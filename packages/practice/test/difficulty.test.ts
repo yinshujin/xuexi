@@ -77,6 +77,27 @@ describe('difficulty controls real difficulty', () => {
     expect(zeros[4]).toBeGreaterThan(zeros[0]);
   });
 
+  it('g4.bignum.place: composing from 3, wider unit gaps and longer numbers later', () => {
+    const value = (q: Question) => (q.answer as { value: number }).value;
+    const lengths: number[][] = [[], [], [], [], []];
+    for (let seed = 0; seed < 200; seed++) {
+      for (let d = 1; d <= 5; d++) {
+        const q = generateQuestion('g4.bignum.place', { difficulty: d, seed });
+        if (q.prompt.startsWith('由 ')) {
+          expect(d, q.key).toBeGreaterThanOrEqual(3);
+          if (d >= 4) expect(String(value(q)).length, q.key).toBeGreaterThanOrEqual(9);
+        }
+        if (q.prompt.includes('里面有'))
+          expect(value(q), q.key).toBeGreaterThanOrEqual(d <= 2 ? 10 : d === 3 ? 100 : 1000);
+        const n = q.prompt.match(/^(\d+) 中的/)?.[1];
+        if (n) lengths[d - 1].push(n.length);
+      }
+    }
+    const avg = lengths.map((l) => l.reduce((a, b) => a + b, 0) / l.length);
+    expect(avg[0]).toBeLessThan(avg[1]);
+    expect(avg[3]).toBeGreaterThan(avg[1]);
+  });
+
   it('g4.angle.measure: multiples of 10 → 5 → any', () => {
     for (let seed = 0; seed < 200; seed++) {
       expect(

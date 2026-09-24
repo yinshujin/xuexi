@@ -170,6 +170,57 @@ export function expectedAnswer(q: Question): Answer {
       } else total = qtyValue(left);
       return { type: 'number', value: (total - qtyValue(prefix)) / UNIT_SIZE[target] };
     }
+    case 'g4.bignum.place': {
+      // Counting-unit words: 一 十 一百 一千 一万 十万 一百万 … (百万 alone reads as 一百万).
+      const unitValue = (w: string) => parseChinese(/^[百千万亿]/.test(w) ? '一' + w : w);
+      const isUnitWord = (o: string) => !o.endsWith('位');
+      const placeOf = (n: number, digit: string) => {
+        const s = String(n);
+        if (s.indexOf(digit) !== s.lastIndexOf(digit))
+          throw new Error(`${q.key}: digit not unique`);
+        return s.length - 1 - s.indexOf(digit);
+      };
+      const PLACES = [
+        '个',
+        '十',
+        '百',
+        '千',
+        '万',
+        '十万',
+        '百万',
+        '千万',
+        '亿',
+        '十亿',
+        '百亿',
+        '千亿',
+      ];
+      let m: RegExpMatchArray | null;
+      if ((m = p.match(/^(\d+) 个(.+)是（　）。$/))) {
+        const target = Number(m[1]) * unitValue(m[2]);
+        return onlyMatching(q, (o) => isUnitWord(o) && unitValue(o) === target);
+      }
+      if ((m = p.match(/^(.+)里面有（　）个(.+)。$/)))
+        return { type: 'number', value: unitValue(m[1]) / unitValue(m[2]) };
+      if ((m = p.match(/^(\d+) 中的「(\d)」在（　）上。$/))) {
+        const k = placeOf(Number(m[1]), m[2]);
+        return onlyMatching(q, (o) => o === PLACES[k] + '位');
+      }
+      if ((m = p.match(/^(\d+) 中的「(\d)」表示 \d 个（　）。$/))) {
+        const k = placeOf(Number(m[1]), m[2]);
+        return onlyMatching(q, (o) => isUnitWord(o) && unitValue(o) === 10 ** k);
+      }
+      if ((m = p.match(/^(\d+) 中的「(\d)」表示（　）。$/))) {
+        const k = placeOf(Number(m[1]), m[2]);
+        return { type: 'number', value: Number(m[2]) * 10 ** k };
+      }
+      if ((m = p.match(/^由 (.+)组成的数是（　）。$/))) {
+        let total = 0;
+        for (const part of m[1].matchAll(/(\d+) 个([^、和]+)/g))
+          total += Number(part[1]) * unitValue(part[2]);
+        return { type: 'number', value: total };
+      }
+      throw new Error(`unknown place prompt ${p}`);
+    }
     case 'g4.bignum.read': {
       if (p.includes('读作')) {
         const n = numbersIn(p)[0];

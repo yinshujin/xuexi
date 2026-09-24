@@ -60,7 +60,7 @@ export const bsdG4a: Book = {
             remedies: ['place-value'],
           },
         ],
-        practice: [{ generatorId: 'g4.bignum.read', minDifficulty: 1, maxDifficulty: 2 }],
+        practice: [{ generatorId: 'g4.bignum.place', minDifficulty: 1, maxDifficulty: 5 }],
       },
       {
         slug: 'read-write-big',

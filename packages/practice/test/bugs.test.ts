@@ -8,6 +8,7 @@ import { g2MulTable } from '../src/generators/g2-mul-table';
 import { g2UnitLength, g2UnitMoney } from '../src/generators/g2-units';
 import { g4AngleClassify, g4AngleMeasure } from '../src/generators/g4-angle';
 import { g4BignumCompare } from '../src/generators/g4-bignum-compare';
+import { g4BignumPlace } from '../src/generators/g4-bignum-place';
 import { g4BignumRewrite } from '../src/generators/g4-bignum-rewrite';
 import { g4Div2d, longDivide } from '../src/generators/g4-div-2d';
 import { g4LawSimplify } from '../src/generators/g4-law-simplify';
@@ -305,6 +306,27 @@ describe('laws, estimation, oral', () => {
 });
 
 describe('big numbers, angles, negative numbers', () => {
+  it('place value: composing, digit values and unit rates', () => {
+    // 3 个亿、5 个百万和 2 个千 = 305002000
+    const parts = [
+      { count: 3, place: 8 },
+      { count: 5, place: 6 },
+      { count: 2, place: 3 },
+    ];
+    const p = { form: 'compose' as const, parts };
+    expect(g4BignumPlace.diagnoseWith(p, num(352)).tags).toEqual(['zero-reading']);
+    expect(g4BignumPlace.diagnoseWith(p, num(30_502_000)).tags).toEqual(['zero-reading']);
+    expect(g4BignumPlace.diagnoseWith(p, num(350_002_000)).tags).toEqual(['place-value']);
+    expect(g4BignumPlace.diagnoseWith(p, num(305_002_001)).tags).toEqual([]);
+    // 38472000 中的「4」表示 400000
+    const v = { form: 'value' as const, n: 38_472_000, place: 5 };
+    expect(g4BignumPlace.diagnoseWith(v, num(40_000)).tags).toEqual(['place-value']);
+    expect(g4BignumPlace.diagnoseWith(v, num(4)).tags).toEqual(['place-value']);
+    // 一亿里面有 10000 个一万
+    const r = { form: 'rate' as const, big: 8, place: 4, count: 10_000 };
+    expect(g4BignumPlace.diagnoseWith(r, num(1000)).tags).toEqual(['place-value']);
+    expect(g4BignumPlace.diagnoseWith(r, num(9999)).tags).toEqual([]);
+  });
   it('rewrite vs approximation, rounding', () => {
     expect(g4BignumRewrite.diagnoseWith({ form: 'rw-wan', n: 3_460_000 }, num(350)).tags).toEqual([
       'rewrite-vs-approx',

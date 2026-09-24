@@ -8,6 +8,7 @@ import { g2MulTable } from './generators/g2-mul-table';
 import { g2UnitLength, g2UnitMoney } from './generators/g2-units';
 import { g4AngleClassify, g4AngleMeasure } from './generators/g4-angle';
 import { g4BignumCompare } from './generators/g4-bignum-compare';
+import { g4BignumPlace } from './generators/g4-bignum-place';
 import { g4BignumRead } from './generators/g4-bignum-read';
 import { g4BignumRewrite } from './generators/g4-bignum-rewrite';
 import { g4Div2d } from './generators/g4-div-2d';
@@ -27,6 +28,7 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g2DivTable,
   g2UnitMoney,
   g2UnitLength,
+  g4BignumPlace,
   g4BignumRead,
   g4BignumRewrite,
   g4BignumCompare,

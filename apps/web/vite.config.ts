@@ -3,10 +3,37 @@ import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
+import { readFileSync, writeFileSync } from 'node:fs';
+import { join } from 'node:path';
+import type { Plugin } from 'vite';
+
+/**
+ * Writes dist/version.json with a build id derived from index.html (which
+ * references every hashed asset), so the id only changes when the app changes.
+ * Native shells compare their bundled version.json with the site's to offer an
+ * APK update.
+ */
+function buildVersion(): Plugin {
+  let outDir = 'dist';
+  return {
+    name: 'xuexi-build-version',
+    apply: 'build',
+    configResolved(c) {
+      outDir = c.build.outDir;
+    },
+    closeBundle() {
+      const html = readFileSync(join(outDir, 'index.html'));
+      const build = createHash('sha256').update(html).digest('hex').slice(0, 12);
+      writeFileSync(join(outDir, 'version.json'), JSON.stringify({ build, builtAt: new Date().toISOString() }));
+    },
+  };
+}
 
 export default defineConfig({
   base: './',
   plugins: [
+    buildVersion(),
     react(),
     tailwindcss(),
     VitePWA({

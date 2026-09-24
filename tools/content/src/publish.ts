@@ -25,6 +25,7 @@ export async function assembleSite(
   cpSync(paths.webDist, paths.site, { recursive: true });
   if (existsSync(paths.packs)) cpSync(paths.packs, join(paths.site, 'packs'), { recursive: true });
   cpSync(paths.catalog, join(paths.site, 'catalog.json'));
+  await addLatestApk(paths, opts.log);
   opts.log(`站点已生成：${paths.site}`);
 }
 
@@ -41,4 +42,33 @@ export async function publish(
   log(`部署到 ${target} …`);
   const args = target === 'tencent' && opts.init ? [script, '--init', paths.site] : [script, paths.site];
   await run('bash', args, { cwd: paths.root, env });
+}
+
+/**
+ * Put the latest CI-built APK (GitHub release "app-latest") at /download/xuexi.apk,
+ * so publishing from this computer keeps the in-app update download working.
+ * Best effort: skipped silently when offline or when no release exists.
+ */
+async function addLatestApk(paths: Paths, log: (s: string) => void) {
+  let url = process.env.XUEXI_APK_URL;
+  if (!url) {
+    try {
+      const { execFileSync } = await import('node:child_process');
+      const remote = execFileSync('git', ['remote', 'get-url', 'origin'], { cwd: paths.root, encoding: 'utf8' }).trim();
+      const m = remote.match(/github\.com[/:]([^/]+)\/([^/.]+?)(?:\.git)?$/);
+      if (m) url = `https://github.com/${m[1]}/${m[2]}/releases/download/app-latest/xuexi.apk`;
+    } catch {
+      return;
+    }
+  }
+  if (!url) return;
+  try {
+    const res = await fetch(url, { signal: AbortSignal.timeout(120_000) });
+    if (!res.ok) return;
+    mkdirSync(join(paths.site, 'download'), { recursive: true });
+    writeFileSync(join(paths.site, 'download', 'xuexi.apk'), new Uint8Array(await res.arrayBuffer()));
+    log('已附带最新 APK（/download/xuexi.apk）');
+  } catch {
+    /* offline: publish without the APK */
+  }
 }

@@ -1,7 +1,9 @@
 name: Android APK
 
 # Builds one universal APK for the Huawei tablet (HarmonyOS 4.x) and the vivo phone.
-# Run it from the Actions tab ("Run workflow") or push a tag like app-v0.1.0.
+# Runs automatically after CI passes on the default branch (and then publishes the
+# APK as the "app-latest" release, which the EdgeOne deploy puts on the site at
+# /download/xuexi.apk), or manually from the Actions tab.
 #
 # Signing (strongly recommended, otherwise every build has a different key and
 # you must uninstall before updating): create a keystore once with
@@ -13,16 +15,32 @@ name: Android APK
 
 on:
   workflow_dispatch:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
   push:
     tags: ['app-v*']
 
+concurrency:
+  group: android-apk
+  cancel-in-progress: true
+
 jobs:
   apk:
+    # After CI: only when it passed on the default branch.
+    if: >-
+      github.event_name != 'workflow_run' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == github.event.repository.default_branch)
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       VITE_SITE_URL: ${{ vars.SITE_URL }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
       - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
@@ -79,7 +97,7 @@ jobs:
             ALIAS=xuexi; PASS=throwaway
           fi
           "$BT/apksigner" sign --ks release.jks --ks-pass "pass:$PASS" --ks-key-alias "$ALIAS" \
-            --out "dist/xuexi-${GITHUB_REF_NAME//\//-}.apk" dist/aligned.apk
+            --out dist/xuexi.apk dist/aligned.apk
           rm -f dist/aligned.apk release.jks
           "$BT/apksigner" verify --print-certs dist/*.apk | head -n 3
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -91,3 +109,19 @@ jobs:
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
         with:
           files: dist/*.apk
+      # Keep a stable download: https://github.com/<repo>/releases/download/app-latest/xuexi.apk
+      - name: Move the app-latest tag to this commit
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        run: |
+          git tag -f app-latest HEAD
+          git push -f origin refs/tags/app-latest
+      - name: Publish as the app-latest release
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: app-latest
+          name: 最新 App（自动构建）
+          body: 每次代码更新并通过测试后自动构建。华为平板和 vivo 手机下载 xuexi.apk 覆盖安装即可。
+          files: dist/xuexi.apk
+          overwrite_files: true
+          make_latest: true

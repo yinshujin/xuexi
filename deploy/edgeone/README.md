@@ -38,7 +38,10 @@ https://你的域名/api/*             同步接口：边缘函数 edge-function
 3. Actions → Deploy to EdgeOne → Run workflow（区域选 overseas 不需要备案）。
 4. 再做下面第 4–7 步（KV、环境变量、域名、检查），改完 KV 或环境变量后再运行一次这个工作流。
 
-课程发布：在 Mac 上 `pnpm content publish --target edgeone`（会带上最新课程）；只更新 App 时用这个工作流即可。
+**自动更新**：之后每次代码推送到默认分支，流程自动进行：CI 测试通过 → 构建并签名新 APK（发布为 GitHub Release `app-latest`）→ 部署到 EdgeOne（带上线上已有课程和最新 APK）。
+iPhone、Mac、Windows 上的网页版打开时自动更新；安卓 APK 里会出现"App 有新版本啦 → 下载安装"的提示（从你的网站 `/download/xuexi.apk` 下载，国内也能下）。
+
+课程发布：在 Mac 上 `pnpm content publish --target edgeone`（会带上最新课程和最新 APK）。
 
 ## 第一次部署（家长照着做）
 

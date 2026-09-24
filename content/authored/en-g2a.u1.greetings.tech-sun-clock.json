@@ -1,0 +1,282 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u1.greetings.tech-sun-clock",
+  "title": "看太阳选问候：一招不说错",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "看太阳口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "看太阳，选问候"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "太阳升起",
+              "Good morning."
+            ],
+            [
+              "太阳偏西",
+              "Good afternoon."
+            ],
+            [
+              "太阳落山",
+              "Good evening."
+            ],
+            [
+              "上床睡觉",
+              "Good night."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "小朋友，打招呼之前先抬头看一看太阳，就不会说错啦！"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "太阳升起来，说早上好，跟我读。"
+        },
+        {
+          "say": "Good morning. Good morning.",
+          "lang": "en"
+        },
+        {
+          "say": "太阳偏西了，说下午好。"
+        },
+        {
+          "say": "Good afternoon. Good afternoon.",
+          "lang": "en"
+        },
+        {
+          "say": "太阳落山了，见面说晚上好。"
+        },
+        {
+          "say": "Good evening. Good evening.",
+          "lang": "en"
+        },
+        {
+          "say": "上床睡觉，说晚安。"
+        },
+        {
+          "say": "Good night. Good night.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "四个生活场景",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "该说哪一句？"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "早上到校",
+              "color": "orange"
+            },
+            {
+              "id": "c1b",
+              "text": "下午放学",
+              "color": "blue"
+            },
+            {
+              "id": "c1c",
+              "text": "晚饭后散步",
+              "color": "purple"
+            },
+            {
+              "id": "c1d",
+              "text": "睡前",
+              "color": "gray"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "早上到学校，见到方老师，你说——"
+        },
+        {
+          "say": "Good morning, Miss Fang.",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "下午放学，和门口的保安叔叔打招呼，你说——"
+        },
+        {
+          "say": "Good afternoon.",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "吃过晚饭，在小区楼下遇到基蒂，你说——"
+        },
+        {
+          "say": "Good evening, Kitty.",
+          "lang": "en"
+        },
+        {
+          "laser": "c1d"
+        },
+        {
+          "say": "准备上床睡觉了，你对妈妈说——"
+        },
+        {
+          "say": "Good night.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀：晚上别说错",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "晚上别说错"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "见面：Good evening.  睡前：Good night."
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "晚上见面说晚上好",
+            "分别睡前才说晚安"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "最容易说错的是晚上。晚上刚见面，是打招呼，要说——"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "Good evening!",
+          "lang": "en"
+        },
+        {
+          "say": "要分开回家，或者上床睡觉的时候，才说——"
+        },
+        {
+          "say": "Good night!",
+          "lang": "en"
+        },
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "我们学一个口诀，老师读一句，你跟一句。晚上见面说晚上好。"
+        },
+        {
+          "say": "分别睡前才说晚安。"
+        },
+        {
+          "say": "记住这个口诀，晚上就不会说错啦！"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "我们来做两道判断题。",
+      "questions": [
+        {
+          "question": "下午放学时遇到同学，说“Good afternoon.”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "下午见面说 Good afternoon.，说得对。"
+        },
+        {
+          "question": "晚饭后在楼下遇到邻居，打招呼说“Good night.”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "晚上见面打招呼说 Good evening.；Good night. 是分别或睡前说的。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择与填空",
+      "intro": "再来做几道选择题。",
+      "questions": [
+        {
+          "question": "太阳刚升起，你在校门口见到方老师，说：",
+          "options": [
+            "Good evening, Miss Fang.",
+            "Good morning, Miss Fang.",
+            "Good night, Miss Fang."
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "太阳刚升起是早上，说 Good morning."
+        },
+        {
+          "question": "月亮出来了，你要上床睡觉，对妈妈说：“Good （　）.”",
+          "options": [
+            "night",
+            "afternoon",
+            "morning"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "睡觉前说 Good night.（晚安）。"
+        },
+        {
+          "question": "太阳落山了，你在公园遇到基蒂，说：",
+          "options": [
+            "Good afternoon, Kitty.",
+            "Good night, Kitty.",
+            "Good evening, Kitty."
+          ],
+          "answer": [
+            2
+          ],
+          "analysis": "太阳落山后见面打招呼，说 Good evening."
+        }
+      ]
+    }
+  ]
+}

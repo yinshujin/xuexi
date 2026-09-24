@@ -1,0 +1,134 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u1.how-are-you.tech-polite-reply",
+  "title": "问答小技巧：先回应，再说谢谢",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "接住别人的问话",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "像接球一样回答" },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            { "id": "c1a", "text": "How are you?", "color": "blue" },
+            { "id": "c1b", "text": "I'm fine. Thank you.", "color": "green" }
+          ]
+        },
+        { "id": "t1", "kind": "text", "text": "不要只说“好”，也不要不说话。" }
+      ],
+      "script": [
+        { "say": "说话就像玩传球。别人把球传给你，你要稳稳接住，再传回去。" },
+        { "laser": "c1a" },
+        { "say": "别人问你——" },
+        { "say": "How are you?", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "你马上把球接住，完整地回答——" },
+        { "say": "I'm fine. Thank you. I'm fine. Thank you.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "不要只说一个字，也不要愣着不说话，最后的谢谢千万别漏掉。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "三步对话练习",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "问好三步走" },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            ["1 问候", "Good afternoon."],
+            ["2 问好", "How are you?"],
+            ["3 回答", "I'm fine. Thank you."]
+          ]
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": ["见面先说问候语", "再问一句你好吗", "我很好呀谢谢你"]
+        }
+      ],
+      "script": [
+        { "say": "我们按三步来练。第一步，互相问候。" },
+        { "spotlight": "g1" },
+        { "say": "Good afternoon.", "lang": "en" },
+        { "say": "第二步，问一问你好吗。" },
+        { "say": "How are you?", "lang": "en" },
+        { "say": "第三步，回答我很好，再道谢。" },
+        { "say": "I'm fine. Thank you.", "lang": "en" },
+        { "spotlight": "l1" },
+        { "say": "口诀再读一遍：见面先说问候语，再问一句你好吗，我很好呀谢谢你。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "别听错",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "听清楚再回答" },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            { "id": "c1a", "text": "How are you? 你好吗？", "color": "blue" },
+            { "id": "c1b", "text": "Thank you. 谢谢你。", "color": "orange" }
+          ]
+        }
+      ],
+      "script": [
+        { "say": "这两句都有同一个小词，听的时候要听清楚开头。" },
+        { "laser": "c1a" },
+        { "say": "How are you?", "lang": "en" },
+        { "say": "这一句是在问你好吗，要回答我很好。" },
+        { "laser": "c1b" },
+        { "say": "Thank you.", "lang": "en" },
+        { "say": "这一句是谢谢你。听清楚了再回答，就不会答错啦！" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "我们来做两道判断题。",
+      "questions": [
+        {
+          "question": "别人问“How are you?”，只回答“Thank you.”就可以了。",
+          "options": ["对", "错"],
+          "answer": [1],
+          "analysis": "要先回答自己好不好，再道谢：I'm fine. Thank you."
+        },
+        {
+          "question": "问好三步走：先问候，再问“How are you?”，最后回答“I'm fine. Thank you.”。",
+          "options": ["对", "错"],
+          "answer": [0],
+          "analysis": "顺序正确：问候——问你好吗——回答并道谢。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择与填空",
+      "intro": "再来做几道选择题。",
+      "questions": [
+        {
+          "question": "Kitty: Good evening, Danny. How are you?  Danny: （　）",
+          "options": ["How are you?", "I'm fine. Thank you.", "Good morning."],
+          "answer": [1],
+          "analysis": "Kitty 问 How are you?，Danny 要回答 I'm fine. Thank you."
+        },
+        {
+          "question": "I'm （　）. Thank you.",
+          "options": ["fine", "you", "night"],
+          "answer": [0],
+          "analysis": "我很好是 I'm fine."
+        },
+        {
+          "question": "下午遇到方老师，第一句应该说：",
+          "options": ["I'm fine.", "Thank you.", "Good afternoon, Miss Fang."],
+          "answer": [2],
+          "analysis": "见面第一步先问候：Good afternoon, Miss Fang."
+        }
+      ]
+    }
+  ]
+}

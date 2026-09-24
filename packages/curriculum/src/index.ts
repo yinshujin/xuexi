@@ -1,13 +1,14 @@
 import type { Book, KnowledgePoint, LessonSpec, Unit } from './types';
 import { bsdG2a } from './books/bsd-g2a';
 import { bsdG4a } from './books/bsd-g4a';
+import { enG2a } from './books/en-g2a';
 
 export type { Book, KnowledgePoint, LessonSpec, PracticeSpec, Subject, Unit } from './types';
 export { SUBJECT_LABEL } from './types';
 export { buildGenerationRequirement, lessonTemplateVersion } from './prompt';
 export type { LessonContext } from './prompt';
 
-export const BOOKS: readonly Book[] = [bsdG2a, bsdG4a];
+export const BOOKS: readonly Book[] = [bsdG2a, bsdG4a, enG2a];
 
 export interface KnowledgePointRef {
   book: Book;

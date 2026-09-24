@@ -1,0 +1,125 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u2.i-am-you-are.tech-point-and-say",
+  "title": "指一指：I'm 指自己，You're 指对方",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "边指边说",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "手指来帮忙" },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            { "id": "c1a", "text": "I'm：指自己", "color": "blue" },
+            { "id": "c1b", "text": "You're：指对方", "color": "orange" }
+          ]
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": ["说我自己指自己", "说你对方指对方"]
+        }
+      ],
+      "script": [
+        { "say": "“我是”和“你是”总是分不清？让小手指来帮忙！" },
+        { "laser": "c1a" },
+        { "say": "说“我是”的时候，指着自己的鼻子。跟我读。" },
+        { "say": "I'm, I'm", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "说“你是”的时候，指着对面的人。跟我读。" },
+        { "say": "You're, you're", "lang": "en" },
+        { "spotlight": "l1" },
+        { "say": "口诀记牢：说我自己指自己，说你对方指对方。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "丹尼该说哪一句",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "丹尼该怎么说？" },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            ["丹尼介绍自己", "I'm Danny."],
+            ["丹尼说玛丽很高", "You're tall."],
+            ["丹尼说玛丽是女孩", "You're a girl."]
+          ]
+        }
+      ],
+      "script": [
+        { "say": "丹尼要介绍自己，手指指自己，说——" },
+        { "spotlight": "g1" },
+        { "say": "I'm Danny.", "lang": "en" },
+        { "say": "丹尼看到玛丽很高，手指指玛丽，说——" },
+        { "say": "You're tall.", "lang": "en" },
+        { "say": "丹尼说玛丽是一个女孩，别忘了前面的小词——" },
+        { "say": "You're a girl.", "lang": "en" },
+        { "say": "你看，指对了人，句子就不会说错。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "和家人练一练",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "和家人玩一玩" },
+        { "id": "t1", "kind": "text", "text": "I'm small. You're big." },
+        { "id": "t2", "kind": "text", "text": "I'm short. You're tall." }
+      ],
+      "script": [
+        { "say": "回家和爸爸妈妈玩一玩。先指自己，再指爸爸，跟我读。" },
+        { "spotlight": "t1" },
+        { "say": "I'm small. You're big.", "lang": "en" },
+        { "spotlight": "t2" },
+        { "say": "I'm short. You're tall.", "lang": "en" },
+        { "say": "边指边说，爸爸妈妈一定会夸你！" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "我们来做两道判断题。",
+      "questions": [
+        {
+          "question": "说“You're ...”的时候，应该指着自己。",
+          "options": ["对", "错"],
+          "answer": [1],
+          "analysis": "You're 是“你是”，要指着对方；I'm 才指自己。"
+        },
+        {
+          "question": "玛丽介绍自己时说：“I'm Mary.”",
+          "options": ["对", "错"],
+          "answer": [0],
+          "analysis": "介绍自己用 I'm：I'm Mary."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择与填空",
+      "intro": "再来做几道选择题。",
+      "questions": [
+        {
+          "question": "丹尼指着玛丽说：（　） a girl.",
+          "options": ["I'm", "You're"],
+          "answer": [1],
+          "analysis": "指着对方说，用 You're：You're a girl."
+        },
+        {
+          "question": "丹尼指着自己说：（　） a boy.",
+          "options": ["I'm", "You're"],
+          "answer": [0],
+          "analysis": "指着自己说，用 I'm：I'm a boy."
+        },
+        {
+          "question": "You're （　） boy.",
+          "options": ["a", "big", "tall"],
+          "answer": [0],
+          "analysis": "说“一个男孩”要加 a：You're a boy."
+        }
+      ]
+    }
+  ]
+}

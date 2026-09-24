@@ -1,0 +1,609 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u2.words.lecture",
+  "title": "男孩女孩，大大小小",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "认识新朋友"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "Danny 丹尼",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "Mary 玛丽",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "谁是男孩？谁是女孩？"
+        }
+      ],
+      "script": [
+        {
+          "say": "小朋友们好！新学期，丹尼认识了一位新朋友，她叫玛丽。"
+        },
+        {
+          "say": "我们先用学过的问候语和他们打个招呼吧。"
+        },
+        {
+          "say": "Good morning, Danny. Good morning, Mary.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "丹尼是男孩，玛丽是女孩。男孩、女孩用英语怎么说呢？我们一起来学。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：boy 和 girl",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "男孩和女孩"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "boy 男孩",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "girl 女孩",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "一个男孩：a boy    一个女孩：a girl"
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "丹尼是一个男孩。男孩，跟我读。"
+        },
+        {
+          "say": "boy, boy",
+          "lang": "en"
+        },
+        {
+          "say": "嘴巴先圆圆的，再轻轻咧开，再读一遍。"
+        },
+        {
+          "say": "boy",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "玛丽是一个女孩。女孩，跟我读。"
+        },
+        {
+          "say": "girl, girl",
+          "lang": "en"
+        },
+        {
+          "say": "嘴角微微向两边拉，声音拉长一点，再读一遍。"
+        },
+        {
+          "say": "girl",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "说“一个男孩”“一个女孩”的时候，前面要加一个小词，跟我读。"
+        },
+        {
+          "say": "a boy, a girl",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：big 和 small",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "大和小"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "big 大的",
+              "color": "green"
+            },
+            {
+              "id": "c1b",
+              "text": "small 小的",
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "张开双臂：big！缩成一团：small！"
+        }
+      ],
+      "script": [
+        {
+          "say": "看，一只大熊猫，一只小熊猫。大熊猫真大呀！"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "大的，跟我读，张开双臂。"
+        },
+        {
+          "say": "big, big",
+          "lang": "en"
+        },
+        {
+          "say": "最后要收在喉咙里，轻轻一顿，不要读得太重。"
+        },
+        {
+          "say": "big",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "小熊猫小小的。小的，跟我读，把身体缩成一团。"
+        },
+        {
+          "say": "small, small",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "一边做动作一边读，记得更牢！"
+        },
+        {
+          "say": "big, small",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "看图说词",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "看一看，说一说"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "丹尼",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "玛丽",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "大西瓜",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "小蚂蚁",
+              "color": "purple"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "老师指一张卡片，你马上说出英语单词。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "丹尼是——"
+        },
+        {
+          "say": "a boy",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "玛丽是——"
+        },
+        {
+          "say": "a girl",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "大西瓜，它是——"
+        },
+        {
+          "say": "big",
+          "lang": "en"
+        },
+        {
+          "laser": "c1d"
+        },
+        {
+          "say": "小蚂蚁，它是——"
+        },
+        {
+          "say": "small",
+          "lang": "en"
+        },
+        {
+          "say": "全都说对了，你真棒！"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "丹尼和玛丽"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Danny:",
+              "Hello, I'm Danny. I'm a boy."
+            ],
+            [
+              "Mary:",
+              "Hi, Danny. I'm Mary. I'm a girl."
+            ],
+            [
+              "Danny:",
+              "How are you, Mary?"
+            ],
+            [
+              "Mary:",
+              "I'm fine. Thank you."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "丹尼和玛丽在互相介绍自己。我们一句一句跟着读。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "Hello, I'm Danny. I'm a boy.",
+          "lang": "en"
+        },
+        {
+          "say": "玛丽说。"
+        },
+        {
+          "say": "Hi, Danny. I'm Mary. I'm a girl.",
+          "lang": "en"
+        },
+        {
+          "say": "丹尼用上一单元学的句子问候玛丽。"
+        },
+        {
+          "say": "How are you, Mary?",
+          "lang": "en"
+        },
+        {
+          "say": "玛丽回答。"
+        },
+        {
+          "say": "I'm fine. Thank you.",
+          "lang": "en"
+        },
+        {
+          "say": "你是男孩还是女孩？用英语说一说吧。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "英文小儿歌"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "Boy, boy, a boy.",
+            "Girl, girl, a girl.",
+            "Big, big, big!",
+            "Small, small, small!"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "我们来唱一首拍手小儿歌，老师读一句，你跟一句。"
+        },
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "Boy, boy, a boy.",
+          "lang": "en"
+        },
+        {
+          "say": "Girl, girl, a girl.",
+          "lang": "en"
+        },
+        {
+          "say": "说大的时候张开双臂。"
+        },
+        {
+          "say": "Big, big, big!",
+          "lang": "en"
+        },
+        {
+          "say": "说小的时候蹲下来。"
+        },
+        {
+          "say": "Small, small, small!",
+          "lang": "en"
+        },
+        {
+          "say": "边拍手边念，单词一下子就记住了！"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "今天学会了"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "boy",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "girl",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "big",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "small",
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "一个男孩：a boy；一个女孩：a girl"
+        }
+      ],
+      "script": [
+        {
+          "say": "一句话小结：今天学了男孩、女孩、大的、小的四个词。再读一遍。"
+        },
+        {
+          "say": "boy, girl, big, small",
+          "lang": "en"
+        },
+        {
+          "say": "回家找一找，家里什么东西大，什么东西小，用英语说给爸爸妈妈听吧！"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "下面我们做几道判断题，想一想说得对不对。",
+      "questions": [
+        {
+          "question": "girl 的意思是“男孩”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "girl 是女孩，boy 才是男孩。"
+        },
+        {
+          "question": "big 的意思是“大的”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "big 就是大的，small 是小的。"
+        },
+        {
+          "question": "“一个男孩”用英语说 a boy。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "一个男孩是 a boy，一个女孩是 a girl。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "接下来是选择题，选出正确的答案。",
+      "questions": [
+        {
+          "question": "“小的”用英语怎么说？",
+          "options": [
+            "big",
+            "small",
+            "boy"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "small 是小的，big 是大的。"
+        },
+        {
+          "question": "Mary 是一个女孩，她是：",
+          "options": [
+            "a girl",
+            "a boy",
+            "big"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "女孩是 girl，一个女孩说 a girl。"
+        },
+        {
+          "question": "和 big 意思相反的词是：",
+          "options": [
+            "boy",
+            "girl",
+            "small"
+          ],
+          "answer": [
+            2
+          ],
+          "analysis": "big（大的）和 small（小的）意思相反。"
+        },
+        {
+          "question": "“男孩”用英语怎么说？",
+          "options": [
+            "girl",
+            "boy",
+            "big"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "boy 是男孩。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空和情景交际，选出最合适的一项。",
+      "questions": [
+        {
+          "question": "Hello, I'm Danny. I'm a （　）.（丹尼是男孩）",
+          "options": [
+            "girl",
+            "boy",
+            "small"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "丹尼是男孩，所以说 I'm a boy."
+        },
+        {
+          "question": "大熊猫说：I'm （　）.",
+          "options": [
+            "big",
+            "small",
+            "girl"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "大熊猫大大的，说 I'm big."
+        },
+        {
+          "question": "Hi, Danny. I'm Mary. I'm （　） girl.",
+          "options": [
+            "a",
+            "big",
+            "small"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "说“一个女孩”要在 girl 前面加 a：I'm a girl."
+        }
+      ]
+    }
+  ]
+}

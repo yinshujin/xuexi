@@ -34,7 +34,7 @@ export function edgeBookVoice(voice = 'en-US-AnaNeural', rate = '-10%', concurre
       return new Promise((resolve, reject) => {
         const child = spawn(
           process.env.PYTHON ?? 'python3',
-          [script, '--voice', voice, '--rate', rate, '--concurrency', String(concurrency)],
+          [script, `--voice=${voice}`, `--rate=${rate}`, `--concurrency=${concurrency}`],
           { stdio: ['pipe', 'inherit', 'inherit'] },
         );
         child.on('error', reject);

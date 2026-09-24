@@ -1,0 +1,621 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g4a.u2.words.lecture",
+  "title": "Can you swim?：会做的事情单词",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Unit 2 Can you swim?"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "学校要开运动会啦！你会做什么？"
+        }
+      ],
+      "script": [
+        {
+          "say": "同学们好！今天我们开始学第二单元。先跟我读单元的名字。"
+        },
+        {
+          "spotlight": "h1"
+        },
+        {
+          "say": "Can you swim? Can you swim?",
+          "lang": "en"
+        },
+        {
+          "say": "意思是：你会游泳吗？"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "学校要开运动会啦。每个人都有自己的本领，你会做什么呢？"
+        },
+        {
+          "say": "今天我们就来学说各种本领的单词，一边做动作，一边说。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：swim, skate, ride a bicycle",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "新单词（一）"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "swim 游泳",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "skate 滑冰",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "ride a bicycle 骑自行车",
+              "color": "green"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "双手向前划，像在水里游。这个词是游泳。跟我读。"
+        },
+        {
+          "say": "swim, swim",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "两只脚左右滑，这个词是滑冰。跟我读。"
+        },
+        {
+          "say": "skate, skate",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "双手握车把，脚下踩呀踩，这是骑自行车。跟我读。"
+        },
+        {
+          "say": "ride a bicycle, ride a bicycle",
+          "lang": "en"
+        },
+        {
+          "say": "注意，骑和自行车中间还有一个小词，不能漏掉。"
+        },
+        {
+          "say": "我们再连起来读一遍。"
+        },
+        {
+          "say": "swim, skate, ride a bicycle",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：run fast, jump high, fly",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "新单词（二）"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "run fast 跑得快",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "jump high 跳得高",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "fly 飞",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "A bird can fly."
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "原地快快跑，这个短语是跑得快。跟我读。"
+        },
+        {
+          "say": "run fast, run fast",
+          "lang": "en"
+        },
+        {
+          "say": "后面这个词表示快，放在跑的后面，说明跑得怎么样。"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "用力往上跳，这个短语是跳得高。跟我读。"
+        },
+        {
+          "say": "jump high, jump high",
+          "lang": "en"
+        },
+        {
+          "say": "后面这个词表示高，说明跳得怎么样。"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "张开手臂像小鸟，这个词是飞。跟我读。"
+        },
+        {
+          "say": "fly, fly",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "小鸟会飞。跟我读。"
+        },
+        {
+          "say": "A bird can fly.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "复习学过的动作词",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "复习：学过的动作词"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "draw 画画",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "sing 唱歌",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "dance 跳舞",
+              "color": "green"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "这些动作词我们以前学过，一起复习一下。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "画画。跟我读。"
+        },
+        {
+          "say": "draw, draw",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "唱歌。跟我读。"
+        },
+        {
+          "say": "sing, sing",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "跳舞。跟我读。"
+        },
+        {
+          "say": "dance, dance",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "情景对话：运动会上"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "角色",
+              "说什么"
+            ],
+            [
+              "Peter",
+              "Look, Kitty! I can run fast."
+            ],
+            [
+              "Kitty",
+              "I can run fast too."
+            ],
+            [
+              "Peter",
+              "I can jump high."
+            ],
+            [
+              "Kitty",
+              "Great! I can jump high too."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "运动会上，彼得和凯蒂在比本领。我们来听一听。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "彼得说：看，凯蒂！我跑得快。"
+        },
+        {
+          "say": "Look, Kitty! I can run fast.",
+          "lang": "en"
+        },
+        {
+          "say": "凯蒂说：我也跑得快。"
+        },
+        {
+          "say": "I can run fast too.",
+          "lang": "en"
+        },
+        {
+          "say": "彼得说：我跳得高。"
+        },
+        {
+          "say": "I can jump high.",
+          "lang": "en"
+        },
+        {
+          "say": "凯蒂说：真棒！我也跳得高。"
+        },
+        {
+          "say": "Great! I can jump high too.",
+          "lang": "en"
+        },
+        {
+          "say": "现在跟我一句一句读。"
+        },
+        {
+          "say": "Look, Kitty! I can run fast.",
+          "lang": "en"
+        },
+        {
+          "say": "I can run fast too.",
+          "lang": "en"
+        },
+        {
+          "say": "I can jump high.",
+          "lang": "en"
+        },
+        {
+          "say": "Great! I can jump high too.",
+          "lang": "en"
+        },
+        {
+          "say": "说自己会做什么，就在动作前面加上我会。你也试着换上游泳、滑冰说一说。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "书写小提示",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "书写小提示"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "bicycle：b-i-c-y-c-l-e"
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "ride a bicycle（别漏掉 a）"
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "自行车这个词比较长，我们一个字母一个字母地拼。跟我读。"
+        },
+        {
+          "say": "b, i, c, y, c, l, e, bicycle",
+          "lang": "en"
+        },
+        {
+          "say": "中间有两个一样的字母，拼写时要细心。"
+        },
+        {
+          "spotlight": "t2"
+        },
+        {
+          "say": "写短语的时候，骑和自行车中间的小词不能漏。跟我读。"
+        },
+        {
+          "say": "ride a bicycle",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "学法口诀"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "做个动作说个词",
+            "跑快跳高连着说",
+            "骑自行车别漏词",
+            "边做边说记得牢"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "我们来学口诀。老师先读一遍。"
+        },
+        {
+          "say": "做个动作说个词，跑快跳高连着说，骑自行车别漏词，边做边说记得牢。"
+        },
+        {
+          "say": "跟我读一遍。做个动作说个词，跑快跳高连着说，骑自行车别漏词，边做边说记得牢。"
+        },
+        {
+          "say": "跑得快、跳得高都是两个词连在一起的短语，要连着说。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "一句话小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "一句话小结"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "swim, skate, ride a bicycle, run fast, jump high, fly"
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "一句话小结：今天学了六个本领单词，做着动作说，记得又快又牢。"
+        },
+        {
+          "say": "最后再读一遍。"
+        },
+        {
+          "say": "swim, skate, ride a bicycle, run fast, jump high, fly",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先来做判断题，对的选对，错的选错。",
+      "questions": [
+        {
+          "question": "“swim” 的意思是“游泳”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "对。swim 就是游泳。"
+        },
+        {
+          "question": "“jump high” 的意思是“跑得快”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "错。jump high 是跳得高；跑得快是 run fast。"
+        },
+        {
+          "question": "“骑自行车”可以写成 ride bicycle。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "错。中间不能漏掉 a，要写 ride a bicycle。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "再来做选择题，选出正确答案。",
+      "questions": [
+        {
+          "question": "“滑冰”用英语怎么说？",
+          "options": [
+            "skate",
+            "swim",
+            "sing"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "skate 是滑冰；swim 是游泳；sing 是唱歌。"
+        },
+        {
+          "question": "“跑得快”是哪一个？",
+          "options": [
+            "run fast",
+            "jump high",
+            "ride a bicycle"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "run fast 是跑得快。"
+        },
+        {
+          "question": "下面哪个单词拼写正确？",
+          "options": [
+            "bicycle",
+            "bicicle",
+            "bycicle"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "自行车的拼写是 b-i-c-y-c-l-e。"
+        },
+        {
+          "question": "在游泳池里，我们可以：",
+          "options": [
+            "swim",
+            "skate",
+            "ride a bicycle"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "游泳池里可以游泳，swim。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空题，选一个词填进括号里。",
+      "questions": [
+        {
+          "question": "I can （　） a bicycle.",
+          "options": [
+            "ride",
+            "run",
+            "jump"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "骑自行车是 ride a bicycle。"
+        },
+        {
+          "question": "我跑得快。I can run （　）.",
+          "options": [
+            "fast",
+            "high",
+            "swim"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "跑得快是 run fast。"
+        },
+        {
+          "question": "A bird can （　）.",
+          "options": [
+            "fly",
+            "skate",
+            "ride a bicycle"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "小鸟会飞：A bird can fly."
+        }
+      ]
+    }
+  ]
+}

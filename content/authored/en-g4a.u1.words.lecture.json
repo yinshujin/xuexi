@@ -1,0 +1,777 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g4a.u1.words.lecture",
+  "title": "Meeting new people：认识新同学的单词",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Unit 1 Meeting new people"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "开学第一天，班里来了新同学！"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "Good morning! 早上好",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "Good afternoon! 下午好",
+              "color": "orange"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "同学们好！新学期开始啦，今天我们学习第一单元。"
+        },
+        {
+          "spotlight": "h1"
+        },
+        {
+          "say": "先跟我读单元的名字。"
+        },
+        {
+          "say": "Meeting new people. Meeting new people.",
+          "lang": "en"
+        },
+        {
+          "say": "意思是：认识新朋友。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "开学第一天，班里来了新同学。见到老师和同学，我们先要打招呼。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "上午见面，我们说早上好。跟我读。"
+        },
+        {
+          "say": "Good morning! Good morning!",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "下午见面，我们说下午好。跟我读。"
+        },
+        {
+          "say": "Good afternoon! Good afternoon!",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：meet, new, classmate",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "新单词（一）"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "meet 结识",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "new 新的",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "classmate 同班同学",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "a new classmate 一位新同学"
+        }
+      ],
+      "script": [
+        {
+          "say": "我们来学新单词。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "第一个词，意思是结识、认识。跟我读。"
+        },
+        {
+          "say": "meet, meet",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "第二个词，意思是新的。跟我读。"
+        },
+        {
+          "say": "new, new",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "第三个词，意思是同班同学。跟我读。"
+        },
+        {
+          "say": "classmate, classmate",
+          "lang": "en"
+        },
+        {
+          "say": "这个词前半部分是班级，后半部分是伙伴，合起来就是同班同学。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "把新的和同班同学连起来，就是一位新同学。跟我读。"
+        },
+        {
+          "say": "a new classmate, a new classmate",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：boy, girl, he, she",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "新单词（二）"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "boy 男孩",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "girl 女孩",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "c2",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c2a",
+              "text": "he 他",
+              "color": "blue"
+            },
+            {
+              "id": "c2b",
+              "text": "she 她",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "He is a boy.  She is a girl."
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "这个词是男孩。跟我读。"
+        },
+        {
+          "say": "boy, boy",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "这个词是女孩。跟我读。"
+        },
+        {
+          "say": "girl, girl",
+          "lang": "en"
+        },
+        {
+          "laser": "c2a"
+        },
+        {
+          "say": "说到一个男孩，我们用这个词，意思是他。跟我读。"
+        },
+        {
+          "say": "he, he",
+          "lang": "en"
+        },
+        {
+          "laser": "c2b"
+        },
+        {
+          "say": "说到一个女孩，我们用这个词，意思是她。跟我读。"
+        },
+        {
+          "say": "she, she",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "放进句子里读一读。"
+        },
+        {
+          "say": "He is a boy.",
+          "lang": "en"
+        },
+        {
+          "say": "She is a girl.",
+          "lang": "en"
+        },
+        {
+          "say": "男孩用他，女孩用她，可别弄反哦。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：his, her, name",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "新单词（三）"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "his 他的",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "her 她的",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "name 名字",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "男孩",
+              "他 he",
+              "他的 his"
+            ],
+            [
+              "女孩",
+              "她 she",
+              "她的 her"
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "下面这两个词，表示是谁的东西。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "这个词是他的，说男孩的东西。跟我读。"
+        },
+        {
+          "say": "his, his",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "这个词是她的，说女孩的东西。跟我读。"
+        },
+        {
+          "say": "her, her",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "这个词是名字。跟我读。"
+        },
+        {
+          "say": "name, name",
+          "lang": "en"
+        },
+        {
+          "say": "连起来说：他的名字，她的名字。跟我读。"
+        },
+        {
+          "say": "his name, his name",
+          "lang": "en"
+        },
+        {
+          "say": "her name, her name",
+          "lang": "en"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "看这张表：男孩用他和他的，女孩用她和她的。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "情景对话：新同学是谁？"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "角色",
+              "说什么"
+            ],
+            [
+              "Peter",
+              "Good morning, Kitty. Is she a new classmate?"
+            ],
+            [
+              "Kitty",
+              "Yes. Her name's Jill."
+            ],
+            [
+              "Peter",
+              "Is he a new classmate too?"
+            ],
+            [
+              "Kitty",
+              "Yes. His name's Joe."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "早上，彼得在教室里遇到凯蒂，他们在说新同学。我们来听一听。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "彼得先打招呼，再问：她是新同学吗？"
+        },
+        {
+          "say": "Good morning, Kitty. Is she a new classmate?",
+          "lang": "en"
+        },
+        {
+          "say": "凯蒂说：是的，她的名字叫吉尔。"
+        },
+        {
+          "say": "Yes. Her name's Jill.",
+          "lang": "en"
+        },
+        {
+          "say": "彼得又问：他也是新同学吗？"
+        },
+        {
+          "say": "Is he a new classmate too?",
+          "lang": "en"
+        },
+        {
+          "say": "凯蒂说：是的，他的名字叫乔。"
+        },
+        {
+          "say": "Yes. His name's Joe.",
+          "lang": "en"
+        },
+        {
+          "say": "现在跟我一句一句读。"
+        },
+        {
+          "say": "Good morning, Kitty. Is she a new classmate?",
+          "lang": "en"
+        },
+        {
+          "say": "Yes. Her name's Jill.",
+          "lang": "en"
+        },
+        {
+          "say": "Is he a new classmate too?",
+          "lang": "en"
+        },
+        {
+          "say": "Yes. His name's Joe.",
+          "lang": "en"
+        },
+        {
+          "say": "吉尔是女孩，所以用她的；乔是男孩，所以用他的。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "语音和书写小提示",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "小提示"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "he",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "she",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "me",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "we",
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "字母 e 在词尾，读它自己的名字。"
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "人名开头要大写：Jill, Joe, Peter"
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "c1"
+        },
+        {
+          "say": "看这四个词，最后的字母都一样。听我读。"
+        },
+        {
+          "say": "he, she, me, we",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "这个字母在词的最后，读音和它的字母名一样。再跟我读一遍。"
+        },
+        {
+          "say": "he, she, me, we",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t2"
+        },
+        {
+          "say": "写人名的时候，第一个字母一定要大写。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "学法口诀"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "先看男孩和女孩",
+            "男孩用他和他的",
+            "女孩用她和她的",
+            "人名开头要大写"
+          ]
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "男孩：he / his",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "女孩：she / her",
+              "color": "orange"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "我们来学一首口诀。老师先读一遍。"
+        },
+        {
+          "say": "先看男孩和女孩，男孩用他和他的，女孩用她和她的，人名开头要大写。"
+        },
+        {
+          "say": "跟我读一遍。先看男孩和女孩，男孩用他和他的，女孩用她和她的，人名开头要大写。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "说男孩，用他和他的。"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "说女孩，用她和她的。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "一句话小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "一句话小结"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "认识新同学：meet, new, classmate, boy, girl, he, she, his, her"
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "一句话小结：认识新同学，先打招呼，再分清他和她、他的和她的。"
+        },
+        {
+          "say": "我们把今天的新词再读一遍。"
+        },
+        {
+          "say": "meet, new, classmate, boy, girl, he, she, his, her",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先来做判断题，对的选对，错的选错。",
+      "questions": [
+        {
+          "question": "“classmate” 的意思是“同班同学”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "对。classmate 就是同班同学。"
+        },
+        {
+          "question": "介绍女孩 Jill 时说：His name's Jill.",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "错。Jill 是女孩，要用 her：Her name's Jill."
+        },
+        {
+          "question": "下午见到老师，可以说：Good afternoon!",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "对。下午见面说 Good afternoon!"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "再来做选择题，选出正确答案。",
+      "questions": [
+        {
+          "question": "“新的”用英语怎么说？",
+          "options": [
+            "meet",
+            "new",
+            "name"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "new 是新的；meet 是结识；name 是名字。"
+        },
+        {
+          "question": "图里是一个男孩，我们说：",
+          "options": [
+            "He is a boy.",
+            "She is a boy.",
+            "He is a girl."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "男孩用 he，所以是 He is a boy."
+        },
+        {
+          "question": "“她的”是哪个词？",
+          "options": [
+            "he",
+            "his",
+            "her"
+          ],
+          "answer": [
+            2
+          ],
+          "analysis": "her 是她的；he 是他；his 是他的。"
+        },
+        {
+          "question": "上午在校门口见到方老师，应该说：",
+          "options": [
+            "Good morning, Miss Fang.",
+            "Good afternoon, Miss Fang.",
+            "Goodbye, Miss Fang."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "上午见面说 Good morning."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空题，选一个词填进括号里。",
+      "questions": [
+        {
+          "question": "This is Peter. （　）name's Peter.",
+          "options": [
+            "His",
+            "Her",
+            "He"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "Peter 是男孩，“他的名字”用 His。句子开头要大写。"
+        },
+        {
+          "question": "This is Jill. （　）is a new classmate.",
+          "options": [
+            "He",
+            "She",
+            "Her"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "Jill 是女孩，“她是”用 She。"
+        },
+        {
+          "question": "Kitty 和 Jill 在同一个班。They are （　）.",
+          "options": [
+            "classmates",
+            "boys",
+            "brothers"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "在同一个班，就是同班同学 classmates。"
+        }
+      ]
+    }
+  ]
+}

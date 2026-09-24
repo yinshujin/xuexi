@@ -31,9 +31,11 @@ describe('buildGenerationRequirement', () => {
       expect(text).toContain('计算必须准确');
       if (ctx.lesson.kind === 'lecture') {
         expect(text).toContain('2 道例题');
-        expect(text).toContain('3 道课堂小题');
+        expect(text).toContain('学法口诀');
+        expect(text).toContain('判断题 3 道');
       } else {
-        expect(text).toContain('1 道小练习');
+        expect(text).toContain('学法口诀');
+        expect(text).toContain('判断题 2 道');
         for (const tag of ctx.lesson.remedies ?? []) expect(text).toContain(ERROR_TAGS[tag]);
       }
       for (const c of ctx.kp.localContexts ?? []) expect(text).toContain(c);

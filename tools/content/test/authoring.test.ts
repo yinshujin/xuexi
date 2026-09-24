@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, mkdtempSync, readFileSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -115,9 +115,25 @@ describe('authoring pipeline', () => {
     expect(r.errors).toEqual([]);
     expect(state.lessons[ctx.lesson.id].status).toBe('generated');
 
-    const fake: TtsEngine = { name: 'fake', ext: 'mp3', synthesize: async (_t, out) => writeFileSync(out, 'ID3') };
-    const n = await ttsDraft(paths, state, ctx.lesson.id, { engine: fake });
+    let calls = 0;
+    const fake: TtsEngine = {
+      name: 'fake',
+      ext: 'mp3',
+      cacheKey: 'fake',
+      synthesize: async (_t, out) => {
+        calls++;
+        writeFileSync(out, 'ID3');
+      },
+    };
+    const cacheDir = join(paths.content, 'tts-cache');
+    const n = await ttsDraft(paths, state, ctx.lesson.id, { engine: fake, cacheDir, concurrency: 3 });
     expect(n).toBe(7);
+    const firstCalls = calls;
+    expect(firstCalls).toBeGreaterThan(0);
+    // A fresh checkout (no draft audio) with a warm cache copies clips without calling the engine.
+    rmSync(join(paths.work, ctx.lesson.id, 'draft', 'audio'), { recursive: true });
+    expect(await ttsDraft(paths, state, ctx.lesson.id, { engine: fake, cacheDir })).toBe(7);
+    expect(calls).toBe(firstCalls);
     expect(state.lessons[ctx.lesson.id].warnings?.some((w) => w.includes('没有语音'))).toBe(false);
     const lesson = JSON.parse(readFileSync(join(paths.work, ctx.lesson.id, 'draft', 'lesson.json'), 'utf8'));
     expect(referencedFiles(lesson).length).toBe(7);

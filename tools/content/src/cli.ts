@@ -15,12 +15,12 @@ import { getPaths } from './paths';
 import { assembleSite, publish, type PublishTarget } from './publish';
 import { startReviewServer } from './review-server';
 import { run } from './run';
-import { loadState } from './state';
+import { loadState, updateLesson } from './state';
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { authorBrief, authoredFile, importAuthored, listAuthored } from './authoring/import';
 import { edgeEngine, sayEngine, ttsDraft } from './tts';
-import { exportBundle } from './export';
+import { exportBundle, exportEachUnit } from './export';
 import { bytes as fmtBytes } from './format-bytes';
 
 const HELP = `用法：pnpm content <命令> [选项]
@@ -40,13 +40,16 @@ const HELP = `用法：pnpm content <命令> [选项]
                                   输出写一节课所需的全部要求和"课件脚本"格式；
                                   --next 自动挑下一节还没有草稿的课
   import --lesson <课id> | --all  把 content/authored/<课id>.json 编译成草稿（自动验算算式）
-  tts [--lesson <课id>] [--engine say|edge] [--voice 名称] [--force]
+  tts [--lesson <课id>] [--engine say|edge] [--voice 名称] [--force] [--concurrency N] [--tts-cache 目录]
                                   给没有语音的草稿配音：say = Mac 自带中文语音（免费、离线），
                                   edge = edge-tts（pip install edge-tts，免费、需联网）
 
   review [--port 5180]            打开本地审核页：逐课试播，通过 / 打回（写修改意见）
+  approve --all | --book X [--unit N] | --lesson <课id> [--note 备注]
+                                  不试播直接批准待审核的课（只在家长决定跳过逐课审核时用）
   build                           把审核通过的课打包成课程包，生成 catalog.json
   export [--book X] [--unit N] [--lesson 课id] [--out 文件.zip]
+  export --each-unit [--book X] [--out 目录]   每个单元导出一个课程包文件，并生成清单 index.md
                                   把已打包的课导出成"课程包文件"（zip），用微信 / 网盘 / USB 传到
                                   平板或手机，在 App 家长模式 → 离线课程 → 从文件导入（不需要服务器）
   publish --target dir|edgeone|tencent [--no-web-build] [--init] [--allow-empty]
@@ -95,6 +98,9 @@ async function main() {
       engine: { type: 'string' },
       voice: { type: 'string' },
       title: { type: 'string' },
+      note: { type: 'string' },
+      'tts-cache': { type: 'string' },
+      'each-unit': { type: 'boolean' },
     },
   });
   const paths = getPaths();
@@ -240,12 +246,25 @@ async function main() {
             .filter(([, st]) => st.status === 'generated' || st.status === 'rejected')
             .map(([id]) => id);
       for (const id of ids) {
-        const n = await ttsDraft(paths, state, id, { engine, force: values.force, log });
+        const n = await ttsDraft(paths, state, id, {
+          engine,
+          force: values.force,
+          log,
+          cacheDir: values['tts-cache'],
+          concurrency: values.concurrency ? Number(values.concurrency) : 1,
+        });
         log(`${n > 0 ? '✓' : '·'} ${id}：新配音 ${n} 句（${engine.name}）`);
       }
       return;
     }
     case 'export': {
+      if (values['each-unit']) {
+        const outDir = values.out ?? join(paths.content, 'exports');
+        const all = exportEachUnit(paths, { book: values.book, outDir });
+        for (const r of all) log(`✓ ${r.file}（${r.lessons.length} 节课，${fmtBytes(r.bytes)}）`);
+        log(`共 ${all.length} 个课程包文件，清单见 ${join(outDir, 'index.md')}`);
+        return;
+      }
       const r = exportBundle(paths, {
         book: values.book,
         unit: values.unit,
@@ -256,6 +275,28 @@ async function main() {
       log(`已导出 ${r.lessons.length} 节课（${fmtBytes(r.bytes)}）：${r.file}`);
       log('把这个文件发到平板或手机上，在 App 的 家长模式 → 离线课程 → 选择课程包文件。');
       if (r.bytes > 150 * 1024 * 1024) log('⚠ 文件较大，建议按单元分开导出（--unit N），导入更快、更省内存。');
+      return;
+    }
+    case 'approve': {
+      // Batch approval, for when the parent chooses to skip previewing each lesson.
+      if (!values.all && !values.book && !values.lesson) {
+        throw new Error('用法：approve --all | --book X [--unit N] | --lesson <课id> [--note 备注]（只批准待审核的课）');
+      }
+      const state = loadState(paths.state);
+      const note = values.note ?? '批量通过（家长未逐节试播）';
+      let n = 0;
+      for (const c of contexts()) {
+        if (values.book && c.book.id !== values.book) continue;
+        if (values.unit && c.unit.id !== (/^\d+$/.test(values.unit) ? `${c.book.id}.u${values.unit}` : values.unit)) continue;
+        if (values.lesson && c.lesson.id !== values.lesson) continue;
+        const s = state.lessons[c.lesson.id];
+        if (s?.status !== 'generated') continue;
+        const missingAudio = s.warnings?.some((w) => w.includes('没有语音'));
+        updateLesson(paths.state, state, c.lesson.id, { status: 'approved', reviewedAt: new Date().toISOString(), reviewNote: note });
+        log(`✓ ${c.lesson.id}${missingAudio ? '  ⚠ 还没有配音' : ''}`);
+        n++;
+      }
+      log(`已批准 ${n} 节课。运行 pnpm content build 打包。`);
       return;
     }
     case 'status': {

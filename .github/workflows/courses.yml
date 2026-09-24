@@ -1,0 +1,77 @@
+name: Course bundles
+
+# Turns the lesson scripts in content/authored/ into course-bundle zips
+# (narrated with edge-tts) and publishes them as the `courses-latest` release:
+#   https://github.com/<repo>/releases/tag/courses-latest
+# Download a zip on the tablet / phone, then in the app:
+# 家长模式 → 离线课程 → 选择课程包文件.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - content/authored/**
+      - tools/content/**
+      - packages/course-pack/**
+      - packages/curriculum/**
+      - .github/workflows/courses.yml
+
+concurrency:
+  group: course-bundles
+  cancel-in-progress: true
+
+jobs:
+  bundles:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pip install edge-tts==7.2.8
+      # Narration clips keyed by text: unchanged sentences are not synthesized again.
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: content/tts-cache
+          key: tts-${{ github.run_id }}
+          restore-keys: tts-
+      - name: Compile lesson scripts
+        run: pnpm content import --all
+      - name: Narrate
+        run: pnpm content tts --engine edge --concurrency 4 --tts-cache content/tts-cache
+      # The parent chose to publish without previewing each lesson in the review page.
+      - name: Approve
+        run: pnpm content approve --all --note "自动打包（家长未逐节试播）"
+      - name: Build packs
+        run: pnpm content build
+      - name: Export one bundle per unit
+        run: |
+          set -euo pipefail
+          pnpm content export --each-unit --out dist
+          {
+            echo "讲解课和技巧课的课程包文件，每个单元一个，内容更新后自动重新生成。"
+            echo
+            echo "**使用方法**：在平板或手机上点下面的 zip 下载，打开学数学 App → 家长模式 → 离线课程 → 选择课程包文件。"
+            echo "重新导入同一个单元会替换成新版本，学习记录不受影响。"
+            echo
+            cat dist/index.md
+          } > dist/release.md
+      - name: Move the courses-latest tag to this commit
+        run: |
+          git tag -f courses-latest HEAD
+          git push -f origin refs/tags/courses-latest
+      - name: Publish as the courses-latest release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: courses-latest
+          name: 课程资源包（自动生成）
+          body_path: dist/release.md
+          files: dist/*.zip
+          overwrite_files: true
+          make_latest: false

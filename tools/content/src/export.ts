@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSync } from 'node:fs';
-import { dirname, join, relative } from 'node:path';
+import { basename, dirname, join, relative } from 'node:path';
 import { zipSync, type Zippable } from 'fflate';
 import { assertCatalog, BUNDLE_FORMAT, type BundleIndex, type Catalog, type CatalogEntry } from '@xuexi/course-pack';
 import { BOOKS } from '@xuexi/curriculum';
@@ -81,4 +81,33 @@ export function exportBundle(paths: Paths, o: ExportOptions): ExportResult {
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, zipSync(zip));
   return { file, lessons, bytes };
+}
+
+/**
+ * One bundle per unit (stable names `xuexi-<book>-u<n>.zip`, for a release
+ * that is replaced on every run), plus index.md listing them.
+ */
+export function exportEachUnit(paths: Paths, o: { book?: string; outDir: string }): ExportResult[] {
+  if (!existsSync(paths.catalog)) throw new Error('还没有打包好的课程：先审核通过，再运行 pnpm content build');
+  const catalog = JSON.parse(readFileSync(paths.catalog, 'utf8')) as Catalog;
+  const units = new Map<string, { book: string; unit: string }>();
+  for (const e of Object.values(catalog.lessons)) {
+    if (o.book && e.bookId !== o.book) continue;
+    const unitId = e.kpId.split('.').slice(0, 2).join('.');
+    units.set(unitId, { book: e.bookId, unit: unitId.split('.u')[1] });
+  }
+  const results: ExportResult[] = [];
+  const rows: string[] = [];
+  for (const [, { book, unit }] of [...units].sort(([a], [b]) => a.localeCompare(b, 'en', { numeric: true }))) {
+    const r = exportBundle(paths, { book, unit, out: join(o.outDir, `xuexi-${book}-u${unit}.zip`) });
+    results.push(r);
+    const lectures = r.lessons.filter((e) => e.kind === 'lecture').length;
+    const title = defaultTitle({ book, unit }, r.lessons);
+    rows.push(`| ${title} | ${lectures} | ${r.lessons.length - lectures} | ${(r.bytes / 1024 / 1024).toFixed(1)} MB | \`${basename(r.file)}\` |`);
+  }
+  writeFileSync(
+    join(o.outDir, 'index.md'),
+    ['| 单元 | 讲解课 | 技巧课 | 大小 | 文件 |', '| --- | --- | --- | --- | --- |', ...rows].join('\n') + '\n',
+  );
+  return results;
 }

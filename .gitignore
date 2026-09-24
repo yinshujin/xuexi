@@ -18,3 +18,4 @@ content/publish.env
 .signing/
 content/authored/_*
 content/exports/
+content/state.json

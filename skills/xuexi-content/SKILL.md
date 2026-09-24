@@ -65,6 +65,7 @@ user-invocable: true
 ### 打包发布（两种方式通用）
 
 1. `pnpm content build` —— 把通过的课打包，汇报新打包了几节、跳过了哪些及原因。
+   不要自己运行 `pnpm content approve`：课由家长审核；只有家长明确说"不审核，直接打包"时才用它。
 2. 家长没有部署网站（只装了 App）时，导出课程包文件：
    `pnpm content export --book <书> [--unit N]`，把生成的 zip 路径告诉家长，
    请家长发到设备上，在 App 的"家长模式 → 离线课程 → 选择课程包文件"导入。

@@ -122,6 +122,13 @@ pnpm content review
 
 ### 方式一：不用网站，直接导入课程包文件
 
+**最省事**：`content/authored/` 里的课件脚本一有更新，GitHub Actions 的 "Course bundles" 就会自动配音、打包，
+把每个单元的课程包文件发布到仓库 Releases 页面的 **`courses-latest`**。在平板上打开这个页面，点单元对应的 zip 下载，
+再到 App 里导入即可。注意：自动打包会跳过逐节试播（`pnpm content approve --all`），建议孩子上课前你先在 App 里看一遍，
+有问题告诉我改。
+
+也可以在自己电脑上打包：
+
 ```bash
 pnpm content build                                   # 把通过的课打包
 pnpm content export --book bsd-g4a --unit 3          # 导出四上第 3 单元 → content/exports/xuexi-bsd-g4a-u3-日期.zip

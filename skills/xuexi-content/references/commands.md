@@ -8,11 +8,13 @@
 | `pnpm content gen [选项]` | 调用 OpenMAIC 生成课程（断点续跑） |
 | `pnpm content author-brief --lesson <课id> \| --next [--book X] [--unit N] [--kind K] [--out 文件]` | 输出写一节课的要求和课件脚本格式；`--next` 挑下一节还没草稿（或被打回）的课 |
 | `pnpm content import --lesson <课id> \| --all` | 把 `content/authored/<课id>.json` 编译成草稿，自动验算算式 |
-| `pnpm content tts [--lesson <课id>] [--engine say\|edge] [--voice 名称] [--force]` | 给没有语音的草稿配音（say：Mac 自带；edge：edge-tts） |
+| `pnpm content tts [--lesson <课id>] [--engine say\|edge] [--voice 名称] [--force] [--concurrency N] [--tts-cache 目录]` | 给没有语音的草稿配音（say：Mac 自带；edge：edge-tts） |
 | `pnpm content status [--book X]` | 每节课状态：未生成 / 生成中 / 待审核 / 已通过 / 已打回 / 失败 |
 | `pnpm content review [--port 5180]` | 本地审核页（家长操作） |
+| `pnpm content approve --all \| --book X [--unit N] \| --lesson <课id> [--note 备注]` | 不试播直接批准待审核的课。**只有家长明确要求跳过审核时才用** |
 | `pnpm content build` | 打包审核通过的课，生成 catalog.json |
 | `pnpm content export [--book X] [--unit N] [--lesson 课id] [--out 文件.zip] [--title 标题]` | 把打包好的课导出成课程包文件，发到设备后在 App 家长模式里导入（不需要网站） |
+| `pnpm content export --each-unit [--book X] [--out 目录]` | 每个单元导出一个课程包文件，并生成清单 index.md |
 | `pnpm content publish --target dir\|edgeone\|tencent [--init] [--no-web-build]` | 发布 |
 
 `gen` 的选项：

@@ -194,6 +194,9 @@ importers:
       '@xuexi/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      katex:
+        specifier: ^0.18.9
+        version: 0.18.9
 
 packages:
 

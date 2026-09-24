@@ -16,8 +16,10 @@ import { assembleSite, publish, type PublishTarget } from './publish';
 import { startReviewServer } from './review-server';
 import { run } from './run';
 import { loadState } from './state';
-import { existsSync } from 'node:fs';
-import { join } from 'node:path';
+import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { authorBrief, authoredFile, importAuthored, listAuthored } from './authoring/import';
+import { edgeEngine, sayEngine, ttsDraft } from './tts';
 
 const HELP = `用法：pnpm content <命令> [选项]
 
@@ -29,6 +31,17 @@ const HELP = `用法：pnpm content <命令> [选项]
       --kind lecture|technique  --limit N  --concurrency N
       --force 重新生成已完成的课   --stale 重新生成旧模板生成的课
   status [--book X]               查看每节课的状态
+
+  —— 用 WorkBuddy 等 AI 助手自己的模型写课（不需要 OpenMAIC 和模型 Key）——
+  author-brief --lesson <课id> [--out 文件]
+  author-brief --next [--book X] [--unit N] [--kind lecture|technique]
+                                  输出写一节课所需的全部要求和"课件脚本"格式；
+                                  --next 自动挑下一节还没有草稿的课
+  import --lesson <课id> | --all  把 content/authored/<课id>.json 编译成草稿（自动验算算式）
+  tts [--lesson <课id>] [--engine say|edge] [--voice 名称] [--force]
+                                  给没有语音的草稿配音：say = Mac 自带中文语音（免费、离线），
+                                  edge = edge-tts（pip install edge-tts，免费、需联网）
+
   review [--port 5180]            打开本地审核页：逐课试播，通过 / 打回（写修改意见）
   build                           把审核通过的课打包成课程包，生成 catalog.json
   publish --target dir|edgeone|tencent [--no-web-build] [--init]
@@ -70,6 +83,11 @@ async function main() {
       'no-web-build': { type: 'boolean' },
       'no-build': { type: 'boolean' },
       init: { type: 'boolean' },
+      next: { type: 'boolean' },
+      all: { type: 'boolean' },
+      out: { type: 'string' },
+      engine: { type: 'string' },
+      voice: { type: 'string' },
     },
   });
   const paths = getPaths();
@@ -140,6 +158,84 @@ async function main() {
       );
       log(`\n完成：成功 ${summary.ok.length}，失败 ${summary.failed.length}。下一步：pnpm content review`);
       if (summary.failed.length) process.exitCode = 1;
+      return;
+    }
+    case 'author-brief': {
+      const state = loadState(paths.state);
+      let ctx: LessonContext | undefined;
+      if (values.lesson) {
+        ctx = contexts().find((c) => c.lesson.id === values.lesson);
+        if (!ctx) throw new Error(`没有这节课：${values.lesson}（用 pnpm content list 查看）`);
+      } else if (values.next) {
+        ctx = selectLessons(
+          contexts(),
+          state,
+          { book: values.book, unit: values.unit, kind: values.kind as 'lecture' | 'technique' | undefined },
+          lessonTemplateVersion,
+        ).find((c) => {
+          const st = state.lessons[c.lesson.id];
+          return !st || st.status === 'rejected' || st.status === 'failed';
+        });
+        if (!ctx) {
+          log('这个范围内的课都已经有草稿了。');
+          return;
+        }
+      } else {
+        throw new Error('用法：author-brief --lesson <课id> 或 author-brief --next [--book X] [--unit N]');
+      }
+      const brief = authorBrief(paths, state, ctx);
+      if (values.out) {
+        mkdirSync(dirname(values.out), { recursive: true });
+        writeFileSync(values.out, brief);
+        log(`已写入 ${values.out}（课 ${ctx.lesson.id}）`);
+      } else {
+        log(brief);
+      }
+      return;
+    }
+    case 'import': {
+      const state = loadState(paths.state);
+      const ids = values.all ? listAuthored(paths) : values.lesson ? [values.lesson] : [];
+      if (ids.length === 0) throw new Error(`用法：import --lesson <课id> 或 import --all（读取 ${authoredFile(paths, '<课id>')}）`);
+      const known = new Set(contexts().map((c) => c.lesson.id));
+      let failed = 0;
+      for (const id of ids) {
+        if (!known.has(id)) {
+          log(`✗ ${id}：课程目录里没有这节课`);
+          failed++;
+          continue;
+        }
+        const r = await importAuthored(paths, state, id);
+        if (r.ok) {
+          log(`✓ ${id} 已导入，等待配音和审核`);
+          for (const w of r.warnings) log(`  ⚠ ${w}`);
+        } else {
+          failed++;
+          log(`✗ ${id} 有 ${r.errors.length} 处错误，请修改 ${authoredFile(paths, id)} 后重新导入：`);
+          for (const e of r.errors) log(`  - ${e}`);
+        }
+      }
+      if (failed) process.exitCode = 1;
+      return;
+    }
+    case 'tts': {
+      const state = loadState(paths.state);
+      const engine =
+        values.engine === 'edge'
+          ? edgeEngine(values.voice)
+          : values.engine === 'say' || process.platform === 'darwin'
+            ? sayEngine(values.voice)
+            : null;
+      if (!engine) throw new Error('这台电脑不是 Mac，请加 --engine edge（先 pip install edge-tts）');
+      const ids = values.lesson
+        ? [values.lesson]
+        : Object.entries(state.lessons)
+            .filter(([, st]) => st.status === 'generated' || st.status === 'rejected')
+            .map(([id]) => id);
+      for (const id of ids) {
+        const n = await ttsDraft(paths, state, id, { engine, force: values.force, log });
+        log(`${n > 0 ? '✓' : '·'} ${id}：新配音 ${n} 句（${engine.name}）`);
+      }
       return;
     }
     case 'status': {

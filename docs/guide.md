@@ -56,10 +56,15 @@ ACCESS_CODE=sk-你的访问码
 
 不需要 `openmaic up`，也不需要自己的模型 Key。限制：每天最多 10 节课，额度用完脚本会自动停下，第二天再运行同一条命令接着做。
 
-### 用 WorkBuddy 来操作
+### 用 WorkBuddy 自己的额度写课（不需要 OpenMAIC 和模型 Key）
 
-把仓库里的 `skills/xuexi-content/` 文件夹（或打包成 zip）导入 WorkBuddy 的技能，然后在 WorkBuddy 里打开 xuexi 仓库目录，直接说"生成四年级上册第 3 单元的课""看看生成进度""把通过的课发布出去"即可。
-WorkBuddy 会替你运行下面这些命令；审核仍然由你在审核页里完成。
+1. 把仓库里的 `skills/xuexi-content/` 文件夹（或打包成 zip）导入 WorkBuddy 的技能。
+2. 在 WorkBuddy 里打开 xuexi 仓库目录，说"用 xuexi-content 技能，写四年级上册第 3 单元的课，先写 2 节"。
+3. WorkBuddy 会一节一节地：取任务（`pnpm content author-brief --next`）→ 用它自己的模型写"课件脚本"JSON → `pnpm content import`（自动检查格式并验算所有算式，有错会让它改）。
+4. 写完后配音：`pnpm content tts`（Mac 自带中文语音，免费离线；想要更自然的声音可以 `pip install edge-tts` 后加 `--engine edge`）。
+5. 你在审核页里审核，然后 build、publish，和下面的流程一样。
+
+和 OpenMAIC 相比：画面是统一的简洁版式（标题、文字、彩色卡片、公式、表格、白板推导、课堂小题），没有 AI 配图；好处是不花额外的钱、每节课都经过算式验算。
 
 ## 2. 生成课程
 

@@ -5,7 +5,10 @@
 | `pnpm content openmaic up` / `down` / `status` / `logs` | 本机 Docker 启停 OpenMAIC（固定版本 v1.1.0） |
 | `pnpm content mock [--port 3000]` | 模拟 OpenMAIC（示例课件 + 静音配音），不花钱试流程 |
 | `pnpm content list [--book bsd-g2a\|bsd-g4a]` | 列出所有课和 id |
-| `pnpm content gen [选项]` | 生成课程（断点续跑） |
+| `pnpm content gen [选项]` | 调用 OpenMAIC 生成课程（断点续跑） |
+| `pnpm content author-brief --lesson <课id> \| --next [--book X] [--unit N] [--kind K] [--out 文件]` | 输出写一节课的要求和课件脚本格式；`--next` 挑下一节还没草稿（或被打回）的课 |
+| `pnpm content import --lesson <课id> \| --all` | 把 `content/authored/<课id>.json` 编译成草稿，自动验算算式 |
+| `pnpm content tts [--lesson <课id>] [--engine say\|edge] [--voice 名称] [--force]` | 给没有语音的草稿配音（say：Mac 自带；edge：edge-tts） |
 | `pnpm content status [--book X]` | 每节课状态：未生成 / 生成中 / 待审核 / 已通过 / 已打回 / 失败 |
 | `pnpm content review [--port 5180]` | 本地审核页（家长操作） |
 | `pnpm content build` | 打包审核通过的课，生成 catalog.json |
@@ -28,6 +31,7 @@
 课程规模：二上 30 节讲解 + 24 节技巧，四上 28 节讲解 + 25 节技巧，共 107 节。
 
 文件位置：
+- `content/authored/<课id>.json`：你写的课件脚本（可以提交到 git）
 - `content/openmaic.env`：模型 / 语音 Key 或托管版访问码（家长自己填）
 - `content/publish.env`：发布参数（家长自己填）
 - `content/state.json`：每节课的状态（脚本维护）

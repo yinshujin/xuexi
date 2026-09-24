@@ -3,10 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "scripts": { "typecheck": "tsc -p .", "test": "vitest run" },
+  "scripts": {
+    "typecheck": "tsc -p .",
+    "test": "vitest run"
+  },
   "dependencies": {
-    "@xuexi/shared": "workspace:*",
+    "@xuexi/course-pack": "workspace:*",
     "@xuexi/curriculum": "workspace:*",
-    "@xuexi/course-pack": "workspace:*"
+    "@xuexi/shared": "workspace:*",
+    "katex": "^0.18.9"
   }
 }

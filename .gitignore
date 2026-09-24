@@ -16,3 +16,4 @@ shells/tauri/src-tauri/gen/
 content/openmaic.env
 content/publish.env
 .signing/
+content/authored/_*

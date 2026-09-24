@@ -65,8 +65,8 @@ describe('ids', () => {
 
 describe('books', () => {
   it('has the expected books', () => {
-    expect(BOOKS.map((b) => b.id)).toEqual(['bsd-g2a', 'bsd-g4a', 'en-g2a', 'en-g4a']);
-    expect(BOOKS.map((b) => b.subject)).toEqual(['math', 'math', 'english', 'english']);
+    expect(BOOKS.map((b) => b.id)).toEqual(['bsd-g2a', 'bsd-g4a', 'yw-g4a', 'en-g2a', 'en-g4a']);
+    expect(BOOKS.map((b) => b.subject)).toEqual(['math', 'math', 'chinese', 'english', 'english']);
     expect(getBook('bsd-g2a')?.grade).toBe(2);
     expect(getBook('bsd-g4a')?.grade).toBe(4);
     expect(getBook('nope')).toBeUndefined();

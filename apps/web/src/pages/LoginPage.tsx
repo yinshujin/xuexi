@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { useApp } from '../lib/store';
 import { Btn, Card } from '../components/ui';
-
-/** Native shells (APK / desktop) ship the web app locally and need the site address. */
-const isNativeShell = !/^https?:$/.test(location.protocol) || location.hostname === 'tauri.localhost';
+// Native shells (APK / desktop) ship the web app locally and need the site address.
+import { isNativeShell } from '../lib/platform';
 
 export function LoginPage() {
   const { login, useLocalOnly } = useApp();

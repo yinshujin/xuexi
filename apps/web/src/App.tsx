@@ -12,6 +12,7 @@ import { PracticePage } from './pages/PracticePage';
 import { MistakesPage } from './pages/MistakesPage';
 import { ParentPage } from './pages/ParentPage';
 import { EyeBreak } from './components/EyeBreak';
+import { UpdateBanner } from './components/UpdateBanner';
 
 function ChildRoutes({ childId, parts, query }: { childId: string; parts: string[]; query: URLSearchParams }) {
   const { child, loadChild, family } = useApp();
@@ -76,6 +77,7 @@ export function App() {
   if (parts[0] === 'review') return <ReviewPage />;
   return (
     <AppProvider>
+      <UpdateBanner />
       <Routes />
     </AppProvider>
   );

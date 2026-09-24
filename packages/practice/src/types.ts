@@ -67,6 +67,21 @@ export interface AngleSpec {
   opensLeft: boolean;
 }
 
+/**
+ * A ruler with an object laid along it (numeric widget). The child reads the
+ * length in 厘米: `to − from`. A broken ruler (断尺) starts at `rulerFrom > 0`.
+ */
+export interface RulerSpec {
+  /** First and last centimetre marks printed on the ruler. */
+  rulerFrom: number;
+  rulerTo: number;
+  /** The object's ends, in centimetres on the ruler (rulerFrom ≤ from < to ≤ rulerTo). */
+  from: number;
+  to: number;
+  /** What is being measured, e.g. '铅笔', '线段'. Also picks the drawing style. */
+  item: string;
+}
+
 /** A single step of the programmatic worked solution. */
 export interface SolutionStep {
   /** Plain Chinese text; may contain simple inline math like 326×48. */
@@ -89,6 +104,8 @@ export interface Question {
   options?: string[];
   vertical?: VerticalSpec;
   angle?: AngleSpec;
+  /** Numeric questions that show a ruler figure. */
+  ruler?: RulerSpec;
   answer: Answer;
   /** Short hint shown on first wrong try (does not reveal the answer). */
   hint: string;

@@ -2,7 +2,9 @@ import { GENERATOR_IDS, type GeneratorId } from '@xuexi/shared';
 import type { PracticeGenerator } from './generators/base';
 import { g2AddSub2d } from './generators/g2-addsub-2d';
 import { g2AddSubChain } from './generators/g2-addsub-chain';
+import { g2AddSubWord } from './generators/g2-addsub-word';
 import { g2DivTable } from './generators/g2-div-table';
+import { g2Measure } from './generators/g2-measure';
 import { g2MulMeaning } from './generators/g2-mul-meaning';
 import { g2MulTable } from './generators/g2-mul-table';
 import { g2UnitLength, g2UnitMoney } from './generators/g2-units';
@@ -11,6 +13,7 @@ import { g4BignumCompare } from './generators/g4-bignum-compare';
 import { g4BignumRead } from './generators/g4-bignum-read';
 import { g4BignumRewrite } from './generators/g4-bignum-rewrite';
 import { g4Div2d } from './generators/g4-div-2d';
+import { g4Lines } from './generators/g4-lines';
 import { g4LawSimplify } from './generators/g4-law-simplify';
 import { g4Mul3x2 } from './generators/g4-mul-3x2';
 import { g4MulEstimate } from './generators/g4-mul-estimate';
@@ -22,11 +25,13 @@ import type { GenerateOptions, GradeResult, Question, Response } from './types';
 export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g2AddSub2d,
   g2AddSubChain,
+  g2AddSubWord,
   g2MulMeaning,
   g2MulTable,
   g2DivTable,
   g2UnitMoney,
   g2UnitLength,
+  g2Measure,
   g4BignumRead,
   g4BignumRewrite,
   g4BignumCompare,
@@ -37,6 +42,7 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g4LawSimplify,
   g4AngleMeasure,
   g4AngleClassify,
+  g4Lines,
   g4Negative,
 ] as readonly PracticeGenerator[];
 

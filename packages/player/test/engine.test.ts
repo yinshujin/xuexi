@@ -129,3 +129,27 @@ describe('LessonEngine', () => {
     expect(engine.snapshot.whiteboard.elements.length).toBe(0);
   });
 });
+
+describe('whiteboard tables', () => {
+  const draw = (data: string[][]) =>
+    replayWhiteboard([
+      { id: 'o', type: 'wb_open' },
+      { id: 't', type: 'wb_draw_table', x: 80, y: 40, width: 420, height: data.length * 44, data },
+    ] as never);
+  const cellStyle = (wb: ReturnType<typeof draw>) =>
+    (wb.elements[0] as unknown as { data: Array<Array<{ style?: { fontsize: string; align: string } }>> })
+      .data[0][0].style;
+
+  it('shows digit grids such as 竖式 large and centred', () => {
+    const wb = draw([
+      ['', '十位', '个位'],
+      ['', '5', '2'],
+      ['−', '', '7'],
+    ]);
+    expect(cellStyle(wb)).toEqual({ fontsize: '26px', align: 'center' });
+  });
+
+  it('keeps the default style for tables with longer text', () => {
+    expect(cellStyle(draw([['退 1 当 10', '4 颗', '12 颗']]))).toBeUndefined();
+  });
+});

@@ -9,6 +9,7 @@ import type {
   GradeResult,
   Question,
   Response,
+  RulerSpec,
   SolutionStep,
   VerticalSpec,
 } from '../types';
@@ -40,6 +41,7 @@ export interface Draft<P> {
   options?: string[];
   vertical?: VerticalSpec;
   angle?: AngleSpec;
+  ruler?: RulerSpec;
   answer: Answer;
   hint: string;
   steps: SolutionStep[];
@@ -107,6 +109,10 @@ export const DEFAULT_FEEDBACK: Record<ErrorTag, string> = {
   'protractor-scale': '看清角的一条边对着哪一圈的 0°，就读那一圈上的数。',
   'angle-type': '记住：锐角小于 90°，直角 90°，钝角在 90° 和 180° 之间，平角 180°，周角 360°。',
   'angle-sum': '想一想：平角是 180°，周角是 360°，直角是 90°，这里该用哪一个？',
+  'ruler-read': '量长度要看两端：末端对着的刻度减去起点对着的刻度，才是它的长度。',
+  'measure-count': '量同一样东西，“尺子”越长，量的次数越少；次数越多，“尺子”越短。',
+  'line-type': '数一数端点：线段 2 个端点能量长度，射线 1 个端点，直线没有端点，都是无限长。',
+  'perp-parallel': '平行：同一平面内不相交；垂直：相交成直角。抓住关键词再判断！',
   'negative-compare': '负数比大小：负号后面的数越大，这个负数反而越小，想想数轴吧！',
   careless: '差一点点！静下心来再算一遍，你一定行！',
 };
@@ -222,6 +228,7 @@ export function defineGenerator<P>(def: GeneratorDef<P>): PracticeGenerator<P> {
     if (draft.options) q.options = draft.options;
     if (draft.vertical) q.vertical = draft.vertical;
     if (draft.angle) q.angle = draft.angle;
+    if (draft.ruler) q.ruler = draft.ruler;
     return q;
   };
 

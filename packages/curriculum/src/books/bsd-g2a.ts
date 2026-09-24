@@ -60,6 +60,13 @@ export const bsdG2a: Book = {
         ],
         practice: [
           { generatorId: 'g2.addsub.2d', variant: 'oral', minDifficulty: 1, maxDifficulty: 3 },
+          {
+            generatorId: 'g2.addsub.word',
+            variant: 'add',
+            minDifficulty: 1,
+            maxDifficulty: 3,
+            label: '解决问题',
+          },
         ],
       },
       {
@@ -95,6 +102,13 @@ export const bsdG2a: Book = {
         ],
         practice: [
           { generatorId: 'g2.addsub.2d', variant: 'vertical', minDifficulty: 1, maxDifficulty: 4 },
+          {
+            generatorId: 'g2.addsub.word',
+            variant: 'add',
+            minDifficulty: 2,
+            maxDifficulty: 4,
+            label: '解决问题',
+          },
         ],
       },
       {
@@ -130,6 +144,13 @@ export const bsdG2a: Book = {
         ],
         practice: [
           { generatorId: 'g2.addsub.2d', variant: 'oral', minDifficulty: 1, maxDifficulty: 3 },
+          {
+            generatorId: 'g2.addsub.word',
+            variant: 'sub',
+            minDifficulty: 1,
+            maxDifficulty: 3,
+            label: '解决问题',
+          },
         ],
       },
       {
@@ -173,6 +194,13 @@ export const bsdG2a: Book = {
         ],
         practice: [
           { generatorId: 'g2.addsub.2d', variant: 'vertical', minDifficulty: 1, maxDifficulty: 4 },
+          {
+            generatorId: 'g2.addsub.word',
+            variant: 'sub',
+            minDifficulty: 2,
+            maxDifficulty: 4,
+            label: '解决问题',
+          },
         ],
       },
       {
@@ -215,7 +243,14 @@ export const bsdG2a: Book = {
           },
         ],
         practice: [
-          { generatorId: 'g2.addsub.2d', variant: 'oral', minDifficulty: 2, maxDifficulty: 4 },
+          { generatorId: 'g2.addsub.word', variant: 'compare', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g2.addsub.2d',
+            variant: 'oral',
+            minDifficulty: 2,
+            maxDifficulty: 4,
+            label: '口算巩固',
+          },
           {
             generatorId: 'g2.addsub.2d',
             variant: 'vertical',
@@ -259,6 +294,13 @@ export const bsdG2a: Book = {
         practice: [
           { generatorId: 'g2.addsub.2d', variant: 'vertical', minDifficulty: 3, maxDifficulty: 5 },
           { generatorId: 'g2.addsub.chain', minDifficulty: 1, maxDifficulty: 3, label: '两步计算' },
+          {
+            generatorId: 'g2.addsub.word',
+            variant: 'mixed',
+            minDifficulty: 3,
+            maxDifficulty: 5,
+            label: '解决问题',
+          },
         ],
       },
     ]),
@@ -285,7 +327,19 @@ export const bsdG2a: Book = {
           focus:
             '以教材“教室有多长”情境，演示用步长、脚长、跳绳、拃等方法测量同一长度，强调首尾相接、不重叠、不留空；比较不同同学量出的结果为什么不同，引出“需要统一的长度单位”。本课只做非标准测量，不出现厘米、米的换算。',
         },
-        practice: [],
+        techniques: [
+          {
+            slug: 'fewer-longer',
+            title: '量的次数越少，“尺子”越长',
+            minutes: 4,
+            focus:
+              '教比较测量结果的方法：量同一个物体，用的“尺子”（拃、脚长、小棒）越长，量的次数越少；次数越多，说明“尺子”越短。反过来，用同一把“尺子”量不同物体，量的次数越多，物体越长。演示“同一张课桌，淘气量了 6 拃，笑笑量了 8 拃，谁的一拃长”和“用同样的回形针量铅笔和橡皮”两个例子，对比“次数多尺子就长”的错误，做 1 道小练习。',
+            remedies: ['measure-count'],
+          },
+        ],
+        practice: [
+          { generatorId: 'g2.measure', variant: 'informal', minDifficulty: 1, maxDifficulty: 5 },
+        ],
       },
       {
         slug: 'centimeter',
@@ -315,10 +369,13 @@ export const bsdG2a: Book = {
             minutes: 4,
             focus:
               '教刻度尺量长度的三步口令：“左端对准 0，尺子贴紧放平，看右端对着几”。演示一次正常量法和一次“断尺”（从 3 开始对齐，用末端减起点）量法，对比把刻度尺端点当 0 的错误，做 1 道小练习。',
-            remedies: ['careless'],
+            remedies: ['ruler-read'],
           },
         ],
-        practice: [{ generatorId: 'g2.unit.length', minDifficulty: 1, maxDifficulty: 2 }],
+        // 米还没学，所以不链接 g2.unit.length（它的换算题和选单位题都会用到米）。
+        practice: [
+          { generatorId: 'g2.measure', variant: 'ruler', minDifficulty: 1, maxDifficulty: 5 },
+        ],
       },
       {
         slug: 'meter',
@@ -359,7 +416,16 @@ export const bsdG2a: Book = {
             remedies: ['unit-rate'],
           },
         ],
-        practice: [{ generatorId: 'g2.unit.length', minDifficulty: 1, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g2.unit.length', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g2.measure',
+            variant: 'mixed',
+            minDifficulty: 3,
+            maxDifficulty: 5,
+            label: '测量巩固',
+          },
+        ],
       },
     ]),
     // ------------------------------------------------------------------ 三

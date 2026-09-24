@@ -100,6 +100,8 @@ export const FORMAT_SPEC = `## 课件脚本格式（xuexi-authored@1）
   一页白板最多写 8 行，写满了会自动擦掉重写。
 - {"boardClear":true}     // 擦白板
 - {"boardClose":true}     // 关闭白板，回到幻灯片
+  注意：白板的内容会一直保留到下一页，关闭白板也不会擦掉。所以每一页用完白板都要 boardClose，
+  下一次打开白板写新内容之前先 boardClear。白板打开时会盖住幻灯片，spotlight / laser 要在 boardClose 之后再用。
 
 ### 场景二：课堂小题 quiz
 {

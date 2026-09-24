@@ -15,6 +15,9 @@ const ID_RE = /^[a-z0-9]+(?:[.-][a-z0-9]+)*$/;
 const VARIANTS: Record<string, readonly string[]> = {
   'g2.addsub.2d': ['oral', 'vertical'],
   'g2.mul.table': ['tables-2-5', 'tables-6-9', 'all'],
+  'g2.addsub.word': ['mixed', 'add', 'sub', 'compare'],
+  'g2.measure': ['mixed', 'ruler', 'informal'],
+  'g4.lines': ['mixed', 'lines', 'perpendicular', 'parallel'],
 };
 
 describe('ids', () => {

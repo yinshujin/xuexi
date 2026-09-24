@@ -64,6 +64,8 @@ export function describeQuestionForParent(q: Question): string {
     return `${q.vertical.operands.join(` ${q.vertical.op === '-' ? '−' : q.vertical.op} `)} = ?（竖式）`;
   }
   if (q.widget === 'angle' && q.angle) return `用量角器量角（这个角是 ${q.angle.degrees}°）`;
+  if (q.ruler)
+    return `看刻度尺量${q.ruler.item}的长（从刻度 ${q.ruler.from} 到 ${q.ruler.to}${q.ruler.rulerFrom > 0 ? '，断尺' : ''}）`;
   let text = q.prompt
     .replace(/\s*\n\s*/g, ' ')
     .split(BLANK)

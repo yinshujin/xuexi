@@ -2,7 +2,9 @@ import { describe, expect, it } from 'vitest';
 import { countCarries, countMulCarries } from '../src/arith';
 import { g2AddSub2d } from '../src/generators/g2-addsub-2d';
 import { g2AddSubChain } from '../src/generators/g2-addsub-chain';
+import { g2AddSubWord, type WordParams } from '../src/generators/g2-addsub-word';
 import { g2DivTable } from '../src/generators/g2-div-table';
+import { g2Measure } from '../src/generators/g2-measure';
 import { g2MulMeaning } from '../src/generators/g2-mul-meaning';
 import { g2MulTable } from '../src/generators/g2-mul-table';
 import { g2UnitLength, g2UnitMoney } from '../src/generators/g2-units';
@@ -10,6 +12,7 @@ import { g4AngleClassify, g4AngleMeasure } from '../src/generators/g4-angle';
 import { g4BignumCompare } from '../src/generators/g4-bignum-compare';
 import { g4BignumRewrite } from '../src/generators/g4-bignum-rewrite';
 import { g4Div2d, longDivide } from '../src/generators/g4-div-2d';
+import { g4Lines } from '../src/generators/g4-lines';
 import { g4LawSimplify } from '../src/generators/g4-law-simplify';
 import { g4Mul3x2 } from '../src/generators/g4-mul-3x2';
 import { g4MulEstimate } from '../src/generators/g4-mul-estimate';
@@ -370,5 +373,119 @@ describe('big numbers, angles, negative numbers', () => {
     const g = gradeQuestion(q, num(noCarry));
     expect(countCarries(a, b)).toBeGreaterThan(0);
     expect(g.feedback).toMatch(/进 1/);
+  });
+});
+
+describe('word problems (g2.addsub.word)', () => {
+  const base: WordParams = {
+    form: 'more',
+    tpl: 0,
+    a: 45,
+    b: 12,
+    c: 0,
+    names: [0, 1],
+    act: 0,
+    choice: false,
+    optionTags: [],
+  };
+  it('逆叙: 淘气 45 下，比笑笑多 12 下 → adding is op confusion', () => {
+    const p = { ...base, form: 'back-more' as const };
+    const d = g2AddSubWord.diagnoseWith(p, num(57));
+    expect(d.tags).toEqual(['op-confused']);
+    expect(d.feedback).toMatch(/谁多/);
+    expect(g2AddSubWord.diagnoseWith(p, num(33)).tags).toEqual([]);
+  });
+  it('dropped carry and borrow inside the story', () => {
+    expect(
+      g2AddSubWord.diagnoseWith({ ...base, form: 'join', a: 28, b: 16 }, num(34)).tags,
+    ).toEqual(['carry-missed']);
+    expect(
+      g2AddSubWord.diagnoseWith({ ...base, form: 'remain', a: 42, b: 18 }, num(36)).tags,
+    ).toContain('borrow-missed');
+  });
+  it('two steps: 42 − 18 + 9, borrow forgotten in the first step', () => {
+    const p = { ...base, form: 'back' as const, a: 42, b: 18, c: 9 };
+    expect(g2AddSubWord.diagnoseWith(p, num(45)).tags).toEqual(['borrow-missed']); // 34 + 9 − ... 42−18→34
+    expect(g2AddSubWord.diagnoseWith(p, num(15)).tags).toEqual(['op-confused']); // 42 − 18 − 9
+  });
+  it('every compare question with a flipped answer is diagnosed as op confusion', () => {
+    for (let seed = 0; seed < 100; seed++) {
+      const q = g2AddSubWord.targetFor!('op-confused', {
+        difficulty: 4,
+        seed,
+        variant: 'compare',
+      })!;
+      const p = g2AddSubWord.derive({ difficulty: 4, seed, variant: q.variant });
+      const flipped =
+        q.answer.type === 'number' && q.answer.value === p.a + p.b ? p.a - p.b : p.a + p.b;
+      expect(gradeQuestion(q, num(flipped)).errorTags, q.key).toContain('op-confused');
+    }
+  });
+});
+
+describe('measuring (g2.measure)', () => {
+  it('ruler not starting at 0: reading the end mark or counting tick marks', () => {
+    const p = {
+      form: 'ruler' as const,
+      n: [0, 15, 3, 11],
+      item: 0,
+      names: [0, 1] as [number, number],
+      optionTags: [],
+    };
+    expect(g2Measure.diagnoseWith(p, num(11)).tags).toEqual(['ruler-read']);
+    expect(g2Measure.diagnoseWith(p, num(9)).tags).toEqual(['ruler-read']);
+    expect(g2Measure.diagnoseWith(p, num(7)).tags).toEqual([]);
+  });
+  it('broken ruler: measuring from the first printed mark', () => {
+    const p = {
+      form: 'ruler' as const,
+      n: [4, 14, 6, 12],
+      item: 0,
+      names: [0, 1] as [number, number],
+      optionTags: [],
+    };
+    expect(g2Measure.diagnoseWith(p, num(8)).tags).toEqual(['ruler-read']);
+  });
+  it('fewer times means a longer “ruler”', () => {
+    for (let seed = 0; seed < 60; seed++) {
+      const q = g2Measure.targetFor!('measure-count', {
+        difficulty: 2,
+        seed,
+        variant: 'informal',
+      })!;
+      const wrong = q.options!.findIndex((_, i) => i !== (q.answer as { index: number }).index);
+      expect(gradeQuestion(q, { type: 'choice', index: wrong }).errorTags).toEqual([
+        'measure-count',
+      ]);
+    }
+  });
+});
+
+describe('lines (g4.lines)', () => {
+  it('distance: picking a slanted segment instead of the perpendicular one', () => {
+    const p = { form: 'distance' as const, n: [8, 5, 11], optionTags: [] };
+    expect(g4Lines.diagnoseWith(p, num(8)).tags).toEqual(['perp-parallel']);
+    expect(g4Lines.diagnoseWith(p, num(6)).tags).toEqual([]);
+  });
+  it('rectangle: parallel and perpendicular pairs swapped', () => {
+    expect(
+      g4Lines.diagnoseWith({ form: 'rect-para', n: [0], optionTags: [] }, num(4)).tags,
+    ).toEqual(['perp-parallel']);
+    expect(
+      g4Lines.diagnoseWith({ form: 'rect-perp', n: [0], optionTags: [] }, num(2)).tags,
+    ).toEqual(['perp-parallel']);
+  });
+  it('counting segments: only neighbouring points is not a concept error but gets a specific hint', () => {
+    const d = g4Lines.diagnoseWith({ form: 'count-seg', n: [5], optionTags: [] }, num(4));
+    expect(d.tags).toEqual([]);
+    expect(d.feedback).toMatch(/相邻/);
+  });
+  it('wrong answers to true/false statements are line concept errors', () => {
+    for (let seed = 0; seed < 60; seed++) {
+      const q = g4Lines.targetFor!('line-type', { difficulty: 2, seed, variant: 'lines' })!;
+      if (q.widget !== 'choice') continue;
+      const wrong = q.answer.type === 'choice' ? (q.answer.index + 1) % q.options!.length : 0;
+      expect(gradeQuestion(q, { type: 'choice', index: wrong }).errorTags).toEqual(['line-type']);
+    }
   });
 });

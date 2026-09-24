@@ -147,6 +147,12 @@ export function applyWhiteboardAction(state: WhiteboardState, a: Action): Whiteb
       const cols = rows > 0 ? a.data[0].length : 0;
       if (rows === 0 || cols === 0) return state;
       let cellId = 0;
+      // Digit grids (e.g. 竖式 written as a table): every cell is at most 4 characters.
+      // Show them large and centred so children can read them; other tables keep the default style.
+      const grid = a.data.every((row) => row.every((t) => [...t].length <= 4));
+      const style = grid
+        ? { fontsize: `${Math.round(Math.min(30, (a.height / rows) * 0.6))}px`, align: 'center' }
+        : undefined;
       return add(state, {
         id: elementId(a.elementId, a.id),
         type: 'table',
@@ -158,7 +164,13 @@ export function applyWhiteboardAction(state: WhiteboardState, a: Action): Whiteb
         colWidths: Array(cols).fill(1 / cols),
         cellMinHeight: 36,
         data: a.data.map((row) =>
-          row.map((text) => ({ id: `cell_${cellId++}`, colspan: 1, rowspan: 1, text })),
+          row.map((text) => ({
+            id: `cell_${cellId++}`,
+            colspan: 1,
+            rowspan: 1,
+            text,
+            ...(style ? { style } : {}),
+          })),
         ),
         outline: a.outline ?? { width: 2, style: 'solid', color: '#eeece1' },
         theme: a.theme

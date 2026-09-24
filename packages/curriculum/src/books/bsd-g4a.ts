@@ -201,7 +201,19 @@ export const bsdG4a: Book = {
           focus:
             '以教材“线的认识”情境（斜拉桥钢索、手电筒光线等）引入，列表对比线段（2 个端点、可量长度）、射线（1 个端点、向一端无限延伸）、直线（没有端点、向两端无限延伸），讲字母表示法。例题：数图中有几条线段；判断说法对错。不涉及角的度量。',
         },
-        practice: [],
+        techniques: [
+          {
+            slug: 'endpoints',
+            title: '看端点，分清线段、射线、直线',
+            minutes: 4,
+            focus:
+              '教用“数端点、看延伸”分辨三种线：两个端点、不能延伸的是线段，可以量长度；一个端点、向一端无限延伸的是射线；没有端点、向两端无限延伸的是直线，射线和直线都不能量长度，也不能比长短。再教有序数线段：一条线上有 4 个点，从第一个点出发数出 3 条，第二个点 2 条，第三个点 1 条，3 + 2 + 1 = 6。对比“射线比直线短”和“只数相邻两点”的错误，做 1 道小练习。',
+            remedies: ['line-type'],
+          },
+        ],
+        practice: [
+          { generatorId: 'g4.lines', variant: 'lines', minDifficulty: 1, maxDifficulty: 5 },
+        ],
       },
       {
         slug: 'intersect-perpendicular',
@@ -224,7 +236,9 @@ export const bsdG4a: Book = {
           focus:
             '以教材“相交与垂直”情境（剪刀、十字路口）讲两条直线相交，相交成直角时互相垂直，交点叫垂足。演示用三角板画垂线的步骤（一靠、二移、三画），并讲从直线外一点到直线的所有线段中垂线段最短。例题：找图中互相垂直的线段；画一条垂线。',
         },
-        practice: [],
+        practice: [
+          { generatorId: 'g4.lines', variant: 'perpendicular', minDifficulty: 1, maxDifficulty: 5 },
+        ],
       },
       {
         slug: 'parallel',
@@ -247,7 +261,26 @@ export const bsdG4a: Book = {
           focus:
             '以教材“平移与平行”情境（推拉窗平移、铁轨）讲：同一平面内不相交的两条直线互相平行；演示用直尺和三角板“一靠、二推、三画”画平行线。例题：判断几组线是否平行（包括延长后会相交的情况）；画已知直线的平行线。',
         },
-        practice: [],
+        techniques: [
+          {
+            slug: 'same-plane',
+            title: '判断平行和垂直：抓住关键词',
+            minutes: 4,
+            focus:
+              '教判断平行与垂直的关键词：①平行要“在同一平面内”并且“不相交”，两条线段看起来不相交，要延长后再看会不会相交；②垂直要“相交”并且“成直角”，用三角板的直角比一比。演示“两条线段延长后相交，所以不平行”和“两条直线斜着相交，不是直角，所以不垂直”两个例子，对比漏掉“同一平面内”和“相交就是垂直”的错误说法，做 1 道小练习。',
+            remedies: ['perp-parallel'],
+          },
+        ],
+        practice: [
+          { generatorId: 'g4.lines', variant: 'parallel', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.lines',
+            variant: 'mixed',
+            minDifficulty: 3,
+            maxDifficulty: 5,
+            label: '线的综合',
+          },
+        ],
       },
       {
         slug: 'angles-rotation',

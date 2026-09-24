@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { GradeResult, Question, Response } from '@xuexi/practice';
 import { AngleView } from './AngleView';
 import { NumberPad } from './NumberPad';
+import { RulerView } from './RulerView';
 import { VerticalGrid } from './VerticalGrid';
 
 export interface AnswerOutcome {
@@ -143,6 +144,7 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
     input = (
       <div className="flex flex-col items-center gap-4">
         {q.widget === 'angle' && q.angle && <AngleView spec={q.angle} />}
+        {q.ruler && <RulerView spec={q.ruler} />}
         <div className="flex h-16 min-w-40 items-center justify-center rounded-2xl bg-white px-6 font-mono text-4xl shadow-inner ring-2 ring-sky-300">
           {text || <span className="text-slate-300">?</span>}
           {q.widget === 'angle' && <span className="ml-1 text-2xl">°</span>}

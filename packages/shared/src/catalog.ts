@@ -22,6 +22,9 @@ export const ERROR_TAGS = {
   // ---- units ----
   'unit-rate': '单位进率记错',
   'unit-choice': '单位选择不合适',
+  // ---- measuring ----
+  'ruler-read': '刻度尺读数错（没有用末端刻度减起点刻度）',
+  'measure-count': '量的次数和“尺子”长短的关系弄反',
   // ---- big numbers ----
   'zero-reading': '数中间或末尾的 0 读写错',
   'place-value': '数位 / 计数单位弄错',
@@ -43,6 +46,9 @@ export const ERROR_TAGS = {
   'protractor-scale': '量角器内外圈读反',
   'angle-type': '角的分类弄错',
   'angle-sum': '平角 / 周角关系用错',
+  // ---- lines ----
+  'line-type': '线段、射线、直线的特征弄混',
+  'perp-parallel': '垂直与平行的概念弄错',
   // ---- negative numbers ----
   'negative-compare': '负数比较大小方向弄反',
   // ---- generic ----
@@ -74,6 +80,12 @@ export const GENERATORS = [
     errorTags: ['carry-missed', 'borrow-missed', 'order-of-ops'],
   },
   {
+    id: 'g2.addsub.word',
+    grade: 2,
+    title: '100 以内加减法解决问题（一共、还剩、比多比少）',
+    errorTags: ['op-confused', 'carry-missed', 'borrow-missed'],
+  },
+  {
     id: 'g2.mul.meaning',
     grade: 2,
     title: '乘法的意义（几个几）',
@@ -102,6 +114,12 @@ export const GENERATORS = [
     grade: 2,
     title: '长度单位（厘米、米）',
     errorTags: ['unit-rate', 'unit-choice'],
+  },
+  {
+    id: 'g2.measure',
+    grade: 2,
+    title: '测量（刻度尺量长度、比较测量结果）',
+    errorTags: ['ruler-read', 'measure-count'],
   },
   // ---------------- 四年级 ----------------
   {
@@ -169,6 +187,12 @@ export const GENERATORS = [
     grade: 4,
     title: '角的分类与求未知角',
     errorTags: ['angle-type', 'angle-sum'],
+  },
+  {
+    id: 'g4.lines',
+    grade: 4,
+    title: '线段、射线、直线与相交、垂直、平行',
+    errorTags: ['line-type', 'perp-parallel'],
   },
   {
     id: 'g4.negative',

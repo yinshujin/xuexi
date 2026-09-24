@@ -1,7 +1,15 @@
 import { roundTo } from '../arith';
 import type { Rng } from '../rng';
 import type { SolutionStep } from '../types';
-import { BLANK, defineGenerator, numOf, sampleUntil, step, type Diagnosis } from './base';
+import {
+  BLANK,
+  defineGenerator,
+  numOf,
+  sampleUntil,
+  step,
+  type Diagnosis,
+  type Draft,
+} from './base';
 
 /**
  * g4.bignum.rewrite — 改写成以「万 / 亿」作单位（准确数），以及四舍五入求近似数。
@@ -20,13 +28,26 @@ import { BLANK, defineGenerator, numOf, sampleUntil, step, type Diagnosis } from
  *  3 ap-wan / ap-yi，尾数最高位是 4 或 5（临界）
  *  4 ap 带连续进位（399600 ≈ 40万）/ ap-shiwan
  *  5 改写与近似混合：rw-wan（k 末位不是 0）/ ap-shiwan / 进位的 ap-yi
+ *
+ * 快速推理 (difficulty 4–5, form ap-range): 一个五位数省略万位后面的尾数约是 5 万，
+ * 这个数最大是（　）→ 54999（四舍：千位最大填 4，后面全填 9）；最小是（　）→ 45000
+ * （五入：万位少 1，千位填 5，后面全填 0）。Difficulty 5 also asks about 亿.
  */
 
 type Form = 'rw-wan' | 'rw-yi' | 'ap-wan' | 'ap-yi' | 'ap-shiwan';
 
 export interface RewriteParams {
-  form: Form;
+  form: Form | 'ap-range';
   n: number;
+  /** ap-range: the rounded value is `n` 万 / 亿; asks for the largest or smallest number. */
+  range?: { unit: '万' | '亿'; want: 'max' | 'min'; digits: number };
+}
+
+const CN_COUNT = '零一二三四五六七八九十';
+
+export function rangeAnswer(k: number, unit: '万' | '亿', want: 'max' | 'min'): number {
+  const u = unit === '万' ? WAN : YI;
+  return want === 'max' ? k * u + u / 2 - 1 : k * u - u / 2;
 }
 
 const WAN = 10_000;
@@ -82,16 +103,16 @@ function pick(rng: Rng, d: number, form: Form): number {
   }
 }
 
-function formsFor(d: number, target?: string): Form[] {
+function formsFor(d: number, target?: string): Array<Form | 'ap-range'> {
   if (target === 'rewrite-vs-approx') return ['rw-wan', 'ap-shiwan'];
   if (target === 'rounding') return ['ap-wan', 'ap-yi'];
   return [
     ['rw-wan'],
     ['rw-wan', 'rw-yi', 'ap-wan'],
     ['ap-wan', 'ap-yi'],
-    ['ap-wan', 'ap-yi', 'ap-shiwan'],
-    ['rw-wan', 'ap-shiwan', 'ap-yi'],
-  ][d - 1] as Form[];
+    ['ap-wan', 'ap-yi', 'ap-shiwan', 'ap-range'],
+    ['rw-wan', 'ap-shiwan', 'ap-yi', 'ap-range'],
+  ][d - 1] as Array<Form | 'ap-range'>;
 }
 
 function stepsFor(form: Form, n: number, ans: number): SolutionStep[] {
@@ -125,6 +146,40 @@ function stepsFor(form: Form, n: number, ans: number): SolutionStep[] {
   ];
 }
 
+function buildRange(rng: Rng, d: number): Draft<RewriteParams> {
+  const unit = d >= 5 && rng.chance(0.4) ? '亿' : '万';
+  // 五位数 / 六位数 (万) or 九位数 (亿); k keeps both extremes at the same digit count.
+  const digits = unit === '亿' ? 9 : rng.pick([5, 6]);
+  const k = digits === 6 ? rng.int(11, 99) : rng.int(2, 9);
+  const want = rng.pick(['max', 'min'] as const);
+  const answer = rangeAnswer(k, unit, want);
+  const below = unit === '万' ? '千位' : '千万位';
+  return {
+    widget: 'numeric',
+    prompt:
+      `一个${CN_COUNT[digits]}位数，省略${unit}位后面的尾数约是 ${k} ${unit}，` +
+      `这个数最${want === 'max' ? '大' : '小'}是${BLANK}。`,
+    answer: { type: 'number', value: answer },
+    hint: '想一想：最大的数是“四舍”得到的，还是“五入”得到的？',
+    steps:
+      want === 'max'
+        ? [
+            step(`求最大，要用“四舍”：舍去尾数后，还是 ${k} 个${unit}。`),
+            step(`${below}上最大只能填 4，后面的数位全都填 9。`),
+            step('所以', `最大是 ${answer}，${answer} ≈ ${k}${unit}`),
+          ]
+        : [
+            step(
+              `求最小，要用“五入”：五入以后才变成 ${k} 个${unit}，说明原来是 ${k - 1} 个${unit}。`,
+            ),
+            step(`${below}上最小填 5，后面的数位全都填 0。`),
+            step('所以', `最小是 ${answer}，${answer} ≈ ${k}${unit}`),
+          ],
+    targetSeconds: 30,
+    params: { form: 'ap-range', n: k, range: { unit, want, digits } },
+  };
+}
+
 export const g4BignumRewrite = defineGenerator<RewriteParams>({
   id: 'g4.bignum.rewrite',
   variants: ['mixed', 'rewrite', 'approx'],
@@ -134,7 +189,9 @@ export const g4BignumRewrite = defineGenerator<RewriteParams>({
     if (variant === 'rewrite') forms = d <= 1 ? ['rw-wan'] : ['rw-wan', 'rw-yi'];
     if (variant === 'approx') forms = forms.filter((f) => f.startsWith('ap'));
     if (forms.length === 0) forms = d <= 2 ? ['ap-wan'] : ['ap-wan', 'ap-yi'];
-    const form = rng.pick(forms);
+    const picked = rng.pick(forms);
+    if (picked === 'ap-range') return buildRange(rng, d);
+    const form = picked;
     const n = sampleUntil(
       () => pick(rng, d, form),
       (x) => {
@@ -165,9 +222,23 @@ export const g4BignumRewrite = defineGenerator<RewriteParams>({
       params: { form, n },
     };
   },
-  diagnose({ form, n }, r) {
+  diagnose({ form, n, range }, r) {
     const x = numOf(r);
     if (x === null) return { tags: [] };
+    if (form === 'ap-range') {
+      if (!range) return { tags: [] };
+      const u = range.unit === '万' ? WAN : YI;
+      // Any number near n 万 that is not the extreme: 四舍 / 五入 boundary not worked out.
+      if (Math.abs(x - n * u) <= u)
+        return {
+          tags: ['rounding'],
+          feedback:
+            range.want === 'max'
+              ? '求最大要用“四舍”：看的那一位最大填 4，后面全填 9。'
+              : '求最小要用“五入”：前一位少 1，看的那一位填 5，后面全填 0。',
+        };
+      return { tags: [] };
+    }
     const tags: Diagnosis['tags'] = [];
     const ans = rewriteAnswer(form, n);
     if (form === 'rw-wan' || form === 'rw-yi') {

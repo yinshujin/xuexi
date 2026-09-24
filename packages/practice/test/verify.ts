@@ -213,6 +213,34 @@ export function expectedAnswer(q: Question): Answer {
         const k = placeOf(Number(m[1]), m[2]);
         return { type: 'number', value: Number(m[2]) * 10 ** k };
       }
+      const count = (c: string) => CN.indexOf(c);
+      if ((m = p.match(/^最大的(.)位数是（　）。$/)))
+        return { type: 'number', value: Number('9'.repeat(count(m[1]))) };
+      if ((m = p.match(/^最小的(.)位数是（　）。$/)))
+        return { type: 'number', value: Number('1' + '0'.repeat(count(m[1]) - 1)) };
+      if ((m = p.match(/^最小的(.)位数比最大的(.)位数大（　）。$/))) {
+        const smallest = Number('1' + '0'.repeat(count(m[1]) - 1));
+        return { type: 'number', value: smallest - Number('9'.repeat(count(m[2]))) };
+      }
+      if (
+        (m = p.match(
+          /^用 ([\d、]+) 这(.)张数字卡片（每张都用上），组成(最大|最小)的(.)位数，这个数是（　）。$/,
+        ))
+      ) {
+        const digits = m[1].split('、');
+        if (digits.length !== count(m[2]) || digits.length !== count(m[4]))
+          throw new Error(`${q.key}: card count`);
+        // Try every card at the front; the rest is best sorted.
+        let best: number | null = null;
+        digits.forEach((first, i) => {
+          if (first === '0') return;
+          const rest = digits.filter((_, j) => j !== i).sort();
+          if (m![3] === '最大') rest.reverse();
+          const v = Number(first + rest.join(''));
+          if (best === null || (m![3] === '最大' ? v > best : v < best)) best = v;
+        });
+        return { type: 'number', value: best! };
+      }
       if ((m = p.match(/^由 (.+)组成的数是（　）。$/))) {
         let total = 0;
         for (const part of m[1].matchAll(/(\d+) 个([^、和]+)/g))
@@ -233,6 +261,34 @@ export function expectedAnswer(q: Question): Answer {
       );
     }
     case 'g4.bignum.rewrite': {
+      const range = p.match(
+        /^一个(.)位数，省略(万|亿)位后面的尾数约是 (\d+) (万|亿)，这个数最(大|小)是（　）。$/,
+      );
+      if (range) {
+        // Binary search the boundary of the numbers that round to k, then check the digit count.
+        const u = range[2] === '万' ? 1e4 : 1e8;
+        const k = Number(range[3]);
+        const rounds = (v: number) => Math.round(v / u) === k;
+        let [lo, hi] = [(k - 1) * u, (k + 1) * u]; // rounds(k * u) is true
+        if (range[5] === '大') {
+          lo = k * u; // largest v with rounds(v)
+          while (hi - lo > 1) {
+            const mid = Math.floor((lo + hi) / 2);
+            if (rounds(mid)) lo = mid;
+            else hi = mid;
+          }
+        } else {
+          hi = k * u; // smallest v with rounds(v)
+          while (hi - lo > 1) {
+            const mid = Math.floor((lo + hi) / 2);
+            if (rounds(mid)) hi = mid;
+            else lo = mid;
+          }
+          lo = hi;
+        }
+        if (String(lo).length !== CN.indexOf(range[1])) throw new Error(`${q.key}: digit count`);
+        return { type: 'number', value: lo };
+      }
       const n = numbersIn(p).find((x) => x >= 10000) as number;
       if (p.includes('改写') && p.includes('「万」')) return { type: 'number', value: n / 1e4 };
       if (p.includes('改写') && p.includes('「亿」')) return { type: 'number', value: n / 1e8 };
@@ -242,6 +298,14 @@ export function expectedAnswer(q: Question): Answer {
       throw new Error(`unknown rewrite prompt ${p}`);
     }
     case 'g4.bignum.compare': {
+      const blank = p.match(/^(\d*□\d*) ([<>]) (\d+)，□ 里最(大|小)能填几？/);
+      if (blank) {
+        const fits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9].filter((dg) => {
+          const a = Number(blank[1].replace('□', String(dg)));
+          return blank[2] === '<' ? a < Number(blank[3]) : a > Number(blank[3]);
+        });
+        return { type: 'number', value: blank[4] === '大' ? Math.max(...fits) : Math.min(...fits) };
+      }
       const [l, r] = p.replace('比较大小：', '').split(' ○ ');
       const val = (s: string) =>
         s.endsWith('亿') ? parseInt(s) * 1e8 : s.endsWith('万') ? parseInt(s) * 1e4 : Number(s);

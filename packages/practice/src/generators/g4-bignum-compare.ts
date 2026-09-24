@@ -1,6 +1,6 @@
 import type { Rng } from '../rng';
 import type { SolutionStep } from '../types';
-import { defineGenerator, sampleUntil, step } from './base';
+import { BLANK, defineGenerator, numOf, sampleUntil, step } from './base';
 
 /**
  * g4.bignum.compare — 大数比较大小（compare widget）。
@@ -11,6 +11,10 @@ import { defineGenerator, sampleUntil, step } from './base';
  *  3 位数相同，前几位相同，中间某一位不同
  *  4 「350万 ○ 3490000」一边带单位，或 8~10 位中间有 0 的数
  *  5 「2亿 ○ 19999万」单位不同 / 相等的情况「35万 ○ 350000」
+ *
+ * From difficulty 4 about a third of the questions are 快速推理 instead:
+ * 「58□300 < 584000，□ 里最大能填几？」(numeric). The digits before □ match, so □ is
+ * compared with one digit; whether that digit itself works depends on the digits after.
  */
 
 export interface Side {
@@ -22,6 +26,16 @@ export interface Side {
 export interface CompareParams {
   left: Side;
   right: Side;
+  /** Set for 「□ 里最大 / 最小能填几」 questions (then left / right are unused). */
+  blank?: BlankParams;
+}
+
+export interface BlankParams {
+  /** Left number with 「□」 in it, e.g. "58□300". */
+  a: string;
+  op: '<' | '>';
+  b: number;
+  answer: number;
 }
 
 type Cmp = '<' | '>' | '=';
@@ -111,6 +125,52 @@ function build(rng: Rng, d: number): CompareParams {
   }
 }
 
+const PLACE = ['个', '十', '百', '千', '万', '十万', '百万', '千万', '亿', '十亿', '百亿', '千亿'];
+
+function buildBlank(rng: Rng, d: number): BlankParams {
+  return sampleUntil(
+    () => {
+      const len = d <= 4 ? rng.int(6, 7) : rng.int(7, 9);
+      const b = randomDigits(rng, len);
+      const pos = rng.int(1, len - 2);
+      const after = String(rng.int(0, 10 ** (len - pos - 1) - 1)).padStart(len - pos - 1, '0');
+      const op = rng.pick(['<', '>'] as const);
+      const digit = Number(b[pos]);
+      const rest = b.slice(pos + 1);
+      // With □ = digit the numbers only differ after □.
+      const equalWorks = op === '<' ? after < rest : after > rest;
+      const answer = op === '<' ? (equalWorks ? digit : digit - 1) : equalWorks ? digit : digit + 1;
+      return { a: b.slice(0, pos) + '□' + after, op, b: Number(b), answer };
+    },
+    (x) => {
+      // The digits after □ must differ, otherwise □ = digit makes the numbers equal.
+      const pos = x.a.indexOf('□');
+      return x.answer >= 0 && x.answer <= 9 && x.a.slice(pos + 1) !== String(x.b).slice(pos + 1);
+    },
+    'blank compare',
+  );
+}
+
+function blankSteps(p: BlankParams): SolutionStep[] {
+  const b = String(p.b);
+  const pos = p.a.indexOf('□');
+  const digit = Number(b[pos]);
+  const place = PLACE[b.length - 1 - pos];
+  const withDigit = Number(p.a.replace('□', String(digit)));
+  const ok = p.op === '<' ? withDigit < p.b : withDigit > p.b;
+  const most = p.op === '<' ? '大' : '小';
+  return [
+    step(
+      `两个数都是 ${b.length} 位数${pos > 0 ? `，前 ${pos} 位都相同` : ''}，所以先比${place}位：□ 和 ${digit}。`,
+    ),
+    step(`□ 比 ${digit} ${p.op === '<' ? '小' : '大'}时，一定成立。`),
+    step(
+      `□ 填 ${digit} 时，${withDigit} ${withDigit < p.b ? '<' : '>'} ${p.b}，${ok ? '也成立' : '不成立'}。`,
+    ),
+    step('所以', `□ 里最${most}能填 ${p.answer}`),
+  ];
+}
+
 function explain(p: CompareParams): SolutionStep[] {
   const L = sideValue(p.left);
   const R = sideValue(p.right);
@@ -162,6 +222,18 @@ export const g4BignumCompare = defineGenerator<CompareParams>({
   targets: ['place-value'],
   build({ difficulty: d, target, rng }) {
     const level = target === 'place-value' ? Math.max(d, 4) : d;
+    if (level >= 4 && rng.chance(0.35)) {
+      const blank = buildBlank(rng, level);
+      return {
+        widget: 'numeric',
+        prompt: `${blank.a} ${blank.op} ${blank.b}，□ 里最${blank.op === '<' ? '大' : '小'}能填几？${BLANK}`,
+        answer: { type: 'number', value: blank.answer },
+        hint: '先找出 □ 要和哪一位上的数字比，再试一试 □ 等于这个数字时行不行。',
+        steps: blankSteps(blank),
+        targetSeconds: 25,
+        params: { left: { k: 0, unit: '' }, right: { k: 0, unit: '' }, blank },
+      };
+    }
     const p = sampleUntil(
       () => build(rng, level),
       (x) => {
@@ -189,6 +261,16 @@ export const g4BignumCompare = defineGenerator<CompareParams>({
     };
   },
   diagnose(p, r) {
+    if (p.blank) {
+      const x = numOf(r);
+      // Off by one at the boundary: the equal digit was not checked (or wrongly ruled out).
+      if (x !== null && Math.abs(x - p.blank.answer) === 1)
+        return {
+          tags: ['place-value'],
+          feedback: '□ 等于那一位的数字时，前面都一样，要接着往后比，看看行不行。',
+        };
+      return { tags: [] };
+    }
     if (r.type !== 'compare' || r.value === null) return { tags: [] };
     const x = r.value;
     const a = String(p.left.k);

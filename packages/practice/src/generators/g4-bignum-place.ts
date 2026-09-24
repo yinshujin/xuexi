@@ -23,13 +23,17 @@ import {
  *  unit      38472000 中的「4」表示 4 个（　）。          choice of 计数单位 names
  *  value     38472000 中的「4」表示（　）。               numeric
  *  compose   由 3 个亿、5 个百万和 2 个千组成的数是（　）。numeric
+ *  extreme   最大的七位数是（　）/ 最小的八位数比最大的七位数大（　）  numeric (快速推理)
+ *  cards     用 0、0、3、5、7、8 这六张数字卡片组成最小的六位数        numeric (快速推理)
  *
  * Difficulty:
  *  1 next / rate between neighbouring units, position in 5~6 位数
- *  2 next up to 亿, position / unit in 7~8 位数
- *  3 100 个…是（　）, rate two places apart, value in 6~8 位数, compose within 千万
- *  4 rate 3~4 places apart (一亿里面有 10000 个一万), position / unit in 9~10 位数, compose with 亿
- *  5 compose with the parts out of order, value / position in 9~12 位数
+ *  2 next up to 亿, position / unit in 7~8 位数, 最大 / 最小的几位数
+ *  3 100 个…是（　）, rate two places apart, value in 6~8 位数, compose within 千万,
+ *    最小的 n 位数比最大的 n−1 位数大几
+ *  4 rate 3~4 places apart (一亿里面有 10000 个一万), position / unit in 9~10 位数, compose with 亿,
+ *    6~7 张数字卡片组最大 / 最小的数
+ *  5 compose with the parts out of order, value / position in 9~12 位数, 7~8 张卡片
  */
 
 /** 数位 names, index = place (0 = 个位). */
@@ -78,7 +82,7 @@ export const UNIT_WORDS = [
   '一千亿',
 ];
 
-type Form = 'next' | 'rate' | 'position' | 'unit' | 'value' | 'compose';
+type Form = 'next' | 'rate' | 'position' | 'unit' | 'value' | 'compose' | 'extreme' | 'cards';
 
 export interface Part {
   count: number;
@@ -95,6 +99,10 @@ export interface PlaceParams {
   big?: number;
   /** compose: the parts in the order they are listed. */
   parts?: Part[];
+  /** extreme / cards: what is asked; extreme `n` is the digit count. */
+  want?: 'max' | 'min' | 'gap';
+  /** cards: the digits on the cards, smallest first. */
+  cards?: number[];
   optionTags?: Array<ErrorTag | null>;
 }
 
@@ -108,10 +116,10 @@ function formsFor(d: number, target?: ErrorTag): Form[] {
   return (
     [
       ['next', 'rate', 'position'],
-      ['next', 'position', 'unit'],
-      ['next', 'rate', 'value', 'compose'],
-      ['rate', 'position', 'unit', 'compose'],
-      ['compose', 'value', 'position'],
+      ['next', 'position', 'unit', 'extreme'],
+      ['next', 'rate', 'value', 'compose', 'extreme'],
+      ['rate', 'position', 'unit', 'compose', 'cards'],
+      ['compose', 'value', 'position', 'cards'],
     ] as Form[][]
   )[d - 1];
 }
@@ -173,6 +181,22 @@ function pickParts(rng: Rng, d: number, target?: ErrorTag): Part[] {
     },
     'compose parts',
   );
+}
+
+const CN_COUNT = '零一二三四五六七八九';
+
+/** Largest / smallest number made from all the cards (no leading 0). */
+export function cardsAnswer(cards: number[], want: 'max' | 'min'): number {
+  const asc = [...cards].sort((a, b) => a - b);
+  if (want === 'max') return Number(asc.reverse().join(''));
+  const lead = asc.findIndex((c) => c > 0);
+  return Number([asc[lead], ...asc.slice(0, lead), ...asc.slice(lead + 1)].join(''));
+}
+
+function extremeAnswer(n: number, want: 'max' | 'min' | 'gap'): number {
+  if (want === 'max') return pow10(n) - 1;
+  if (want === 'min') return pow10(n - 1);
+  return pow10(n - 1) - (pow10(n - 1) - 1);
 }
 
 const composeValue = (parts: Part[]) => parts.reduce((s, p) => s + p.count * pow10(p.place), 0);
@@ -298,6 +322,82 @@ export const g4BignumPlace = defineGenerator<PlaceParams>({
           params: { form, n, place },
         };
       }
+      case 'extreme': {
+        const want = d >= 3 && rng.chance(0.4) ? 'gap' : rng.pick(['max', 'min'] as const);
+        const n = rng.int(5, 9);
+        const answer = extremeAnswer(n, want);
+        const cn = CN_COUNT[n];
+        const prev = CN_COUNT[n - 1];
+        const steps =
+          want === 'max'
+            ? [step(`最大的${cn}位数，${n} 个数位上都填最大的数字 9。`)]
+            : want === 'min'
+              ? [step(`最小的${cn}位数，最高位填 1，后面 ${n - 1} 位都填 0。`)]
+              : [
+                  step(
+                    `最大的${prev}位数是 ${pow10(n - 1) - 1}，最小的${cn}位数是 ${pow10(n - 1)}。`,
+                  ),
+                  step('最大的几位数再加 1，每一位都满十进一，就是多一位的最小的数。'),
+                ];
+        return {
+          widget: 'numeric',
+          prompt:
+            want === 'gap'
+              ? `最小的${cn}位数比最大的${prev}位数大${BLANK}。`
+              : `${want === 'max' ? '最大' : '最小'}的${cn}位数是${BLANK}。`,
+          answer: { type: 'number', value: answer },
+          hint:
+            want === 'max'
+              ? '最大的几位数，每一位都填最大的数字。'
+              : want === 'min'
+                ? '最小的几位数，最高位不能是 0。'
+                : '先写出这两个数，再想它们相差多少。',
+          steps: [
+            ...steps,
+            step(
+              '所以',
+              want === 'gap'
+                ? `${pow10(n - 1) - 1} + 1 = ${pow10(n - 1)}，大 1`
+                : `${want === 'max' ? '最大' : '最小'}的${cn}位数是 ${answer}`,
+            ),
+          ],
+          targetSeconds: 12,
+          params: { form, n, want },
+        };
+      }
+      case 'cards': {
+        const len = d <= 4 ? rng.int(6, 7) : rng.int(7, 8);
+        const zeros = d <= 4 ? rng.int(1, 2) : rng.int(2, 3);
+        const digits = rng.shuffle([1, 2, 3, 4, 5, 6, 7, 8, 9]).slice(0, len - zeros);
+        const cards = [...Array(zeros).fill(0), ...digits].sort((a, b) => a - b);
+        const want = rng.pick(['max', 'min'] as const);
+        const answer = cardsAnswer(cards, want);
+        const lead = cards.find((c) => c > 0)!;
+        return {
+          widget: 'numeric',
+          prompt:
+            `用 ${cards.join('、')} 这${CN_COUNT[len]}张数字卡片（每张都用上），` +
+            `组成${want === 'max' ? '最大' : '最小'}的${CN_COUNT[len]}位数，这个数是${BLANK}。`,
+          answer: { type: 'number', value: answer },
+          hint:
+            want === 'max'
+              ? '要最大，大的数字放在哪里？'
+              : '要最小，小的数字放高位；0 能放在最高位吗？',
+          steps:
+            want === 'max'
+              ? [
+                  step('要最大，就把大的数字放在高位，从大到小排。'),
+                  step('所以', `最大的${CN_COUNT[len]}位数是 ${answer}`),
+                ]
+              : [
+                  step('要最小，就把小的数字放在高位，从小到大排；但 0 不能放在最高位。'),
+                  step(`最高位放最小的非 0 数字 ${lead}，接着放 ${zeros} 个 0，其余从小到大排。`),
+                  step('所以', `最小的${CN_COUNT[len]}位数是 ${answer}`),
+                ],
+          targetSeconds: 25 + 5 * d,
+          params: { form, cards, want },
+        };
+      }
       case 'compose': {
         const parts = pickParts(rng, d, target);
         const value = composeValue(parts);
@@ -340,6 +440,48 @@ export const g4BignumPlace = defineGenerator<PlaceParams>({
         if (PLACE_NAMES.some((_, k) => k !== p.place && x === digit * pow10(k)))
           tags.push('place-value');
         return { tags };
+      }
+      case 'extreme': {
+        const n = p.n!;
+        const answer = extremeAnswer(n, p.want!);
+        // Right shape, wrong number of digits (e.g. 最大的七位数 → 999999 or 99999999).
+        const shapes =
+          p.want === 'max'
+            ? [3, 4, 5, 6, 7, 8, 9, 10].map((k) => pow10(k) - 1).concat([pow10(n)])
+            : p.want === 'min'
+              ? [3, 4, 5, 6, 7, 8, 9, 10].map(pow10).concat([pow10(n - 1) - 1])
+              : [0, 10, 100, pow10(n - 1), pow10(n - 1) - 1];
+        if (x !== answer && shapes.includes(x)) tags.push('place-value');
+        return { tags };
+      }
+      case 'cards': {
+        const cards = p.cards!;
+        const answer = cardsAnswer(cards, p.want as 'max' | 'min');
+        const sorted = (v: number) => [...String(v)].sort().join('');
+        const nonZero = (v: number) => String(v).replace(/0/g, '');
+        if (p.want === 'min' && x === Number([...cards].sort((a, b) => a - b).join(''))) {
+          return {
+            tags: ['zero-reading'],
+            feedback: '0 不能放在最高位：最高位放最小的非 0 数字，接着再放 0。',
+          };
+        }
+        if (String(x).length !== cards.length || sorted(x) !== cards.join('')) return { tags };
+        if (nonZero(x) === nonZero(answer)) {
+          return {
+            tags: ['zero-reading'],
+            feedback:
+              p.want === 'min'
+                ? '0 要紧跟在最高位后面，这样数才最小。'
+                : '要最大，0 要放在最后面。',
+          };
+        }
+        return {
+          tags: ['place-value'],
+          feedback:
+            p.want === 'max'
+              ? '要最大，把大的数字放在高位，从大到小排。'
+              : '要最小，把小的数字放在高位，从小到大排（0 不能放最高位）。',
+        };
       }
       case 'compose': {
         const parts = p.parts!;

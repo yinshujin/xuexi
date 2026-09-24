@@ -323,6 +323,18 @@ describe('big numbers, angles, negative numbers', () => {
     expect(g4BignumPlace.diagnoseWith(v, num(40_000)).tags).toEqual(['place-value']);
     expect(g4BignumPlace.diagnoseWith(v, num(4)).tags).toEqual(['place-value']);
     // 一亿里面有 10000 个一万
+    // 快速推理: 最大的七位数, 数字卡片 0、0、3、5、7、8
+    const ex = { form: 'extreme' as const, n: 7, want: 'max' as const };
+    expect(g4BignumPlace.diagnoseWith(ex, num(999_999)).tags).toEqual(['place-value']);
+    expect(g4BignumPlace.diagnoseWith(ex, num(10_000_000)).tags).toEqual(['place-value']);
+    const cards = { form: 'cards' as const, cards: [0, 0, 3, 5, 7, 8] };
+    const min = { ...cards, want: 'min' as const }; // 300578
+    expect(g4BignumPlace.diagnoseWith(min, num(3578)).tags).toEqual(['zero-reading']);
+    expect(g4BignumPlace.diagnoseWith(min, num(305_078)).tags).toEqual(['zero-reading']);
+    expect(g4BignumPlace.diagnoseWith(min, num(300_587)).tags).toEqual(['place-value']);
+    const max = { ...cards, want: 'max' as const }; // 875300
+    expect(g4BignumPlace.diagnoseWith(max, num(875_030)).tags).toEqual(['zero-reading']);
+    expect(g4BignumPlace.diagnoseWith(max, num(857_300)).tags).toEqual(['place-value']);
     const r = { form: 'rate' as const, big: 8, place: 4, count: 10_000 };
     expect(g4BignumPlace.diagnoseWith(r, num(1000)).tags).toEqual(['place-value']);
     expect(g4BignumPlace.diagnoseWith(r, num(9999)).tags).toEqual([]);
@@ -343,6 +355,29 @@ describe('big numbers, angles, negative numbers', () => {
     expect(g4BignumRewrite.diagnoseWith({ form: 'ap-yi', n: 1_490_000_000 }, num(14)).tags).toEqual(
       ['rounding'],
     );
+  });
+  it('rewrite: largest / smallest number that rounds to a given 万', () => {
+    // 一个五位数省略万位后面的尾数约是 5 万：最大 54999，最小 45000
+    const max = {
+      form: 'ap-range' as const,
+      n: 5,
+      range: { unit: '万' as const, want: 'max' as const, digits: 5 },
+    };
+    expect(g4BignumRewrite.diagnoseWith(max, num(59_999)).tags).toEqual(['rounding']);
+    expect(g4BignumRewrite.diagnoseWith(max, num(55_000)).tags).toEqual(['rounding']);
+    const min = { ...max, range: { ...max.range, want: 'min' as const } };
+    expect(g4BignumRewrite.diagnoseWith(min, num(50_000)).tags).toEqual(['rounding']);
+    expect(g4BignumRewrite.diagnoseWith(min, num(123)).tags).toEqual([]);
+  });
+  it('compare: the boundary digit of 「□ 里最大能填几」 not checked', () => {
+    // 58□300 < 584000：最大填 3
+    const p = {
+      left: { k: 0, unit: '' as const },
+      right: { k: 0, unit: '' as const },
+      blank: { a: '58□300', op: '<' as const, b: 584_000, answer: 3 },
+    };
+    expect(g4BignumCompare.diagnoseWith(p, num(4)).tags).toEqual(['place-value']);
+    expect(g4BignumCompare.diagnoseWith(p, num(9)).tags).toEqual([]);
   });
   it('compare: digit strings compared from the left', () => {
     const p = { left: { k: 98_000, unit: '' as const }, right: { k: 123_456, unit: '' as const } };

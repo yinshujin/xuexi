@@ -20,3 +20,5 @@ content/authored/_*
 content/exports/
 content/state.json
 apps/web/public/builtin/
+content/books/
+content/tts-cache/

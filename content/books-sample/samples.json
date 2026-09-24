@@ -1,0 +1,50 @@
+{
+  "_note": "Open picture books (Book Dash, CC BY 4.0, https://github.com/bookdash/bookdash-books) used to check the read-along pipeline before importing books from the family's own RAZ subscription. Levels are rough RAZ equivalents.",
+  "books": [
+    {
+      "slug": "come-back-cat",
+      "level": "C",
+      "quiz": [
+        { "question": "Who does the child want to play with?", "options": ["The cat", "The dog", "The chicken"], "answer": 0, "analysis": "每一页都在喊 “Come back, cat!”，小主人想和猫一起玩。" },
+        { "question": "Where does the child want the cat to stay?", "options": ["In the tree", "In her basket", "On the washline"], "answer": 1, "analysis": "“Sit in your basket. Stay right here!” 主人让猫待在篮子里。" },
+        { "question": "Where is the cat sleeping at the end?", "options": ["In her basket", "Outside", "On the couch"], "answer": 2, "analysis": "最后一页：猫在沙发上睡着了，篮子是空的。" }
+      ]
+    },
+    {
+      "slug": "a-house-for-mouse",
+      "level": "D",
+      "quiz": [
+        { "question": "What was Mouse looking for?", "options": ["A new house", "Some food", "A friend to play with"], "answer": 0, "analysis": "第一页：Mouse was looking for a new house." },
+        { "question": "Why were Mouse's dreams cold and wet?", "options": ["He slept with Parrot", "He slept with Fish", "He slept with Puppy"], "answer": 1, "analysis": "和鱼一起睡在水里，所以梦是又冷又湿的。" },
+        { "question": "Where did Mouse have warm and cosy dreams?", "options": ["In a bookshelf", "In the pond", "In a tree"], "answer": 0, "analysis": "Mouse found a bookshelf nearby. 最后在书架里睡得又暖和又舒服。" }
+      ]
+    },
+    {
+      "slug": "i-will-help-you",
+      "level": "E",
+      "quiz": [
+        { "question": "How did Mama Heron get hurt?", "options": ["On barbed wire", "In the river", "In a fight"], "answer": 0, "analysis": "第一页：Mama Heron hurts her wing and leg on barbed wire." },
+        { "question": "What did Lungile lose?", "options": ["His bread", "The money for bread", "His friends"], "answer": 1, "analysis": "他在河里玩，把 Gogo 给他买面包的钱弄丢了。" },
+        { "question": "How did Mama Heron help Lungile?", "options": ["She bought bread for him", "She saw the coins in the water", "She took him home"], "answer": 1, "analysis": "Mama Heron 的眼睛很尖，看到了水里闪光的硬币。先是 Lungile 帮了她，后来她也帮了 Lungile。" }
+      ]
+    },
+    {
+      "slug": "sleepy-mr-sloth",
+      "level": "G",
+      "quiz": [
+        { "question": "What does Mr Sloth like best?", "options": ["Climbing", "Swinging", "Sleeping"], "answer": 2, "analysis": "“But sleeping's my favourite, favourite thing!” 他最喜欢睡觉。" },
+        { "question": "Why can't Mr Sloth sleep on the second branch?", "options": ["A giraffe is eating there", "It is too high", "It is raining"], "answer": 0, "analysis": "“A giraffe's eating there!” 长颈鹿在那里吃树叶。" },
+        { "question": "Why does Mr Sloth keep looking for a new branch?", "options": ["He is hungry", "Each branch has a problem", "He wants to play"], "answer": 1, "analysis": "每根树枝上都有麻烦：长颈鹿、蜂窝……所以他一直在找。" }
+      ]
+    },
+    {
+      "slug": "a-tiny-seed",
+      "level": "J",
+      "quiz": [
+        { "question": "Where did Wangari grow up?", "options": ["In the United States", "On the slopes of Mount Kenya", "In a big city"], "answer": 1, "analysis": "第一页：她住在东非肯尼亚山坡上的一个村子里。" },
+        { "question": "What did Wangari teach the women?", "options": ["How to read books", "How to plant trees from seeds", "How to build farms"], "answer": 1, "analysis": "She taught the women how to plant trees from seeds." },
+        { "question": "What prize did Wangari receive?", "options": ["The Nobel Peace Prize", "A school prize", "A prize for farming"], "answer": 0, "analysis": "她是第一位获得诺贝尔和平奖的非洲女性。" }
+      ]
+    }
+  ]
+}

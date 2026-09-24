@@ -101,4 +101,6 @@ export interface BundleIndex {
   /** Human title, e.g. "四年级上册 第3单元". */
   title: string;
   lessons: CatalogEntry[];
+  /** Picture books (绘本), under `books/<id>/v<n>/`. */
+  books?: import('./book').BookEntry[];
 }

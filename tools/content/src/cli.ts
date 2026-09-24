@@ -11,7 +11,7 @@ import { generateMany, selectLessons, type LessonContext } from './generate';
 import { startMockOpenMaic } from './mock/server';
 import { OpenMaicClient } from './openmaic-client';
 import { OPENMAIC_VERSION, openmaicDown, openmaicLogs, openmaicUp, pipelineConfig, waitHealthy } from './openmaic-docker';
-import { getPaths } from './paths';
+import { getPaths, REPO_ROOT } from './paths';
 import { assembleSite, publish, type PublishTarget } from './publish';
 import { startReviewServer } from './review-server';
 import { run } from './run';
@@ -22,6 +22,10 @@ import { authorBrief, authoredFile, importAuthored, listAuthored } from './autho
 import { edgeEngine, sayEngine, ttsDraft } from './tts';
 import { exportBundle, exportEachUnit } from './export';
 import { writeBuiltin } from './builtin';
+import { exportBooks } from './books/export';
+import { importBookDash, importBookDashSamples, importPdf } from './books/import';
+import { listBooks, loadBook } from './books/store';
+import { edgeBookVoice, narrateBook, sayBookVoice } from './books/tts';
 import { bytes as fmtBytes } from './format-bytes';
 
 const HELP = `用法：pnpm content <命令> [选项]
@@ -55,6 +59,15 @@ const HELP = `用法：pnpm content <命令> [选项]
                                   平板或手机，在 App 家长模式 → 离线课程 → 从文件导入（不需要服务器）
   builtin <课程包.zip ...> [--out 目录]
                                   把课程包文件解包到 apps/web/public/builtin，构建 App 时一起打包（装好就能上课）
+  —— 绘本跟读（原图 + 逐句朗读 + 跟读录音）——
+  book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M]
+                                  导入自己有版权的绘本 PDF（如 RAZ Plus 订阅里下载的），默认私有
+  book import-bookdash <目录/en> --level A [--quiz 题目.json]   导入 Book Dash 开放绘本（CC BY 4.0）
+  book import-samples <bookdash-books 目录>   导入 content/books-sample/samples.json 里的示例绘本
+  book list                       列出绘本和配音进度
+  book tts [--id X] [--level A] [--engine edge|say]   逐句配音（edge 带逐词时间，用于逐词高亮）
+  book export [--id a,b] [--level A] [--out 文件.zip]  导出绘本包，传到平板导入
+
   publish --target dir|edgeone|tencent [--no-web-build] [--init] [--allow-empty]
                                   组装站点并发布（dir 只生成 content/site；
                                   腾讯云第一次部署加 --init）
@@ -105,6 +118,19 @@ async function main() {
       'tts-cache': { type: 'string' },
       'each-unit': { type: 'boolean' },
       'voice-en': { type: 'string' },
+      level: { type: 'string' },
+      id: { type: 'string' },
+      quiz: { type: 'string' },
+      split: { type: 'string' },
+      first: { type: 'string' },
+      last: { type: 'string' },
+      dpi: { type: 'string' },
+      private: { type: 'boolean' },
+      public: { type: 'boolean' },
+      source: { type: 'string' },
+      license: { type: 'string' },
+      'allow-silent': { type: 'boolean' },
+      samples: { type: 'string' },
     },
   });
   const paths = getPaths();
@@ -314,6 +340,74 @@ async function main() {
       const r = await writeBuiltin(zips, out);
       for (const s of r.skipped) log(`⚠ 跳过 ${s}`);
       log(`App 内置课程：${r.lessons.length} 节（${fmtBytes(r.bytes)}）→ ${out}`);
+      return;
+    }
+    case 'book': {
+      const sub = positionals[0];
+      if (sub === 'import-bookdash') {
+        const dir = positionals[1];
+        if (!dir || !values.level) throw new Error('用法：book import-bookdash <书目录/en> --level A [--id X] [--quiz 题目.json]');
+        const b = importBookDash(paths, dir, { level: values.level, id: values.id, title: values.title, quiz: values.quiz });
+        log(`✓ ${b.id}：《${b.title}》${b.pages.length} 页，级别 ${b.level}`);
+      } else if (sub === 'import-samples') {
+        const repo = positionals[1];
+        if (!repo) throw new Error('用法：book import-samples <bookdash-books 目录> [--samples 清单.json]');
+        const samples = values.samples ?? join(REPO_ROOT, 'content', 'books-sample', 'samples.json');
+        for (const b of importBookDashSamples(paths, repo, samples)) {
+          log(`✓ ${b.id}：《${b.title}》${b.pages.length} 页，级别 ${b.level}`);
+        }
+      } else if (sub === 'import-pdf') {
+        const pdf = positionals[1];
+        if (!pdf || !values.level) {
+          throw new Error('用法：book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M] [--public]');
+        }
+        const b = await importPdf(paths, pdf, {
+          level: values.level,
+          id: values.id,
+          title: values.title,
+          quiz: values.quiz,
+          source: values.source,
+          license: values.license,
+          private: !values.public,
+          split: values.split === '2' ? 2 : 1,
+          first: values.first ? Number(values.first) : undefined,
+          last: values.last ? Number(values.last) : undefined,
+          dpi: values.dpi ? Number(values.dpi) : undefined,
+        });
+        log(`✓ ${b.id}：《${b.title}》${b.pages.length} 页，级别 ${b.level}${b.private ? '（私有，只在本机和你的设备上）' : ''}`);
+        log(`  请检查 content/books/${b.id}/book.json：删掉封面、版权页等不需要跟读的页，改正识别错的文字，再运行 book tts`);
+      } else if (sub === 'list') {
+        for (const b of listBooks(paths)) {
+          const sentences = b.pages.flatMap((p) => p.sentences);
+          const voiced = sentences.filter((s) => s.audio).length;
+          log(`${b.level.padEnd(3)} ${b.id.padEnd(40)} ${b.pages.length} 页  配音 ${voiced}/${sentences.length}${b.private ? '  私有' : ''}`);
+        }
+      } else if (sub === 'tts') {
+        // edge (default): natural voice with word timings; say: macOS offline voice, no word timings.
+        const voice =
+          values.engine === 'say'
+            ? sayBookVoice(values.voice)
+            : edgeBookVoice(values.voice, '-10%', values.concurrency ? Number(values.concurrency) : 4);
+        const books = values.id ? [loadBook(paths, values.id)] : listBooks(paths).filter((b) => !values.level || b.level === values.level);
+        const cacheDir = values['tts-cache'] ?? join(paths.content, 'tts-cache');
+        for (const b of books) {
+          const n = await narrateBook(paths, b, { voice, cacheDir, force: values.force, log });
+          log(`${n > 0 ? '✓' : '·'} ${b.id}：配音 ${n} 句（${voice.name}）`);
+        }
+      } else if (sub === 'export') {
+        const r = await exportBooks(paths, {
+          ids: values.id ? values.id.split(',') : undefined,
+          level: values.level,
+          out: values.out,
+          title: values.title,
+          allowSilent: values['allow-silent'],
+        });
+        log(`已导出 ${r.books.length} 本绘本（${fmtBytes(r.bytes)}）：${r.file}`);
+        log('发到平板上，在 App 的 家长模式 → 离线课程 → 选择课程包文件 导入。');
+        if (r.books.some((b) => b.private)) log('⚠ 含私有绘本：只在自家设备之间传，不要发到群里或上传到网上。');
+      } else {
+        throw new Error('用法：book import-bookdash | import-samples | import-pdf | list | tts | export');
+      }
       return;
     }
     case 'status': {

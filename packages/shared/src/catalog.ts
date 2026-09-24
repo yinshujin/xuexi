@@ -105,6 +105,12 @@ export const GENERATORS = [
   },
   // ---------------- 四年级 ----------------
   {
+    id: 'g4.bignum.place',
+    grade: 4,
+    title: '计数单位、数位与数的组成',
+    errorTags: ['place-value', 'zero-reading'],
+  },
+  {
     id: 'g4.bignum.read',
     grade: 4,
     title: '大数的读法与写法',

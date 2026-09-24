@@ -28,6 +28,28 @@ describe('math check', () => {
     expect(checkArithmetic('100 - 37 = 63，12 + 30 × 2 = 72')).toEqual([]);
     expect(checkArithmetic('1 米 = 100 厘米，第 3 页')).toEqual([]);
   });
+
+  it('checks every part of a worked chain against the first part', () => {
+    expect(checkArithmetic('408 × 23 = 408 × 20 + 408 × 3')).toEqual([]);
+    expect(checkArithmetic('408×20+408×3=8160+1224=9384')).toEqual([]);
+    expect(checkArithmetic('114 × 21 = 114 × 20 + 114 = 2280 + 114 = 2395')).toEqual([
+      { expression: '2280 + 114 = 2395', expected: 2394, written: 2395 },
+    ]);
+    // A wrong middle step is reported even when the final result is right.
+    expect(checkArithmetic('114 × 21 = 2280 + 115 = 2394')).toEqual([
+      { expression: '114 × 21 = 2280 + 115', expected: 2394, written: 2395 },
+    ]);
+  });
+
+  it('reads 万 and 亿 as values but ignores counts of counting units', () => {
+    expect(checkArithmetic('1200000 = 120 万，3 × 10万 = 30万，1亿 = 10000万')).toEqual([]);
+    expect(checkArithmetic('1200000 = 12 万')).toEqual([
+      { expression: '1200000 = 12 万', expected: 1200000, written: 120000 },
+    ]);
+    expect(checkArithmetic('1亿 = 1000万').length).toBe(1);
+    expect(checkArithmetic('30 万 = 3 个十万，10 个一千 = 1 万，300万 = 3 百万')).toEqual([]);
+    expect(checkArithmetic('4352000 ≈ 435 万，万位 = 3')).toEqual([]);
+  });
 });
 
 describe('compileAuthored', () => {

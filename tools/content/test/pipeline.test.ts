@@ -151,3 +151,31 @@ describe('content pipeline (mock OpenMAIC)', () => {
     expect(existsSync(join(paths.packs, 'bsd-g4a.u3.mul-3x2.lecture', 'v1'))).toBe(false);
   });
 });
+
+describe('quota handling', () => {
+  it('stops the run on HTTP 403 instead of failing every remaining lesson', async () => {
+    const paths = getPaths(mkdtempSync(join(tmpdir(), 'xuexi-quota-')));
+    const state = loadState(paths.state);
+    let calls = 0;
+    const fakeFetch = (async () => {
+      calls += 1;
+      return new Response(JSON.stringify({ success: false, error: 'Daily quota exhausted' }), { status: 403 });
+    }) as typeof fetch;
+    const summary = await generateMany(
+      {
+        client: new OpenMaicClient('http://quota.test', 'sk-x', fakeFetch),
+        paths,
+        state,
+        buildRequirement,
+        templateVersion: 't1',
+        enableTTS: true,
+        log: () => {},
+        pollMs: 1,
+      },
+      ctxs,
+    );
+    expect(summary.stopped).toBe(true);
+    expect(summary.failed.length).toBe(1);
+    expect(calls).toBe(1);
+  });
+});

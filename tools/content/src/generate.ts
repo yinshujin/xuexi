@@ -159,13 +159,16 @@ export async function generateLesson(deps: GenerateDeps, ctx: LessonContext): Pr
 export interface GenerateSummary {
   ok: string[];
   failed: Array<{ id: string; error: string }>;
+  /** True when the run stopped early (quota exhausted / access denied). */
+  stopped?: boolean;
 }
 
 export async function generateMany(deps: GenerateDeps, lessons: LessonContext[], concurrency = 1): Promise<GenerateSummary> {
   const summary: GenerateSummary = { ok: [], failed: [] };
   let next = 0;
+  let stopped = false;
   const worker = async () => {
-    while (next < lessons.length) {
+    while (next < lessons.length && !stopped) {
       const i = next++;
       const ctx = lessons[i];
       deps.log(`[${i + 1}/${lessons.length}] ${ctx.lesson.id}  ${ctx.book.title} · ${ctx.kp.title} · ${ctx.lesson.title}`);
@@ -187,6 +190,13 @@ export async function generateMany(deps: GenerateDeps, lessons: LessonContext[],
           });
         }
         deps.log(`  ✗ ${error}`);
+        // Quota exhausted / access denied (e.g. hosted open.maic.chat: 10 generations a day):
+        // every following lesson would fail the same way, so stop the run.
+        if (/HTTP (401|403)\b/.test(error)) {
+          stopped = true;
+          summary.stopped = true;
+          deps.log('  已停止：额度用完或访问码无效（HTTP 401/403），剩下的课下次再生成。');
+        }
       }
     }
   };

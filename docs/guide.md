@@ -45,6 +45,22 @@ App 运行时**不调用任何大模型**：讲解课是提前生成、你审核
 > 不需要 Docker 和 Key，可以先把"生成 → 审核 → 打包 → 发布"整个流程走一遍。
 > 试完后删掉 `content/state.json` 和 `content/work/`、`content/out/` 再正式生成。
 
+### 不想装 Docker？用 OpenMAIC 官方托管版
+
+在 [open.maic.chat](https://open.maic.chat/) 登录 → 右上角账号 → 访问码设置 → 生成访问码，然后在 `content/openmaic.env` 里只写两行：
+
+```env
+XUEXI_OPENMAIC_URL=https://open.maic.chat
+ACCESS_CODE=sk-你的访问码
+```
+
+不需要 `openmaic up`，也不需要自己的模型 Key。限制：每天最多 10 节课，额度用完脚本会自动停下，第二天再运行同一条命令接着做。
+
+### 用 WorkBuddy 来操作
+
+把仓库里的 `skills/xuexi-content/` 文件夹（或打包成 zip）导入 WorkBuddy 的技能，然后在 WorkBuddy 里打开 xuexi 仓库目录，直接说"生成四年级上册第 3 单元的课""看看生成进度""把通过的课发布出去"即可。
+WorkBuddy 会替你运行下面这些命令；审核仍然由你在审核页里完成。
+
 ## 2. 生成课程
 
 ```bash

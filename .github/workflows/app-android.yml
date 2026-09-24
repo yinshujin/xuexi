@@ -20,7 +20,6 @@ jobs:
   apk:
     runs-on: ubuntu-latest
     env:
-      NDK_VERSION: 27.2.12479018
       VITE_SITE_URL: ${{ vars.SITE_URL }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -33,11 +32,16 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - uses: android-actions/setup-android@9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407 # v3
-      - name: Install Android platform, build tools and NDK
+      # The ubuntu runner image ships the Android SDK (ANDROID_HOME) and NDKs
+      # (ANDROID_NDK_LATEST_HOME); only make sure the platform / build tools exist.
+      - name: Set up Android SDK and NDK
         run: |
-          sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;${NDK_VERSION}"
-          echo "NDK_HOME=$ANDROID_HOME/ndk/${NDK_VERSION}" >> "$GITHUB_ENV"
+          set -euo pipefail
+          SDKMANAGER="$(ls -d "$ANDROID_HOME"/cmdline-tools/*/bin | sort -V | tail -n1)/sdkmanager"
+          yes | "$SDKMANAGER" --licenses > /dev/null || true
+          "$SDKMANAGER" --install "platforms;android-34" "build-tools;34.0.0" "platform-tools"
+          echo "NDK_HOME=${ANDROID_NDK_LATEST_HOME}" >> "$GITHUB_ENV"
+          echo "Using NDK ${ANDROID_NDK_LATEST_HOME}"
       - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
         with:
           toolchain: stable

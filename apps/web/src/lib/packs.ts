@@ -3,6 +3,7 @@ import {
   assertCatalog,
   assertLesson,
   assertManifest,
+  isNewerEntry,
   readBundle,
   sha256Hex,
   type Catalog,
@@ -35,16 +36,53 @@ async function cacheOpen(name: string): Promise<Cache | null> {
   }
 }
 
-/** Site catalog merged with packs imported on this device (newest version wins). */
+/**
+ * Courses shipped inside the installed app (APK / desktop builds put them in
+ * dist/builtin/ with `pnpm content builtin`). Absent in the website build.
+ */
+const BUILTIN_DIR = 'builtin/';
+let builtinCatalog: Promise<Catalog | null> | null = null;
+
+function builtinBase(): string {
+  return new URL(BUILTIN_DIR, document.baseURI).toString();
+}
+
+function loadBuiltinCatalog(): Promise<Catalog | null> {
+  builtinCatalog ??= (async () => {
+    try {
+      const res = await fetch(builtinBase() + 'catalog.json', { cache: 'no-store' });
+      if (!res.ok || !(res.headers.get('content-type') ?? '').includes('json')) return null;
+      const data = await res.json();
+      assertCatalog(data);
+      for (const e of Object.values(data.lessons)) e.origin = 'builtin';
+      return data;
+    } catch {
+      return null;
+    }
+  })();
+  return builtinCatalog;
+}
+
+/**
+ * Site catalog, courses built into the app and packs imported on this device,
+ * merged per lesson: a strictly newer build wins, ties go to the copy that
+ * needs no network (built-in over site, imported over both).
+ */
 export async function loadCatalog(): Promise<Catalog | null> {
-  const [site, local] = await Promise.all([loadSiteCatalog().catch(() => null), kvGet<Catalog>(LOCAL_CATALOG_KEY)]);
-  if (!local || Object.keys(local.lessons).length === 0) return site;
-  const merged: Catalog = site
-    ? { ...site, lessons: { ...site.lessons } }
-    : { format: 'xuexi-catalog@1', generatedAt: local.generatedAt, lessons: {} };
-  for (const [id, e] of Object.entries(local.lessons)) {
-    const s = merged.lessons[id];
-    if (!s || e.version >= s.version) merged.lessons[id] = e;
+  const [site, builtin, local] = await Promise.all([
+    loadSiteCatalog().catch(() => null),
+    loadBuiltinCatalog(),
+    kvGet<Catalog>(LOCAL_CATALOG_KEY),
+  ]);
+  const layers = [site, builtin, local].filter((c): c is Catalog => !!c && Object.keys(c.lessons).length > 0);
+  if (layers.length === 0) return site;
+  if (layers.length === 1) return layers[0];
+  const merged: Catalog = { format: 'xuexi-catalog@1', generatedAt: layers[0].generatedAt, lessons: {} };
+  for (const layer of layers) {
+    for (const [id, e] of Object.entries(layer.lessons)) {
+      const cur = merged.lessons[id];
+      if (!cur || !isNewerEntry(cur, e)) merged.lessons[id] = e;
+    }
   }
   return merged;
 }
@@ -73,12 +111,14 @@ async function loadSiteCatalog(): Promise<Catalog | null> {
 }
 
 async function fileUrl(entry: CatalogEntry, path: string): Promise<string> {
-  return new URL(entry.path + path, entry.origin === 'local' ? LOCAL_BASE : await siteBase()).toString();
+  const base = entry.origin === 'local' ? LOCAL_BASE : entry.origin === 'builtin' ? builtinBase() : await siteBase();
+  return new URL(entry.path + path, base).toString();
 }
 
 const downloadedKey = (e: CatalogEntry) => `pack:${e.lessonId}:v${e.version}${e.origin === 'local' ? ':local' : ''}`;
 
 export async function isDownloaded(entry: CatalogEntry): Promise<boolean> {
+  if (entry.origin === 'builtin') return true;
   return Boolean(await kvGet<boolean>(downloadedKey(entry)));
 }
 
@@ -136,6 +176,7 @@ async function removeCached(entry: CatalogEntry): Promise<void> {
 }
 
 export async function removePack(entry: CatalogEntry): Promise<void> {
+  if (entry.origin === 'builtin') throw new Error('App 自带的课程不能删除');
   await removeCached(entry);
   if (entry.origin === 'local') {
     const local = await kvGet<Catalog>(LOCAL_CATALOG_KEY);
@@ -209,9 +250,9 @@ export async function importBundle(bytes: Uint8Array, onProgress?: (ratio: numbe
     );
     await kvSet(downloadedKey(entry), true);
     const prev = local.lessons[entry.lessonId];
-    if (!prev || entry.version >= prev.version) {
+    if (!prev || !isNewerEntry(prev, entry)) {
       // Drop the older imported version's files.
-      if (prev && prev.version !== entry.version) await removeCached(prev);
+      if (prev && prev.path !== entry.path) await removeCached(prev);
       local.lessons[entry.lessonId] = entry;
     }
     result.imported.push(entry);
@@ -244,6 +285,10 @@ export async function openPack(entry: CatalogEntry): Promise<OpenedLesson> {
   for (const path of Object.keys(manifest.files)) {
     if (path === 'lesson.json') continue;
     const url = await fileUrl(entry, path);
+    if (entry.origin === 'builtin') {
+      assets.set(path, url);
+      continue;
+    }
     const hit = await cache?.match(url);
     if (hit) {
       const blobUrl = URL.createObjectURL(await hit.blob());

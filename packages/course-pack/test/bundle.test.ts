@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { BUNDLE_FORMAT, PACK_FORMAT, readBundle, sha256Hex, type CatalogEntry, type PackManifest } from '../src';
+import { BUNDLE_FORMAT, PACK_FORMAT, isNewerEntry, readBundle, sha256Hex, type CatalogEntry, type PackManifest } from '../src';
 
 const enc = (s: string) => new TextEncoder().encode(s);
 
@@ -75,5 +75,20 @@ describe('readBundle', () => {
     const bundle = await readBundle({ 'bundle.json': enc(JSON.stringify(index)), ...a.files });
     expect(bundle.packs).toHaveLength(0);
     expect(bundle.skipped[0]).toContain('路径无效');
+  });
+});
+
+describe('isNewerEntry', () => {
+  it('orders by build time when both have one, else by version', async () => {
+    const { entry } = await makePack('x', 1);
+    const older = { ...entry, builtAt: '2026-09-01T00:00:00Z' };
+    const newer = { ...entry, builtAt: '2026-09-24T00:00:00Z' };
+    expect(isNewerEntry(newer, older)).toBe(true);
+    expect(isNewerEntry(older, newer)).toBe(false);
+    expect(isNewerEntry(older, older)).toBe(false);
+    // CI rebuilds restart at v1: build time wins over the version number.
+    expect(isNewerEntry({ ...newer, version: 1 }, { ...older, version: 3 })).toBe(true);
+    expect(isNewerEntry({ ...entry, version: 2 }, { ...entry, version: 1 })).toBe(true);
+    expect(isNewerEntry({ ...entry, version: 2 }, { ...older, version: 1 })).toBe(true);
   });
 });

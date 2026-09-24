@@ -41,6 +41,18 @@ jobs:
         with:
           workspaces: shells/tauri/src-tauri
       - run: pnpm install --frozen-lockfile
+      - name: Bundle the published courses into the app
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p bundles
+          if gh release download courses-latest --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles; then
+            pnpm content builtin bundles/*.zip
+          else
+            echo "::notice::No courses-latest release yet; building without built-in courses."
+          fi
       - working-directory: shells/tauri
         run: pnpm tauri build ${{ matrix.args }}
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4

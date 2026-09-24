@@ -19,3 +19,4 @@ content/publish.env
 content/authored/_*
 content/exports/
 content/state.json
+apps/web/public/builtin/

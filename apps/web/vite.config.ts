@@ -57,9 +57,11 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // Courses bundled into the native apps are served from the app itself.
+        globIgnores: ['builtin/**'],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,
         navigateFallback: 'index.html',
-        navigateFallbackDenylist: [/^\/api\//, /^\/packs\//],
+        navigateFallbackDenylist: [/^\/api\//, /^\/packs\//, /^\/builtin\//],
         // Course packs are cached by the app itself (Cache Storage), not by the SW.
         runtimeCaching: [],
       },

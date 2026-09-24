@@ -68,6 +68,7 @@ export async function buildPacks(
       path: `packs/${id}/v${version}/`,
       durationSec: manifest.durationSec,
       totalBytes: Object.values(manifest.files).reduce((n, f) => n + f.bytes, 0),
+      builtAt: manifest.createdAt,
     };
     result.catalog.lessons[id] = entry;
   };

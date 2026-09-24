@@ -21,6 +21,7 @@ import { dirname, join } from 'node:path';
 import { authorBrief, authoredFile, importAuthored, listAuthored } from './authoring/import';
 import { edgeEngine, sayEngine, ttsDraft } from './tts';
 import { exportBundle, exportEachUnit } from './export';
+import { writeBuiltin } from './builtin';
 import { bytes as fmtBytes } from './format-bytes';
 
 const HELP = `用法：pnpm content <命令> [选项]
@@ -52,6 +53,8 @@ const HELP = `用法：pnpm content <命令> [选项]
   export --each-unit [--book X] [--out 目录]   每个单元导出一个课程包文件，并生成清单 index.md
                                   把已打包的课导出成"课程包文件"（zip），用微信 / 网盘 / USB 传到
                                   平板或手机，在 App 家长模式 → 离线课程 → 从文件导入（不需要服务器）
+  builtin <课程包.zip ...> [--out 目录]
+                                  把课程包文件解包到 apps/web/public/builtin，构建 App 时一起打包（装好就能上课）
   publish --target dir|edgeone|tencent [--no-web-build] [--init] [--allow-empty]
                                   组装站点并发布（dir 只生成 content/site；
                                   腾讯云第一次部署加 --init）
@@ -297,6 +300,15 @@ async function main() {
         n++;
       }
       log(`已批准 ${n} 节课。运行 pnpm content build 打包。`);
+      return;
+    }
+    case 'builtin': {
+      const zips = positionals;
+      if (zips.length === 0) throw new Error('用法：builtin <课程包.zip ...> [--out apps/web/public/builtin]');
+      const out = values.out ?? join(paths.root, 'apps/web/public/builtin');
+      const r = await writeBuiltin(zips, out);
+      for (const s of r.skipped) log(`⚠ 跳过 ${s}`);
+      log(`App 内置课程：${r.lessons.length} 节（${fmtBytes(r.bytes)}）→ ${out}`);
       return;
     }
     case 'status': {

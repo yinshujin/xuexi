@@ -63,8 +63,22 @@ export interface CatalogEntry {
   path: string;
   durationSec: number;
   totalBytes: number;
-  /** Set by the app for packs imported from a bundle file (stored on the device only). */
-  origin?: 'local';
+  /**
+   * When the pack was built (manifest.createdAt). Orders two builds of the same
+   * lesson whose `version` cannot be compared (CI builds start from v1 each time).
+   */
+  builtAt?: string;
+  /**
+   * Set by the app: 'local' = imported from a bundle file (Cache Storage on the
+   * device), 'builtin' = shipped inside the installed app.
+   */
+  origin?: 'local' | 'builtin';
+}
+
+/** Whether `a` is a strictly newer build of the same lesson than `b`. */
+export function isNewerEntry(a: CatalogEntry, b: CatalogEntry): boolean {
+  if (a.builtAt && b.builtAt && a.builtAt !== b.builtAt) return a.builtAt > b.builtAt;
+  return a.version > b.version;
 }
 
 /** catalog.json at the site root. */

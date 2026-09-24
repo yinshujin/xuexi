@@ -261,13 +261,15 @@ function OfflineTab() {
   };
 
   const total = entries.reduce((n, e) => n + e.totalBytes, 0);
-  const remote = entries.filter((e) => e.origin !== 'local');
+  const remote = entries.filter((e) => !e.origin);
+  const builtin = entries.filter((e) => e.origin === 'builtin').length;
   return (
     <div className="flex flex-col gap-3">
       <ImportCard />
       <Card className="flex flex-wrap items-center gap-3">
         <div className="flex-1">
-          共 {entries.length} 节课，{bytes(total)}。{remote.length > 0 ? '网站上的课下载后没有网络也能上课。' : ''}
+          共 {entries.length} 节课{builtin > 0 ? `（${builtin} 节 App 自带）` : ''}，{bytes(total)}。
+          {remote.length > 0 ? '网站上的课下载后没有网络也能上课。' : ''}
         </div>
         <Btn tone="plain" onClick={() => refreshCatalog()}>
           刷新
@@ -290,9 +292,12 @@ function OfflineTab() {
             <span className="flex-1">
               {e.title}
               {e.origin === 'local' && <span className="ml-2 rounded bg-emerald-50 px-1.5 text-xs text-emerald-700">本机导入</span>}
+              {e.origin === 'builtin' && <span className="ml-2 rounded bg-sky-50 px-1.5 text-xs text-sky-700">App 自带</span>}
             </span>
             <span className="text-sm text-slate-500">{bytes(e.totalBytes)}</span>
-            {s === 'done' ? (
+            {e.origin === 'builtin' ? (
+              <span className="text-sm text-slate-400">已内置</span>
+            ) : s === 'done' ? (
               <button
                 type="button"
                 className="text-sm text-slate-500 underline"

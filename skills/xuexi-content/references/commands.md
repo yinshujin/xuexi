@@ -15,6 +15,7 @@
 | `pnpm content build` | 打包审核通过的课，生成 catalog.json |
 | `pnpm content export [--book X] [--unit N] [--lesson 课id] [--out 文件.zip] [--title 标题]` | 把打包好的课导出成课程包文件，发到设备后在 App 家长模式里导入（不需要网站） |
 | `pnpm content export --each-unit [--book X] [--out 目录]` | 每个单元导出一个课程包文件，并生成清单 index.md |
+| `pnpm content builtin <课程包.zip ...> [--out 目录]` | 把课程包解包到 apps/web/public/builtin，构建 App 时内置这些课 |
 | `pnpm content publish --target dir\|edgeone\|tencent [--init] [--no-web-build]` | 发布 |
 
 `gen` 的选项：

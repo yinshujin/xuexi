@@ -1,6 +1,7 @@
 name: Android APK
 
-# Builds one universal APK for the Huawei tablet (HarmonyOS 4.x) and the vivo phone.
+# Builds one universal APK for the Huawei tablet (HarmonyOS 4.x) and the vivo phone,
+# with the lessons from the courses-latest release built in.
 # Runs automatically after CI passes on the default branch (and then publishes the
 # APK as the "app-latest" release, which the EdgeOne deploy puts on the site at
 # /download/xuexi.apk), or manually from the Actions tab.
@@ -16,7 +17,8 @@ name: Android APK
 on:
   workflow_dispatch:
   workflow_run:
-    workflows: [CI]
+    # Also after new course bundles, so the APK ships the latest lessons.
+    workflows: [CI, Course bundles]
     types: [completed]
   push:
     tags: ['app-v*']
@@ -69,6 +71,18 @@ jobs:
         with:
           workspaces: shells/tauri/src-tauri
       - run: pnpm install --frozen-lockfile
+      - name: Bundle the published courses into the app
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p bundles
+          if gh release download courses-latest --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles; then
+            pnpm content builtin bundles/*.zip
+          else
+            echo "::notice::No courses-latest release yet; building without built-in courses."
+          fi
       - name: Generate Android project
         working-directory: shells/tauri
         run: |
@@ -122,7 +136,7 @@ jobs:
         with:
           tag_name: app-latest
           name: 最新 App（自动构建）
-          body: 每次代码更新并通过测试后自动构建。华为平板和 vivo 手机下载 xuexi.apk 覆盖安装即可。
+          body: 每次代码或课程更新后自动构建，已内置当时所有的讲解课和技巧课。华为平板和 vivo 手机下载 xuexi.apk 覆盖安装即可，学习记录不会丢。
           files: dist/xuexi.apk
           overwrite_files: true
           make_latest: true

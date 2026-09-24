@@ -9,6 +9,7 @@ import { assertCatalog, assertManifest, readBundle, sha256Hex, type PackManifest
 import type { Book } from '@xuexi/curriculum';
 import { buildPacks } from '../src/build';
 import { exportBundle } from '../src/export';
+import { writeBuiltin } from '../src/builtin';
 import { generateMany, requirementFor, selectLessons, type LessonContext } from '../src/generate';
 import { startMockOpenMaic } from '../src/mock/server';
 import { OpenMaicClient } from '../src/openmaic-client';
@@ -162,6 +163,20 @@ describe('content pipeline (mock OpenMAIC)', () => {
     expect(bundle.packs).toHaveLength(1);
     expect(bundle.packs[0].entry.version).toBe(2);
     expect(Object.keys(bundle.packs[0].files)).toContain('lesson.json');
+
+    // Unpack it as the courses built into the app.
+    const builtinDir = join(dir, 'builtin');
+    const b = await writeBuiltin([exported.file], builtinDir);
+    expect(b.lessons.map((e) => e.lessonId)).toEqual(['bsd-g4a.u3.mul-3x2.lecture']);
+    const builtinCatalog = JSON.parse(readFileSync(join(builtinDir, 'catalog.json'), 'utf8'));
+    assertCatalog(builtinCatalog);
+    const be = builtinCatalog.lessons['bsd-g4a.u3.mul-3x2.lecture'];
+    expect(be.builtAt).toBeTruthy();
+    expect(be.origin).toBeUndefined();
+    const bm = JSON.parse(readFileSync(join(builtinDir, be.path, 'manifest.json'), 'utf8')) as PackManifest;
+    for (const [f, info] of Object.entries(bm.files)) {
+      expect(await sha256Hex(readFileSync(join(builtinDir, be.path, f)))).toBe(info.sha256);
+    }
   });
 });
 

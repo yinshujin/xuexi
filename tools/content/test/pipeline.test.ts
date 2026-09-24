@@ -4,9 +4,11 @@ import type { Server } from 'node:http';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { assertCatalog, assertManifest, sha256Hex, type PackManifest } from '@xuexi/course-pack';
+import { unzipSync } from 'fflate';
+import { assertCatalog, assertManifest, readBundle, sha256Hex, type PackManifest } from '@xuexi/course-pack';
 import type { Book } from '@xuexi/curriculum';
 import { buildPacks } from '../src/build';
+import { exportBundle } from '../src/export';
 import { generateMany, requirementFor, selectLessons, type LessonContext } from '../src/generate';
 import { startMockOpenMaic } from '../src/mock/server';
 import { OpenMaicClient } from '../src/openmaic-client';
@@ -149,6 +151,17 @@ describe('content pipeline (mock OpenMAIC)', () => {
     expect(r3.built).toEqual(['bsd-g4a.u3.mul-3x2.lecture']);
     expect(existsSync(join(paths.packs, 'bsd-g4a.u3.mul-3x2.lecture', 'v2', 'manifest.json'))).toBe(true);
     expect(existsSync(join(paths.packs, 'bsd-g4a.u3.mul-3x2.lecture', 'v1'))).toBe(false);
+
+    // Export a course-bundle file and read it back the way the app does.
+    expect(() => exportBundle(paths, { book: 'bsd-g2a' })).toThrow('没有符合条件');
+    const exported = exportBundle(paths, { book: 'bsd-g4a', unit: '3', title: '四上 第3单元' });
+    expect(exported.lessons.map((e) => e.lessonId)).toEqual(['bsd-g4a.u3.mul-3x2.lecture']);
+    const bundle = await readBundle(unzipSync(new Uint8Array(readFileSync(exported.file))));
+    expect(bundle.title).toBe('四上 第3单元');
+    expect(bundle.skipped).toEqual([]);
+    expect(bundle.packs).toHaveLength(1);
+    expect(bundle.packs[0].entry.version).toBe(2);
+    expect(Object.keys(bundle.packs[0].files)).toContain('lesson.json');
   });
 });
 

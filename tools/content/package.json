@@ -11,6 +11,7 @@
     "@xuexi/course-pack": "workspace:*",
     "@xuexi/curriculum": "workspace:*",
     "@xuexi/shared": "workspace:*",
+    "fflate": "^0.8.3",
     "katex": "^0.18.9"
   }
 }

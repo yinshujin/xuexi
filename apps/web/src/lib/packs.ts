@@ -1,7 +1,9 @@
+import { unzip } from 'fflate';
 import {
   assertCatalog,
   assertLesson,
   assertManifest,
+  readBundle,
   sha256Hex,
   type Catalog,
   type CatalogEntry,
@@ -18,6 +20,12 @@ import { kvGet, kvSet } from './db';
  */
 const PACK_CACHE = 'xuexi-packs-v1';
 const CATALOG_CACHE = 'xuexi-catalog-v1';
+/**
+ * Packs imported from a bundle file live under this synthetic origin in Cache
+ * Storage (never fetched from the network).
+ */
+const LOCAL_BASE = 'https://xuexi.local/';
+const LOCAL_CATALOG_KEY = 'localCatalog';
 
 async function cacheOpen(name: string): Promise<Cache | null> {
   try {
@@ -27,8 +35,24 @@ async function cacheOpen(name: string): Promise<Cache | null> {
   }
 }
 
+/** Site catalog merged with packs imported on this device (newest version wins). */
 export async function loadCatalog(): Promise<Catalog | null> {
-  const url = new URL('catalog.json', await siteBase()).toString();
+  const [site, local] = await Promise.all([loadSiteCatalog().catch(() => null), kvGet<Catalog>(LOCAL_CATALOG_KEY)]);
+  if (!local || Object.keys(local.lessons).length === 0) return site;
+  const merged: Catalog = site
+    ? { ...site, lessons: { ...site.lessons } }
+    : { format: 'xuexi-catalog@1', generatedAt: local.generatedAt, lessons: {} };
+  for (const [id, e] of Object.entries(local.lessons)) {
+    const s = merged.lessons[id];
+    if (!s || e.version >= s.version) merged.lessons[id] = e;
+  }
+  return merged;
+}
+
+async function loadSiteCatalog(): Promise<Catalog | null> {
+  const base = await siteBase();
+  if (!/^https?:/.test(base)) return null;
+  const url = new URL('catalog.json', base).toString();
   const cache = await cacheOpen(CATALOG_CACHE);
   try {
     const res = await fetch(url, { cache: 'no-cache' });
@@ -49,10 +73,10 @@ export async function loadCatalog(): Promise<Catalog | null> {
 }
 
 async function fileUrl(entry: CatalogEntry, path: string): Promise<string> {
-  return new URL(entry.path + path, await siteBase()).toString();
+  return new URL(entry.path + path, entry.origin === 'local' ? LOCAL_BASE : await siteBase()).toString();
 }
 
-const downloadedKey = (e: CatalogEntry) => `pack:${e.lessonId}:v${e.version}`;
+const downloadedKey = (e: CatalogEntry) => `pack:${e.lessonId}:v${e.version}${e.origin === 'local' ? ':local' : ''}`;
 
 export async function isDownloaded(entry: CatalogEntry): Promise<boolean> {
   return Boolean(await kvGet<boolean>(downloadedKey(entry)));
@@ -102,13 +126,100 @@ export async function downloadPack(entry: CatalogEntry, onProgress?: (ratio: num
   await kvSet(downloadedKey(entry), true);
 }
 
-export async function removePack(entry: CatalogEntry): Promise<void> {
+async function removeCached(entry: CatalogEntry): Promise<void> {
   const cache = await cacheOpen(PACK_CACHE);
   if (cache) {
     const prefix = await fileUrl(entry, '');
     for (const req of await cache.keys()) if (req.url.startsWith(prefix)) await cache.delete(req);
   }
   await kvSet(downloadedKey(entry), false);
+}
+
+export async function removePack(entry: CatalogEntry): Promise<void> {
+  await removeCached(entry);
+  if (entry.origin === 'local') {
+    const local = await kvGet<Catalog>(LOCAL_CATALOG_KEY);
+    if (local?.lessons[entry.lessonId]?.version === entry.version) {
+      delete local.lessons[entry.lessonId];
+      await kvSet(LOCAL_CATALOG_KEY, local);
+    }
+  }
+}
+
+const MIME: Record<string, string> = {
+  json: 'application/json',
+  mp3: 'audio/mpeg',
+  m4a: 'audio/mp4',
+  wav: 'audio/wav',
+  ogg: 'audio/ogg',
+  png: 'image/png',
+  jpg: 'image/jpeg',
+  jpeg: 'image/jpeg',
+  webp: 'image/webp',
+  gif: 'image/gif',
+  svg: 'image/svg+xml',
+  mp4: 'video/mp4',
+};
+
+function unzipAsync(bytes: Uint8Array): Promise<Record<string, Uint8Array>> {
+  return new Promise((resolve, reject) => unzip(bytes, (err, files) => (err ? reject(err) : resolve(files))));
+}
+
+export interface ImportResult {
+  title: string;
+  imported: CatalogEntry[];
+  skipped: string[];
+}
+
+/**
+ * Import a course-bundle zip (made with `pnpm content export`) into this
+ * device: every file is checked against its manifest hash, stored in Cache
+ * Storage under LOCAL_BASE, and the lessons are added to the local catalog.
+ */
+export async function importBundle(bytes: Uint8Array, onProgress?: (ratio: number) => void): Promise<ImportResult> {
+  const cache = await cacheOpen(PACK_CACHE);
+  if (!cache) throw new Error('此设备不支持离线缓存');
+  let files: Record<string, Uint8Array>;
+  try {
+    files = await unzipAsync(bytes);
+  } catch {
+    throw new Error('这不是有效的课程包文件（zip 解压失败）');
+  }
+  const bundle = await readBundle(files);
+
+  const local = (await kvGet<Catalog>(LOCAL_CATALOG_KEY)) ?? {
+    format: 'xuexi-catalog@1' as const,
+    generatedAt: new Date().toISOString(),
+    lessons: {},
+  };
+  const result: ImportResult = { title: bundle.title, imported: [], skipped: bundle.skipped };
+  let done = 0;
+  for (const pack of bundle.packs) {
+    const entry: CatalogEntry = { ...pack.entry, origin: 'local' };
+    for (const [rel, data] of Object.entries(pack.files)) {
+      const ext = rel.split('.').pop()?.toLowerCase() ?? '';
+      await cache.put(
+        await fileUrl(entry, rel),
+        new Response(data as Uint8Array<ArrayBuffer>, { headers: { 'content-type': MIME[ext] ?? 'application/octet-stream' } }),
+      );
+    }
+    await cache.put(
+      await fileUrl(entry, 'manifest.json'),
+      new Response(pack.manifestBytes as Uint8Array<ArrayBuffer>, { headers: { 'content-type': 'application/json' } }),
+    );
+    await kvSet(downloadedKey(entry), true);
+    const prev = local.lessons[entry.lessonId];
+    if (!prev || entry.version >= prev.version) {
+      // Drop the older imported version's files.
+      if (prev && prev.version !== entry.version) await removeCached(prev);
+      local.lessons[entry.lessonId] = entry;
+    }
+    result.imported.push(entry);
+    onProgress?.(++done / bundle.packs.length);
+  }
+  local.generatedAt = new Date().toISOString();
+  await kvSet(LOCAL_CATALOG_KEY, local);
+  return result;
 }
 
 export interface OpenedLesson {

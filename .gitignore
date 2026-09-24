@@ -17,3 +17,4 @@ content/openmaic.env
 content/publish.env
 .signing/
 content/authored/_*
+content/exports/

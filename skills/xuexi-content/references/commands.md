@@ -12,6 +12,7 @@
 | `pnpm content status [--book X]` | 每节课状态：未生成 / 生成中 / 待审核 / 已通过 / 已打回 / 失败 |
 | `pnpm content review [--port 5180]` | 本地审核页（家长操作） |
 | `pnpm content build` | 打包审核通过的课，生成 catalog.json |
+| `pnpm content export [--book X] [--unit N] [--lesson 课id] [--out 文件.zip] [--title 标题]` | 把打包好的课导出成课程包文件，发到设备后在 App 家长模式里导入（不需要网站） |
 | `pnpm content publish --target dir\|edgeone\|tencent [--init] [--no-web-build]` | 发布 |
 
 `gen` 的选项：

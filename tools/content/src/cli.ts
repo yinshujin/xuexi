@@ -20,6 +20,8 @@ import { existsSync, mkdirSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { authorBrief, authoredFile, importAuthored, listAuthored } from './authoring/import';
 import { edgeEngine, sayEngine, ttsDraft } from './tts';
+import { exportBundle } from './export';
+import { bytes as fmtBytes } from './format-bytes';
 
 const HELP = `用法：pnpm content <命令> [选项]
 
@@ -44,6 +46,9 @@ const HELP = `用法：pnpm content <命令> [选项]
 
   review [--port 5180]            打开本地审核页：逐课试播，通过 / 打回（写修改意见）
   build                           把审核通过的课打包成课程包，生成 catalog.json
+  export [--book X] [--unit N] [--lesson 课id] [--out 文件.zip]
+                                  把已打包的课导出成"课程包文件"（zip），用微信 / 网盘 / USB 传到
+                                  平板或手机，在 App 家长模式 → 离线课程 → 从文件导入（不需要服务器）
   publish --target dir|edgeone|tencent [--no-web-build] [--init] [--allow-empty]
                                   组装站点并发布（dir 只生成 content/site；
                                   腾讯云第一次部署加 --init）
@@ -89,6 +94,7 @@ async function main() {
       out: { type: 'string' },
       engine: { type: 'string' },
       voice: { type: 'string' },
+      title: { type: 'string' },
     },
   });
   const paths = getPaths();
@@ -237,6 +243,19 @@ async function main() {
         const n = await ttsDraft(paths, state, id, { engine, force: values.force, log });
         log(`${n > 0 ? '✓' : '·'} ${id}：新配音 ${n} 句（${engine.name}）`);
       }
+      return;
+    }
+    case 'export': {
+      const r = exportBundle(paths, {
+        book: values.book,
+        unit: values.unit,
+        lesson: values.lesson,
+        out: values.out,
+        title: values.title,
+      });
+      log(`已导出 ${r.lessons.length} 节课（${fmtBytes(r.bytes)}）：${r.file}`);
+      log('把这个文件发到平板或手机上，在 App 的 家长模式 → 离线课程 → 选择课程包文件。');
+      if (r.bytes > 150 * 1024 * 1024) log('⚠ 文件较大，建议按单元分开导出（--unit N），导入更快、更省内存。');
       return;
     }
     case 'status': {

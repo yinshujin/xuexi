@@ -63,11 +63,14 @@ user-invocable: true
 ### 打包发布（两种方式通用）
 
 1. `pnpm content build` —— 把通过的课打包，汇报新打包了几节、跳过了哪些及原因。
-2. 确认 `content/publish.env` 已填写（参考 `deploy/publish.env.example`），再发布：
+2. 家长没有部署网站（只装了 App）时，导出课程包文件：
+   `pnpm content export --book <书> [--unit N]`，把生成的 zip 路径告诉家长，
+   请家长发到设备上，在 App 的"家长模式 → 离线课程 → 选择课程包文件"导入。
+3. 家长部署了网站时，确认 `content/publish.env` 已填写（参考 `deploy/publish.env.example`），再发布：
    - 免费 EdgeOne：`pnpm content publish --target edgeone`
    - 腾讯云服务器：`pnpm content publish --target tencent`（第一次加 `--init`）
    - 只生成网站文件：`pnpm content publish --target dir`
-3. 本机 OpenMAIC 用完可以关掉：`pnpm content openmaic down`。
+4. 本机 OpenMAIC 用完可以关掉：`pnpm content openmaic down`。
 
 ### 汇报
 

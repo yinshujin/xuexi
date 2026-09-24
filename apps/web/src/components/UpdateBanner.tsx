@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { siteBase } from '../lib/api';
+import { openExternal } from '../lib/files';
 import { isNativeShell } from '../lib/platform';
 
 interface Version {
@@ -42,9 +43,9 @@ export function UpdateBanner() {
   return (
     <div className="flex items-center gap-3 bg-amber-100 px-4 py-2 text-amber-900">
       <span className="flex-1">App 有新版本啦。</span>
-      <a href={apkUrl} className="rounded-full bg-amber-500 px-4 py-1.5 font-bold text-white">
+      <button type="button" onClick={() => openExternal(apkUrl)} className="rounded-full bg-amber-500 px-4 py-1.5 font-bold text-white">
         下载安装
-      </a>
+      </button>
       <button type="button" onClick={() => setApkUrl(null)} className="text-amber-700">
         稍后
       </button>

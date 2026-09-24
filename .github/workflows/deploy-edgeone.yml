@@ -37,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_SITE_URL: ${{ vars.SITE_URL }}
+      VITE_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
     steps:
       - name: Check that EdgeOne is set up
         id: setup

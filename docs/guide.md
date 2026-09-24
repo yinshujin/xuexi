@@ -11,6 +11,7 @@ pnpm content review → 逐课试播，通过/打回
 pnpm content build → 打包成课程包
 pnpm content publish ────────────────────────→  EdgeOne Pages（免费）  ←──  华为平板 / vivo（APK）
                                                   或 腾讯云服务器         ←──  iPhone / Mac / Windows（PWA）
+pnpm content export ──→ 课程包文件 .zip ──（微信 / 数据线）──────────────→  APK / 桌面 App 直接导入（不需要网站）
 ```
 
 App 运行时**不调用任何大模型**：讲解课是提前生成、你审核过的静态内容；练习题由程序在设备上现场出题，答案由程序计算。
@@ -110,6 +111,35 @@ pnpm content review
 
 ## 4. 打包和发布
 
+有两种用法，任选其一（也可以同时用）：
+
+| | 不用网站：只装 App | 家庭网站（EdgeOne / 腾讯云） |
+| --- | --- | --- |
+| 课程怎么到设备上 | 电脑导出课程包文件（.zip），微信 / 数据线发到设备，在 App 里导入 | 发布到网站，设备上一键下载 |
+| 学习记录 | 只存在这台设备上；换设备用"导出备份 / 从备份恢复" | 多台设备自动同步 |
+| 支持的设备 | 华为平板、vivo（APK），Mac、Windows（安装包） | 以上全部，外加 iPhone / iPad |
+| App 更新 | 家长模式 → 设置 → 检查更新，下载新 APK 覆盖安装 | 打开 App 时自动提示 |
+
+### 方式一：不用网站，直接导入课程包文件
+
+```bash
+pnpm content build                                   # 把通过的课打包
+pnpm content export --book bsd-g4a --unit 3          # 导出四上第 3 单元 → content/exports/xuexi-bsd-g4a-u3-日期.zip
+pnpm content export --book bsd-g2a                   # 导出整本二上
+pnpm content export --lesson <课id>                  # 只导出一节课
+```
+
+把 zip 文件发到平板 / 手机上（微信"文件传输助手"、QQ、数据线都可以），然后在 App 里：
+**家长模式 → 离线课程 → 选择课程包文件**。App 会逐个校验文件，导入后没有网络也能上课。
+同一节课重新审核通过后，再导出、再导入一次即可替换成新版本。
+
+注意：
+- 这种方式下每台设备的学习记录各自独立。换设备、重装 App 或"清除数据"之前，先在 **家长模式 → 设置 → 学习记录备份** 里导出备份，到新设备上"从备份恢复"。
+- iPhone / iPad 没有 APK，只能用网站方式（PWA）。
+- 以后想换成网站方式：家长模式 → 设置 → 登录家庭账号，本机的孩子和学习记录会合并到家庭账号里。
+
+### 方式二：发布到家庭网站
+
 ```bash
 pnpm content build                        # 把通过的课打包成课程包，生成 catalog.json
 pnpm content publish --target edgeone     # 发布到 EdgeOne Pages（免费）
@@ -131,7 +161,10 @@ pnpm content publish --target dir         # 只生成 content/site/，自己上�
 | Mac | Safari 打开网站 → 文件 → 添加到程序坞（或 Chrome 地址栏右侧"安装"） |
 | Windows | Edge / Chrome 打开网站 → 地址栏右侧"安装应用"；也可以在 Actions 里运行 "Desktop apps" 获取安装包 |
 
-APK 第一次打开时需要填写网站地址（例如 `https://xuexi.example.com/`）和家庭口令。
+最新的 APK 也可以直接在仓库的 Releases 页面 `app-latest` 下载（每次代码更新后自动构建）。
+
+APK 第一次打开时点 **"开始使用"** 就能直接用（不用网站的方式）。
+如果部署了家庭网站，点下面的"我有家庭网站"，填写网站地址（例如 `https://xuexi.example.com/`）和家庭口令。
 网站必须是 **HTTPS**（EdgeOne 默认就是；腾讯云需要绑定域名）。
 
 APK 签名：先在电脑上运行一次 `bash shells/tauri/scripts/create-keystore.sh`，按提示把三项填到 GitHub 仓库的 Secrets 里。
@@ -145,6 +178,6 @@ APK 签名：先在电脑上运行一次 `bash shells/tauri/scripts/create-keyst
 - **家长模式**（首页底部，需要家长密码）：
   - 学习报告：每个知识点的掌握情况、常见错因、每天学习时长；
   - 孩子：添加 / 编辑孩子档案和课本；
-  - 离线课程：把课程提前下载到这台设备，没网也能上课；
-  - 设置：每日时长上限、护眼提醒间隔、掌握标准。
-- 多台设备的学习记录会自动同步（联网时）。
+  - 离线课程：从课程包文件导入课程，或把网站上的课程提前下载到这台设备，没网也能上课；
+  - 设置：每日时长上限、护眼提醒间隔、掌握标准；学习记录备份 / 恢复；App 版本和检查更新。
+- 登录了家庭账号时，多台设备的学习记录会自动同步（联网时）。

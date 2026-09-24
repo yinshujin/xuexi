@@ -63,6 +63,8 @@ export interface CatalogEntry {
   path: string;
   durationSec: number;
   totalBytes: number;
+  /** Set by the app for packs imported from a bundle file (stored on the device only). */
+  origin?: 'local';
 }
 
 /** catalog.json at the site root. */
@@ -70,4 +72,19 @@ export interface Catalog {
   format: 'xuexi-catalog@1';
   generatedAt: string;
   lessons: Record<string, CatalogEntry>;
+}
+
+export const BUNDLE_FORMAT = 'xuexi-bundle@1' as const;
+
+/**
+ * bundle.json at the root of a course-bundle zip ("课程包文件"), used to move
+ * courses to a device without any server. The zip also contains every pack
+ * under the same `packs/<lessonId>/v<n>/` paths as the published site.
+ */
+export interface BundleIndex {
+  format: typeof BUNDLE_FORMAT;
+  createdAt: string;
+  /** Human title, e.g. "四年级上册 第3单元". */
+  title: string;
+  lessons: CatalogEntry[];
 }

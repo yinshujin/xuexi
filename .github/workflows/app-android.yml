@@ -37,6 +37,7 @@ jobs:
       contents: write
     env:
       VITE_SITE_URL: ${{ vars.SITE_URL }}
+      VITE_REPO_URL: ${{ github.server_url }}/${{ github.repository }}
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:

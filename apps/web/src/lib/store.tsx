@@ -2,6 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useRef, use
 import type { Catalog } from '@xuexi/course-pack';
 import { DEFAULT_SETTINGS, type ChildProfile, type FamilyDoc, type LearningEvent } from '@xuexi/shared';
 import { api, ApiError } from './api';
+import { mergeChildren } from './backup';
 import { getCachedFamily, getDeviceId, KV, kvGet, kvSet } from './db';
 import { loadCatalog } from './packs';
 import { loadEvents, recordEvent, syncNow, type SyncStatus } from './sync';
@@ -25,6 +26,8 @@ interface AppContextValue {
   logout: () => Promise<void>;
   syncNow: () => Promise<void>;
   refreshCatalog: () => Promise<void>;
+  /** Re-read events of every loaded child from IndexedDB (after a restore). */
+  reloadEvents: () => Promise<void>;
 }
 
 const EMPTY_FAMILY: FamilyDoc = { children: [], settings: DEFAULT_SETTINGS, version: 0, updatedAt: 0 };
@@ -164,9 +167,24 @@ export function AppProvider({ children }: { children: ReactNode }) {
       child: (id) => family.children.find((c) => c.id === id),
       login: async (code, serverUrl) => {
         if (serverUrl !== undefined) await kvSet(KV.serverUrl, serverUrl.trim() || null);
+        const localFamily = familyRef.current;
         await api.login(code);
         await kvSet('localOnly', false);
         setAuth('ok');
+        // Profiles created in on-device mode join the family account (their
+        // records are pushed by the sync below, since they are still unsynced).
+        if (localFamily.children.length > 0) {
+          const server = await api.getFamily();
+          const children = mergeChildren(server.children, localFamily.children);
+          if (children.length !== server.children.length) {
+            const saved = await api.putFamily(
+              { children, settings: server.children.length ? server.settings : localFamily.settings },
+              server.version,
+            );
+            setFamily(saved);
+            await kvSet(KV.family, saved);
+          }
+        }
         await runSync();
         await refreshCatalog();
       },
@@ -181,8 +199,9 @@ export function AppProvider({ children }: { children: ReactNode }) {
       },
       syncNow: runSync,
       refreshCatalog,
+      reloadEvents: reloadLoadedChildren,
     }),
-    [auth, family, catalog, sync, deviceId, events, loadChild, addEvent, saveFamily, runSync, refreshCatalog],
+    [auth, family, catalog, sync, deviceId, events, loadChild, addEvent, saveFamily, runSync, refreshCatalog, reloadLoadedChildren],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;

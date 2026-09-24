@@ -14,6 +14,7 @@ pnpm content mock                        # 终端 1：模拟 OpenMAIC
 pnpm content gen --book bsd-g4a --limit 2 # 终端 2：生成两节示例课
 pnpm content review                      # 浏览器打开 http://localhost:5180/#/review 试播、通过
 pnpm content build && pnpm content publish --target dir   # 生成 content/site
+pnpm content export --book bsd-g4a       # 或：导出课程包文件，在 App 里直接导入（不需要网站）
 ```
 
 ## 目录

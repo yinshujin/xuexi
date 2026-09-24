@@ -4,7 +4,9 @@ import type { CatalogEntry } from '@xuexi/course-pack';
 import { sha256Hex } from '@xuexi/course-pack';
 import type { ChildProfile, FamilySettings } from '@xuexi/shared';
 import { useApp } from '../lib/store';
-import { downloadPack, isDownloaded, removePack } from '../lib/packs';
+import { downloadPack, importBundle, isDownloaded, removePack, type ImportResult } from '../lib/packs';
+import { buildBackup, mergeChildren, parseBackup, restoreEvents } from '../lib/backup';
+import { openExternal, pickFile, saveFile } from '../lib/files';
 import { bytes, uuid } from '../lib/format';
 import { Btn, Card, Empty, Page } from '../components/ui';
 import { NumberPad } from '../practice/NumberPad';
@@ -180,6 +182,60 @@ function ChildrenTab() {
   );
 }
 
+function ImportCard() {
+  const { refreshCatalog } = useApp();
+  const [busy, setBusy] = useState<number | null>(null);
+  const [result, setResult] = useState<ImportResult | null>(null);
+  const [error, setError] = useState('');
+
+  const run = async () => {
+    setError('');
+    setResult(null);
+    try {
+      const file = await pickFile({ extensions: ['zip'], label: '课程包' });
+      if (!file) return;
+      setBusy(0);
+      const r = await importBundle(file.bytes, (x) => setBusy(x));
+      setResult(r);
+      await refreshCatalog();
+    } catch (e) {
+      setError((e as Error).message);
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <Card>
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex-1">
+          <h3 className="text-lg font-bold">从文件导入课程</h3>
+          <p className="text-sm text-slate-500">不需要网站：电脑上 pnpm content export 生成 .zip，用微信 / 数据线传到这台设备后导入。</p>
+        </div>
+        <Btn tone="green" disabled={busy !== null} onClick={run}>
+          {busy !== null ? `导入中 ${Math.round(busy * 100)}%` : '选择课程包文件'}
+        </Btn>
+      </div>
+      {error && <p className="mt-3 text-rose-600">{error}</p>}
+      {result && (
+        <div className="mt-3 text-slate-700">
+          <p>
+            「{result.title}」导入了 {result.imported.length} 节课
+            {result.skipped.length > 0 ? `，${result.skipped.length} 节有问题没导入：` : '。'}
+          </p>
+          {result.skipped.length > 0 && (
+            <ul className="mt-1 list-disc pl-6 text-sm text-rose-600">
+              {result.skipped.map((x) => (
+                <li key={x}>{x}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+    </Card>
+  );
+}
+
 function OfflineTab() {
   const { catalog, family, refreshCatalog } = useApp();
   const [state, setState] = useState<Record<string, number | 'done' | 'error'>>({});
@@ -205,34 +261,49 @@ function OfflineTab() {
   };
 
   const total = entries.reduce((n, e) => n + e.totalBytes, 0);
+  const remote = entries.filter((e) => e.origin !== 'local');
   return (
     <div className="flex flex-col gap-3">
+      <ImportCard />
       <Card className="flex flex-wrap items-center gap-3">
         <div className="flex-1">
-          已发布 {entries.length} 节课，共 {bytes(total)}。下载后没有网络也能上课。
+          共 {entries.length} 节课，{bytes(total)}。{remote.length > 0 ? '网站上的课下载后没有网络也能上课。' : ''}
         </div>
         <Btn tone="plain" onClick={() => refreshCatalog()}>
           刷新
         </Btn>
         <Btn
           onClick={async () => {
-            for (const e of entries) if (state[e.lessonId] !== 'done') await download(e);
+            for (const e of remote) if (state[e.lessonId] !== 'done') await download(e);
           }}
+          disabled={remote.length === 0}
         >
           全部下载
         </Btn>
       </Card>
-      {entries.length === 0 && <Empty>还没有发布的课程。用 pnpm content publish 发布后，这里会出现。</Empty>}
+      {entries.length === 0 && <Empty>还没有课程。在电脑上用 pnpm content export 导出课程包文件，再点上面的「从文件导入」。</Empty>}
       {entries.map((e) => {
         const s = state[e.lessonId];
         return (
           <div key={e.lessonId} className="flex items-center gap-3 rounded-2xl bg-white px-4 py-3 ring-1 ring-slate-200">
             <span className="rounded bg-slate-100 px-2 text-sm">{e.kind === 'lecture' ? '讲解' : '技巧'}</span>
-            <span className="flex-1">{e.title}</span>
+            <span className="flex-1">
+              {e.title}
+              {e.origin === 'local' && <span className="ml-2 rounded bg-emerald-50 px-1.5 text-xs text-emerald-700">本机导入</span>}
+            </span>
             <span className="text-sm text-slate-500">{bytes(e.totalBytes)}</span>
             {s === 'done' ? (
-              <button type="button" className="text-sm text-slate-500 underline" onClick={async () => { await removePack(e); setState((x) => ({ ...x, [e.lessonId]: 0 })); }}>
-                已下载 · 删除
+              <button
+                type="button"
+                className="text-sm text-slate-500 underline"
+                onClick={async () => {
+                  if (e.origin === 'local' && !confirm(`删除「${e.title}」？删除后需要重新导入课程包文件。`)) return;
+                  await removePack(e);
+                  setState((x) => ({ ...x, [e.lessonId]: 0 }));
+                  if (e.origin === 'local') await refreshCatalog();
+                }}
+              >
+                {e.origin === 'local' ? '删除' : '已下载 · 删除'}
               </button>
             ) : typeof s === 'number' && s > 0 ? (
               <span className="text-sm text-sky-600">{Math.round(s * 100)}%</span>
@@ -319,7 +390,91 @@ function SettingsTab() {
           </Btn>
         </div>
       </Card>
+      <BackupCard />
+      <VersionCard />
     </div>
+  );
+}
+
+function BackupCard() {
+  const { family, saveFamily, reloadEvents } = useApp();
+  const [msg, setMsg] = useState('');
+  const [error, setError] = useState('');
+
+  const exportIt = async () => {
+    setMsg('');
+    setError('');
+    try {
+      const data = await buildBackup(family);
+      const name = `xuexi-backup-${new Date().toISOString().slice(0, 10)}.json`;
+      if (await saveFile(name, data, 'application/json', '学习记录备份', 'json')) setMsg(`已导出 ${name}`);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
+  const restore = async () => {
+    setMsg('');
+    setError('');
+    try {
+      const file = await pickFile({ extensions: ['json'], label: '学习记录备份' });
+      if (!file) return;
+      const backup = parseBackup(file.bytes);
+      const added = await restoreEvents(backup.events);
+      const children = mergeChildren(family.children, backup.family.children);
+      const newKids = children.length - family.children.length;
+      if (newKids > 0) {
+        await saveFamily({ children, settings: family.children.length ? family.settings : backup.family.settings });
+      }
+      await reloadEvents();
+      setMsg(`恢复完成：新增 ${added} 条学习记录${newKids > 0 ? `、${newKids} 个孩子` : ''}（已有的记录不会重复）。`);
+    } catch (e) {
+      setError((e as Error).message);
+    }
+  };
+
+  return (
+    <Card>
+      <h3 className="mb-2 text-lg font-bold">学习记录备份</h3>
+      <p className="mb-3 text-slate-600">
+        换设备或重装 App 前先导出；在新设备上恢复即可接着学。恢复只会补上缺少的记录，不会覆盖已有的。
+      </p>
+      <div className="flex flex-wrap gap-2">
+        <Btn tone="plain" onClick={exportIt}>
+          导出备份
+        </Btn>
+        <Btn tone="plain" onClick={restore}>
+          从备份恢复
+        </Btn>
+      </div>
+      {msg && <p className="mt-3 text-emerald-700">{msg}</p>}
+      {error && <p className="mt-3 text-rose-600">{error}</p>}
+    </Card>
+  );
+}
+
+const REPO_URL = (import.meta.env.VITE_REPO_URL as string | undefined) ?? '';
+
+function VersionCard() {
+  const [version, setVersion] = useState<{ build: string; builtAt?: string } | null>(null);
+  useEffect(() => {
+    fetch('./version.json', { cache: 'no-store' })
+      .then((r) => (r.ok ? r.json() : null))
+      .then(setVersion)
+      .catch(() => setVersion(null));
+  }, []);
+  return (
+    <Card>
+      <h3 className="mb-2 text-lg font-bold">App 版本</h3>
+      <p className="mb-3 text-slate-600">
+        {version ? `版本 ${version.build}${version.builtAt ? `（${new Date(version.builtAt).toLocaleDateString()} 构建）` : ''}` : '开发版'}
+      </p>
+      {REPO_URL && (
+        <Btn tone="plain" onClick={() => openExternal(`${REPO_URL}/releases/tag/app-latest`)}>
+          检查更新（打开下载页）
+        </Btn>
+      )}
+    </Card>
   );
 }
 

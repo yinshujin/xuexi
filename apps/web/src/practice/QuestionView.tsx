@@ -19,6 +19,8 @@ export interface QuestionViewProps {
   onFirstAnswer: (o: AnswerOutcome) => void;
   /** Called when the child is ready for the next question. */
   onNext: () => void;
+  /** Speed drills: move on automatically after a correct answer. */
+  autoNext?: boolean;
 }
 
 type Phase = 'answering' | 'retry' | 'done';
@@ -37,7 +39,7 @@ function answerText(q: Question): string {
   }
 }
 
-export function QuestionView({ question: q, grade, onFirstAnswer, onNext }: QuestionViewProps) {
+export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNext }: QuestionViewProps) {
   const [phase, setPhase] = useState<Phase>('answering');
   const [text, setText] = useState('');
   const [quotient, setQuotient] = useState('');
@@ -71,7 +73,10 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext }: Ques
       firstTryCorrect.current = result.correct;
       onFirstAnswer({ response, result, durationMs: Date.now() - started.current, hinted: false });
     }
-    if (result.correct) setPhase('done');
+    if (result.correct) {
+      setPhase('done');
+      if (autoNext) setTimeout(onNext, 350);
+    }
     else if (phase === 'answering') setPhase('retry');
     else {
       setPhase('done');

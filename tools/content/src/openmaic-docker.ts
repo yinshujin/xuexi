@@ -18,7 +18,7 @@ export interface PipelineConfig {
 
 export function pipelineConfig(env: Record<string, string>): PipelineConfig {
   return {
-    openmaicUrl: env.XUEXI_OPENMAIC_URL || 'http://localhost:3000',
+    openmaicUrl: process.env.XUEXI_OPENMAIC_URL || env.XUEXI_OPENMAIC_URL || 'http://localhost:3000',
     accessCode: env.ACCESS_CODE || undefined,
     enableTTS: env.XUEXI_ENABLE_TTS !== '0',
     env,

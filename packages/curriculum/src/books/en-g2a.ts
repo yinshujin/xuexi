@@ -61,7 +61,7 @@ export const enG2a: Book = {
               '教“看太阳”口诀：太阳升起 Good morning，太阳头顶过后 Good afternoon，太阳落山 Good evening，上床睡觉 Good night。用 4 个生活场景（早上到校、下午放学、晚饭后遇到邻居、睡前和妈妈说话）让孩子选问候语，专门对比晚上见面说 Good evening、睡前说 Good night 的区别。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.greetings' }],
       },
       {
         slug: 'how-are-you',
@@ -93,7 +93,7 @@ export const enG2a: Book = {
               '教对话“接球”技巧：听到 How are you? 要马上回答 I\'m fine. Thank you. 而不是只说 Fine 或不说话。用“先问好—再问你好吗—再回答并道谢”的三步顺序练习：Good afternoon. / Good afternoon. / How are you? / I\'m fine. Thank you. 再对比都带 you 的 How are you?（你好吗）和 Thank you.（谢谢你），听清开头再回答。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.how-are-you' }],
       },
     ]),
     // ------------------------------------------------------------------ Unit 2
@@ -128,7 +128,7 @@ export const enG2a: Book = {
               '教“成对记单词”的方法：big 和 small 是一对“相反的词”，boy 和 girl 是一对“小伙伴词”。用夸张动作（张开双臂说 big，缩成一团说 small）和“我说一个你说另一个”的对口令游戏，把 big、small、boy、girl 各读两遍以上，并能快速说出配对词。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.words' }],
       },
       {
         slug: 'i-am-you-are',
@@ -160,7 +160,7 @@ export const enG2a: Book = {
               '教“边指边说”的方法区分 I\'m 和 You\'re：说 I\'m 时指自己，说 You\'re 时指对方。用 Danny 和 Mary 的图片做判断题（Danny 介绍自己该说 I\'m Danny. 还是 You\'re Danny.），并练习 You\'re a girl. / You\'re a boy. 不漏 a。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.i-am-you-are' }],
       },
     ]),
   ],

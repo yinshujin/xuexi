@@ -62,7 +62,7 @@ export const enG4a: Book = {
               '只讲一个方法：先看是男孩还是女孩——男孩用 he / his，女孩用 she / her。演示 2 个例子：This is Peter. His name’s Peter. / This is Jill. Her name’s Jill.；对比把女孩说成 his name 的错误；小口诀帮助记忆。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.words' }],
       },
       {
         slug: 'introduce',
@@ -94,7 +94,7 @@ export const enG4a: Book = {
               '只讲一个方法：看时间选招呼——上午 Good morning，下午 Good afternoon，晚上见面 Good evening，睡前道别 Good night。演示 2 个例子；对比晚上见面说 Good night 的错误；中文口诀帮助记忆。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.introduce' }],
       },
     ]),
     // ------------------------------------------------------------------ Unit 2
@@ -129,7 +129,7 @@ export const enG4a: Book = {
               '只讲一个方法：边做动作边说词组（TPR 记单词）。演示 2 个例子：做蛙泳动作说 swim，原地快跑说 run fast；对比漏说 a 的 ride bicycle；用一小段 chant 串起 swim、skate、ride a bicycle、run fast、jump high。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.words' }],
       },
       {
         slug: 'can-questions',
@@ -162,7 +162,7 @@ export const enG4a: Book = {
               '只讲一个规则：can 后面的动作词不变样，I、you、he、she 都一样。演示 2 个例子：He can swim. / She can ride a bicycle.；对比 He can swims. 和 Do you can swim? 两个错误；配一句 chant 帮助记忆。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'en4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.can-questions' }],
       },
       {
         slug: 'can-but',
@@ -185,7 +185,7 @@ export const enG4a: Book = {
           focus:
             '用 Welcome to our class. 开场，讲 but 表示“但是”：I can swim, but I can’t skate. She can draw, but she can’t sing. 读一段 4~5 句的小短文（介绍 Peter 和 Kitty 的本领），找出谁会、谁不会；最后仿写介绍自己。',
         },
-        practice: [],
+        practice: [{ generatorId: 'en4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.can-but' }],
       },
     ]),
   ],

@@ -20,6 +20,7 @@ import { g4Mul3x2 } from './generators/g4-mul-3x2';
 import { g4MulEstimate } from './generators/g4-mul-estimate';
 import { g4Negative } from './generators/g4-negative';
 import { g4OralMulDiv } from './generators/g4-oral-muldiv';
+import { en2Words, en4Words, yw2Words, yw4Polyphone, yw4Words } from './generators/lang-banks';
 import type { GenerateOptions, GradeResult, Question, Response } from './types';
 
 /** Every generator, in catalog order. */
@@ -46,6 +47,11 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g4AngleClassify,
   g4Lines,
   g4Negative,
+  yw2Words,
+  yw4Words,
+  yw4Polyphone,
+  en2Words,
+  en4Words,
 ] as readonly PracticeGenerator[];
 
 const BY_ID = new Map<string, PracticeGenerator>(ALL_GENERATORS.map((g) => [g.id, g]));

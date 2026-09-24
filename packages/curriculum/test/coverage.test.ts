@@ -29,7 +29,8 @@ function coverage(book: Book) {
 }
 
 describe('error tag coverage by technique lessons', () => {
-  for (const book of BOOKS) {
+  // Only math technique lessons carry `remedies`; 语文 / 英语 errors are fixed by the item explanations.
+  for (const book of BOOKS.filter((b) => b.subject === 'math')) {
     it(`${book.id}: every tag emitted by linked generators has a remedy (or is documented)`, () => {
       const { emitted, uncovered } = coverage(book);
       // Report for humans running the tests.

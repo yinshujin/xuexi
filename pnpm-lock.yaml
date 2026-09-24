@@ -137,6 +137,10 @@ importers:
       '@xuexi/shared':
         specifier: workspace:*
         version: link:../shared
+    devDependencies:
+      '@xuexi/practice':
+        specifier: workspace:*
+        version: link:../practice
 
   packages/player:
     dependencies:

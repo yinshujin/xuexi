@@ -51,6 +51,15 @@ export const ERROR_TAGS = {
   'perp-parallel': '垂直与平行的概念弄错',
   // ---- negative numbers ----
   'negative-compare': '负数比较大小方向弄反',
+  // ---- 语文 ----
+  'char-pinyin': '字音读错（声调、平翘舌、前后鼻音）',
+  polyphone: '多音字的读音和意思没对上',
+  'similar-char': '形近字、同音字混淆',
+  'word-usage': '词语意思或搭配用错',
+  // ---- English ----
+  'en-meaning': '英语单词意思记混',
+  'en-spelling': '英语单词拼写错误',
+  'en-sentence': '英语句型或答语用错',
   // ---- generic ----
   careless: '粗心（与典型错误都不符）',
 } as const;
@@ -199,6 +208,37 @@ export const GENERATORS = [
     grade: 4,
     title: '生活中的负数',
     errorTags: ['negative-compare'],
+  },
+  // ---------------- 语文 / 英语 (item banks) ----------------
+  {
+    id: 'yw2.words',
+    grade: 2,
+    title: '语文字词（读音、字形、词语）',
+    errorTags: ['char-pinyin', 'polyphone', 'similar-char', 'word-usage'],
+  },
+  {
+    id: 'yw4.words',
+    grade: 4,
+    title: '语文字词（读音、字形、词语）',
+    errorTags: ['char-pinyin', 'similar-char', 'word-usage'],
+  },
+  {
+    id: 'yw4.polyphone',
+    grade: 4,
+    title: '多音字（据义定音）',
+    errorTags: ['polyphone'],
+  },
+  {
+    id: 'en2.words',
+    grade: 2,
+    title: '英语单词与句型',
+    errorTags: ['en-meaning', 'en-spelling', 'en-sentence'],
+  },
+  {
+    id: 'en4.words',
+    grade: 4,
+    title: '英语单词与句型',
+    errorTags: ['en-meaning', 'en-spelling', 'en-sentence'],
   },
 ] as const satisfies readonly GeneratorInfo[];
 

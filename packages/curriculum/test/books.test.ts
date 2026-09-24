@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { GENERATORS, isErrorTag, isGeneratorId } from '@xuexi/shared';
+import { getGenerator } from '@xuexi/practice';
 import {
   BOOKS,
   allKnowledgePoints,
@@ -147,10 +148,39 @@ describe('knowledge points', () => {
         expect(p.minDifficulty, where).toBeGreaterThanOrEqual(1);
         expect(p.maxDifficulty, where).toBeLessThanOrEqual(5);
         expect(p.minDifficulty, where).toBeLessThanOrEqual(p.maxDifficulty);
-        const allowed = VARIANTS[p.generatorId];
+        // 语文 / 英语 bank generators: variants are the knowledge points found in the bank data.
+        const allowed = VARIANTS[p.generatorId] ?? (book.subject !== 'math' ? getGenerator(p.generatorId).variants : undefined);
         if (p.variant === undefined) continue;
         expect(allowed, `${where} takes no variant`).toBeDefined();
         expect(allowed).toContain(p.variant);
+      }
+    }
+  });
+});
+
+describe('语文 / 英语 practice banks', () => {
+  const BANK_BOOK: Record<string, string> = {
+    'yw2.words': 'yw-g2a',
+    'yw4.words': 'yw-g4a',
+    'yw4.polyphone': 'yw-g4a',
+    'en2.words': 'en-g2a',
+    'en4.words': 'en-g4a',
+  };
+  it('every bank knowledge point exists in its book and every book knowledge point has practice', () => {
+    for (const [gid, bookId] of Object.entries(BANK_BOOK)) {
+      for (const v of getGenerator(gid as never).variants) {
+        if (v !== 'mixed') expect(findKnowledgePoint(`${bookId}.${v}`), `${gid}: ${v}`).toBeDefined();
+      }
+    }
+    for (const book of BOOKS.filter((b) => b.subject !== 'math')) {
+      for (const u of book.units) {
+        for (const k of u.knowledgePoints) {
+          expect(k.practice.length, `${k.id} has no practice`).toBeGreaterThan(0);
+          for (const p of k.practice) {
+            expect(BANK_BOOK[p.generatorId], k.id).toBe(book.id);
+            if (p.variant !== 'mixed') expect(`${book.id}.${p.variant}`, k.id).toBe(k.id);
+          }
+        }
       }
     }
   });

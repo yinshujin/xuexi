@@ -64,7 +64,7 @@ export const ywG4a: Book = {
               '教孩子找时间顺序的“路标词”（午后一点左右、过了一会儿、霎时、潮头过后），把课文分成潮来前、潮来时、潮头过后三段，并说出每段写了什么；再用同样方法说一说一次看日落或看海的经过。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tide' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tide', label: '多音字' }],
       },
       {
         slug: 'modern-poems',
@@ -95,7 +95,7 @@ export const ywG4a: Book = {
               '教“想象画面”三步：圈出诗句里的景物，找出颜色和动作，再用“我好像看到了……”说出一幅完整的画面。以“双翅一翻，把斜阳掉在江上”为例演示，再让孩子练习一句。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.modern-poems' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.modern-poems', label: '多音字' }],
       },
       {
         slug: 'stars',
@@ -119,7 +119,7 @@ export const ywG4a: Book = {
             '《繁星》是巴金写的散文，新版中是精读课文。带孩子找出三次看星星的时间和地点（家乡庭院纳凉、南京住处的后门、海上的船上），对比每次看到的景象和心情，体会作者由看星星展开的想象和对星天的喜爱。可引用开头“我爱月夜，但我也爱星天。”，不整段抄录课文。',
         },
         techniques: [],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.stars' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.stars', label: '多音字' }],
       },
       {
         slug: 'recommend-place',
@@ -143,7 +143,7 @@ export const ywG4a: Book = {
             '教孩子写推荐文：先选地方（公园、图书馆、小吃街、自己的小书桌都可以），再用“地方—特点—理由”列提纲，每条理由配一个具体的景物或活动来说明，结尾发出邀请。以深圳湾公园为例示范如何把“好玩”写具体，并提醒不要写成流水账。',
         },
         techniques: [],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.recommend-place' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.recommend-place', label: '多音字' }],
       },
     ]),
     // ------------------------------------------------------------------ 二
@@ -169,7 +169,7 @@ export const ywG4a: Book = {
             '讲安徒生童话《一个豆荚里的五粒豆》：五粒豆飞出豆荚后的不同经历，重点是最后一粒落在顶楼窗下的裂缝里、在青苔中发芽开花，给生病的小女孩带来希望，小女孩慢慢好起来。以此为例教提问策略的第一步：边读边把想到的问题记下来，列成问题清单，并分出针对部分内容和针对全文的问题。',
         },
         techniques: [],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.peas' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.peas', label: '多音字' }],
       },
       {
         slug: 'night-flight',
@@ -200,7 +200,7 @@ export const ywG4a: Book = {
               '教孩子从三个角度提问：针对内容（为什么蒙上眼睛铃铛不响）、针对写法（作者为什么把三次试验一次一次写清楚）、联系生活得到启示（生活里还有哪些东西学了动物本领）。每个角度举一个例子，再让孩子分类。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.night-flight' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.night-flight', label: '多音字' }],
       },
       {
         slug: 'square-hats',
@@ -223,7 +223,7 @@ export const ywG4a: Book = {
             '讲施雁冰的童话《方帽子店》：老店只做方帽子，大家也只戴方帽子，可方帽子戴着不舒服；孩子们想出了各种舒服又好看的圆帽子，人们纷纷去买，方帽子慢慢卖不出去成了古董。引导孩子提问并挑选对理解故事最有帮助的问题，体会不能墨守成规、要敢于创新。',
         },
         techniques: [],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.square-hats' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.square-hats', label: '多音字' }],
       },
       {
         slug: 'horse-race',
@@ -246,7 +246,7 @@ export const ywG4a: Book = {
             '讲齐国大将田忌和齐威王赛马的故事：第一次每个等级的马都比不过齐威王，三场全输；孙膑让田忌用下等马对上等马、上等马对中等马、中等马对下等马，结果两胜一负赢了比赛。用表格对比两次比赛，引导孩子提问并综合运用提问方法，体会孙膑的智慧。',
         },
         techniques: [],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.horse-race' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.horse-race', label: '多音字' }],
       },
       {
         slug: 'my-family',
@@ -270,7 +270,41 @@ export const ywG4a: Book = {
             '教孩子写家人：先想一想家人最突出的特点（比如爱唠叨、爱运动、像只勤劳的小蜜蜂），再选一两件事把特点写具体，最后写出自己的感受。可以用“像什么动物”来帮助找特点（旧版题目为“小小‘动物园’”）。示范把“爸爸很爱运动”写成一件具体的事。',
         },
         techniques: [],
-        practice: [],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.my-family' }],
+      },
+      {
+        slug: 'polyphones',
+        title: '多音字：据义定音',
+        objectives: [
+          '知道多音字读哪个音，要看它在词语和句子里的意思',
+          '会用“组词定音、据义定音、结合语境”三种方法判断读音',
+          '读准前两个单元课文里的多音字（如 薄雾、相称、系着、扫兴）',
+        ],
+        keyPoints: [
+          '重点：意思不同，读音不同——先弄清这个字在词语里的意思，再定读音',
+          '难点：意思相近的读音（如 露 lù／lòu、薄 báo／bó），要记住书面词和口语词的区别',
+          '常见错误：只按最常见的读音读，如把“相称”读成 xiāng chēng，把“系鞋带”读成 xì',
+        ],
+        prerequisites: ['yw-g4a.u2.peas'],
+        lecture: {
+          title: '多音字：据义定音',
+          minutes: 10,
+          focus:
+            '讲清多音字的读音由意思决定。三种方法：一、组词定音——给字组个熟悉的词（称赞 chēng／相称 chèn）；二、据义定音——想想这个字在这里是什么意思（系 jì 是打结，系 xì 是关系）；三、结合语境——把句子读完整再定音（“我倒想知道”的倒读 dào，“摔倒”读 dǎo）。例子取自本册课文：观潮的薄雾、闷雷、风号浪吼，繁星的似的、模糊，五粒豆的相称、挣钱、盛开，夜间飞行的秘密的系着、塞上，田忌赛马的大将、扫兴。',
+        },
+        techniques: [
+          {
+            slug: 'swap-word',
+            title: '换个词试一试',
+            minutes: 4,
+            focus:
+              '教孩子一个小窍门：拿不准读音时，把这个字换进自己熟悉的词里比一比，意思一样的就读一样的音（盛开的“盛”和茂盛一样读 shèng，盛饭的“盛”是装进去，读 chéng）。再配几句顺口溜帮助记忆，如“系鞋带读 jì，关系联系读 xì”。',
+          },
+        ],
+        practice: [
+          { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.polyphones' },
+          { generatorId: 'yw4.polyphone', minDifficulty: 2, maxDifficulty: 5, variant: 'mixed', label: '多音字综合' },
+        ],
       },
     ]),
   ],

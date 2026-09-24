@@ -57,7 +57,7 @@ export const ywG2a: Book = {
               '教“看变化图、按顺序讲故事”的方法：用四张小图（后腿、前腿、尾巴变短、变成青蛙）配“过了几天”“遇到谁”“说了什么”，示范把故事讲完整；对比顺序颠倒、漏掉一次相遇的错误讲法，最后请孩子自己讲一遍。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tadpole' }],
       },
       {
         slug: 'what-am-i',
@@ -89,7 +89,7 @@ export const ywG2a: Book = {
               '教区分三个动词：雨从空中“落”下来；冰雹又硬又重，“打”下来；雪花又轻又慢，“飘”下来。用做动作、比轻重的方法帮助理解，再用“树叶（　）下来”“冰雹（　）在屋顶上”等练习选词，并区分风字旁的“飘”和三点水的“漂”。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.what-am-i' }],
       },
       {
         slug: 'plant-mothers',
@@ -112,7 +112,7 @@ export const ywG2a: Book = {
           focus:
             '从“孩子长大要离开妈妈”的关键句导入；逐一讲清蒲公英（像降落伞，靠风）、苍耳（带刺的铠甲，挂住动物皮毛）、豌豆（太阳晒得豆荚炸开，蹦着跳着离开）三种办法，用表格整理“植物—办法—靠谁帮忙”；识字讲“豌、苍、甲、娃”等字；朗读时读出押韵；最后鼓励观察身边植物。',
         },
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.plant-mothers' }],
       },
       {
         slug: 'fun-animals',
@@ -134,7 +134,7 @@ export const ywG2a: Book = {
           focus:
             '用“动物朋友介绍会”情境，示范按“叫什么—样子—有趣在哪里”三步把一种动物说清楚（如青蛙、熊猫、海鸥）；再讲听的人要做到的两件事：认真听、听不明白用“请问……”有礼貌地提问；对比“只说喜欢”和“说出有趣之处”的两种介绍。',
         },
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.fun-animals' }],
       },
     ]),
     // ------------------------------------------------------------------ 二
@@ -169,7 +169,7 @@ export const ywG2a: Book = {
               '教选量词的方法：看样子（又大又平的一片沙滩、长长的一条帆船/小溪），看种类（军舰用“艘”，桥用“座”或“孔”，旗用“面”）；用配对游戏练习，并纠正什么都用“个”的错误。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.scene-song' }],
       },
       {
         slug: 'tree-song',
@@ -201,7 +201,7 @@ export const ywG2a: Book = {
               '教“看偏旁猜字义”的识字方法：带木字旁的字大多和树木、木头有关（杨、松、柏、桐、桌、椅）；示范用“加一加”（木+公=松，木+白=柏）识字；提醒木字旁在左边时第四笔写点不写捺。',
           },
         ],
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.tree-song' }],
       },
       {
         slug: 'clap-song',
@@ -224,7 +224,7 @@ export const ywG2a: Book = {
           focus:
             '用拍手游戏导入，只引用首句“你拍一，我拍一，动物世界很新奇”；按儿歌认识孔雀、锦鸡、雄鹰、大雁、猛虎、黄鹂、百灵、熊猫等动物，讲“雁群会写字”；识字讲“鸟”在右边（鸡、鹂）和在下面（鹰）的不同位置；最后说说保护动物，联系红树林候鸟。',
         },
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.clap-song' }],
       },
       {
         slug: 'farm-seasons',
@@ -247,7 +247,7 @@ export const ywG2a: Book = {
           focus:
             '以“一年四季农民伯伯在忙什么”导入，引用春季和秋季两句关键句；用表格梳理四季的景物和农事（春：花草蝴蝶、麦苗桑叶；夏：采桑插秧；秋：稻谷丰收；冬：新棉衣、农事了）；识字讲“季、吹、农、事、忙”等字；联系我们吃的米饭来自农民的辛苦劳动。',
         },
-        practice: [],
+        practice: [{ generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.farm-seasons' }],
       },
     ]),
   ],

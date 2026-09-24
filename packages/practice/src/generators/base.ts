@@ -114,10 +114,17 @@ export const DEFAULT_FEEDBACK: Record<ErrorTag, string> = {
   'line-type': '数一数端点：线段 2 个端点能量长度，射线 1 个端点，直线没有端点，都是无限长。',
   'perp-parallel': '平行：同一平面内不相交；垂直：相交成直角。抓住关键词再判断！',
   'negative-compare': '负数比大小：负号后面的数越大，这个负数反而越小，想想数轴吧！',
-  careless: '差一点点！静下心来再算一遍，你一定行！',
+  'char-pinyin': '读一读，注意声调、平舌翘舌和前鼻音后鼻音。',
+  polyphone: '多音字要看它在词语里的意思，意思不同，读音就不同。',
+  'similar-char': '这几个字长得像（或读音一样），看看偏旁，想想字的意思。',
+  'word-usage': '把词语放回句子里读一读，看意思通不通、搭配对不对。',
+  'en-meaning': '想一想这个单词在课文里是什么意思，可以配着动作记。',
+  'en-spelling': '一个字母一个字母地拼一拼，和课本上的单词对一对。',
+  'en-sentence': '想一想对方问的是什么，用课文里学过的句子来回答。',
+  careless: '差一点点！静下心来再想一遍，你一定行！',
 };
 
-const PRAISE = ['太棒了，答对了！', '完全正确，继续加油！', '真厉害，答对啦！', '算得又对又好！'];
+const PRAISE = ['太棒了，答对了！', '完全正确，继续加油！', '真厉害，答对啦！', '又对又快，真棒！'];
 
 export function allowedTags(id: GeneratorId): readonly ErrorTag[] {
   const info = GENERATORS.find((g) => g.id === id);
@@ -236,7 +243,7 @@ export function defineGenerator<P>(def: GeneratorDef<P>): PracticeGenerator<P> {
 
   const grade = (question: Question, response: Response): GradeResult => {
     if (isEmpty(question.answer, response)) {
-      return { correct: false, errorTags: [], feedback: '还没有写答案哦，试着算一算吧！' };
+      return { correct: false, errorTags: [], feedback: '还没有作答哦，试一试吧！' };
     }
     if (responseMatches(question.answer, response)) {
       return {

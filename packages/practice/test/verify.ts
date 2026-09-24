@@ -4,6 +4,12 @@
  * that shares nothing with the generators.
  */
 import type { Answer, Question } from '../src/types';
+import type { ChoiceItem, EnWord, Polyphone } from '../src/banks/types';
+import { EN_G2A } from '../src/banks/en-g2a';
+import { EN_G4A } from '../src/banks/en-g4a';
+import { YW_G2A } from '../src/banks/yw-g2a';
+import { YW_G4A_ITEMS } from '../src/banks/yw-g4a';
+import { YW_G4A_POLY } from '../src/banks/yw-g4a-poly';
 
 const MINUS = '−';
 
@@ -102,6 +108,16 @@ export function expectedAnswer(q: Question): Answer {
   const p = q.prompt;
   const lhs = (s: string) => s.slice(s.indexOf('：') + 1).split(' = ')[0];
   switch (q.generatorId) {
+    case 'yw2.words':
+      return langAnswer(q, YW_G2A.items, YW_G2A.polyphones, []);
+    case 'yw4.words':
+      return langAnswer(q, YW_G4A_ITEMS, [], []);
+    case 'yw4.polyphone':
+      return langAnswer(q, [], YW_G4A_POLY, []);
+    case 'en2.words':
+      return langAnswer(q, EN_G2A.items, [], EN_G2A.words);
+    case 'en4.words':
+      return langAnswer(q, EN_G4A.items, [], EN_G4A.words);
     case 'g2.addsub.2d': {
       if (q.vertical) {
         const [a, b] = q.vertical.operands;
@@ -529,4 +545,65 @@ function linesAnswer(q: Question): Answer {
   if (p.includes('互相垂直的边')) return { type: 'number', value: 4 };
   if (p.includes('互相平行的边')) return { type: 'number', value: 2 };
   throw new Error(`unknown lines prompt ${p}`);
+}
+
+// ------------------------------------------------------------ 语文 / 英语 banks
+
+/** Re-derive a bank question's answer from its prompt and the bank data only. */
+function langAnswer(q: Question, items: ChoiceItem[], polys: Polyphone[], words: EnWord[]): Answer {
+  const opts = q.options ?? [];
+  const pick = (text: string): Answer => {
+    const hits = opts.flatMap((o, i) => (o === text ? [i] : []));
+    if (hits.length !== 1) throw new Error(`${q.key}: "${text}" found ${hits.length}× in ${opts.join(' | ')}`);
+    return { type: 'choice', index: hits[0] };
+  };
+  const m = /^【(.+?)】([\s\S]*)$/.exec(q.prompt);
+  if (!m) throw new Error(`${q.key}: no kind label: ${q.prompt}`);
+  const [, kind, body] = m;
+  const item = items.find((it) => it.kind === kind && it.prompt === body);
+  if (item) return pick(item.answer);
+
+  if (kind === '多音字') {
+    const poly = (ch: string) => {
+      const found = polys.filter((p) => p.char === ch);
+      if (found.length !== 1) throw new Error(`${q.key}: ${found.length} entries for ${ch}`);
+      return found[0];
+    };
+    const readingOf = (ch: string, word: string) => {
+      const rs = poly(ch).readings.filter((r) => r.words.includes(word));
+      if (rs.length !== 1) throw new Error(`${q.key}: ${word} is in ${rs.length} readings`);
+      return rs[0].pinyin;
+    };
+    let x = /^「(.)」在「(.+)」里读（　）$/.exec(body);
+    if (x) return pick(readingOf(x[1], x[2]));
+    x = /^下面哪个词语里的「(.)」读 (\S+)？$/.exec(body);
+    if (x) {
+      const words = poly(x[1]).readings.find((r) => r.pinyin === x![2])!.words;
+      const hits = opts.filter((o) => words.includes(o));
+      if (hits.length !== 1) throw new Error(`${q.key}: ${hits.length} options read ${x[2]}`);
+      return pick(hits[0]);
+    }
+    x = /^「(.+)」和「(.+)」里的「(.)」读音相同吗？$/.exec(body);
+    if (x) return pick(readingOf(x[3], x[1]) === readingOf(x[3], x[2]) ? '相同' : '不同');
+    x = /^([\s\S]+)\n句子里「(.)」的读音是（　）$/.exec(body);
+    if (x) {
+      const sentence = poly(x[2]).sentences?.find((s) => s.text === x![1]);
+      if (!sentence) throw new Error(`${q.key}: unknown sentence ${x[1]}`);
+      return pick(sentence.pinyin);
+    }
+    throw new Error(`${q.key}: unknown 多音字 form: ${body}`);
+  }
+
+  const word = (pred: (w: EnWord) => boolean) => {
+    const found = words.filter(pred);
+    if (found.length !== 1) throw new Error(`${q.key}: ${found.length} words match`);
+    return found[0];
+  };
+  let x = kind === '词义' ? /^(.+) 的意思是（　）$/.exec(body) : null;
+  if (x) return pick(word((w) => w.en === x![1]).zh);
+  x = kind === '说一说' ? /^“(.+)”用英语怎么说？$/.exec(body) : null;
+  if (x) return pick(word((w) => w.zh === x![1]).en);
+  x = kind === '拼写' ? /^选出拼写正确的单词：(.+)$/.exec(body) : null;
+  if (x) return pick(word((w) => w.zh === x![1]).en);
+  throw new Error(`${q.key}: no bank entry for ${q.prompt}`);
 }

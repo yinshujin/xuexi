@@ -6,12 +6,14 @@ import {
   isNewerEntry,
   readBundle,
   sha256Hex,
+  type BookEntry,
   type Catalog,
   type CatalogEntry,
   type PackLesson,
   type PackManifest,
 } from '@xuexi/course-pack';
 import { siteBase } from './api';
+import { storeBooks } from './books';
 import { kvGet, kvSet } from './db';
 
 /**
@@ -209,6 +211,7 @@ function unzipAsync(bytes: Uint8Array): Promise<Record<string, Uint8Array>> {
 export interface ImportResult {
   title: string;
   imported: CatalogEntry[];
+  books: BookEntry[];
   skipped: string[];
 }
 
@@ -233,7 +236,7 @@ export async function importBundle(bytes: Uint8Array, onProgress?: (ratio: numbe
     generatedAt: new Date().toISOString(),
     lessons: {},
   };
-  const result: ImportResult = { title: bundle.title, imported: [], skipped: bundle.skipped };
+  const result: ImportResult = { title: bundle.title, imported: [], books: [], skipped: bundle.skipped };
   let done = 0;
   for (const pack of bundle.packs) {
     const entry: CatalogEntry = { ...pack.entry, origin: 'local' };
@@ -256,10 +259,11 @@ export async function importBundle(bytes: Uint8Array, onProgress?: (ratio: numbe
       local.lessons[entry.lessonId] = entry;
     }
     result.imported.push(entry);
-    onProgress?.(++done / bundle.packs.length);
+    onProgress?.(++done / (bundle.packs.length + bundle.books.length));
   }
   local.generatedAt = new Date().toISOString();
   await kvSet(LOCAL_CATALOG_KEY, local);
+  result.books = await storeBooks(bundle.books);
   return result;
 }
 

@@ -15,7 +15,8 @@ export interface ImportCommon {
 }
 
 function readQuiz(quiz?: string | BookQuizQuestion[]): BookQuizQuestion[] | undefined {
-  if (!quiz || Array.isArray(quiz)) return quiz;
+  if (!quiz) return undefined;
+  if (Array.isArray(quiz)) return quiz;
   const q = JSON.parse(readFileSync(quiz, 'utf8'));
   if (!Array.isArray(q)) throw new Error(`${quiz} 应该是题目数组`);
   return q;

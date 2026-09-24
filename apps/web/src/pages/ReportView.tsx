@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { BOOK_EVENT_PREFIX } from '@xuexi/shared';
 import { useApp } from '../lib/store';
 import { attemptsOf, childKps, openMistakes, progressMap, tagLabel } from '../lib/learning';
 import { dayKey } from '../lib/format';
@@ -32,9 +33,20 @@ export function ReportView() {
     const tags = [...tagCounts].sort((a, b) => b[1] - a[1]).slice(0, 8);
     const progress = progressMap(events, family.settings, now);
     const kps = childKps(child).filter((k) => k.kp.practice.length > 0);
-    const lessons = events.filter((e) => e.type === 'lesson' && e.completed);
-    const lessonIds = new Set(lessons.map((e) => (e.type === 'lesson' ? e.lessonId : '')));
-    return { perDay, tags, progress, kps, lessonsWatched: lessonIds.size, mistakes: openMistakes(events).length, total: attempts.length };
+    const done = events.filter((e) => e.type === 'lesson' && e.completed);
+    const ids = done.map((e) => (e.type === 'lesson' ? e.lessonId : ''));
+    const lessonIds = new Set(ids.filter((id) => !id.startsWith(BOOK_EVENT_PREFIX)));
+    const booksRead = new Set(ids.filter((id) => id.startsWith(BOOK_EVENT_PREFIX))).size;
+    return {
+      perDay,
+      tags,
+      progress,
+      kps,
+      lessonsWatched: lessonIds.size,
+      booksRead,
+      mistakes: openMistakes(events).length,
+      total: attempts.length,
+    };
   }, [child, events, family.settings]);
 
   if (family.children.length === 0) return <Empty>先在"孩子"里添加孩子档案。</Empty>;
@@ -58,7 +70,7 @@ export function ReportView() {
         </Card>
         <Card className="text-center">
           <div className="text-3xl font-bold">{report.lessonsWatched}</div>
-          <div className="text-slate-500">看完的课</div>
+          <div className="text-slate-500">看完的课{report.booksRead > 0 ? ` · 绘本 ${report.booksRead} 本` : ''}</div>
         </Card>
         <Card className="text-center">
           <div className="text-3xl font-bold">{report.mistakes}</div>

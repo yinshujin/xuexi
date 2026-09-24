@@ -87,6 +87,19 @@ jobs:
         working-directory: shells/tauri
         run: |
           if [ ! -d src-tauri/gen/android ]; then pnpm tauri android init --ci; fi
+      # 绘本跟读 records the child's reading: the WebView asks for the microphone
+      # (wry maps getUserMedia to a runtime RECORD_AUDIO request), which Android
+      # only grants when the manifest declares it.
+      - name: Allow the microphone
+        working-directory: shells/tauri/src-tauri/gen/android/app/src/main
+        run: |
+          set -euo pipefail
+          for p in RECORD_AUDIO MODIFY_AUDIO_SETTINGS; do
+            grep -q "android.permission.$p" AndroidManifest.xml ||
+              sed -i "0,/<application/s||<uses-permission android:name=\"android.permission.$p\" />\n    <application|" AndroidManifest.xml
+          done
+          grep -c 'RECORD_AUDIO\|MODIFY_AUDIO_SETTINGS' AndroidManifest.xml | grep -qx 2
+          grep uses-permission AndroidManifest.xml
       - name: Build release APK
         working-directory: shells/tauri
         # 64-bit ARM only: the Huawei tablet (HarmonyOS 4) and the vivo phone are arm64, and

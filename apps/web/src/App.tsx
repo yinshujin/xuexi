@@ -10,6 +10,8 @@ import { KpPage } from './pages/KpPage';
 import { LessonPage } from './pages/LessonPage';
 import { PracticePage } from './pages/PracticePage';
 import { MistakesPage } from './pages/MistakesPage';
+import { BookShelf } from './pages/BookShelf';
+import { BookReader } from './pages/BookReader';
 import { ParentPage } from './pages/ParentPage';
 import { EyeBreak } from './components/EyeBreak';
 import { UpdateBanner } from './components/UpdateBanner';
@@ -43,6 +45,11 @@ function ChildRoutes({ childId, parts, query }: { childId: string; parts: string
     case 'mistakes':
       page = <MistakesPage child={profile} />;
       break;
+    case 'books':
+      page = <BookShelf child={profile} />;
+      break;
+    case 'book':
+      return <BookReader childId={childId} bookId={arg} back={query.get('back') ?? `/c/${childId}/books`} />;
     default:
       page = <ChildHome child={profile} />;
   }

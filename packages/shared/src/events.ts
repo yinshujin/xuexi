@@ -51,7 +51,16 @@ export interface LessonEvent extends EventBase {
   progress: number;
   completed: boolean;
   durationMs: number;
+  /** Picture books (lessonId "book:<id>"): how the child read it. */
+  readMode?: BookReadMode;
+  quizCorrect?: number;
+  quizTotal?: number;
 }
+
+/** 听读 (listen), 跟读 (repeat after the voice, recording), 自己读 (read alone). */
+export type BookReadMode = 'listen' | 'repeat' | 'self';
+
+export const BOOK_EVENT_PREFIX = 'book:';
 
 export type LearningEvent = AttemptEvent | LessonEvent;
 

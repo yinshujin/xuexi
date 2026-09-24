@@ -15,15 +15,31 @@ export interface KvRow {
   value: unknown;
 }
 
+/** A child's recorded reading of one sentence of a picture book (this device only). */
+export interface RecordingRow {
+  id: string;
+  childId: string;
+  bookId: string;
+  page: number;
+  sentence: number;
+  text: string;
+  at: number;
+  blob: Blob;
+}
+
 class XuexiDb extends Dexie {
   events!: Table<StoredEvent, string>;
   kv!: Table<KvRow, string>;
+  recordings!: Table<RecordingRow, string>;
 
   constructor() {
     super('xuexi');
     this.version(1).stores({
       events: 'id, childId, at, synced',
       kv: 'key',
+    });
+    this.version(2).stores({
+      recordings: 'id, childId, bookId, [childId+bookId], at',
     });
   }
 }

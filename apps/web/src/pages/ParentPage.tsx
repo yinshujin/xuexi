@@ -11,6 +11,7 @@ import { bytes, uuid } from '../lib/format';
 import { Btn, Card, Empty, Page } from '../components/ui';
 import { NumberPad } from '../practice/NumberPad';
 import { ReportView } from './ReportView';
+import { ParentBooks } from './ParentBooks';
 
 const AVATARS = ['🐼', '🦊', '🐯', '🐰', '🐬', '🦄', '🐧', '🐻', '🐱', '🐶', '🚀', '⚽'];
 
@@ -229,7 +230,7 @@ function ImportCard() {
     <Card>
       <div className="flex flex-wrap items-center gap-3">
         <div className="flex-1">
-          <h3 className="text-lg font-bold">从文件导入课程</h3>
+          <h3 className="text-lg font-bold">从文件导入课程 / 绘本</h3>
           <p className="text-sm text-slate-500">不需要网站：电脑上 pnpm content export 生成 .zip，用微信 / 数据线传到这台设备后导入。</p>
         </div>
         <Btn tone="green" disabled={busy !== null} onClick={run}>
@@ -240,8 +241,12 @@ function ImportCard() {
       {result && (
         <div className="mt-3 text-slate-700">
           <p>
-            「{result.title}」导入了 {result.imported.length} 节课
-            {result.skipped.length > 0 ? `，${result.skipped.length} 节有问题没导入：` : '。'}
+            「{result.title}」导入了
+            {[result.imported.length > 0 && ` ${result.imported.length} 节课`, result.books.length > 0 && ` ${result.books.length} 本绘本`]
+              .filter(Boolean)
+              .join('、') || ' 0 节课'}
+            {result.skipped.length > 0 ? `，${result.skipped.length} 项有问题没导入：` : '。'}
+            {result.books.length > 0 && '孩子首页点「📚 绘本跟读」就能读。'}
           </p>
           {result.skipped.length > 0 && (
             <ul className="mt-1 list-disc pl-6 text-sm text-rose-600">
@@ -507,6 +512,7 @@ const TABS = [
   { id: 'report', label: '学习报告' },
   { id: 'children', label: '孩子' },
   { id: 'offline', label: '离线课程' },
+  { id: 'books', label: '绘本' },
   { id: 'settings', label: '设置' },
 ] as const;
 
@@ -526,6 +532,7 @@ export function ParentPage({ tab }: { tab?: string }) {
       {current === 'report' && <ReportView />}
       {current === 'children' && <ChildrenTab />}
       {current === 'offline' && <OfflineTab />}
+      {current === 'books' && <ParentBooks />}
       {current === 'settings' && <SettingsTab />}
     </Page>
   );

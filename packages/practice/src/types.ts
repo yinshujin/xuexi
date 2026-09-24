@@ -34,9 +34,13 @@ export type Response =
       value: number | null;
       /**
        * Multiplication only: partial product rows as the child wrote them,
-       * right-aligned digit strings exactly as they appear in the grid
-       * (e.g. ["1284", "3210"] where the second row is shifted one column left
-       * and the shift is represented by the grid column, not by a trailing 0).
+       * top to bottom. Row i is read from its leftmost non-empty cell to the
+       * RIGHTMOST column of the grid, with each empty cell as a single space.
+       * Example for 326 × 48: a correct first row is "2608"; a correctly
+       * shifted second row is "1304 " (the ones cell is left empty); a child
+       * who forgot to shift writes "1304" (→ diagnosed as partial-shift).
+       * A trailing "0" instead of an empty cell ("13040") also counts as
+       * correctly shifted. An empty row is "".
        */
       partials?: string[];
       /** Carry marks the child wrote, keyed by column index from the right. */

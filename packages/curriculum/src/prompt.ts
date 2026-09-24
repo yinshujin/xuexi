@@ -5,7 +5,7 @@ import type { Book, KnowledgePoint, LessonSpec, Unit } from './types';
  * Bump whenever the requirement template below changes, so that the content
  * CLI knows previously generated lessons are stale.
  */
-export const lessonTemplateVersion = '2026-09-24.1';
+export const lessonTemplateVersion = '2026-09-24.2';
 
 /** Hard upper bound on the requirement text length (characters). */
 export const MAX_REQUIREMENT_LENGTH = 900;
@@ -55,8 +55,11 @@ function render(ctx: LessonContext, objectives: string[], keyPoints: string[]): 
   }
   lines.push(
     isLecture
-      ? '结构：情境导入 → 讲解概念与方法 → 2 道例题在白板上逐步推导 → 3 道课堂小题（附答案讲评）→ 一句话小结。'
-      : '结构：只讲一个方法 → 演示 2 个例子 → 对比一个常见错误说明错在哪 → 1 道小练习（附答案）。',
+      ? '结构：情境导入 → 讲解概念与方法 → 2 道例题在白板上逐步推导 → 学法口诀（一两句好记的话）→ ' +
+          '快速推理（如求最大、最小的数，□ 里最大或最小能填几）→ 6–8 道课堂小题，题型多样（判断、单选、多选、推理），' +
+          '附答案讲评 → 一句话小结。'
+      : '结构：只讲一个方法，并编成一句口诀 → 演示 2 个例子 → 对比一个常见错误说明错在哪 → ' +
+          '3–5 道小练习，题型多样（判断、单选、多选或推理），附答案。',
   );
   lines.push(
     `要求：口语化短句，像老师面对面讲；每页文字不超过 40 字；术语与北师大版教材一致；不超纲，` +

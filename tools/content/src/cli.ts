@@ -44,7 +44,7 @@ const HELP = `用法：pnpm content <命令> [选项]
 
   review [--port 5180]            打开本地审核页：逐课试播，通过 / 打回（写修改意见）
   build                           把审核通过的课打包成课程包，生成 catalog.json
-  publish --target dir|edgeone|tencent [--no-web-build] [--init]
+  publish --target dir|edgeone|tencent [--no-web-build] [--init] [--allow-empty]
                                   组装站点并发布（dir 只生成 content/site；
                                   腾讯云第一次部署加 --init）
 
@@ -83,6 +83,7 @@ async function main() {
       'no-web-build': { type: 'boolean' },
       'no-build': { type: 'boolean' },
       init: { type: 'boolean' },
+      'allow-empty': { type: 'boolean' },
       next: { type: 'boolean' },
       all: { type: 'boolean' },
       out: { type: 'string' },
@@ -274,7 +275,7 @@ async function main() {
     case 'publish': {
       const target = (values.target ?? 'dir') as PublishTarget;
       if (!['dir', 'edgeone', 'tencent'].includes(target)) throw new Error('--target 必须是 dir、edgeone 或 tencent');
-      await assembleSite(paths, { buildWeb: !values['no-web-build'], log });
+      await assembleSite(paths, { buildWeb: !values['no-web-build'], log, allowEmpty: values['allow-empty'] });
       await publish(paths, target, readEnvFile(paths.publishEnv), log, { init: values.init });
       log('发布完成');
       return;

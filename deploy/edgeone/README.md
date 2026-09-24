@@ -26,6 +26,20 @@ https://你的域名/api/*             同步接口：边缘函数 edge-function
 
 没有备案域名的话选“不含中国大陆”，随便在哪个注册商买个域名（约几十元/年）就能用。已有备案域名可以选“含中国大陆”。区域只在**创建项目时**生效，以后要改需要新建项目。
 
+## 最省事：用 GitHub Actions 部署（不用在电脑上装任何东西）
+
+仓库里有工作流 **Deploy to EdgeOne**（`.github/workflows/deploy-edgeone.yml`）：
+在 GitHub 的机器上构建 App 和同步接口并上传到 EdgeOne。它会先把线上已经发布的课程包下载下来一起上传，所以随时运行都不会弄丢课程。
+
+1. 按下面第 1、2 步注册账号、生成 API Token。
+2. GitHub 仓库 → Settings → Secrets and variables → Actions：
+   - **Secrets** 标签：新建 `EDGEONE_API_TOKEN` = 刚生成的 Token
+   - **Variables** 标签（可选）：`EDGEONE_PROJECT` = 项目名（默认 `xuexi-family`）；绑定域名后再加 `SITE_URL` = `https://你的域名/`（结尾带 `/`）
+3. Actions → Deploy to EdgeOne → Run workflow（区域选 overseas 不需要备案）。
+4. 再做下面第 4–7 步（KV、环境变量、域名、检查），改完 KV 或环境变量后再运行一次这个工作流。
+
+课程发布：在 Mac 上 `pnpm content publish --target edgeone`（会带上最新课程）；只更新 App 时用这个工作流即可。
+
 ## 第一次部署（家长照着做）
 
 ### 1. 注册账号

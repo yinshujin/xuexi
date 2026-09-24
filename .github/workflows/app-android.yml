@@ -66,7 +66,7 @@ jobs:
       - uses: dtolnay/rust-toolchain@6bed0761d98439e5a578e2877258200ad565ba87 # stable
         with:
           toolchain: stable
-          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+          targets: aarch64-linux-android
       - uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
         with:
           workspaces: shells/tauri/src-tauri
@@ -89,7 +89,9 @@ jobs:
           if [ ! -d src-tauri/gen/android ]; then pnpm tauri android init --ci; fi
       - name: Build release APK
         working-directory: shells/tauri
-        run: pnpm tauri android build --apk --ci --target aarch64 armv7
+        # 64-bit ARM only: the Huawei tablet (HarmonyOS 4) and the vivo phone are arm64, and
+        # Tauri embeds the web assets (including the built-in lessons) once per ABI.
+        run: pnpm tauri android build --apk --ci --target aarch64
       - name: Sign APK
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}

@@ -1,0 +1,21 @@
+{
+  "name": "@xuexi/sync",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/node.ts",
+    "start": "tsx src/node.ts",
+    "typecheck": "tsc -p .",
+    "build:node": "node scripts/build-node.mjs",
+    "build:edgeone": "node scripts/build-edgeone.mjs"
+  },
+  "dependencies": {
+    "@hono/node-server": "^2.1.1",
+    "@xuexi/shared": "workspace:*",
+    "hono": "^4.13.9"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2"
+  }
+}

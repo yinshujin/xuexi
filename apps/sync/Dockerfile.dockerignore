@@ -1,0 +1,7 @@
+# BuildKit reads <Dockerfile>.dockerignore next to the Dockerfile, so the repo
+# root needs no .dockerignore. Send only what the image build needs.
+**
+!apps/sync/package.json
+!apps/sync/src/**
+!apps/sync/scripts/**
+!packages/shared/src/**

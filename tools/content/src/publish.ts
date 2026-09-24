@@ -25,10 +25,12 @@ export async function publish(
   target: PublishTarget,
   env: Record<string, string>,
   log: (s: string) => void,
+  opts: { init?: boolean } = {},
 ) {
   if (target === 'dir') return;
   const script = join(paths.root, 'deploy', target, 'deploy.sh');
   if (!existsSync(script)) throw new Error(`找不到部署脚本 ${script}`);
   log(`部署到 ${target} …`);
-  await run('bash', [script, paths.site], { cwd: paths.root, env });
+  const args = target === 'tencent' && opts.init ? [script, '--init', paths.site] : [script, paths.site];
+  await run('bash', args, { cwd: paths.root, env });
 }

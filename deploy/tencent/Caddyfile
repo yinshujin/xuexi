@@ -1,0 +1,69 @@
+# xuexi: static PWA + course packs + /api reverse proxy.
+#
+# SITE_ADDRESS is computed by the caddy service command in docker-compose.yml:
+#   - SITE_DOMAIN is a domain (e.g. xuexi.example.com) -> that domain, automatic HTTPS
+#     (Let's Encrypt / ZeroSSL; ports 80+443 must be reachable, DNS must point here)
+#   - SITE_DOMAIN empty or an IP -> ":80", plain HTTP only
+#     (PWA install/offline and the Android APK need HTTPS, so use a domain for real use)
+
+{$SITE_ADDRESS::80} {
+	encode zstd gzip
+
+	header {
+		X-Content-Type-Options nosniff
+		Referrer-Policy strict-origin-when-cross-origin
+		X-Frame-Options SAMEORIGIN
+		Permissions-Policy "camera=(), geolocation=(), payment=()"
+		-Server
+	}
+
+	# ---- sync API ----
+	handle /api/* {
+		reverse_proxy sync:8787 {
+			# Caddy replaces X-Forwarded-For with the real client IP (it does not
+			# trust incoming values), so the sync service can rate-limit by it.
+			health_uri /api/health
+			health_interval 30s
+		}
+	}
+
+	# ---- static site ----
+	handle {
+		root * /srv/site
+
+		# Course packs and hashed build assets never change under the same path.
+		# (`file`: never mark a 404 as immutable.)
+		@immutable {
+			path /packs/* /assets/*
+			file
+		}
+		header @immutable Cache-Control "public, max-age=31536000, immutable"
+
+		# Entry points must always be revalidated so updates reach devices.
+		@revalidate path / /index.html /sw.js /catalog.json /manifest.webmanifest /manifest.json
+		header @revalidate Cache-Control "no-cache"
+
+		# The APK / desktop shells load the app from a local origin
+		# (tauri://localhost, https://tauri.localhost) and fetch these cross-origin.
+		@cors path /catalog.json /packs/*
+		header @cors Access-Control-Allow-Origin "*"
+
+		@manifest path *.webmanifest
+		header @manifest Content-Type "application/manifest+json"
+
+		# SPA fallback for extension-less routes only; a missing pack file stays a 404.
+		@spa {
+			not file
+			not path_regexp \.[A-Za-z0-9]+$
+		}
+		header @spa Cache-Control "no-cache"
+		rewrite @spa /index.html
+
+		file_server
+	}
+
+	log {
+		output stdout
+		format console
+	}
+}

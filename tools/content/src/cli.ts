@@ -31,10 +31,11 @@ const HELP = `用法：pnpm content <命令> [选项]
   status [--book X]               查看每节课的状态
   review [--port 5180]            打开本地审核页：逐课试播，通过 / 打回（写修改意见）
   build                           把审核通过的课打包成课程包，生成 catalog.json
-  publish --target dir|edgeone|tencent [--no-web-build]
-                                  组装站点并发布（dir 只生成 content/site）
+  publish --target dir|edgeone|tencent [--no-web-build] [--init]
+                                  组装站点并发布（dir 只生成 content/site；
+                                  腾讯云第一次部署加 --init）
 
-配置文件：content/openmaic.env（模型和语音 Key），content/publish.env（部署参数）`;
+配置文件：content/openmaic.env（模型和语音 Key），content/publish.env（部署参数，参考 deploy/publish.env.example）`;
 
 function contexts(): LessonContext[] {
   return allLessons() as LessonContext[];
@@ -68,6 +69,7 @@ async function main() {
       target: { type: 'string' },
       'no-web-build': { type: 'boolean' },
       'no-build': { type: 'boolean' },
+      init: { type: 'boolean' },
     },
   });
   const paths = getPaths();
@@ -177,7 +179,7 @@ async function main() {
       const target = (values.target ?? 'dir') as PublishTarget;
       if (!['dir', 'edgeone', 'tencent'].includes(target)) throw new Error('--target 必须是 dir、edgeone 或 tencent');
       await assembleSite(paths, { buildWeb: !values['no-web-build'], log });
-      await publish(paths, target, readEnvFile(paths.publishEnv), log);
+      await publish(paths, target, readEnvFile(paths.publishEnv), log, { init: values.init });
       log('发布完成');
       return;
     }

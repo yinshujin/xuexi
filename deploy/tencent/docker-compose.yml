@@ -1,0 +1,104 @@
+# xuexi on a Tencent Cloud Lighthouse server (or any Linux box with Docker).
+#
+# Layout on the server (/srv/xuexi), created by `deploy.sh --init`:
+#   docker-compose.yml  Caddyfile  .env  backup.sh
+#   site/      static PWA + packs/ + catalog.json (rsync'd by deploy.sh)
+#   src/       apps/sync + packages/shared (build context for the sync image)
+#   backups/   daily SQLite backups (backup.sh)
+#
+# Validate locally:  docker compose -f deploy/tencent/docker-compose.yml \
+#                      --env-file deploy/tencent/.env.example config
+
+name: xuexi
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: '10m'
+    max-file: '3'
+
+services:
+  caddy:
+    image: ${CADDY_IMAGE:-caddy:2-alpine}
+    restart: unless-stopped
+    depends_on:
+      sync:
+        condition: service_healthy
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:-}
+    # Empty SITE_DOMAIN or a bare IPv4/IPv6 address -> plain HTTP on :80,
+    # otherwise the domain with automatic HTTPS.
+    command:
+      - sh
+      - -c
+      - |
+        d="$${SITE_DOMAIN}"
+        if [ -z "$$d" ] || echo "$$d" | grep -Eq '^[0-9.]+$$|:'; then
+          export SITE_ADDRESS=':80'
+          echo "[caddy] SITE_DOMAIN empty or an IP: serving plain HTTP on :80 (no PWA install / APK)"
+        else
+          export SITE_ADDRESS="$$d"
+          echo "[caddy] serving https://$$d"
+        fi
+        exec caddy run --config /etc/caddy/Caddyfile --adapter caddyfile
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./site:/srv/site:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    healthcheck:
+      # Caddy's admin API listens on localhost:2019 inside the container.
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:2019/config/']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging: *logging
+
+  sync:
+    build:
+      # On the server: ./src (copied by deploy.sh --init).
+      # From a repo checkout: SYNC_BUILD_CONTEXT=../.. (the repo root).
+      context: ${SYNC_BUILD_CONTEXT:-./src}
+      dockerfile: apps/sync/Dockerfile
+      args:
+        NODE_IMAGE: ${NODE_IMAGE:-node:22-alpine}
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org}
+      # Optional extra CA (PEM) for npm behind a TLS-intercepting proxy.
+      secrets:
+        - npm_ca
+    image: xuexi-sync:latest
+    restart: unless-stopped
+    environment:
+      FAMILY_CODE: ${FAMILY_CODE:?set FAMILY_CODE in .env (at least 8 characters)}
+      TOKEN_SECRET: ${TOKEN_SECRET:?set TOKEN_SECRET in .env (at least 32 characters)}
+      CORS_ORIGINS: ${CORS_ORIGINS:-*}
+      DB_PATH: /data/xuexi.db
+      PORT: '8787'
+      # Only reachable through Caddy, which sets X-Forwarded-For to the real client IP.
+      TRUST_PROXY: '1'
+    expose:
+      - '8787'
+    volumes:
+      - sync_data:/data
+      - ./backups:/backups
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:8787/api/health']
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    logging: *logging
+
+secrets:
+  npm_ca:
+    file: ${NPM_CA_FILE:-/dev/null}
+
+volumes:
+  sync_data:
+  caddy_data:
+  caddy_config:

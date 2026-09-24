@@ -153,3 +153,75 @@ describe('whiteboard tables', () => {
     expect(cellStyle(draw([['退 1 当 10', '4 颗', '12 颗']]))).toBeUndefined();
   });
 });
+
+describe('whiteboard timing', () => {
+  beforeEach(() => vi.useFakeTimers());
+  afterEach(() => vi.useRealTimers());
+
+  const draw = (id: string, y: number) => ({ id, type: 'wb_draw_text', content: id, x: 80, y, width: 800, height: 60 });
+  const scene = (id: string, actions: unknown[]) => ({
+    id,
+    stageId: 'x',
+    title: id,
+    order: 0,
+    type: 'slide',
+    content: { type: 'slide', canvas: { id: `${id}-c`, viewportSize: 1000, viewportRatio: 0.5625, elements: [] } },
+    actions,
+  });
+  const lesson = {
+    stage: { id: 'x', name: 'x' },
+    scenes: [
+      scene('s0', [
+        { id: 'o', type: 'wb_open' },
+        draw('d1', 40),
+        draw('d2', 116),
+        draw('d3', 192),
+        { id: 'sp', type: 'speech', text: '一边写一边讲', audioId: 'a.mp3' },
+        { id: 'sp2', type: 'speech', text: '讲完了', audioId: 'b.mp3' },
+      ]),
+      scene('s1', [{ id: 'sp3', type: 'speech', text: '下一页', audioId: 'c.mp3' }]),
+    ],
+  } as never;
+
+  it('writes the items before a speech while it plays, one after another', async () => {
+    const audio = fakeAudio();
+    const engine = new LessonEngine(lesson, { audio: audio.port, resolveAudio: (p) => p, onChange: () => {}, revealMs: 900 });
+    engine.play();
+    await flush();
+    await vi.advanceTimersByTimeAsync(500); // wb_open animation pause
+    await flush();
+    // The speech has started together with the first item.
+    expect(audio.log).toEqual(['a.mp3']);
+    expect(engine.snapshot.whiteboard.elements.map((e) => e.id)).toEqual(['wb_d1']);
+    await vi.advanceTimersByTimeAsync(900);
+    expect(engine.snapshot.whiteboard.elements.length).toBe(2);
+    // Pausing holds the next item back.
+    engine.pause();
+    await vi.advanceTimersByTimeAsync(3000);
+    expect(engine.snapshot.whiteboard.elements.length).toBe(2);
+    engine.resume();
+    await vi.advanceTimersByTimeAsync(900);
+    expect(engine.snapshot.whiteboard.elements.length).toBe(3);
+    // Next speech only after the first one ends.
+    expect(audio.log).toEqual(['a.mp3']);
+    audio.end();
+    await flush();
+    expect(audio.log).toEqual(['a.mp3', 'b.mp3']);
+  });
+
+  it('closes the board when the next scene starts, also when seeking', async () => {
+    const audio = fakeAudio();
+    const engine = new LessonEngine(lesson, { audio: audio.port, resolveAudio: (p) => p, onChange: () => {} });
+    engine.play();
+    for (let i = 0; i < 10 && engine.snapshot.sceneIndex === 0; i++) {
+      await vi.advanceTimersByTimeAsync(1000);
+      if (audio.playing) audio.end();
+      await flush();
+    }
+    expect(engine.snapshot.sceneIndex).toBe(1);
+    expect(engine.snapshot.whiteboard.open).toBe(false);
+    expect(engine.snapshot.whiteboard.elements.length).toBe(3);
+    engine.goToScene(1, false);
+    expect(engine.snapshot.whiteboard.open).toBe(false);
+  });
+});

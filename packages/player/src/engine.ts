@@ -6,7 +6,10 @@
  * - speech: shows the subtitle and plays pre-synthesized narration (or waits an
  *   estimated reading time when the clip is missing / cannot play);
  * - spotlight / laser: fire-and-forget effects, cleared after the next speech;
- * - wb_*: whiteboard reducer + a short animation pause;
+ * - wb_*: whiteboard reducer + a short animation pause; several wb_draw_*
+ *   actions right before a speech are written *while* that speech plays
+ *   (one after another), so the board and the narration stay together;
+ * - the whiteboard closes when a new scene starts (its content is kept);
  * - quiz / interactive scenes stop at the end and wait for the child (`continue()`).
  */
 import type { Action } from '@openmaic/dsl';
@@ -55,9 +58,16 @@ export interface EngineOptions {
   onChange: (snapshot: PlayerSnapshot) => void;
   /** Animation pause after a whiteboard action, ms at 1× (default 500). */
   whiteboardMs?: number;
+  /** Interval between whiteboard items written during a speech, ms at 1× (default 900). */
+  revealMs?: number;
   /** Speech duration estimate override (tests). */
   speechMs?: (text: string) => number;
 }
+
+const isDrawAction = (a: Action) => a.type.startsWith('wb_draw_');
+
+/** The board closes between scenes; its content stays for the next time it opens. */
+const closeBoard = (wb: WhiteboardState): WhiteboardState => (wb.open ? { ...wb, open: false } : wb);
 
 class Cancelled extends Error {
   constructor() {
@@ -126,6 +136,8 @@ export class LessonEngine {
   private state: PlayerSnapshot;
   private run = 0;
   private timer = new PausableTimer();
+  /** Second timer: whiteboard items revealed while a speech plays. */
+  private revealTimer = new PausableTimer();
   private clearEffectsAfterSpeech = false;
   private readonly offsets: number[];
 
@@ -133,6 +145,7 @@ export class LessonEngine {
     this.lesson = lesson;
     this.opts = {
       whiteboardMs: 500,
+      revealMs: 900,
       speechMs: estimateSpeechMs,
       ...options,
     } as LessonEngine['opts'];
@@ -181,6 +194,7 @@ export class LessonEngine {
     if (this.state.status !== 'playing') return;
     this.opts.audio.pause();
     this.timer.pause();
+    this.revealTimer.pause();
     this.set({ status: 'paused' });
   }
 
@@ -194,6 +208,7 @@ export class LessonEngine {
     }
     this.opts.audio.resume();
     this.timer.resume();
+    this.revealTimer.resume();
     this.flushResumeWaiters();
   }
 
@@ -223,6 +238,7 @@ export class LessonEngine {
       for (const a of this.lesson.scenes[k].actions ?? []) {
         if (isWhiteboardAction(a)) wb = applyWhiteboardAction(wb, a);
       }
+      wb = closeBoard(wb);
     }
     this.set({
       sceneIndex: i,
@@ -254,6 +270,7 @@ export class LessonEngine {
     this.running = false;
     this.opts.audio.stop();
     this.timer.cancel();
+    this.revealTimer.cancel();
     this.flushResumeWaiters();
   }
 
@@ -276,13 +293,29 @@ export class LessonEngine {
       const scene = this.lesson.scenes[si];
       const actions = scene.actions ?? [];
       if (si !== sceneIndex) {
-        this.set({ sceneIndex: si, actionIndex: 0, effects: {}, subtitle: null });
+        this.set({
+          sceneIndex: si,
+          actionIndex: 0,
+          effects: {},
+          subtitle: null,
+          whiteboard: closeBoard(this.state.whiteboard),
+        });
       }
       for (let ai = si === sceneIndex ? actionIndex : 0; ai < actions.length; ai++) {
         this.alive(token);
         await this.untilResumed();
         this.alive(token);
         this.set({ actionIndex: ai });
+        // wb_draw_* … wb_draw_* followed by a speech: write while speaking.
+        let end = ai;
+        while (end < actions.length && isDrawAction(actions[end])) end++;
+        if (end > ai && end < actions.length && actions[end].type === 'speech') {
+          await this.drawWhileSpeaking(token, actions.slice(ai, end), actions[end]);
+          this.alive(token);
+          ai = end;
+          this.set({ actionIndex: ai + 1, played: this.offsets[si] + ai + 1 });
+          continue;
+        }
         await this.exec(token, actions[ai]);
         this.alive(token);
         this.set({ actionIndex: ai + 1, played: this.offsets[si] + ai + 1 });
@@ -313,6 +346,21 @@ export class LessonEngine {
 
   private wait(ms: number) {
     return this.timer.wait(ms / this.state.rate, this.state.status === 'paused');
+  }
+
+  /** First item at once, the rest one by one while the speech plays. */
+  private async drawWhileSpeaking(token: number, draws: Action[], speech: Action) {
+    this.set({ whiteboard: applyWhiteboardAction(this.state.whiteboard, draws[0]) });
+    const reveal = (async () => {
+      for (const d of draws.slice(1)) {
+        await this.revealTimer.wait(this.opts.revealMs / this.state.rate, this.state.status === 'paused');
+        this.alive(token);
+        this.set({ whiteboard: applyWhiteboardAction(this.state.whiteboard, d) });
+      }
+    })();
+    const talk = this.exec(token, speech);
+    const [a, b] = await Promise.allSettled([talk, reveal]);
+    for (const r of [a, b]) if (r.status === 'rejected') throw r.reason;
   }
 
   private async exec(token: number, a: Action) {

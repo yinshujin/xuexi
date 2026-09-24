@@ -51,7 +51,10 @@ export function Btn({
 }
 
 export function Card({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <div className={`rounded-3xl bg-white p-5 shadow-sm ring-1 ring-slate-200 ${className}`}>{children}</div>;
+  // A caller's own background (e.g. bg-sky-500) must win over the default white;
+  // both are plain utilities, so only one of them may be on the element.
+  const bg = /(^|\s)bg-(?!gradient)/.test(className) ? '' : 'bg-white ';
+  return <div className={`rounded-3xl ${bg}p-5 shadow-sm ring-1 ring-slate-200 ${className}`}>{children}</div>;
 }
 
 export function Empty({ children }: { children: ReactNode }) {

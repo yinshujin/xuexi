@@ -55,21 +55,42 @@ function targetDifficulty(kp: KnowledgePoint): number {
 
 const kpIndex = () => new Map(BOOKS.flatMap((b) => b.units.flatMap((u) => u.knowledgePoints.map((kp) => [kp.id, kp] as const))));
 
-export function progressMap(events: LearningEvent[], settings: FamilySettings, now = Date.now()): Map<string, KpProgress> {
-  const attempts = attemptsOf(events);
+/** Events handed to the engine must belong to a single child. */
+function childOf(events: LearningEvent[]): string | undefined {
+  return events[0]?.childId;
+}
+
+function masteryOf(attempts: AttemptEvent[], settings: FamilySettings) {
   const kps = kpIndex();
-  const mastery = practice.computeMastery(attempts, {
+  return practice.computeMastery(attempts, {
+    childId: childOf(attempts),
     masteryAccuracy: settings.masteryAccuracy,
     targetDifficulty: (kpId: string) => {
       const kp = kps.get(kpId);
       return kp ? targetDifficulty(kp) : 3;
     },
   });
-  const due = new Set(practice.computeReviewSchedule(attempts, mastery, now).filter((r) => r.dueAt <= now).map((r) => r.kpId));
+}
+
+export function progressMap(events: LearningEvent[], settings: FamilySettings, now = Date.now()): Map<string, KpProgress> {
+  const attempts = attemptsOf(events);
+  const kps = kpIndex();
+  const mastery = practice.computeMastery(attempts, {
+    childId: childOf(attempts),
+    masteryAccuracy: settings.masteryAccuracy,
+    targetDifficulty: (kpId: string) => {
+      const kp = kps.get(kpId);
+      return kp ? targetDifficulty(kp) : 3;
+    },
+  });
+  const schedule = practice.computeReviewSchedule(attempts, mastery, now, { childId: childOf(attempts) });
+  const due = new Set(schedule.filter((r) => r.isDue).map((r) => r.kpId));
+  const failedReview = new Set(schedule.filter((r) => r.status === 'learning').map((r) => r.kpId));
   const out = new Map<string, KpProgress>();
   for (const [kpId, m] of mastery) {
     out.set(kpId, {
-      status: m.status,
+      // A failed review sends a mastered point back to practice.
+      status: m.status === 'mastered' && failedReview.has(kpId) ? 'learning' : m.status,
       attempts: m.attempts,
       accuracy: m.recentAccuracy,
       theta: m.theta,
@@ -80,8 +101,7 @@ export function progressMap(events: LearningEvent[], settings: FamilySettings, n
 }
 
 export function difficultyFor(events: LearningEvent[], settings: FamilySettings, kpId: string, spec: PracticeSpec): number {
-  const attempts = attemptsOf(events);
-  const mastery = practice.computeMastery(attempts, { masteryAccuracy: settings.masteryAccuracy });
+  const mastery = masteryOf(attemptsOf(events), settings);
   return practice.recommendDifficulty(mastery.get(kpId), { min: spec.minDifficulty, max: spec.maxDifficulty });
 }
 
@@ -129,8 +149,9 @@ export interface MistakeView {
 }
 
 export function openMistakes(events: LearningEvent[]): MistakeView[] {
+  const attempts = attemptsOf(events);
   return practice
-    .computeMistakeBook(attemptsOf(events))
+    .computeMistakeBook(attempts, { childId: childOf(attempts) })
     .filter((m) => !m.cleared && m.question.source === 'generator')
     .map((m) => ({
       key: m.key,
@@ -141,12 +162,21 @@ export function openMistakes(events: LearningEvent[]): MistakeView[] {
     }));
 }
 
+/** A fresh question of the same kind, aimed at the diagnosed error when possible. */
+function variantRef(ref: SessionItem['ref'], tag: string | undefined): SessionItem['ref'] {
+  const opts = { difficulty: ref.difficulty, seed: randomSeed(), variant: ref.variant?.split('@')[0] };
+  const gen = practice.getGenerator(ref.generatorId);
+  const targeted = tag && tag !== 'careless' ? gen.targetFor?.(tag as never, opts) : null;
+  const q = targeted ?? practice.generateQuestion(ref.generatorId, opts);
+  return practice.refOfQuestion(q) as SessionItem['ref'];
+}
+
 /** Mistake redo: original question, then a variant targeting the diagnosed error. */
 export function mistakeItems(events: LearningEvent[], limit = 6): SessionItem[] {
   const items: SessionItem[] = [];
   for (const m of openMistakes(events).slice(0, limit)) {
     items.push({ kpId: m.kpId, ref: m.ref, mode: 'mistakes', label: '错题重做' });
-    items.push({ kpId: m.kpId, ref: { ...m.ref, seed: randomSeed() }, mode: 'mistakes', label: '同类题' });
+    items.push({ kpId: m.kpId, ref: variantRef(m.ref, m.errorTags[0]), mode: 'mistakes', label: '同类题' });
   }
   return items;
 }
@@ -155,9 +185,10 @@ export function mistakeItems(events: LearningEvent[], limit = 6): SessionItem[] 
 export function dailyItems(child: ChildProfile, events: LearningEvent[], settings: FamilySettings, now = Date.now()): SessionItem[] {
   const kps = childKps(child);
   const attempts = attemptsOf(events);
-  const mastery = practice.computeMastery(attempts, { masteryAccuracy: settings.masteryAccuracy });
-  const reviewDue = practice.computeReviewSchedule(attempts, mastery, now);
-  const mistakes = practice.computeMistakeBook(attempts);
+  const childId = childOf(attempts);
+  const mastery = masteryOf(attempts, settings);
+  const reviewDue = practice.computeReviewSchedule(attempts, mastery, now, { childId });
+  const mistakes = practice.computeMistakeBook(attempts, { childId });
   const plan = practice.buildDailyPlan({
     kps: kps.map((r) => ({ id: r.kp.id, practice: r.kp.practice, prerequisites: r.kp.prerequisites })),
     masteryMap: mastery,
@@ -168,12 +199,9 @@ export function dailyItems(child: ChildProfile, events: LearningEvent[], setting
     seedBase: Number(dayKey(now).replace(/-/g, '')) + child.id.length,
   });
   return plan.blocks.flatMap((b) =>
-    b.questions.map((q) => ({
-      kpId: b.kpId,
-      ref: { source: 'generator' as const, ...q },
-      mode: 'daily' as const,
-      label: b.title,
-    })),
+    b.questions
+      .filter((q) => q.ref.source === 'generator')
+      .map((q) => ({ kpId: q.kpId, ref: q.ref as SessionItem['ref'], mode: q.mode, label: b.title })),
   );
 }
 

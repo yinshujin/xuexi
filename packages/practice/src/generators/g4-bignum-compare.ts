@@ -115,11 +115,12 @@ function explain(p: CompareParams): SolutionStep[] {
   const L = sideValue(p.left);
   const R = sideValue(p.right);
   const out: SolutionStep[] = [];
-  if (p.left.unit || p.right.unit) {
+  const withUnit = [p.left, p.right].filter((s) => s.unit);
+  if (withUnit.length > 0) {
     out.push(
       step(
-        '单位不同，先都化成没有单位的数：',
-        `${sideText(p.left)} = ${L}，${sideText(p.right)} = ${R}`,
+        '单位不同，先化成没有单位的数：',
+        withUnit.map((s) => `${sideText(s)} = ${sideValue(s)}`).join('，'),
       ),
     );
   }

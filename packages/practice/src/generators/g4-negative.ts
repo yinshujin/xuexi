@@ -196,7 +196,7 @@ export const g4Negative = defineGenerator<NegativeParams>({
           hint: '气温下降，就是在温度计上往下数。',
           steps: [
             step(`下降 ${drop}℃，就是在温度计上从 ${fmtSigned(start)} 往下数 ${drop} 格。`),
-            step('', `${fmtSigned(start)} − ${drop} = ${fmtSigned(ans)}`),
+            step('列式计算：', `${fmtSigned(start)} − ${drop} = ${fmtSigned(ans)}`),
           ],
           targetSeconds: 15,
           params: { form, n: [start, drop] },
@@ -220,7 +220,7 @@ export const g4Negative = defineGenerator<NegativeParams>({
           steps: [
             step(`从 ${fmtSigned(cold)}℃ 升到 0℃，升高了 ${-cold}℃。`),
             step(`从 0℃ 升到 ${warm}℃，又升高了 ${warm}℃。`),
-            step('', `${-cold} + ${warm} = ${ans}（℃）`),
+            step('合起来：', `${-cold} + ${warm} = ${ans}（℃）`),
           ],
           targetSeconds: 20,
           params: { form, n: [warm, cold, warmCity, coldCity] },

@@ -88,6 +88,9 @@ describe('computeMastery', () => {
       settings: { masteryAccuracy: 0.8 },
     }).get('kp.a')!;
     expect(lenient.status).toBe('mastered');
+    expect(
+      computeMastery(events, { targetDifficulty: 2, masteryAccuracy: 0.8 }).get('kp.a')!.status,
+    ).toBe('mastered');
   });
 
   it('θ goes down with wrong answers; one slip does not un-master (hysteresis), many do', () => {

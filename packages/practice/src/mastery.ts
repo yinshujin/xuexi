@@ -69,6 +69,8 @@ export interface MasteryOptions {
   /** Only events of this child. Required when the log contains several children. */
   childId?: string;
   settings?: Pick<FamilySettings, 'masteryAccuracy'>;
+  /** Shorthand for settings.masteryAccuracy (takes precedence). */
+  masteryAccuracy?: number;
   /** θ needed for mastery; per KP (e.g. its maxDifficulty) or a constant. Default 3. */
   targetDifficulty?: number | ((kpId: string) => number);
   /** Starting θ per KP. Default 1. */
@@ -126,7 +128,8 @@ export function computeMastery(
   events: readonly LearningEvent[],
   opts: MasteryOptions = {},
 ): Map<string, MasteryState> {
-  const accuracyNeeded = (opts.settings ?? DEFAULT_SETTINGS).masteryAccuracy;
+  const accuracyNeeded =
+    opts.masteryAccuracy ?? (opts.settings ?? DEFAULT_SETTINGS).masteryAccuracy;
   const minAttempts = opts.minAttempts ?? RECENT_WINDOW;
   const targetOf = (kp: string) =>
     typeof opts.targetDifficulty === 'function'

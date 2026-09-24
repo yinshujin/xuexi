@@ -205,7 +205,7 @@ export const g4AngleClassify = defineGenerator<AngleClassifyParams>({
         prompt = `∠1 和 ∠2 合起来是一个${name}，∠1 = ${a}°，∠2 = ${BLANK}°。`;
         steps = [
           step(`一个${name}是 ${total}°。`),
-          step('', `∠2 = ${total}° − ${a}° = ${total - a}°`),
+          step('所以', `∠2 = ${total}° − ${a}° = ${total - a}°`),
         ];
         break;
       }
@@ -216,7 +216,7 @@ export const g4AngleClassify = defineGenerator<AngleClassifyParams>({
         prompt = `∠1、∠2、∠3 合起来是一个平角，∠1 = ${a}°，∠2 = ${b}°，∠3 = ${BLANK}°。`;
         steps = [
           step('一个平角是 180°。'),
-          step('', `∠3 = 180° − ${a}° − ${b}° = ${180 - a - b}°`),
+          step('所以', `∠3 = 180° − ${a}° − ${b}° = ${180 - a - b}°`),
         ];
         break;
       }
@@ -230,7 +230,7 @@ export const g4AngleClassify = defineGenerator<AngleClassifyParams>({
           step(
             `${h} 时整，分针指着 12，时针指着 ${h}，两针之间较小的一边有 ${Math.min(h, 12 - h)} 个大格。`,
           ),
-          step('', `30° × ${Math.min(h, 12 - h)} = ${ans}°`),
+          step('所以', `30° × ${Math.min(h, 12 - h)} = ${ans}°`),
         ];
       }
     }

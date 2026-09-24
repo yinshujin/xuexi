@@ -129,15 +129,22 @@ describe('buildDailyPlan', () => {
     expect(plan.budgetSeconds).toBe(1200);
     expect(plan.estSeconds).toBeLessThanOrEqual(plan.budgetSeconds);
     expect(plan.estSeconds).toBe(plan.blocks.reduce((s, b) => s + b.estSeconds, 0));
-    expect(plan.estSeconds).toBeGreaterThan(plan.budgetSeconds * 0.8);
+    // Sessions are capped by question count, so a plan may end before the budget.
+    expect(plan.estSeconds).toBeGreaterThan(plan.budgetSeconds * 0.5);
+    for (const b of plan.blocks) {
+      if (b.kind === 'warmup') expect(b.questions.length).toBeLessThanOrEqual(12);
+      if (b.kind === 'practice') expect(b.questions.length).toBeLessThanOrEqual(25);
+    }
   });
 
   it('warm-up is a ~2 minute speed drill from a mastered computation KP, never vertical', () => {
     const w = buildDailyPlan(input).blocks[0];
     expect(w.mode).toBe('speed');
     expect(['g2.table-2-5', 'g2.addsub']).toContain(w.kpId);
-    expect(w.estSeconds).toBeGreaterThanOrEqual(120);
+    // ~2 minutes, but never more than 12 questions.
+    expect(w.estSeconds).toBeGreaterThanOrEqual(Math.min(120, 12 * 5));
     expect(w.estSeconds).toBeLessThan(150);
+    expect(w.questions.length).toBeLessThanOrEqual(12);
     for (const q of w.questions) {
       expect(q.ref.source === 'generator' && q.ref.variant).not.toBe('vertical');
       expect(questionFromRef(q.ref)).not.toBeNull();

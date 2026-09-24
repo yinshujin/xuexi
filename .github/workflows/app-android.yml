@@ -1,0 +1,88 @@
+name: Android APK
+
+# Builds one universal APK for the Huawei tablet (HarmonyOS 4.x) and the vivo phone.
+# Run it from the Actions tab ("Run workflow") or push a tag like app-v0.1.0.
+#
+# Signing (strongly recommended, otherwise every build has a different key and
+# you must uninstall before updating): create a keystore once with
+#   bash shells/tauri/scripts/create-keystore.sh
+# and add the printed values as repository secrets:
+#   ANDROID_KEYSTORE_BASE64, ANDROID_KEYSTORE_PASSWORD, ANDROID_KEY_ALIAS
+# Optional repository variable SITE_URL (e.g. https://xuexi.example.com/) is baked
+# in as the default site address on the login screen.
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['app-v*']
+
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    env:
+      NDK_VERSION: 27.2.12479018
+      VITE_SITE_URL: ${{ vars.SITE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+      - uses: android-actions/setup-android@v3
+      - name: Install Android platform, build tools and NDK
+        run: |
+          sdkmanager "platforms;android-34" "build-tools;34.0.0" "ndk;${NDK_VERSION}"
+          echo "NDK_HOME=$ANDROID_HOME/ndk/${NDK_VERSION}" >> "$GITHUB_ENV"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: aarch64-linux-android,armv7-linux-androideabi,i686-linux-android,x86_64-linux-android
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: shells/tauri/src-tauri
+      - run: pnpm install --frozen-lockfile
+      - name: Generate Android project
+        working-directory: shells/tauri
+        run: |
+          if [ ! -d src-tauri/gen/android ]; then pnpm tauri android init --ci; fi
+      - name: Build release APK
+        working-directory: shells/tauri
+        run: pnpm tauri android build --apk --ci --target aarch64 armv7
+      - name: Sign APK
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          set -euo pipefail
+          BT="$ANDROID_HOME/build-tools/34.0.0"
+          UNSIGNED=$(find shells/tauri/src-tauri/gen/android -name '*release-unsigned.apk' | head -n1)
+          test -n "$UNSIGNED"
+          mkdir -p dist
+          "$BT/zipalign" -f -p 4 "$UNSIGNED" dist/aligned.apk
+          if [ -n "${KEYSTORE_B64:-}" ]; then
+            echo "$KEYSTORE_B64" | base64 -d > release.jks
+            ALIAS="${KEY_ALIAS:-xuexi}"; PASS="$KEYSTORE_PASSWORD"
+          else
+            echo "::warning::No signing secrets configured; signing with a throwaway key (uninstall before updating)."
+            keytool -genkeypair -keystore release.jks -storepass throwaway -keypass throwaway \
+              -alias xuexi -keyalg RSA -keysize 2048 -validity 10000 -dname "CN=xuexi"
+            ALIAS=xuexi; PASS=throwaway
+          fi
+          "$BT/apksigner" sign --ks release.jks --ks-pass "pass:$PASS" --ks-key-alias "$ALIAS" \
+            --out "dist/xuexi-${GITHUB_REF_NAME//\//-}.apk" dist/aligned.apk
+          rm -f dist/aligned.apk release.jks
+          "$BT/apksigner" verify --print-certs dist/*.apk | head -n 3
+      - uses: actions/upload-artifact@v4
+        with:
+          name: xuexi-android
+          path: dist/*.apk
+      - name: Attach to release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.apk

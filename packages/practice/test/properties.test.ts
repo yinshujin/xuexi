@@ -91,6 +91,7 @@ describe.each(ALL_GENERATORS.map((g) => [g.id, g] as const))('%s', (id, gen) => 
           // Well-formed.
           expect(answerMatchesWidget(q, q.answer), q.key).toBe(true);
           expect(q.steps.length, q.key).toBeGreaterThan(0);
+          for (const st of q.steps) expect(st.text.trim().length, q.key).toBeGreaterThan(0);
           expect(q.hint.length, q.key).toBeGreaterThan(0);
           expect(q.targetSeconds, q.key).toBeGreaterThan(0);
           if (q.answer.type === 'number') {

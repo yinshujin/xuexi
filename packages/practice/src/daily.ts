@@ -26,7 +26,11 @@ const REVIEW_SHARE = 0.35;
 const MISTAKE_SHARE = 0.25;
 const MAX_MISTAKE_ENTRIES = 5;
 const BANK_QUESTION_SECONDS = 60;
-const MAX_BLOCK_QUESTIONS = 120;
+/** Hard caps so a child's session stays short even for very quick questions. */
+const MAX_WARMUP_QUESTIONS = 12;
+const MAX_PRACTICE_QUESTIONS = 25;
+/** Per-question overhead for reading feedback and moving on, seconds. */
+const OVERHEAD_SECONDS = { speed: 2, other: 5 } as const;
 
 /** Generators suitable for a timed warm-up (口算). */
 export const WARMUP_GENERATORS: readonly GeneratorId[] = [
@@ -109,7 +113,10 @@ function planned(
   const ref: QuestionRef = { source: 'generator', generatorId, difficulty, seed };
   if (variant !== undefined) ref.variant = variant;
   const q = getGenerator(generatorId).generate({ difficulty, seed, variant });
-  const est = mode === 'speed' ? q.targetSeconds : Math.round(q.targetSeconds * NON_SPEED_FACTOR);
+  const est =
+    mode === 'speed'
+      ? q.targetSeconds + OVERHEAD_SECONDS.speed
+      : Math.round(q.targetSeconds * NON_SPEED_FACTOR) + OVERHEAD_SECONDS.other;
   return { kpId, ref, mode, role, targetSeconds: q.targetSeconds, estSeconds: est };
 }
 
@@ -198,7 +205,7 @@ export function buildDailyPlan(input: DailyPlanInput): DailyPlan {
       const d = specDifficulty(spec, input.masteryMap.get(kp.id), 0.9);
       const qs: PlannedQuestion[] = [];
       let t = 0;
-      for (let i = 0; t < WARMUP_SECONDS && i < MAX_BLOCK_QUESTIONS; i++) {
+      for (let i = 0; t < WARMUP_SECONDS && i < MAX_WARMUP_QUESTIONS; i++) {
         const q = planned(kp.id, spec.generatorId, d, seed('warmup', i), variant, 'speed', 'new');
         qs.push(q);
         t += q.estSeconds;
@@ -320,7 +327,7 @@ export function buildDailyPlan(input: DailyPlanInput): DailyPlan {
     const state = input.masteryMap.get(current.id);
     const qs: PlannedQuestion[] = [];
     let misses = 0;
-    for (let i = 0; i < MAX_BLOCK_QUESTIONS && misses < 3; i++) {
+    for (let i = 0; qs.length < MAX_PRACTICE_QUESTIONS && misses < 3 && i < 200; i++) {
       // Mostly the main practice (first spec); every 4th question from the other specs, if any.
       const others = current.practice.length - 1;
       const spec =

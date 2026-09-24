@@ -166,7 +166,7 @@ function divSteps(n: number, dv: number): SolutionStep[] {
   const q = n / dv;
   return [
     step(`想：${dv} × ( ) = ${n}？`),
-    step(`因为 ${dv} × ${q} = ${n}，`, `${dv} × ${q} = ${n}`),
+    step('因为', `${dv} × ${q} = ${n}`),
     step('所以', `${n} ÷ ${dv} = ${q}`),
   ];
 }

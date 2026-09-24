@@ -160,8 +160,8 @@ function lawSteps(p: LawParams): SolutionStep[] {
           `${a} 和 ${c} 能凑成整百，用加法交换律、结合律先把它们加起来：`,
           `${expr} = (${a} + ${c}) + ${b}`,
         ),
-        step('', `= ${a + c} + ${b}`),
-        step('', `= ${value}`),
+        step('先算：', `= ${a + c} + ${b}`),
+        step('得：', `= ${value}`),
       ];
     case 'add-pair4':
       return [
@@ -169,8 +169,8 @@ function lawSteps(p: LawParams): SolutionStep[] {
           '用加法交换律、结合律，把能凑成整百的数放在一起：',
           `${expr} = (${a} + ${c}) + (${b} + ${d})`,
         ),
-        step('', `= ${a + c} + ${b + d}`),
-        step('', `= ${value}`),
+        step('先算：', `= ${a + c} + ${b + d}`),
+        step('得：', `= ${value}`),
       ];
     case 'mul-pair':
       return [
@@ -178,8 +178,8 @@ function lawSteps(p: LawParams): SolutionStep[] {
           `${a} × ${c} = ${a * c}，用乘法交换律、结合律先算它们：`,
           `${expr} = (${a} × ${c}) × ${b}`,
         ),
-        step('', `= ${a * c} × ${b}`),
-        step('', `= ${value}`),
+        step('先算：', `= ${a * c} × ${b}`),
+        step('得：', `= ${value}`),
       ];
     case 'dist-fwd':
       return [
@@ -187,8 +187,8 @@ function lawSteps(p: LawParams): SolutionStep[] {
           '用乘法分配律：括号里的两个数都要和括号外的数相乘，再把积相加。',
           `${expr} = ${a} × ${b} + ${a} × ${c}`,
         ),
-        step('', `= ${a * b} + ${a * c}`),
-        step('', `= ${value}`),
+        step('先算：', `= ${a * b} + ${a * c}`),
+        step('得：', `= ${value}`),
       ];
     case 'dist-rev':
       return [
@@ -196,8 +196,8 @@ function lawSteps(p: LawParams): SolutionStep[] {
           `两个积都有相同的因数 ${a}，用乘法分配律（逆用）：`,
           `${expr} = ${a} × (${b} ${s} ${c})`,
         ),
-        step('', `= ${a} × ${p.sign === '+' ? b + c : b - c}`),
-        step('', `= ${value}`),
+        step('先算：', `= ${a} × ${p.sign === '+' ? b + c : b - c}`),
+        step('得：', `= ${value}`),
       ];
     case 'mul-split':
       return [
@@ -205,8 +205,8 @@ function lawSteps(p: LawParams): SolutionStep[] {
           `把 ${b * c} 拆成 ${b} × ${c}，再用乘法结合律让 ${a} 和 ${b} 先乘：`,
           `${expr} = ${a} × ${b} × ${c}`,
         ),
-        step('', `= ${a * b} × ${c}`),
-        step('', `= ${value}`),
+        step('先算：', `= ${a * b} × ${c}`),
+        step('得：', `= ${value}`),
       ];
     case 'dist-split':
       return p.sign === '+'
@@ -215,16 +215,16 @@ function lawSteps(p: LawParams): SolutionStep[] {
               `把 ${b + c} 看作 ${b} + ${c}，用乘法分配律：`,
               `${expr} = (${b} + ${c}) × ${a} = ${b} × ${a} + ${c} × ${a}`,
             ),
-            step('', `= ${b * a} + ${c * a}`),
-            step('', `= ${value}`),
+            step('先算：', `= ${b * a} + ${c * a}`),
+            step('得：', `= ${value}`),
           ]
         : [
             step(
               `把 ${b - c} 看作 ${b} ${MINUS} ${c}，用乘法分配律：`,
               `${expr} = ${a} × (${b} ${MINUS} ${c}) = ${a} × ${b} ${MINUS} ${a} × ${c}`,
             ),
-            step('', `= ${a * b} ${MINUS} ${a * c}`),
-            step('', `= ${value}`),
+            step('先算：', `= ${a * b} ${MINUS} ${a * c}`),
+            step('得：', `= ${value}`),
           ];
     case 'dist-rev1':
       return [
@@ -232,8 +232,8 @@ function lawSteps(p: LawParams): SolutionStep[] {
           `${a} 可以看作 ${a} × 1，用乘法分配律（逆用）：`,
           `${expr} = ${a} × (${p.sign === '+' ? '99 + 1' : `101 ${MINUS} 1`})`,
         ),
-        step('', `= ${a} × 100`),
-        step('', `= ${value}`),
+        step('先算：', `= ${a} × 100`),
+        step('得：', `= ${value}`),
       ];
   }
 }

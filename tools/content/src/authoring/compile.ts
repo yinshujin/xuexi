@@ -286,7 +286,11 @@ export function compileAuthored(input: unknown, expectLessonId: string): Compile
         const aid = `${sceneId}-a${k}`;
         if ('say' in st) {
           if (typeof st.say !== 'string' || !st.say.trim()) errors.push(`${at}: say 为空`);
-          actions.push({ id: aid, type: 'speech', text: st.say });
+          if (st.lang !== undefined && st.lang !== 'en') errors.push(`${at}: lang 只能是 "en"`);
+          if (st.lang === 'en' && /[\u4e00-\u9fff]/.test(st.say ?? '')) {
+            errors.push(`${at}: 英文朗读（lang "en"）里有中文，请把中文讲解拆成单独的 say`);
+          }
+          actions.push({ id: aid, type: 'speech', text: st.say, ...(st.lang === 'en' ? { lang: 'en' } : {}) });
           says++;
         } else if ('spotlight' in st) {
           if (!ids.has(st.spotlight)) errors.push(`${at}: spotlight 指向不存在的 id "${st.spotlight}"`);

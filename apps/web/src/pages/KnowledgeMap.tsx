@@ -1,9 +1,10 @@
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
+import { SUBJECT_LABEL, type Subject } from '@xuexi/curriculum';
 import type { ChildProfile } from '@xuexi/shared';
 import { useApp } from '../lib/store';
 import { href } from '../lib/router';
 import { childKps, progressMap, type KpRef } from '../lib/learning';
-import { Card, Page } from '../components/ui';
+import { Btn, Card, Page } from '../components/ui';
 
 const STATUS_STYLE = {
   new: 'bg-white ring-slate-200',
@@ -15,7 +16,25 @@ export function KnowledgeMap({ child }: { child: ChildProfile }) {
   const { eventsOf, family, catalog } = useApp();
   const events = eventsOf(child.id);
   const progress = useMemo(() => progressMap(events, family.settings), [events, family.settings]);
-  const kps = childKps(child);
+  const allKps = childKps(child);
+  const subjects = [...new Set(allKps.map((k) => k.subject))];
+  const [picked, setPicked] = useState<Subject | null>(() => {
+    try {
+      return (localStorage.getItem('xuexi.mapSubject') as Subject | null) ?? null;
+    } catch {
+      return null;
+    }
+  });
+  const subject = picked && subjects.includes(picked) ? picked : subjects[0];
+  const pick = (s: Subject) => {
+    setPicked(s);
+    try {
+      localStorage.setItem('xuexi.mapSubject', s);
+    } catch {
+      /* private mode */
+    }
+  };
+  const kps = allKps.filter((k) => k.subject === subject);
   const byUnit = new Map<string, KpRef[]>();
   for (const k of kps) {
     const key = `${k.bookId}|${k.unitIndex}`;
@@ -31,6 +50,15 @@ export function KnowledgeMap({ child }: { child: ChildProfile }) {
         <span className="rounded-full bg-emerald-50 px-3 py-1 ring-1 ring-emerald-400">已掌握 ⭐</span>
         <span className="rounded-full bg-white px-3 py-1 ring-1 ring-slate-200">🔁 需要复习</span>
       </div>
+      {subjects.length > 1 && (
+        <div className="mb-4 flex gap-2">
+          {subjects.map((s) => (
+            <Btn key={s} tone={s === subject ? 'primary' : 'plain'} onClick={() => pick(s)}>
+              {SUBJECT_LABEL[s]}
+            </Btn>
+          ))}
+        </div>
+      )}
       {[...byUnit.values()].map((list) => (
         <Card key={`${list[0].bookId}${list[0].unitIndex}`} className="mb-4">
           <h2 className="mb-3 text-xl font-bold">

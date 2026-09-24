@@ -13,7 +13,7 @@ export interface LessonSpec {
    * concept, method, typical examples, what to avoid. Chinese, 1–4 sentences.
    */
   focus: string;
-  /** Technique lessons: error tags this lesson remediates. */
+  /** Technique lessons: error tags this lesson remediates (math only; empty for other subjects). */
   remedies?: ErrorTag[];
 }
 
@@ -55,10 +55,16 @@ export interface Unit {
   knowledgePoints: KnowledgePoint[];
 }
 
+export type Subject = 'math' | 'chinese' | 'english';
+
+export const SUBJECT_LABEL: Record<Subject, string> = { math: '数学', chinese: '语文', english: '英语' };
+
 export interface Book {
   /** e.g. "bsd-g4a" = 北师大版 四年级上册 */
   id: string;
-  edition: '北师大版';
+  subject: Subject;
+  /** e.g. "北师大版", "统编版", "沪教牛津版（深圳）" */
+  edition: string;
   /** Edition revision, e.g. "2024修订" or "2014". */
   revision: string;
   grade: 2 | 4;

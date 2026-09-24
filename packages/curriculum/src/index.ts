@@ -2,7 +2,8 @@ import type { Book, KnowledgePoint, LessonSpec, Unit } from './types';
 import { bsdG2a } from './books/bsd-g2a';
 import { bsdG4a } from './books/bsd-g4a';
 
-export type { Book, KnowledgePoint, LessonSpec, PracticeSpec, Unit } from './types';
+export type { Book, KnowledgePoint, LessonSpec, PracticeSpec, Subject, Unit } from './types';
+export { SUBJECT_LABEL } from './types';
 export { buildGenerationRequirement, lessonTemplateVersion } from './prompt';
 export type { LessonContext } from './prompt';
 

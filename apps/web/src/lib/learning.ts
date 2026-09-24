@@ -2,7 +2,7 @@
  * Adapter between the app and @xuexi/practice / @xuexi/curriculum.
  * Pages only use the functions here, so engine API changes stay local.
  */
-import { BOOKS, type KnowledgePoint, type PracticeSpec } from '@xuexi/curriculum';
+import { BOOKS, type KnowledgePoint, type PracticeSpec, type Subject } from '@xuexi/curriculum';
 import { ERROR_TAGS } from '@xuexi/shared';
 import type { AttemptEvent, ChildProfile, FamilySettings, LearningEvent, PracticeMode, QuestionRef } from '@xuexi/shared';
 import * as practice from '@xuexi/practice';
@@ -12,6 +12,7 @@ import { dayKey } from './format';
 export interface KpRef {
   bookId: string;
   bookTitle: string;
+  subject: Subject;
   unitIndex: number;
   unitTitle: string;
   kp: KnowledgePoint;
@@ -20,7 +21,14 @@ export interface KpRef {
 export function childKps(child: ChildProfile): KpRef[] {
   return BOOKS.filter((b) => child.bookIds.includes(b.id)).flatMap((b) =>
     b.units.flatMap((u) =>
-      u.knowledgePoints.map((kp) => ({ bookId: b.id, bookTitle: b.title, unitIndex: u.index, unitTitle: u.title, kp })),
+      u.knowledgePoints.map((kp) => ({
+        bookId: b.id,
+        bookTitle: b.title,
+        subject: b.subject,
+        unitIndex: u.index,
+        unitTitle: u.title,
+        kp,
+      })),
     ),
   );
 }

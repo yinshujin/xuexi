@@ -1,5 +1,5 @@
 import { ERROR_TAGS } from '@xuexi/shared';
-import type { Book, KnowledgePoint, LessonSpec, Unit } from './types';
+import { SUBJECT_LABEL, type Book, type KnowledgePoint, type LessonSpec, type Subject, type Unit } from './types';
 
 /**
  * Bump whenever the requirement template below changes, so that the content
@@ -20,10 +20,70 @@ export interface LessonContext {
 const AGE: Record<Book['grade'], string> = { 2: '7~8 岁', 4: '9~10 岁' };
 
 /** Content this grade has not learned yet (keeps generated lessons within the book). */
-const NOT_YET: Record<Book['grade'], string> = {
-  2: '有余数的除法、除法竖式、三位数加减、小数、分数、方程',
-  4: '小数、分数、方程和用字母求未知数',
+const NOT_YET: Record<Subject, Record<Book['grade'], string>> = {
+  math: {
+    2: '有余数的除法、除法竖式、三位数加减、小数、分数、方程',
+    4: '小数、分数、方程和用字母求未知数',
+  },
+  chinese: {
+    2: '本册以后才学的生字、古诗和语法术语（如主谓宾、修辞手法名称）',
+    4: '本册以后才学的古诗文和语法术语（如主谓宾、词性分类）',
+  },
+  english: {
+    2: '本册以后才学的单词、句型和语法术语',
+    4: '本册以后才学的单词、句型和语法术语（如时态名称）',
+  },
 };
+
+const STRUCTURE: Record<Subject, { lecture: string; technique: string }> = {
+  math: {
+    lecture:
+      '结构：情境导入 → 讲解概念与方法 → 2 道例题在白板上逐步推导 → 易错提醒 → 学法口诀（2~4 句顺口好记，和方法一致）→ ' +
+      '快速推理（如求最大、最小的数，□ 里最大或最小能填几）→ 一句话小结 → ' +
+      '课堂小题按题型分组：判断题 3 道、选择题 3~4 道（可含多选）、填空与解决问题 3 道（附答案讲评）。',
+    technique:
+      '结构：只讲一个方法 → 演示 2 个例子 → 对比一个常见错误说明错在哪 → 学法口诀 → 小练习分两组：判断题 2 道、选择与填空 2~3 道（附答案）。',
+  },
+  chinese: {
+    lecture:
+      '结构：情境导入 → 朗读感知（只引用课文关键句，不整篇抄录）→ 识字写字（生字读音、结构、易错笔画，形近字、多音字）→ ' +
+      '理解词语和内容（借助图片、动作、生活经验）→ 学法口诀（2~4 句顺口好记）→ 一句话小结 → ' +
+      '课堂小题按题型分组：判断题 3 道、选择题 3~4 道（可含多选）、填空与积累运用 3 道（附答案讲评）。',
+    technique:
+      '结构：只讲一个方法（如识字、朗读、提问、写话的方法）→ 演示 2 个例子 → 对比一个常见错误说明错在哪 → 学法口诀 → ' +
+      '小练习分两组：判断题 2 道、选择与填空 2~3 道（附答案）。',
+  },
+  english: {
+    lecture:
+      '结构：情境导入 → 新单词（每个词英文领读两遍、中文意思、图示或动作）→ 核心句型放进情境对话里练（领读、替换）→ ' +
+      '语音或书写小提示 → 学法口诀（中文口诀或英文 chant）→ 一句话小结 → ' +
+      '课堂小题按题型分组：判断题 3 道、选择题 3~4 道、填空与情景交际 3 道（附答案讲评）。',
+    technique:
+      '结构：只讲一个方法（如自然拼读、记单词、句型替换、问答技巧）→ 演示 2 个例子 → 对比一个常见错误说明错在哪 → ' +
+      '学法口诀或 chant → 小练习分两组：判断题 2 道、选择与填空 2~3 道（附答案）。',
+  },
+};
+
+function rules(book: Book): string {
+  const notYet = NOT_YET[book.subject][book.grade];
+  switch (book.subject) {
+    case 'math':
+      return (
+        `要求：口语化短句，像老师面对面讲；每页文字不超过 40 字；术语与北师大版教材一致；不超纲，` +
+        `不要使用${notYet}等本册未学内容；所有数学计算必须准确；全部使用中文。`
+      );
+    case 'chinese':
+      return (
+        `要求：口语化短句，像老师面对面讲；每页文字不超过 40 字；字音（拼音带声调）、字形、词义准确，与${book.edition}教材一致；` +
+        `不超纲，不要使用${notYet}；课文只引用关键句，不整篇抄录；全部使用中文。`
+      );
+    case 'english':
+      return (
+        `要求：讲解用中文口语化短句，英语单词和句子写英文，拼写、语法准确，与${book.edition}教材一致；每页文字不超过 40 字；` +
+        `不超纲，不要使用${notYet}。`
+      );
+  }
+}
 
 const UNIT_NUM = ['', '一', '二', '三', '四', '五', '六', '七', '八', '九', '十'];
 
@@ -37,7 +97,7 @@ function render(ctx: LessonContext, objectives: string[], keyPoints: string[]): 
   const lines: string[] = [];
 
   lines.push(
-    `教材：${book.edition}（${book.revision}）小学数学${book.grade === 2 ? '二' : '四'}年级${book.term}册，` +
+    `教材：${book.edition}（${book.revision}）小学${SUBJECT_LABEL[book.subject]}${book.grade === 2 ? '二' : '四'}年级${book.term}册，` +
       `第${UNIT_NUM[unit.index] ?? unit.index}单元“${unit.title}”，知识点“${kp.title}”。`,
   );
   lines.push(
@@ -53,17 +113,8 @@ function render(ctx: LessonContext, objectives: string[], keyPoints: string[]): 
   if (kp.localContexts && kp.localContexts.length > 0) {
     lines.push(`可选用的深圳生活情境：${kp.localContexts.join('、')}（自然融入即可）。`);
   }
-  lines.push(
-    isLecture
-      ? '结构：情境导入 → 讲解概念与方法 → 2 道例题在白板上逐步推导 → 易错提醒 → 学法口诀（2~4 句顺口好记，和方法一致）→ ' +
-          '快速推理（如求最大、最小的数，□ 里最大或最小能填几）→ 一句话小结 → ' +
-          '课堂小题按题型分组：判断题 3 道、选择题 3~4 道（可含多选）、填空与解决问题 3 道（附答案讲评）。'
-      : '结构：只讲一个方法 → 演示 2 个例子 → 对比一个常见错误说明错在哪 → 学法口诀 → 小练习分两组：判断题 2 道、选择与填空 2~3 道（附答案）。',
-  );
-  lines.push(
-    `要求：口语化短句，像老师面对面讲；每页文字不超过 40 字；术语与北师大版教材一致；不超纲，` +
-      `不要使用${NOT_YET[book.grade]}等本册未学内容；所有数学计算必须准确；全部使用中文。`,
-  );
+  lines.push(STRUCTURE[book.subject][isLecture ? 'lecture' : 'technique']);
+  lines.push(rules(book));
   return lines.join('\n');
 }
 

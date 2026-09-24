@@ -161,6 +161,26 @@ function ChildrenTab() {
             <div className="text-slate-500">
               {c.grade} 年级 · {c.bookIds.map((id) => BOOKS.find((b) => b.id === id)?.title ?? id).join('、')}
             </div>
+            {(() => {
+              // Books added in an app update (e.g. 语文 / 英语) are not in older profiles.
+              const missing = BOOKS.filter((b) => b.grade === c.grade && !c.bookIds.includes(b.id));
+              if (missing.length === 0) return null;
+              return (
+                <button
+                  type="button"
+                  className="mt-1 text-left text-sm text-sky-600 underline"
+                  onClick={() =>
+                    saveFamily({
+                      children: family.children.map((x) =>
+                        x.id === c.id ? { ...x, bookIds: [...x.bookIds, ...missing.map((b) => b.id)] } : x,
+                      ),
+                    })
+                  }
+                >
+                  ＋ 添加新课本：{missing.map((b) => b.title.split('（')[0]).join('、')}
+                </button>
+              );
+            })()}
           </div>
           <Btn tone="plain" onClick={() => setEditing(c)}>
             编辑

@@ -47,6 +47,8 @@ export function edgeEngine(voice = 'zh-CN-XiaoxiaoNeural', rate = '-5%'): TtsEng
 
 export interface TtsOptions {
   engine: TtsEngine;
+  /** Voice for speech actions marked lang "en" (defaults to `engine`). */
+  englishEngine?: TtsEngine;
   /** Re-synthesize clips that already have audio. */
   force?: boolean;
   log?: (s: string) => void;
@@ -82,17 +84,18 @@ export async function ttsDraft(paths: Paths, state: ContentState, lessonId: stri
     for (const action of scene.actions ?? []) {
       if (action.type !== 'speech' || !action.text?.trim()) continue;
       if (action.audioId && !opts.force && existsSync(join(dir, action.audioId))) continue;
-      const rel = `audio/${action.id.replace(/[^A-Za-z0-9._-]/g, '_')}.${opts.engine.ext}`;
+      const engine = (action as { lang?: string }).lang === 'en' && opts.englishEngine ? opts.englishEngine : opts.engine;
+      const rel = `audio/${action.id.replace(/[^A-Za-z0-9._-]/g, '_')}.${engine.ext}`;
       const text = action.text;
       jobs.push(async () => {
         const out = join(dir, rel);
         if (opts.cacheDir) {
-          const key = await sha256Hex(new TextEncoder().encode(`${opts.engine.cacheKey}\n${text}`));
-          const cached = join(opts.cacheDir, `${key}.${opts.engine.ext}`);
-          if (!existsSync(cached) || opts.force) await synthesizeWithRetry(opts.engine, text, cached);
+          const key = await sha256Hex(new TextEncoder().encode(`${engine.cacheKey}\n${text}`));
+          const cached = join(opts.cacheDir, `${key}.${engine.ext}`);
+          if (!existsSync(cached) || opts.force) await synthesizeWithRetry(engine, text, cached);
           copyFileSync(cached, out);
         } else {
-          await synthesizeWithRetry(opts.engine, text, out);
+          await synthesizeWithRetry(engine, text, out);
         }
         action.audioId = rel;
       });

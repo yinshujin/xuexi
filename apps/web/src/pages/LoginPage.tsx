@@ -64,7 +64,7 @@ export function LoginPage() {
       <Card className="w-full max-w-md">
         <div className="mb-4 text-center text-5xl">🧮</div>
         <h1 className="mb-1 text-center text-2xl font-bold">学数学</h1>
-        <p className="mb-6 text-center text-slate-500">北师大版 · 讲解课 + 专项练习</p>
+        <p className="mb-6 text-center text-slate-500">数学 · 语文 · 英语　讲解课 + 专项练习</p>
 
         {isNativeShell ? (
           <>

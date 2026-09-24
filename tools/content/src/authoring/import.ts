@@ -6,7 +6,7 @@ import type { LessonContext } from '../generate';
 import { draftDir, type Paths } from '../paths';
 import { type ContentState, updateLesson } from '../state';
 import { compileAuthored } from './compile';
-import { EXAMPLE_LESSON, FORMAT_SPEC } from './format';
+import { EXAMPLE_LESSON, FORMAT_SPEC, SUBJECT_RULES } from './format';
 
 export const AUTHORED_TEMPLATE = 'authored-1';
 
@@ -33,6 +33,7 @@ export function authorBrief(paths: Paths, state: ContentState, ctx: LessonContex
     buildGenerationRequirement(ctx),
     note,
     FORMAT_SPEC,
+    SUBJECT_RULES[ctx.book.subject],
     '## 示例（只示意格式，内容要按本课要求重写）',
     '```json',
     JSON.stringify({ ...EXAMPLE_LESSON, lessonId: ctx.lesson.id }, null, 2),

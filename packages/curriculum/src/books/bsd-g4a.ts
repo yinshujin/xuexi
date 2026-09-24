@@ -11,6 +11,7 @@ const B = 'bsd-g4a';
  */
 export const bsdG4a: Book = {
   id: B,
+  subject: 'math',
   edition: '北师大版',
   revision: '2014',
   grade: 4,

@@ -19,6 +19,7 @@ import { loadState } from '../src/state';
 
 const book: Book = {
   id: 'bsd-g4a',
+  subject: 'math',
   edition: '北师大版',
   revision: '2014',
   grade: 4,

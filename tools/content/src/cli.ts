@@ -41,7 +41,7 @@ const HELP = `用法：pnpm content <命令> [选项]
                                   输出写一节课所需的全部要求和"课件脚本"格式；
                                   --next 自动挑下一节还没有草稿的课
   import --lesson <课id> | --all  把 content/authored/<课id>.json 编译成草稿（自动验算算式）
-  tts [--lesson <课id>] [--engine say|edge] [--voice 名称] [--force] [--concurrency N] [--tts-cache 目录]
+  tts [--lesson <课id>] [--engine say|edge] [--voice 名称] [--force] [--voice-en 英文语音] [--concurrency N] [--tts-cache 目录]
                                   给没有语音的草稿配音：say = Mac 自带中文语音（免费、离线），
                                   edge = edge-tts（pip install edge-tts，免费、需联网）
 
@@ -104,6 +104,7 @@ async function main() {
       note: { type: 'string' },
       'tts-cache': { type: 'string' },
       'each-unit': { type: 'boolean' },
+      'voice-en': { type: 'string' },
     },
   });
   const paths = getPaths();
@@ -236,12 +237,15 @@ async function main() {
     }
     case 'tts': {
       const state = loadState(paths.state);
-      const engine =
-        values.engine === 'edge'
-          ? edgeEngine(values.voice)
-          : values.engine === 'say' || process.platform === 'darwin'
-            ? sayEngine(values.voice)
-            : null;
+      const useEdge = values.engine === 'edge';
+      const useSay = !useEdge && (values.engine === 'say' || process.platform === 'darwin');
+      const engine = useEdge ? edgeEngine(values.voice) : useSay ? sayEngine(values.voice) : null;
+      // English sentences in 英语 lessons: a native English voice.
+      const englishEngine = useEdge
+        ? edgeEngine(values['voice-en'] ?? 'en-US-AnaNeural', '-10%')
+        : useSay
+          ? sayEngine(values['voice-en'] ?? 'Samantha', 160)
+          : undefined;
       if (!engine) throw new Error('这台电脑不是 Mac，请加 --engine edge（先 pip install edge-tts）');
       const ids = values.lesson
         ? [values.lesson]
@@ -251,6 +255,7 @@ async function main() {
       for (const id of ids) {
         const n = await ttsDraft(paths, state, id, {
           engine,
+          englishEngine,
           force: values.force,
           log,
           cacheDir: values['tts-cache'],

@@ -17,7 +17,8 @@ export interface KpInput {
     title: string;
     minutes: number;
     focus: string;
-    remedies: ErrorTag[];
+    /** Math only: the error tags the technique fixes. */
+    remedies?: ErrorTag[];
   }>;
   practice: PracticeSpec[];
 }
@@ -38,7 +39,7 @@ export function kp(unitId: string, input: KpInput): KnowledgePoint {
       title: t.title,
       minutes: t.minutes,
       focus: t.focus,
-      remedies: t.remedies,
+      ...(t.remedies && t.remedies.length > 0 ? { remedies: t.remedies } : {}),
     })),
   ];
   const out: KnowledgePoint = {

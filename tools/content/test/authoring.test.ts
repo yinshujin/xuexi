@@ -145,3 +145,48 @@ describe('authoring pipeline', () => {
     expect(existsSync(join(paths.packs, ctx.lesson.id, 'v1', 'audio'))).toBe(true);
   });
 });
+
+describe('English narration', () => {
+  const withSay = (step: Record<string, unknown>) => ({
+    ...EXAMPLE_LESSON,
+    lessonId: 'x',
+    scenes: [
+      {
+        type: 'slide',
+        title: 't',
+        blocks: [{ id: 't1', kind: 'text', text: 'Hello' }],
+        script: [{ say: '跟我读。' }, step],
+      },
+    ],
+  });
+
+  it('marks lang "en" speech and rejects Chinese inside it', () => {
+    const ok = compileAuthored(withSay({ say: "Hello! I'm Danny.", lang: 'en' }), 'x');
+    expect(ok.errors).toEqual([]);
+    const actions = ok.lesson!.scenes[0].actions as Array<{ type: string; lang?: string }>;
+    expect(actions.filter((a) => a.type === 'speech').map((a) => a.lang)).toEqual([undefined, 'en']);
+    expect(compileAuthored(withSay({ say: 'Hello 你好', lang: 'en' }), 'x').errors[0]).toContain('有中文');
+    expect(compileAuthored(withSay({ say: 'Bonjour', lang: 'fr' }), 'x').errors[0]).toContain('lang');
+  });
+
+  it('reads lang "en" lines with the English voice', async () => {
+    const paths = getPaths(mkdtempSync(join(tmpdir(), 'xuexi-en-')));
+    const state = loadState(paths.state);
+    const ctx = allLessons().find((l) => l.lesson.id === 'bsd-g4a.u3.mul-3x2.lecture') as LessonContext;
+    mkdirSync(join(paths.content, 'authored'), { recursive: true });
+    writeFileSync(authoredFile(paths, ctx.lesson.id), JSON.stringify({ ...withSay({ say: 'Good morning!', lang: 'en' }), lessonId: ctx.lesson.id }));
+    expect((await importAuthored(paths, state, ctx.lesson.id)).errors).toEqual([]);
+    const voices: string[] = [];
+    const engine = (name: string): TtsEngine => ({
+      name,
+      ext: 'mp3',
+      cacheKey: name,
+      synthesize: async (text, out) => {
+        voices.push(`${name}:${text}`);
+        writeFileSync(out, 'ID3');
+      },
+    });
+    await ttsDraft(paths, state, ctx.lesson.id, { engine: engine('zh'), englishEngine: engine('en') });
+    expect(voices.sort()).toEqual(['en:Good morning!', 'zh:跟我读。']);
+  });
+});

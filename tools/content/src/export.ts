@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, readFileSync, readdirSync, statSync, writeFileSy
 import { basename, dirname, join, relative } from 'node:path';
 import { zipSync, type Zippable } from 'fflate';
 import { assertCatalog, BUNDLE_FORMAT, type BundleIndex, type Catalog, type CatalogEntry } from '@xuexi/course-pack';
-import { BOOKS } from '@xuexi/curriculum';
+import { BOOKS, SUBJECT_LABEL } from '@xuexi/curriculum';
 import type { Paths } from './paths';
 
 export interface ExportOptions {
@@ -47,7 +47,7 @@ function defaultTitle(o: ExportOptions, lessons: CatalogEntry[]): string {
   const book = BOOKS.find((b) => b.id === o.book);
   if (!book) return '全部课程';
   const unit = o.unit ? book.units.find((u) => u.id === (/^\d+$/.test(o.unit!) ? `${book.id}.u${o.unit}` : o.unit)) : undefined;
-  const name = `${'一二三四五六'[book.grade - 1]}年级${book.term}册`;
+  const name = `${SUBJECT_LABEL[book.subject]} ${'一二三四五六'[book.grade - 1]}年级${book.term}册`;
   return unit ? `${name} 第${unit.index}单元 ${unit.title}` : name;
 }
 

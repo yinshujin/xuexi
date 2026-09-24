@@ -66,11 +66,13 @@ describe('ids', () => {
 describe('books', () => {
   it('has the expected books', () => {
     expect(BOOKS.map((b) => b.id)).toEqual(['bsd-g2a', 'bsd-g4a']);
+    expect(BOOKS.map((b) => b.subject)).toEqual(['math', 'math']);
     expect(getBook('bsd-g2a')?.grade).toBe(2);
     expect(getBook('bsd-g4a')?.grade).toBe(4);
     expect(getBook('nope')).toBeUndefined();
     for (const b of BOOKS) {
-      expect(b.edition).toBe('北师大版');
+      if (b.subject === 'math') expect(b.edition).toBe('北师大版');
+      if (b.subject === 'chinese') expect(b.edition).toBe('统编版');
       expect(b.sourceNote.length).toBeGreaterThan(50);
       expect(b.units.length).toBeGreaterThan(0);
       for (const u of b.units) expect(u.knowledgePoints.length, u.id).toBeGreaterThan(0);
@@ -107,9 +109,13 @@ describe('knowledge points', () => {
     }
   });
 
-  it('technique remedies are non-empty valid ERROR_TAGS', () => {
-    for (const { lesson } of allLessons()) {
+  it('math technique remedies are non-empty valid ERROR_TAGS', () => {
+    for (const { book, lesson } of allLessons()) {
       if (lesson.kind !== 'technique') continue;
+      if (book.subject !== 'math') {
+        expect(lesson.remedies, lesson.id).toBeUndefined();
+        continue;
+      }
       expect(lesson.remedies?.length ?? 0, lesson.id).toBeGreaterThan(0);
       for (const tag of lesson.remedies ?? [])
         expect(isErrorTag(tag), `${lesson.id}: ${tag}`).toBe(true);

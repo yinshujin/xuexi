@@ -39,7 +39,7 @@ https://你的域名/api/*             同步接口：边缘函数 edge-function
 4. 再做下面第 4–7 步（KV、环境变量、域名、检查），改完 KV 或环境变量后再运行一次这个工作流。
 
 **自动更新**：之后每次代码推送到默认分支，流程自动进行：CI 测试通过 → 构建并签名新 APK（发布为 GitHub Release `app-latest`）→ 部署到 EdgeOne（带上线上已有课程和最新 APK）。
-iPhone、Mac、Windows 上的网页版打开时自动更新；安卓 APK 里会出现"App 有新版本啦 → 下载安装"的提示（从你的网站 `/download/xuexi.apk` 下载，国内也能下）。
+iPhone、Mac、Windows 上的网页版打开时自动更新；安卓 APK 里会出现"App 有新版本啦 → 下载安装"的提示（从 GitHub Releases 的 app-latest 下载；APK 内置了全部课程，约 100 MB，超过 EdgeOne 单个文件的大小限制，所以不再放到网站上）。
 
 课程发布：在 Mac 上 `pnpm content publish --target edgeone`（会带上最新课程和最新 APK）。
 

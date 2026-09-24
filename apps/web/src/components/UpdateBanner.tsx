@@ -19,7 +19,8 @@ async function fetchVersion(url: string): Promise<Version | null> {
 /**
  * In the APK / desktop shells the app is bundled, so it can fall behind the
  * website. Compare the bundled version.json with the site's and offer the new
- * APK (published by CI at <site>/download/xuexi.apk). The PWA updates itself.
+ * APK (the GitHub release "app-latest"; the APK with built-in lessons is too big
+ * for the site). The PWA updates itself.
  */
 export function UpdateBanner() {
   const [apkUrl, setApkUrl] = useState<string | null>(null);
@@ -30,13 +31,8 @@ export function UpdateBanner() {
       if (!/^https?:/.test(base)) return;
       const [mine, live] = await Promise.all([fetchVersion('./version.json'), fetchVersion(new URL('version.json', base).toString())]);
       if (!mine || !live || mine.build === live.build) return;
-      const apk = new URL('download/xuexi.apk', base).toString();
-      try {
-        const head = await fetch(apk, { method: 'HEAD', cache: 'no-store' });
-        if (head.ok) setApkUrl(apk);
-      } catch {
-        /* offline or no APK published: no prompt */
-      }
+      const repo = import.meta.env.VITE_REPO_URL as string | undefined;
+      if (repo) setApkUrl(`${repo}/releases/download/app-latest/xuexi.apk`);
     })();
   }, []);
   if (!apkUrl) return null;

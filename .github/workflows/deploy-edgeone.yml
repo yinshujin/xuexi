@@ -3,8 +3,9 @@ name: Deploy to EdgeOne
 # Builds the web app + sync API and deploys it to EdgeOne Pages (free plan).
 # Runs automatically after the Android APK workflow succeeds (i.e. after every
 # code change that passed CI), or manually. Courses already published on the site
-# are kept (downloaded from the live site first), and the latest APK is served at
-# /download/xuexi.apk for the in-app update prompt.
+# are kept (downloaded from the live site first). The APK is not put on the site:
+# with the built-in lessons it is ~100 MB, over the EdgeOne file size limit; the
+# app links to the GitHub release (app-latest) instead.
 #
 # One-time setup (see deploy/edgeone/README.md):
 #   Secret   EDGEONE_API_TOKEN   EdgeOne Pages console -> API Token
@@ -66,13 +67,6 @@ jobs:
       - name: Build site
         if: steps.setup.outputs.ready == 'true'
         run: pnpm content publish --target dir --allow-empty
-      - name: Add the latest APK (for the in-app update prompt)
-        if: steps.setup.outputs.ready == 'true'
-        run: |
-          mkdir -p content/site/download
-          curl -fsSL -o content/site/download/xuexi.apk \
-            "https://github.com/${{ github.repository }}/releases/download/app-latest/xuexi.apk" \
-            || { rm -f content/site/download/xuexi.apk; echo "::notice::No app-latest release yet; the site will not offer an APK download."; }
       - name: Keep courses already published on the live site
         if: steps.setup.outputs.ready == 'true' && vars.SITE_URL != ''
         run: node deploy/edgeone/fetch-live-packs.mjs "${{ vars.SITE_URL }}" content/site

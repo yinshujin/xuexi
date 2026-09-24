@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.cache/
+*.log
+.env
+.env.*
+!.env.example
+coverage/
+# content pipeline outputs (audio/images/packs are large; regenerate or publish)
+content/work/
+content/out/
+content/site/
+# tauri
+shells/tauri/src-tauri/target/
+shells/tauri/src-tauri/gen/
+content/openmaic.env
+content/publish.env

@@ -1,0 +1,17 @@
+{
+  "name": "@xuexi/tauri-shell",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri",
+    "dev": "tauri dev",
+    "build": "tauri build",
+    "android:init": "tauri android init --ci",
+    "android:build": "tauri android build --apk --ci",
+    "icons": "tauri icon ../../apps/web/public/icon-1024.png"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2.11.5"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "name": "xuexi",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.33.0",
+  "engines": { "node": ">=22.12" },
+  "scripts": {
+    "dev": "pnpm --filter @xuexi/web dev",
+    "build": "pnpm --filter @xuexi/web build",
+    "test": "vitest run",
+    "typecheck": "pnpm -r --parallel typecheck",
+    "content": "tsx tools/content/src/cli.ts",
+    "format": "prettier . --write",
+    "check": "prettier . --check"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "prettier": "^3.6.2",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

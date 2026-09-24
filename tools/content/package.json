@@ -1,0 +1,12 @@
+{
+  "name": "@xuexi/content",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "typecheck": "tsc -p .", "test": "vitest run" },
+  "dependencies": {
+    "@xuexi/shared": "workspace:*",
+    "@xuexi/curriculum": "workspace:*",
+    "@xuexi/course-pack": "workspace:*"
+  }
+}

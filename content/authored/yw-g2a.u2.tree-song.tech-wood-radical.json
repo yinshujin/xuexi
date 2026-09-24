@@ -1,0 +1,96 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "yw-g2a.u2.tree-song.tech-wood-radical",
+  "title": "木字旁：看偏旁猜字义",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "方法：看偏旁猜字义",
+      "blocks": [
+        {"id": "h1", "kind": "heading", "text": "看偏旁，猜字义"},
+        {"id": "t1", "kind": "text", "text": "带木字旁的字，大多和树木、木头有关。"},
+        {"id": "c1", "kind": "cards", "items": [
+          {"id": "c1a", "text": "杨 yáng", "color": "green"},
+          {"id": "c1b", "text": "松 sōng", "color": "green"},
+          {"id": "c1c", "text": "椅 yǐ", "color": "orange"},
+          {"id": "c1d", "text": "桥 qiáo", "color": "orange"}
+        ]}
+      ],
+      "script": [
+        {"say": "小朋友，遇到不认识的字，有一个好办法：看偏旁，猜字义。今天我们看木字旁。"},
+        {"spotlight": "t1"},
+        {"say": "带木字旁的字，大多和树木、木头有关。"},
+        {"laser": "c1a"},
+        {"say": "杨，松，是树的名字。"},
+        {"laser": "c1c"},
+        {"say": "椅，椅子常常是用木头做的。"},
+        {"laser": "c1d"},
+        {"say": "桥，很久以前的桥，很多是用木头搭的，所以也是木字旁。"}
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "示范：加一加",
+      "blocks": [
+        {"id": "h1", "kind": "heading", "text": "加一加，认新字"},
+        {"id": "t1", "kind": "text", "text": "例1：木 ＋ 公 ＝ 松（sōng）"},
+        {"id": "t2", "kind": "text", "text": "例2：木 ＋ 白 ＝ 柏（bǎi）"}
+      ],
+      "script": [
+        {"say": "再教你一个识字方法：加一加。用学过的字，加上木字旁，就变成新字。"},
+        {"spotlight": "t1"},
+        {"say": "第一个例子：木加公，就是松。松树的松，四季常绿。"},
+        {"spotlight": "t2"},
+        {"say": "第二个例子：木加白，就是柏，松柏的柏，读第三声。"},
+        {"boardClear": true},
+        {"board": [{"text": "木 ＋ 同 ＝ 桐（梧桐）"}, {"text": "木 ＋ 风 ＝ 枫（枫树）"}]},
+        {"say": "我们再加两个：木加同，是梧桐的桐；木加风，是枫树的枫。"},
+        {"boardClose": true}
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "对比错误 + 学法口诀",
+      "blocks": [
+        {"id": "h1", "kind": "heading", "text": "这一笔，写对了吗？"},
+        {"id": "t1", "kind": "text", "text": "木字旁：横、竖、撇、点（不是捺）"},
+        {"id": "c1", "kind": "cards", "items": [
+          {"id": "c1a", "text": "木字站左边，", "color": "blue"},
+          {"id": "c1b", "text": "捺儿变成点，", "color": "green"},
+          {"id": "c1c", "text": "看见木字旁，", "color": "orange"},
+          {"id": "c1d", "text": "多和树有关。", "color": "purple"}
+        ]}
+      ],
+      "script": [
+        {"spotlight": "t1"},
+        {"say": "有的小朋友写松字，左边的木写了一个长长的捺，把右边的公挤得没地方了。"},
+        {"say": "记住：木在左边做木字旁时，第四笔是点，不是捺。"},
+        {"say": "看看树林的林，左边的木写点，右边的木还是捺，一左一右不一样。"},
+        {"say": "我们编个口诀，跟老师读：木字站左边，捺儿变成点，看见木字旁，多和树有关。"},
+        {"spotlight": "c1a"},
+        {"say": "木字站左边，捺儿变成点：写字的方法。"},
+        {"spotlight": "c1c"},
+        {"say": "看见木字旁，多和树有关：这是猜字义的方法，想一想，它和树木、木头有什么关系。"}
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先来判断一下。",
+      "questions": [
+        {"question": "“林”字左边的木，最后一笔写成点。", "options": ["对", "错"], "answer": [0], "analysis": "对。木在左边做木字旁，捺变成点。"},
+        {"question": "带木字旁的字，大多和鸟有关。", "options": ["对", "错"], "answer": [1], "analysis": "错。带木字旁的字大多和树木、木头有关。"}
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择与填空",
+      "intro": "再来选一选、填一填。",
+      "questions": [
+        {"question": "木 ＋ 公 ＝（　）", "options": ["松", "柏", "桐"], "answer": [0], "analysis": "木加公是松。"},
+        {"question": "（　）树秋天叶儿红。", "options": ["枫", "风", "凤"], "answer": [0], "analysis": "枫树是树，所以是木字旁的枫。"},
+        {"question": "下面哪个字不是木字旁？", "options": ["杨", "桥", "睛"], "answer": [2], "analysis": "睛是目字旁，和眼睛有关。"}
+      ]
+    }
+  ]
+}

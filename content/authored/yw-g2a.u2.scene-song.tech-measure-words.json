@@ -1,0 +1,92 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "yw-g2a.u2.scene-song.tech-measure-words",
+  "title": "数量词搭配小妙招",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "方法：看样子、看种类",
+      "blocks": [
+        {"id": "h1", "kind": "heading", "text": "选量词，看两样"},
+        {"id": "c1", "kind": "cards", "items": [
+          {"id": "c1a", "text": "看样子：大又平用“片”", "color": "blue"},
+          {"id": "c1b", "text": "看种类：船用“艘”", "color": "orange"}
+        ]},
+        {"id": "l1", "kind": "bullets", "items": ["一群：很多聚在一起", "一座：大桥、花园", "一面：红旗、镜子"]}
+      ],
+      "script": [
+        {"say": "小朋友，一只、一片、一艘，这些叫数量词。怎么选对呢？老师教你一个小妙招：看两样。"},
+        {"laser": "c1a"},
+        {"say": "第一，看样子。又大又平、铺开一大片的，用片，比如一片沙滩、一片草地。"},
+        {"laser": "c1b"},
+        {"say": "第二，看种类。有些量词是专门给某一类东西用的，比如艘，专门说船，一艘军舰。"},
+        {"spotlight": "l1"},
+        {"say": "还有：很多聚在一起用群，一群鸟；又大又稳的桥和花园用座；红旗、镜子用面。"}
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "示范两个例子",
+      "blocks": [
+        {"id": "h1", "kind": "heading", "text": "老师示范配一配"},
+        {"id": "t1", "kind": "text", "text": "例1：一（　）石桥　→　看种类：桥用“座”"},
+        {"id": "t2", "kind": "text", "text": "例2：一（　）飞鸟　→　很多只：用“群”"}
+      ],
+      "script": [
+        {"spotlight": "t1"},
+        {"say": "第一个例子：一什么石桥？石桥又大又稳地立在河上，我们说一座石桥。课文里还说一孔石桥，因为桥下有桥洞。"},
+        {"say": "一座石桥，一孔石桥，都可以。"},
+        {"spotlight": "t2"},
+        {"say": "第二个例子：一什么飞鸟？如果只有一只，就说一只飞鸟。"},
+        {"say": "可是天上飞着好多好多鸟，聚在一起，就要说一群飞鸟。"}
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "对比错误 + 学法口诀",
+      "blocks": [
+        {"id": "h1", "kind": "heading", "text": "什么都用“个”？"},
+        {"id": "t1", "kind": "text", "text": "✗ 一个军舰　一个石桥　→　✓ 一艘军舰　一座石桥"},
+        {"id": "c1", "kind": "cards", "items": [
+          {"id": "c1a", "text": "量词别乱用，", "color": "blue"},
+          {"id": "c1b", "text": "先看啥样子，", "color": "green"},
+          {"id": "c1c", "text": "再看哪一类，", "color": "orange"},
+          {"id": "c1d", "text": "配对才准确。", "color": "purple"}
+        ]}
+      ],
+      "script": [
+        {"spotlight": "t1"},
+        {"say": "有的小朋友说话，什么都用个：一个军舰，一个石桥。听起来不够准确。"},
+        {"say": "军舰是船，要用艘；石桥又大又稳，要用座。换一换，一艘军舰，一座石桥，是不是好听多了？"},
+        {"say": "我们把方法编成口诀，跟老师读：量词别乱用，先看啥样子，再看哪一类，配对才准确。"},
+        {"spotlight": "c1a"},
+        {"say": "量词别乱用：不要什么都用个。"},
+        {"spotlight": "c1b"},
+        {"say": "先看啥样子：大又平用片，很多聚一起用群。"},
+        {"spotlight": "c1c"},
+        {"say": "再看哪一类：船用艘，桥用座，旗用面。"},
+        {"spotlight": "c1d"},
+        {"say": "配对才准确：这样说话又准又美。"}
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先来判断一下。",
+      "questions": [
+        {"question": "说“一个军舰”最准确。", "options": ["对", "错"], "answer": [1], "analysis": "错。军舰是船，说一艘军舰更准确。"},
+        {"question": "“一座石桥”这个说法是正确的。", "options": ["对", "错"], "answer": [0], "analysis": "对。桥又大又稳，可以用座。"}
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择与填空",
+      "intro": "再来选一选、填一填。",
+      "questions": [
+        {"question": "一（　）红旗", "options": ["面", "艘", "只"], "answer": [0], "analysis": "旗子用面，一面红旗。"},
+        {"question": "一（　）帆船", "options": ["条", "片", "座"], "answer": [0], "analysis": "课文里说一条帆船。"},
+        {"question": "天上飞着好多鸟，是一（　）飞鸟。", "options": ["群", "面", "艘"], "answer": [0], "analysis": "很多只鸟聚在一起，用群。"}
+      ]
+    }
+  ]
+}

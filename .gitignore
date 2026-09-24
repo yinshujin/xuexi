@@ -15,3 +15,4 @@ shells/tauri/src-tauri/target/
 shells/tauri/src-tauri/gen/
 content/openmaic.env
 content/publish.env
+.signing/

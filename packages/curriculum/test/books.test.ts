@@ -127,14 +127,14 @@ describe('ids', () => {
 
 describe('books', () => {
   it('has the expected books', () => {
-    expect(BOOKS.map((b) => b.id)).toEqual(['bsd-g2a', 'bsd-g4a', 'yw-g2a', 'yw-g4a', 'en-g2a', 'en-g4a']);
-    expect(BOOKS.map((b) => b.subject)).toEqual(['math', 'math', 'chinese', 'chinese', 'english', 'english']);
+    expect(BOOKS.map((b) => b.id)).toEqual(['bsd-g2a', 'bsd-g4a', 'yw-g2a', 'yw-g4a', 'en-g2a', 'en-g4a', 'xz-g4a']);
+    expect(BOOKS.map((b) => b.subject)).toEqual(['math', 'math', 'chinese', 'chinese', 'english', 'english', 'writing']);
     expect(getBook('bsd-g2a')?.grade).toBe(2);
     expect(getBook('bsd-g4a')?.grade).toBe(4);
     expect(getBook('nope')).toBeUndefined();
     for (const b of BOOKS) {
       if (b.subject === 'math') expect(b.edition).toBe('北师大版');
-      if (b.subject === 'chinese') expect(b.edition).toBe('统编版');
+      if (b.subject === 'chinese' || b.subject === 'writing') expect(b.edition).toBe('统编版');
       expect(b.sourceNote.length).toBeGreaterThan(50);
       expect(b.units.length).toBeGreaterThan(0);
       for (const u of b.units) expect(u.knowledgePoints.length, u.id).toBeGreaterThan(0);
@@ -231,6 +231,7 @@ describe('语文 / 英语 practice banks', () => {
     'en4.words': 'en-g4a',
     'g2.concepts': 'bsd-g2a',
     'g4.concepts': 'bsd-g4a',
+    'xz4.skills': 'xz-g4a',
   };
   it('every bank knowledge point exists in its book and every book knowledge point has practice', () => {
     for (const [gid, bookId] of Object.entries(BANK_BOOK)) {
@@ -253,8 +254,8 @@ describe('语文 / 英语 practice banks', () => {
     }
   });
 
-  it('数学 concept banks: every bank knowledge point links to its routine, 拔高 and 创新 items', () => {
-    for (const [gid, bookId] of [['g2.concepts', 'bsd-g2a'], ['g4.concepts', 'bsd-g4a']] as const) {
+  it('数学 concept and 写作 banks: every bank knowledge point links to its routine, 拔高 and 创新 items', () => {
+    for (const [gid, bookId] of [['g2.concepts', 'bsd-g2a'], ['g4.concepts', 'bsd-g4a'], ['xz4.skills', 'xz-g4a']] as const) {
       const kps = getGenerator(gid).variants.filter((v) => v !== 'mixed' && !v.includes('#'));
       for (const v of kps) {
         const kp = findKnowledgePoint(`${bookId}.${v}`)!.kp;

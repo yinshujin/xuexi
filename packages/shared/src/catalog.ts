@@ -69,6 +69,16 @@ export const ERROR_TAGS = {
   polyphone: '多音字的读音和意思没对上',
   'similar-char': '形近字、同音字混淆',
   'word-usage': '词语意思或搭配用错',
+  // ---- 写作（四年级 xz4.skills） ----
+  'topic-off': '审题不清，选的材料或写的内容不合题目要求',
+  'no-detail': '写得笼统，缺少具体的动作、语言、神态、感受等细节',
+  'order-mixed': '顺序乱了（事情经过、段落、提纲或介绍的先后弄错）',
+  'method-confused': '写作方法认错（描写方法、修辞、说明方法混淆）',
+  'structure-weak': '开头结尾、过渡句、首尾呼应没安排好',
+  'revise-wrong': '病句没改对或修改符号用错',
+  'letter-format': '书信或信封的格式写错',
+  'imagine-off': '想象不合理（和人物的本领、性格或事情的道理不符）',
+  'material-copy': '照抄资料，没有挑选、没有改成自己的话',
   // ---- English ----
   'en-meaning': '英语单词意思记混',
   'en-spelling': '英语单词拼写错误',
@@ -336,6 +346,25 @@ export const GENERATORS = [
     grade: 4,
     title: '英语单词与句型',
     errorTags: ['en-meaning', 'en-spelling', 'en-sentence'],
+  },
+  // ---------------- 写作 (item banks) ----------------
+  {
+    id: 'xz4.skills',
+    grade: 4,
+    title: '写作方法（审题、描写、顺序、修改、说明方法、书信格式）',
+    errorTags: [
+      'topic-off',
+      'no-detail',
+      'order-mixed',
+      'method-confused',
+      'structure-weak',
+      'revise-wrong',
+      'letter-format',
+      'imagine-off',
+      'material-copy',
+      'word-usage',
+      'reasoning',
+    ],
   },
 ] as const satisfies readonly GeneratorInfo[];
 

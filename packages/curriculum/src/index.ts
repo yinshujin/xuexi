@@ -5,13 +5,14 @@ import { ywG2a } from './books/yw-g2a';
 import { ywG4a } from './books/yw-g4a';
 import { enG2a } from './books/en-g2a';
 import { enG4a } from './books/en-g4a';
+import { xzG4a } from './books/xz-g4a';
 
 export type { Book, KnowledgePoint, LessonSpec, PracticeSpec, Subject, Unit } from './types';
 export { SUBJECT_LABEL } from './types';
 export { buildGenerationRequirement, lessonTemplateVersion } from './prompt';
 export type { LessonContext } from './prompt';
 
-export const BOOKS: readonly Book[] = [bsdG2a, bsdG4a, ywG2a, ywG4a, enG2a, enG4a];
+export const BOOKS: readonly Book[] = [bsdG2a, bsdG4a, ywG2a, ywG4a, enG2a, enG4a, xzG4a];
 
 export interface KnowledgePointRef {
   book: Book;

@@ -8,6 +8,7 @@ import { MATH_G4A } from '../src/banks/math-g4a';
 import { YW_G2A } from '../src/banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../src/banks/yw-g4a';
 import { YW_G4A_POLY } from '../src/banks/yw-g4a-poly';
+import { XZ_G4A } from '../src/banks/xz-g4a';
 
 /**
  * Data rules for the 语文 / 英语 item banks. The generators assume these hold
@@ -154,5 +155,35 @@ describe('数学概念题 banks', () => {
     checkItems('math-g4a', 'g4.concepts', MATH_G4A.items, false);
     expect(MATH_G4A.polyphones).toEqual([]);
     checkCounts(MATH_G4A.items);
+  });
+});
+
+describe('写作 banks', () => {
+  /**
+   * Per knowledge point: at least 20 routine items (6+ per level) plus 4+ 拔高 and 4+ 创新; a unit's
+   * two knowledge points together give the 单元闯关 papers about 40 distinct routine questions.
+   */
+  it('xz-g4a', () => {
+    checkItems('xz-g4a', 'xz4.skills', XZ_G4A.items, false);
+    expect(XZ_G4A.polyphones).toEqual([]);
+    const kps = [...new Set(XZ_G4A.items.map((it) => it.kp))];
+    expect(kps.length).toBe(16);
+    for (const kp of kps) {
+      const of = XZ_G4A.items.filter((it) => it.kp === kp);
+      const routine = of.filter((it) => !it.tier);
+      expect(routine.length, `${kp}: routine items`).toBeGreaterThanOrEqual(20);
+      for (const level of [1, 2, 3]) expect(routine.filter((it) => it.level === level).length, `${kp}: level ${level}`).toBeGreaterThanOrEqual(6);
+      for (const tier of ['stretch', 'creative'])
+        expect(of.filter((it) => it.tier === tier).length, `${kp}: ${tier} items`).toBeGreaterThanOrEqual(4);
+    }
+    for (let u = 1; u <= 8; u++) {
+      const unit = XZ_G4A.items.filter((it) => it.kp.startsWith(`u${u}.`) && !it.tier);
+      expect(new Set(unit.map((it) => it.kp)).size, `u${u}`).toBe(2);
+      expect(new Set(unit.map((it) => it.prompt)).size, `u${u}: distinct routine prompts`).toBeGreaterThanOrEqual(40);
+    }
+    // The right answer should not give itself away as the one long option: at most two thirds of the
+    // items may have the answer as their longest option (long but vague or off-topic distractors).
+    const longest = XZ_G4A.items.filter((it) => [...it.answer].length > Math.max(...it.wrong.map(([w]) => [...w].length)));
+    expect(longest.length / XZ_G4A.items.length).toBeLessThan(2 / 3);
   });
 });

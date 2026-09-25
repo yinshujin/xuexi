@@ -109,7 +109,8 @@ describe('连连看 / 拼一拼', () => {
     for (const u of units) {
       const papers = unitPapers(u.id);
       const kinds = new Set(papers.flatMap((p) => p.items.flatMap((it) => (it.game ? [it.game.kind] : []))));
-      if (papers[0].subject !== 'math') {
+      // 写作 papers are writing-method questions only (the word games need a 词语听写表 or word list).
+      if (papers[0].subject === 'chinese' || papers[0].subject === 'english') {
         expect([...kinds], u.id).toEqual(expect.arrayContaining(['match', 'order']));
         for (const p of papers) expect(p.items.some((it) => it.game), p.id).toBe(true);
       }

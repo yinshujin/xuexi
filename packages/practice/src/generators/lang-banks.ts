@@ -7,6 +7,7 @@ import { YW_G4A_ITEMS } from '../banks/yw-g4a';
 import { YW_G4A_POLY } from '../banks/yw-g4a-poly';
 import { YW_G2A_SOUNDALIKE_WORDS, YW_G2A_WORDS } from '../banks/yw-g2a-words';
 import { YW_G4A_SOUNDALIKE_WORDS, YW_G4A_WORDS } from '../banks/yw-g4a-words';
+import { XZ_G4A } from '../banks/xz-g4a';
 import { dictationGenerator } from './dictation';
 import { chineseWordsGenerator, englishGenerator, polyphoneGenerator } from './lang';
 
@@ -27,3 +28,6 @@ export const yw4Dictation = dictationGenerator('yw4.dictation', YW_G4A_WORDS, YW
  */
 export const g2Concepts = chineseWordsGenerator('g2.concepts', MATH_G2A);
 export const g4Concepts = chineseWordsGenerator('g4.concepts', MATH_G4A);
+
+/** 写作 四年级上册: 写作方法选择题（审题、描写、顺序、修改、说明方法、书信格式）. */
+export const xz4Skills = chineseWordsGenerator('xz4.skills', XZ_G4A);

@@ -99,4 +99,5 @@ export { YW_G2A_SOUNDALIKE_WORDS } from './banks/yw-g2a-words';
 export { YW_G4A_SOUNDALIKE_WORDS } from './banks/yw-g4a-words';
 export { EN_G2A } from './banks/en-g2a';
 export { EN_G4A } from './banks/en-g4a';
+export { XZ_G4A } from './banks/xz-g4a';
 export type { EnglishBank, EnWord, ChoiceItem } from './banks/types';

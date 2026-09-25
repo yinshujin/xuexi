@@ -23,7 +23,7 @@ describe('generator options', () => {
 describe('property test split', () => {
   it('every generator is covered by one of the properties.*.test.ts files', () => {
     const covered = (id: string) =>
-      /^g[24]\./.test(id) || id.endsWith('.challenge') || /^(yw|en)\d\./.test(id);
+      /^g[24]\./.test(id) || id.endsWith('.challenge') || /^(yw|en|xz)\d\./.test(id);
     expect(ALL_GENERATORS.map((g) => g.id).filter((id) => !covered(id))).toEqual([]);
   });
 });

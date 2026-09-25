@@ -210,6 +210,9 @@ importers:
       '@xuexi/curriculum':
         specifier: workspace:*
         version: link:../../packages/curriculum
+      '@xuexi/practice':
+        specifier: workspace:*
+        version: link:../../packages/practice
       '@xuexi/shared':
         specifier: workspace:*
         version: link:../../packages/shared

@@ -1,0 +1,67 @@
+name: Word audio
+
+# Every English word / phrase of the 英语 banks (en-US-AnaNeural, the picture
+# books' voice) and every 语文 听写 word (zh-CN-XiaoxiaoNeural), spoken one by
+# one with edge-tts and zipped as xuexi-word-audio.zip, published as the
+# `word-audio` release. The Android and desktop builds download it and
+# `pnpm content builtin` puts it into the app (单元闯关 听音选择 and 拼写).
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, 'claude/**']
+    paths:
+      - packages/practice/src/banks/en-*.ts
+      - packages/practice/src/banks/yw-*-words.ts
+      - packages/course-pack/src/word-audio.ts
+      - tools/content/src/word-audio.ts
+      - tools/content/scripts/edge_tts_words.py
+      - .github/workflows/word-audio.yml
+
+concurrency:
+  group: word-audio
+  cancel-in-progress: true
+
+jobs:
+  words:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pip install edge-tts==7.2.8
+      # Clips keyed by voice + text: only new or changed words are synthesized again.
+      - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+        with:
+          path: content/tts-cache
+          key: word-tts-${{ github.run_id }}
+          restore-keys: word-tts-
+      - name: Speak every word
+        run: pnpm content word-audio --engine edge --tts-cache content/tts-cache --out dist/xuexi-word-audio.zip
+      - name: Release notes
+        run: |
+          set -euo pipefail
+          unzip -p dist/xuexi-word-audio.zip word-audio.json | jq -r '
+            "单元闯关「听音选择」「拼写」用的单词语音：英语课本单词 \([.words | keys[] | select(startswith("en:"))] | length) 个（\(.voices.en)），语文听写词语 \([.words | keys[] | select(startswith("zh:"))] | length) 个（\(.voices.zh)）。",
+            "",
+            "已经内置在最新的 App 里（Android / 桌面版构建时自动下载）；网页版没有单词语音，听音选择会自动跳过。"' > dist/release.md
+          cat dist/release.md
+      - name: Move the word-audio tag to this commit
+        run: |
+          git tag -f word-audio HEAD
+          git push -f origin refs/tags/word-audio
+      - name: Publish as the word-audio release
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2
+        with:
+          tag_name: word-audio
+          name: 单词语音包（自动生成）
+          body_path: dist/release.md
+          files: dist/xuexi-word-audio.zip
+          overwrite_files: true
+          make_latest: false

@@ -106,7 +106,7 @@ describe('连连看 / 拼一拼', () => {
       for (const p of unitPapers(u.id)) {
         const kinds = p.items.flatMap((it) => (it.game ? [it.game.kind] : []));
         const subject = p.subject;
-        if (subject !== 'math') expect(kinds.sort(), p.id).toEqual(['match', 'order']);
+        if (subject !== 'math') expect(kinds, p.id).toEqual(expect.arrayContaining(['match', 'order']));
         else expect(kinds.every((k) => k === 'match'), p.id).toBe(true);
       }
     }
@@ -124,7 +124,7 @@ describe('连连看 / 拼一拼', () => {
             expect(new Set(g.pairs.map((x) => x[0])).size, p.id).toBe(g.pairs.length);
             expect(new Set(g.pairs.map((x) => x[1])).size, p.id).toBe(g.pairs.length);
             expect([...g.order].sort((a, b) => a - b)).toEqual(g.pairs.map((_, i) => i));
-          } else {
+          } else if (g.kind === 'order') {
             // The answer can be built from the tiles, and the tiles are not already in order.
             const pool = [...g.tiles];
             for (const t of g.answer) {

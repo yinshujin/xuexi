@@ -59,6 +59,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p bundles
+          # 单元闯关 听音选择 / 拼写: every textbook word spoken (the word-audio release).
+          gh release download word-audio --repo "$GITHUB_REPOSITORY" --pattern 'xuexi-word-audio.zip' --dir bundles ||
+            echo "::notice::No word-audio release yet; building without word audio (听音选择 is left out)."
           if gh release download courses-latest --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles &&
             { gh release download books-sample --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles ||
               echo "::notice::No books-sample release yet; building without built-in picture books."; }; then

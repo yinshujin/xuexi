@@ -1,19 +1,31 @@
 import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { unzipSync } from 'fflate';
-import { isNewerEntry, readBundle, type BookEntry, type Catalog, type CatalogEntry } from '@xuexi/course-pack';
+import {
+  isNewerEntry,
+  isWordAudioZip,
+  readBundle,
+  readWordAudioPack,
+  WORD_AUDIO_MANIFEST,
+  type BookEntry,
+  type Catalog,
+  type CatalogEntry,
+} from '@xuexi/course-pack';
 
 export interface BuiltinResult {
   lessons: CatalogEntry[];
   books: BookEntry[];
   bytes: number;
   skipped: string[];
+  /** Words in the built-in word audio pack (0 without one). */
+  wordAudio: number;
 }
 
 /**
  * Unpack course-bundle zips into a directory the app ships with
  * (apps/web/public/builtin → dist/builtin): packs/… plus catalog.json, and
- * picture books under books/… plus books.json. Every file is verified against
+ * picture books under books/… plus books.json, and the word audio pack
+ * (xuexi-word-audio.zip) under word-audio/. Every file is verified against
  * its manifest; the directory is replaced. Private books (the family's own
  * subscriptions) are never built into the app.
  */
@@ -21,8 +33,16 @@ export async function writeBuiltin(zips: string[], outDir: string): Promise<Buil
   const lessons: Record<string, { entry: CatalogEntry; files: Record<string, Uint8Array>; manifest: Uint8Array }> = {};
   const skipped: string[] = [];
   const books: Record<string, { entry: BookEntry; files: Record<string, Uint8Array>; manifest: Uint8Array }> = {};
+  let wordAudio: Awaited<ReturnType<typeof readWordAudioPack>> | null = null;
   for (const zip of zips) {
-    const bundle = await readBundle(unzipSync(new Uint8Array(readFileSync(zip))));
+    const unzipped = unzipSync(new Uint8Array(readFileSync(zip)));
+    if (isWordAudioZip(unzipped)) {
+      const pack = await readWordAudioPack(unzipped);
+      skipped.push(...pack.skipped);
+      if (!wordAudio || pack.manifest.builtAt > wordAudio.manifest.builtAt) wordAudio = pack;
+      continue;
+    }
+    const bundle = await readBundle(unzipped);
     skipped.push(...bundle.skipped);
     for (const b of bundle.books) {
       if (b.entry.private || b.book.private) {
@@ -64,9 +84,25 @@ export async function writeBuiltin(zips: string[], outDir: string): Promise<Buil
     write('manifest.json', manifest);
     for (const [rel, data] of Object.entries(files)) write(rel, data);
   }
+  if (wordAudio) {
+    const write = (rel: string, data: Uint8Array) => {
+      const f = join(outDir, 'word-audio', rel);
+      mkdirSync(dirname(f), { recursive: true });
+      writeFileSync(f, data);
+      bytes += data.byteLength;
+    };
+    for (const [rel, data] of Object.entries(wordAudio.files)) write(rel, data);
+    write(WORD_AUDIO_MANIFEST, new TextEncoder().encode(JSON.stringify(wordAudio.manifest)));
+  }
   const bookList = Object.values(books).map((b) => b.entry);
   mkdirSync(outDir, { recursive: true });
   writeFileSync(join(outDir, 'catalog.json'), JSON.stringify(catalog));
   writeFileSync(join(outDir, 'books.json'), JSON.stringify(bookList));
-  return { lessons: Object.values(catalog.lessons), books: bookList, bytes, skipped };
+  return {
+    lessons: Object.values(catalog.lessons),
+    books: bookList,
+    bytes,
+    skipped,
+    wordAudio: wordAudio ? Object.keys(wordAudio.manifest.words).length : 0,
+  };
 }

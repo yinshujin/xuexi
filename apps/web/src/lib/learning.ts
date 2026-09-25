@@ -277,7 +277,7 @@ export class ItemPicker {
 }
 
 const RECENT_WINDOW = 40;
-const PICK_TRIES = 24;
+const PICK_TRIES = 60;
 
 export const CHALLENGE_LABEL = { stretch: '⭐ 拔高题 · 挑战一下！', creative: '💡 创新题 · 换个角度想一想' } as const;
 

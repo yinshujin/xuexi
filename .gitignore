@@ -20,5 +20,6 @@ content/authored/_*
 content/exports/
 content/state.json
 apps/web/public/builtin/
+apps/web/public/hanzi/
 content/books/
 content/tts-cache/

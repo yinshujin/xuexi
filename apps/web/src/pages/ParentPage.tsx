@@ -508,7 +508,34 @@ function VersionCard() {
           检查更新（打开下载页）
         </Btn>
       )}
+      <HanziLicence />
     </Card>
+  );
+}
+
+/** The notice the 写汉字 stroke data (Arphic Public License) asks for, with the licence text. */
+function HanziLicence() {
+  const [text, setText] = useState<string | null>(null);
+  return (
+    <div className="mt-4 text-sm text-slate-500">
+      写汉字的笔顺数据来自 hanzi-writer-data / Make Me a Hanzi，源自文鼎科技（Arphic）的字体，按 Arphic Public License 分发。
+      {text === null ? (
+        <button
+          type="button"
+          className="ml-1 underline"
+          onClick={() =>
+            void fetch('./hanzi/ARPHICPL.TXT')
+              .then((r) => (r.ok ? r.text() : '（这个版本没有带笔顺数据）'))
+              .catch(() => '（读取失败）')
+              .then(setText)
+          }
+        >
+          查看许可
+        </button>
+      ) : (
+        <pre className="mt-2 max-h-64 overflow-auto whitespace-pre-wrap rounded-xl bg-slate-50 p-3 text-xs">{text}</pre>
+      )}
+    </div>
   );
 }
 

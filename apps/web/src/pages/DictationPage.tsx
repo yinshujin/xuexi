@@ -3,10 +3,15 @@ import { findKnowledgePoint } from '@xuexi/curriculum';
 import type { DictWord } from '@xuexi/practice';
 import type { ChildProfile } from '@xuexi/shared';
 import { displayPinyin, missedWords, roundOrder, saveResults, wordsOf } from '../lib/dictation';
+import { hanziChars } from '../lib/hanzi';
+import { WordWriter, type CharResult } from '../practice/WordWriter';
 import { navigate } from '../lib/router';
 import { Btn, Card, Empty, Page, Stars } from '../components/ui';
 
-/** ✍️ 看拼音写词语: pinyin on screen, the word on paper, then check and mark. */
+/**
+ * ✍️ 看拼音写词语: pinyin on screen, the word on paper, then check and mark;
+ * or, where the stroke data is there, written on the screen and checked stroke by stroke.
+ */
 export function DictationPage({ child, kpId, back }: { child: ChildProfile; kpId: string; back: string }) {
   const kp = findKnowledgePoint(kpId)?.kp;
   const words = useMemo(() => wordsOf(kpId), [kpId]);
@@ -17,6 +22,13 @@ export function DictationPage({ child, kpId, back }: { child: ChildProfile; kpId
   const [right, setRight] = useState<string[]>([]);
   const [wrong, setWrong] = useState<string[]>([]);
   const [n, setN] = useState(0);
+  // 在屏幕上写: the characters this app has stroke data for (null: none), and the chosen mode.
+  const [strokes, setStrokes] = useState<Set<string> | null>(null);
+  const [onScreen, setOnScreen] = useState(false);
+  const [written, setWritten] = useState<CharResult[] | null>(null);
+  useEffect(() => {
+    void hanziChars().then(setStrokes);
+  }, []);
 
   useEffect(() => {
     void missedWords(child.id).then((m) => {
@@ -80,7 +92,9 @@ export function DictationPage({ child, kpId, back }: { child: ChildProfile; kpId
   }
 
   const d = round[at];
+  const canWrite = !!strokes && [...d.w].every((c) => strokes.has(c));
   const mark = async (ok: boolean) => {
+    setWritten(null);
     const r = ok ? [...right, d.w] : right;
     const w = ok ? wrong : [...wrong, d.w];
     setRight(r);
@@ -101,22 +115,43 @@ export function DictationPage({ child, kpId, back }: { child: ChildProfile; kpId
     >
       <Card className="mx-auto flex w-full max-w-xl flex-col items-center gap-6 py-10 text-center">
         {missed.includes(d.w) && <span className="rounded-full bg-rose-50 px-3 text-rose-700">上次写错的词</span>}
-        <div className="text-5xl font-medium tracking-wide text-slate-800">{displayPinyin(d)}</div>
-        <p className="text-lg text-slate-500">{shown ? '对一对，写对了吗？' : '在本子上写出这个词语，写好了再看答案。'}</p>
-        {shown ? (
+        {canWrite && (
+          <button type="button" onClick={() => {
+              setOnScreen((x) => !x);
+              setWritten(null);
+            }} className="rounded-full bg-slate-100 px-4 py-1 text-slate-600">
+            {onScreen ? '📒 改成在本子上写' : '✏️ 在屏幕上写'}
+          </button>
+        )}
+        {canWrite && onScreen ? (
           <>
-            <div className="text-6xl font-bold tracking-widest">{d.w}</div>
-            <div className="flex gap-3">
-              <Btn tone="green" onClick={() => void mark(true)}>
-                ✓ 写对了
+            <WordWriter key={`${n}-${at}`} word={d.w} pinyin={displayPinyin(d)} blanks={[...d.w].map((_, i) => i)} onDone={setWritten} />
+            {written && (
+              <Btn tone={written.every((r) => r.ok) ? 'green' : 'danger'} onClick={() => void mark(written.every((r) => r.ok))}>
+                {written.every((r) => r.ok) ? '✓ 写对了，下一个' : '✗ 有字写错了，下一个'}
               </Btn>
-              <Btn tone="danger" onClick={() => void mark(false)}>
-                ✗ 写错了
-              </Btn>
-            </div>
+            )}
           </>
         ) : (
-          <Btn onClick={() => setShown(true)}>看答案</Btn>
+          <>
+            <div className="text-5xl font-medium tracking-wide text-slate-800">{displayPinyin(d)}</div>
+            <p className="text-lg text-slate-500">{shown ? '对一对，写对了吗？' : '在本子上写出这个词语，写好了再看答案。'}</p>
+            {shown ? (
+              <>
+                <div className="text-6xl font-bold tracking-widest">{d.w}</div>
+                <div className="flex gap-3">
+                  <Btn tone="green" onClick={() => void mark(true)}>
+                    ✓ 写对了
+                  </Btn>
+                  <Btn tone="danger" onClick={() => void mark(false)}>
+                    ✗ 写错了
+                  </Btn>
+                </div>
+              </>
+            ) : (
+              <Btn onClick={() => setShown(true)}>看答案</Btn>
+            )}
+          </>
         )}
       </Card>
     </Page>

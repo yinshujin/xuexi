@@ -7,6 +7,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Plugin } from 'vite';
+import { hanziData } from './scripts/hanzi-data';
 
 /**
  * Writes dist/version.json with a build id derived from index.html (which
@@ -34,6 +35,7 @@ export default defineConfig({
   base: './',
   plugins: [
     buildVersion(),
+    hanziData(),
     react(),
     tailwindcss(),
     VitePWA({

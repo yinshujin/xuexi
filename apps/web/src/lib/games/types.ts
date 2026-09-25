@@ -47,8 +47,22 @@ export interface OrderGame extends GameBase {
   joiner: string;
 }
 
+/** 写汉字: 语文 words with a character or two left out, written stroke by stroke. */
+export interface WriteGame extends GameBase {
+  kind: 'write';
+  items: WriteItem[];
+}
+
+export interface WriteItem {
+  word: string;
+  /** displayPinyin of the word, e.g. "kuān guǎng". */
+  pinyin: string;
+  /** Indices (into the word's characters) of the characters to write. */
+  blanks: number[];
+}
+
 /** Every game kind. New kinds add their interface here. */
-export type Game = MatchGame | OrderGame;
+export type Game = MatchGame | OrderGame | WriteGame;
 
 export interface UnitGame {
   kpId: string;

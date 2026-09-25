@@ -3,6 +3,9 @@ import { EN_G4A } from '../banks/en-g4a';
 import { YW_G2A } from '../banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../banks/yw-g4a';
 import { YW_G4A_POLY } from '../banks/yw-g4a-poly';
+import { YW_G2A_SOUNDALIKE_WORDS, YW_G2A_WORDS } from '../banks/yw-g2a-words';
+import { YW_G4A_SOUNDALIKE_WORDS, YW_G4A_WORDS } from '../banks/yw-g4a-words';
+import { dictationGenerator } from './dictation';
 import { chineseWordsGenerator, englishGenerator, polyphoneGenerator } from './lang';
 
 /** 语文 / 英语 practice, one generator per book (and 多音字 for 四上). */
@@ -11,3 +14,7 @@ export const yw4Words = chineseWordsGenerator('yw4.words', { items: YW_G4A_ITEMS
 export const yw4Polyphone = polyphoneGenerator('yw4.polyphone', YW_G4A_POLY);
 export const en2Words = englishGenerator('en2.words', EN_G2A);
 export const en4Words = englishGenerator('en4.words', EN_G4A);
+
+/** 看拼音选词语 from each book's 词语听写表. */
+export const yw2Dictation = dictationGenerator('yw2.dictation', YW_G2A_WORDS, YW_G2A_SOUNDALIKE_WORDS);
+export const yw4Dictation = dictationGenerator('yw4.dictation', YW_G4A_WORDS, YW_G4A_SOUNDALIKE_WORDS);

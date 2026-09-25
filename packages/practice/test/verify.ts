@@ -3,6 +3,9 @@
  * answer from what the child sees (prompt / options / widget spec) with code
  * that shares nothing with the generators.
  */
+import { YW_G2A_WORDS } from '../src/banks/yw-g2a-words';
+import { YW_G4A_WORDS } from '../src/banks/yw-g4a-words';
+import type { DictationList } from '../src/banks/types';
 import { g2Challenge } from '../src/generators/challenge-g2';
 import { g4Challenge } from '../src/generators/challenge-g4';
 import { g4Figures } from '../src/generators/g4-figures';
@@ -107,6 +110,19 @@ function onlyMatching(q: Question, pred: (opt: string) => boolean): Answer {
   return { type: 'choice', index: hits[0] };
 }
 
+/** 看拼音写词语: the one option that is a listed word with exactly that pinyin. */
+function dictationAnswer(q: Question, list: DictationList): Answer {
+  const m = /^【看拼音写词语】(.+)（　）$/.exec(q.prompt);
+  if (!m) throw new Error(`${q.key}: unexpected prompt ${q.prompt}`);
+  // 儿化 is printed merged: "nǎ er" (哪儿) → "nǎr".
+  const printed = (d: { w: string; py: string }) =>
+    d.py.replace(/ er\b/g, (x, off: number) => (d.w[d.py.slice(0, off).split(' ').length] === '儿' ? 'r' : x));
+  const words = Object.values(list).flat().filter((d) => printed(d) === m[1]).map((d) => d.w);
+  const hits = (q.options ?? []).flatMap((o, i) => (words.includes(o) ? [i] : []));
+  if (hits.length !== 1) throw new Error(`${q.key}: ${hits.length} options match ${m[1]}: ${q.options}`);
+  return { type: 'choice', index: hits[0] };
+}
+
 /** Recompute the expected answer of a question independently. */
 export function expectedAnswer(q: Question): Answer {
   const p = q.prompt;
@@ -127,6 +143,10 @@ export function expectedAnswer(q: Question): Answer {
       const params = gen.derive({ difficulty: q.difficulty, seed: q.seed, variant: q.variant });
       return gen.templates.find((x) => x.id === params.template)!.solve(params.p);
     }
+    case 'yw2.dictation':
+      return dictationAnswer(q, YW_G2A_WORDS);
+    case 'yw4.dictation':
+      return dictationAnswer(q, YW_G4A_WORDS);
     case 'yw2.words':
       return langAnswer(q, YW_G2A.items, YW_G2A.polyphones, []);
     case 'yw4.words':

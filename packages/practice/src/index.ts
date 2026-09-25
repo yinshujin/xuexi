@@ -90,3 +90,7 @@ export {
   type ChallengeTemplate,
   type ChallengeTier,
 } from './generators/challenge';
+export { YW_G2A_WORDS } from './banks/yw-g2a-words';
+export { YW_G4A_WORDS } from './banks/yw-g4a-words';
+export type { DictWord, DictationList } from './banks/types';
+export { displayPinyin } from './generators/dictation';

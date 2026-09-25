@@ -11,6 +11,7 @@ import { LessonPage } from './pages/LessonPage';
 import { PracticePage } from './pages/PracticePage';
 import { MistakesPage } from './pages/MistakesPage';
 import { BookShelf } from './pages/BookShelf';
+import { DictationPage } from './pages/DictationPage';
 import { BookReader } from './pages/BookReader';
 import { ParentPage } from './pages/ParentPage';
 import { EyeBreak } from './components/EyeBreak';
@@ -44,6 +45,9 @@ function ChildRoutes({ childId, parts, query }: { childId: string; parts: string
       break;
     case 'mistakes':
       page = <MistakesPage child={profile} />;
+      break;
+    case 'dictation':
+      page = <DictationPage child={profile} kpId={query.get('kp') ?? ''} back={back} />;
       break;
     case 'books':
       page = <BookShelf child={profile} />;

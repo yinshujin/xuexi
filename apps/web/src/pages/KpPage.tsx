@@ -4,6 +4,7 @@ import { GENERATORS, practiceSizeOf, type ChildProfile } from '@xuexi/shared';
 import { useApp } from '../lib/store';
 import { href } from '../lib/router';
 import { coreSpecs, progressMap, setShape } from '../lib/learning';
+import { wordsOf } from '../lib/dictation';
 import { minutes } from '../lib/format';
 import { Card, Empty, Page } from '../components/ui';
 
@@ -20,6 +21,7 @@ export function KpPage({ child, kpId }: { child: ChildProfile; kpId: string }) {
   const back = encodeURIComponent(`/c/${child.id}/kp/${kpId}`);
   const hasSpeed = coreSpecs(kp).some((p) => SPEED_GENERATORS.has(p.generatorId));
   const shape = setShape(kp, practiceSizeOf(family.settings));
+  const dictation = wordsOf(kpId);
   const challenges = shape.filter((x) => x !== 'core').length;
 
   return (
@@ -77,6 +79,17 @@ export function KpPage({ child, kpId }: { child: ChildProfile; kpId: string }) {
         })}
       </div>
 
+      {dictation.length > 0 && (
+        <a href={href(`/c/${child.id}/dictation?kp=${kpId}&back=${back}`)} className="mb-4 block">
+          <Card className="flex items-center gap-3 bg-violet-500 text-white ring-0 transition active:scale-95">
+            <span className="text-4xl">✍️</span>
+            <span className="flex-1">
+              <span className="block text-xl font-bold">看拼音写词语（{dictation.length} 个）</span>
+              <span className="opacity-90">课本听写词语：看拼音在本子上写，写完对答案</span>
+            </span>
+          </Card>
+        </a>
+      )}
       <h2 className="mb-2 text-xl font-bold">✏️ 专项练习</h2>
       {kp.practice.length === 0 ? (
         <Empty>这个知识点以看课和课本练习为主，暂时没有电子练习题。</Empty>

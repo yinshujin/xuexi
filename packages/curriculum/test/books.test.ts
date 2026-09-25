@@ -222,8 +222,10 @@ describe('knowledge points', () => {
 describe('语文 / 英语 practice banks', () => {
   const BANK_BOOK: Record<string, string> = {
     'yw2.words': 'yw-g2a',
+    'yw2.dictation': 'yw-g2a',
     'yw4.words': 'yw-g4a',
     'yw4.polyphone': 'yw-g4a',
+    'yw4.dictation': 'yw-g4a',
     'en2.words': 'en-g2a',
     'en4.words': 'en-g4a',
   };

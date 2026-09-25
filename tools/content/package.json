@@ -13,5 +13,8 @@
     "@xuexi/shared": "workspace:*",
     "fflate": "^0.8.3",
     "katex": "^0.18.9"
+  },
+  "devDependencies": {
+    "pinyin-pro": "^3.29.4"
   }
 }

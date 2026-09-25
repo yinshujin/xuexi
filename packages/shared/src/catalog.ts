@@ -294,6 +294,18 @@ export const GENERATORS = [
     errorTags: ['polyphone'],
   },
   {
+    id: 'yw2.dictation',
+    grade: 2,
+    title: '看拼音写词语（课本听写词语）',
+    errorTags: ['similar-char'],
+  },
+  {
+    id: 'yw4.dictation',
+    grade: 4,
+    title: '看拼音写词语（课本听写词语）',
+    errorTags: ['similar-char'],
+  },
+  {
     id: 'en2.words',
     grade: 2,
     title: '英语单词与句型',

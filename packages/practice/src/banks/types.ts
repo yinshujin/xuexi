@@ -67,3 +67,16 @@ export interface EnglishBank {
   /** Sentence-level items (情景交际、句型选择、补全对话). */
   items: ChoiceItem[];
 }
+
+/**
+ * A word from the class's 词语听写表 (the words each lesson requires), with
+ * its pinyin as printed in the textbook: syllables separated by spaces, one per
+ * character, tone marks, tone sandhi of 一/不 as the book marks it.
+ */
+export interface DictWord {
+  w: string;
+  py: string;
+}
+
+/** 听写词语 of a book, by knowledge point id without the book prefix ("u3.rainbow"). */
+export type DictationList = Record<string, DictWord[]>;

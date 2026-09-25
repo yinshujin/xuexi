@@ -4,15 +4,21 @@ import { unit } from './helpers';
 const B = 'yw-g4a';
 
 /**
- * 题库练习：常规题（yw4.words）+ 可选多音字（yw4.polyphone）+ 拔高 / 创新题。
+ * 题库练习：常规题（yw4.words）+ 可选多音字（yw4.polyphone）+ 可选看拼音写词语（yw4.dictation）+ 拔高 / 创新题。
  * `v` 是知识点 id 去掉 "yw-g4a."，如 'u3.ivy'。
  */
-function bank(v: string, polyphone = false): PracticeSpec[] {
+/** 看拼音写词语：本课词语听写表里的词（yw-g4a-words.ts）。 */
+function dictation(v: string): PracticeSpec {
+  return { generatorId: 'yw4.dictation', variant: v, minDifficulty: 1, maxDifficulty: 5, label: '看拼音写词语' };
+}
+
+function bank(v: string, opts: { polyphone?: boolean; dictation?: boolean } = {}): PracticeSpec[] {
   return [
     { generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: v },
-    ...(polyphone
+    ...(opts.polyphone
       ? [{ generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: v, label: '多音字' } as PracticeSpec]
       : []),
+    ...(opts.dictation ? [dictation(v)] : []),
     { generatorId: 'yw4.words', variant: `${v}#stretch`, tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 },
     { generatorId: 'yw4.words', variant: `${v}#creative`, tier: 'creative', minDifficulty: 3, maxDifficulty: 5 },
   ];
@@ -79,7 +85,7 @@ export const ywG4a: Book = {
               '教孩子找时间顺序的“路标词”（午后一点左右、过了一会儿、霎时、潮头过后），把课文分成潮来前、潮来时、潮头过后三段，并说出每段写了什么；再用同样方法说一说一次看日落或看海的经过。',
           },
         ],
-        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tide' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tide', label: '多音字' }, { generatorId: 'yw4.words', variant: 'u1.tide#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u1.tide#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tide' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tide', label: '多音字' }, dictation('u1.tide'), { generatorId: 'yw4.words', variant: 'u1.tide#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u1.tide#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
       },
       {
         slug: 'stars',
@@ -103,7 +109,7 @@ export const ywG4a: Book = {
             '《繁星》是巴金写的散文，新版中是精读课文。带孩子找出三次看星星的时间和地点（家乡庭院纳凉、南京住处的后门、海上的船上），对比每次看到的景象和心情，体会作者由看星星展开的想象和对星天的喜爱。可引用开头“我爱月夜，但我也爱星天。”，不整段抄录课文。',
         },
         techniques: [],
-        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.stars' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.stars', label: '多音字' }, { generatorId: 'yw4.words', variant: 'u1.stars#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u1.stars#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.stars' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.stars', label: '多音字' }, dictation('u1.stars'), { generatorId: 'yw4.words', variant: 'u1.stars#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u1.stars#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
       },
       {
         slug: 'modern-poems',
@@ -184,6 +190,29 @@ export const ywG4a: Book = {
         techniques: [],
         practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.recommend-place' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.recommend-place', label: '多音字' }, { generatorId: 'yw4.words', variant: 'u1.recommend-place#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u1.recommend-place#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
       },
+      {
+        slug: 'garden',
+        title: '语文园地一：描写声音的词语',
+        objectives: [
+          '积累描写声音的四字词语，会读会写',
+          '分清哪些词写声音大、热闹，哪些词写安静',
+          '能把这些词语用在句子里，把声音写生动',
+        ],
+        keyPoints: [
+          '重点：人声鼎沸、锣鼓喧天、震耳欲聋、响彻云霄写声音大；低声细语、窃窃私语、鸦雀无声、悄无声息写声音小或安静',
+          '难点：根据场合选对词语，不说“夜深了锣鼓喧天”这样不合情理的话',
+          '常见错误：把“窃窃私语”当成大声说话；“霄”写成“宵”',
+        ],
+        prerequisites: ['yw-g4a.u1.tide'],
+        lecture: {
+          title: '语文园地一：描写声音的词语',
+          minutes: 8,
+          focus:
+            '讲语文园地一“词句段运用”中描写声音的八个四字词语：先按“热闹—安静”分成两组，逐个讲读音和意思（鼎是古代的锅，人声鼎沸像锅里的水烧开了；鸦雀无声是连乌鸦麻雀的声音都没有），再结合观潮、考试、图书馆等情境练习选词，最后学着用对比把声音的变化写出来。',
+        },
+        techniques: [],
+        practice: bank('u1.garden', { dictation: true }),
+      },
     ]),
     // ------------------------------------------------------------------ 二
     unit(B, 2, '阅读方法：提问', [
@@ -208,7 +237,7 @@ export const ywG4a: Book = {
             '讲安徒生童话《一个豆荚里的五粒豆》：五粒豆飞出豆荚后的不同经历，重点是最后一粒落在顶楼窗下的裂缝里、在青苔中发芽开花，给生病的小女孩带来希望，小女孩慢慢好起来。以此为例教提问策略的第一步：边读边把想到的问题记下来，列成问题清单，并分出针对部分内容和针对全文的问题。',
         },
         techniques: [],
-        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.peas' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.peas', label: '多音字' }, { generatorId: 'yw4.words', variant: 'u2.peas#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u2.peas#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.peas' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.peas', label: '多音字' }, dictation('u2.peas'), { generatorId: 'yw4.words', variant: 'u2.peas#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u2.peas#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
       },
       {
         slug: 'night-flight',
@@ -239,7 +268,7 @@ export const ywG4a: Book = {
               '教孩子从三个角度提问：针对内容（为什么蒙上眼睛铃铛不响）、针对写法（作者为什么把三次试验一次一次写清楚）、联系生活得到启示（生活里还有哪些东西学了动物本领）。每个角度举一个例子，再让孩子分类。',
           },
         ],
-        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.night-flight' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.night-flight', label: '多音字' }, { generatorId: 'yw4.words', variant: 'u2.night-flight#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u2.night-flight#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.night-flight' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.night-flight', label: '多音字' }, dictation('u2.night-flight'), { generatorId: 'yw4.words', variant: 'u2.night-flight#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u2.night-flight#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
       },
       {
         slug: 'square-hats',
@@ -262,7 +291,7 @@ export const ywG4a: Book = {
             '讲施雁冰的童话《方帽子店》：老店只做方帽子，大家也只戴方帽子，可方帽子戴着不舒服；孩子们想出了各种舒服又好看的圆帽子，人们纷纷去买，方帽子慢慢卖不出去成了古董。引导孩子提问并挑选对理解故事最有帮助的问题，体会不能墨守成规、要敢于创新。',
         },
         techniques: [],
-        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.square-hats' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.square-hats', label: '多音字' }, { generatorId: 'yw4.words', variant: 'u2.square-hats#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u2.square-hats#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
+        practice: [{ generatorId: 'yw4.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.square-hats' }, { generatorId: 'yw4.polyphone', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.square-hats', label: '多音字' }, dictation('u2.square-hats'), { generatorId: 'yw4.words', variant: 'u2.square-hats#stretch', tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 }, { generatorId: 'yw4.words', variant: 'u2.square-hats#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 }],
       },
       {
         slug: 'horse-race',
@@ -347,6 +376,29 @@ export const ywG4a: Book = {
           { generatorId: 'yw4.words', variant: 'u2.polyphones#creative', tier: 'creative', minDifficulty: 3, maxDifficulty: 5 },
         ],
       },
+      {
+        slug: 'garden',
+        title: '语文园地二：识字加油站（形声字）',
+        objectives: [
+          '会读会写提纲、生锈、泡沫、综合、氧气、结账、矿物、俱乐部',
+          '知道形声字一边表示意思、一边表示读音',
+          '能根据偏旁猜字的意思',
+        ],
+        keyPoints: [
+          '重点：锈（金属）、沫（水）、矿（石）、账（钱，古时贝壳当钱）、氧（气体）——形旁表义，另一边表音',
+          '难点：用形声字的规律推测生字的意思',
+          '常见错误：“结账”写成“结帐”；“提纲”的“纲”写成“钢”',
+        ],
+        prerequisites: [],
+        lecture: {
+          title: '语文园地二：形声字识字',
+          minutes: 8,
+          focus:
+            '讲语文园地二识字加油站的一组词：提纲、生锈、泡沫、综合、氧气、结账、矿物、俱乐部。重点讲形声字：锈是金字旁因为金属才会生锈，沫是三点水，矿是石字旁，账是贝字旁因为古时候贝壳当钱用，氧的气字头表示气体、羊表示读音。教孩子遇到生字先看偏旁猜意思。',
+        },
+        techniques: [],
+        practice: bank('u2.garden', { dictation: true }),
+      },
     ]),
     // ------------------------------------------------------------------ 三
     unit(B, 3, '连续观察', [
@@ -372,7 +424,7 @@ export const ywG4a: Book = {
             '逐首讲读：《暮江吟》抓“一道残阳铺水中，半江瑟瑟半江红”的颜色对比和“露似真珠月似弓”的比喻，体会诗人按时间先后连续观察（傍晚到夜晚）；《题西林壁》讲横看、侧看、远近高低看到的庐山不同，悟出“看问题要跳出局部、全面地看”；《雪梅》讲梅和雪各有长处也各有不足，要取长补短。每首结合注释串讲诗意，再指导背诵。',
         },
         techniques: [],
-        practice: bank('u3.ancient-poems', true),
+        practice: bank('u3.ancient-poems', { polyphone: true, dictation: true }),
       },
       {
         slug: 'ivy',
@@ -396,7 +448,7 @@ export const ywG4a: Book = {
             '讲叶圣陶的《爬山虎的脚》：先看叶子（嫩叶红、长大后绿得新鲜，叶尖一顺儿朝下，铺得均匀），再看脚长在哪里、什么样子，最后按“触墙—变成小圆片巴住—细丝弯曲拉一把茎—贴紧墙”的顺序讲清怎样爬。用动作演示几个关键动词，引导孩子发现作者是长时间、反复观察才写得这样细致，只引用个别短语，不整段抄录课文。',
         },
         techniques: [],
-        practice: bank('u3.ivy', true),
+        practice: bank('u3.ivy', { polyphone: true, dictation: true }),
       },
       {
         slug: 'cricket',
@@ -420,7 +472,7 @@ export const ywG4a: Book = {
             '讲法布尔（法国昆虫学家，《昆虫记》作者）笔下的蟋蟀：它不肯随遇而安，慎重地选择住址；住宅的特点（隐蔽、排水好、干净朝阳）；建造过程（用前足扒土，用钳子搬走较大的土块，用有力的后足踏地），工具简单却建成了“伟大的工程”。讲清作者把蟋蟀当作人来写，引导孩子体会作者长期、耐心的连续观察。',
         },
         techniques: [],
-        practice: bank('u3.cricket'),
+        practice: bank('u3.cricket', { dictation: true }),
       },
       {
         slug: 'eyes',
@@ -494,7 +546,7 @@ export const ywG4a: Book = {
             '先讲什么是神话：古人用神奇的想象解释天地万物的来历。再按起因、经过、结果讲盘古开天地：天地混沌一片像个大鸡蛋，盘古醒来用斧子劈开，轻而清的东西上升变成天，重而浊的东西下降变成地；他怕天地合拢，头顶天、脚踏地，天越来越高、地越来越厚；最后倒下，气息、声音、双眼、四肢、血液、汗毛、汗水变成了风云、雷声、日月、四极五岳、江河、草木、雨露。引导孩子体会想象的神奇和盘古的献身精神，不逐字引用课文。',
         },
         techniques: [],
-        practice: bank('u4.pangu'),
+        practice: bank('u4.pangu', { dictation: true }),
       },
       {
         slug: 'jingwei',
@@ -517,7 +569,7 @@ export const ywG4a: Book = {
             '讲读《山海经》里的文言文《精卫填海》：先读准字音和停顿（炎帝之/少女，名曰/女娃……），再借助注释逐句理解“少女”是小女儿、“溺而不返”是淹死没能回来、“故”是所以、“衔”是用嘴叼、“堙”是填塞，最后用自己的话讲故事，体会精卫不怕困难、坚持到底的精神。',
         },
         techniques: [],
-        practice: bank('u4.jingwei'),
+        practice: bank('u4.jingwei', { dictation: true }),
       },
       {
         slug: 'prometheus',
@@ -540,7 +592,7 @@ export const ywG4a: Book = {
             '介绍古希腊神话，按起因、经过、结果讲普罗米修斯的故事：人类没有火，生活艰难，普罗米修斯盗取火种送给人类；众神领袖宙斯大怒，让火神把他锁在高加索山的悬崖上，又派鹫鹰每天啄食他的肝脏；他始终不屈服，后来被大力神赫拉克勒斯救下。引导孩子体会他为人类造福、不怕牺牲的精神，并和盘古作比较。',
         },
         techniques: [],
-        practice: bank('u4.prometheus'),
+        practice: bank('u4.prometheus', { dictation: true }),
       },
       {
         slug: 'nuwa',
@@ -563,7 +615,7 @@ export const ywG4a: Book = {
             '讲女娲补天的神话：远古时天塌了一个大窟窿，大火燃烧、洪水泛滥，人们无处安身；女娲不忍心看人们受苦，决心补天，她四处寻找五彩石，用大火炼成熔浆，把天上的窟窿补好了。引导孩子按起因、经过、结果复述，并学着加上想象，把女娲找五彩石的过程讲具体。只讲情节梗概，不逐句引用课文。',
         },
         techniques: [],
-        practice: bank('u4.nuwa'),
+        practice: bank('u4.nuwa', { dictation: true }),
       },
       {
         slug: 'day-with',
@@ -612,6 +664,29 @@ export const ywG4a: Book = {
         techniques: [],
         practice: bank('u4.myths-reading'),
       },
+      {
+        slug: 'garden',
+        title: '语文园地四：花卉名称和神话词语',
+        objectives: [
+          '会读会写玫瑰、牡丹、茉莉、海棠等花卉名称',
+          '积累腾云驾雾、神通广大、各显神通等形容神话人物本领的词语',
+          '能在讲神话故事、写想象作文时用上这些词语',
+        ],
+        keyPoints: [
+          '重点：花卉、花蕾、玫瑰、牡丹、茉莉、海棠；腾云驾雾、上天入地、神机妙算、各显神通、三头六臂、神通广大、未卜先知、刀枪不入',
+          '难点：理解“未卜先知”“神机妙算”等词语的意思，用得恰当',
+          '常见错误：“卉”读成 huī；把“神清气爽”误当作形容本领的词',
+        ],
+        prerequisites: ['yw-g4a.u4.pangu'],
+        lecture: {
+          title: '语文园地四：花卉与神话词语',
+          minutes: 8,
+          focus:
+            '讲语文园地四的两组词：一组是花卉名称（玫瑰、牡丹、茉莉、海棠，草字头、王字旁的由来），一组是形容神话人物本领的四字词语（腾云驾雾、上天入地、三头六臂、神通广大、各显神通、未卜先知、神机妙算、刀枪不入）。结合孙悟空、哪吒、八仙过海等孩子熟悉的故事讲词义，再练习在“我和___过一天”的习作中用上它们。',
+        },
+        techniques: [],
+        practice: bank('u4.garden', { dictation: true }),
+      },
     ]),
     // ------------------------------------------------------------------ 五
     unit(B, 5, '习作单元：把一件事写清楚', [
@@ -636,7 +711,7 @@ export const ywG4a: Book = {
             '讲俄国作家屠格涅夫的《麻雀》：打猎回来的路上，猎狗发现一只从巢里掉下来的小麻雀；老麻雀从树上飞下来，挡在猎狗面前，浑身发抖却拼命保护小麻雀；猎狗犹豫着后退，“我”唤回猎狗走开了。重点引导孩子按起因、经过、结果理清故事，找出作者看到的、听到的、想到的，体会这样写才能把事情写清楚，感受母爱（亲情）的力量。只讲情节，不整段抄录课文。',
         },
         techniques: [],
-        practice: bank('u5.sparrow'),
+        practice: bank('u5.sparrow', { dictation: true }),
       },
       {
         slug: 'tiandu',
@@ -660,7 +735,7 @@ export const ywG4a: Book = {
             '讲“我”在黄山天都峰脚下遇到一位老爷爷，两人都担心爬不上去，却互相鼓励，一起爬上了峰顶，最后互相道谢——都是从对方身上汲取了勇气和力量。引导孩子按爬山前、爬山时、爬上后梳理经过，体会作者写出了心里的想法和动作，才把事情写清楚；联系自己爬梧桐山的经历说一说。只讲情节，不整段引用课文。',
         },
         techniques: [],
-        practice: bank('u5.tiandu'),
+        practice: bank('u5.tiandu', { dictation: true }),
       },
       {
         slug: 'kaleidoscope',
@@ -684,7 +759,7 @@ export const ywG4a: Book = {
             '先借习作例文说方法：《我家的杏熟了》按事情顺序写奶奶把杏分给孩子们，懂得好东西要和大家分享；《小木船》写“我”和好朋友因小木船闹翻又和好，写出了前后的心情变化。再教孩子选一件印象深的事，用“起因—经过—结果”列提纲，经过部分写出看到、听到、想到的，把最精彩的地方写具体。以“第一次自己坐地铁”为例示范。',
         },
         techniques: [],
-        practice: bank('u5.kaleidoscope'),
+        practice: bank('u5.kaleidoscope', { dictation: true }),
       },
     ]),
     // ------------------------------------------------------------------ 六
@@ -711,7 +786,7 @@ export const ywG4a: Book = {
             '介绍万里长城：先远看，它像一条长龙在崇山峻岭间蜿蜒，东起山海关、西到嘉峪关；再近看，城墙很宽、很高，上面有垛子，垛子上有瞭望口和射口，每隔一段有城台，古时用来打仗和守卫。引导孩子想象古代劳动人民在没有机器的时代，靠肩扛手抬修筑长城，体会长城是劳动人民血汗和智慧凝成的伟大奇迹。长城于 1987 年列入《世界遗产名录》。',
         },
         techniques: [],
-        practice: bank('u6.great-wall'),
+        practice: bank('u6.great-wall', { dictation: true }),
       },
       {
         slug: 'summer-palace',
@@ -734,7 +809,7 @@ export const ywG4a: Book = {
             '介绍北京的颐和园（清代皇家园林，1998 年列入《世界遗产名录》）：跟着游览路线走——进门先到长廊（很长，横槛上有许多彩色的画），再登上万寿山看佛香阁、俯瞰昆明湖，最后从山上下来到昆明湖边，看十七孔桥。教孩子找出过渡句，学习按游览顺序、移步换景写一个地方。只讲景点和顺序，不整段引用课文。',
         },
         techniques: [],
-        practice: bank('u6.summer-palace'),
+        practice: bank('u6.summer-palace', { dictation: true }),
       },
       {
         slug: 'terracotta',
@@ -806,6 +881,29 @@ export const ywG4a: Book = {
         techniques: [],
         practice: bank('u6.heritage'),
       },
+      {
+        slug: 'garden',
+        title: '语文园地六：世界遗产相关词语',
+        objectives: [
+          '会读会写游人、狮子、姿态、陵寝、景观、丝绸、廊道等词语',
+          '认识拉萨、大昭寺、都江堰、哈尼族等地名和名称',
+          '了解这些词语和我国世界文化遗产的联系',
+        ],
+        keyPoints: [
+          '重点：陵寝（帝王的坟墓）、都江堰（四川）、大昭寺（西藏拉萨）、哈尼梯田（云南）、丝绸之路',
+          '难点：读准“寝 qǐn”“堰 yàn”“都 dū”“昭 zhāo”',
+          '常见错误：“都江堰”的“都”读成 dōu',
+        ],
+        prerequisites: ['yw-g4a.u6.great-wall'],
+        lecture: {
+          title: '语文园地六：遗产词语',
+          minutes: 8,
+          focus:
+            '讲语文园地六识字加油站的词语：游人、狮子、姿态、陵寝、景观、丝绸、拉萨、廊道、哈尼族、都江堰、大昭寺。结合地图介绍都江堰（四川，两千多年前修建的水利工程）、大昭寺（西藏拉萨）、哈尼梯田（云南）、丝绸之路、明清皇家陵寝，读准难读的字音，体会我国文化遗产的丰富。',
+        },
+        techniques: [],
+        practice: bank('u6.garden', { dictation: true }),
+      },
     ]),
     // ------------------------------------------------------------------ 七
     unit(B, 7, '童年成长', [
@@ -830,7 +928,7 @@ export const ywG4a: Book = {
             '讲任大霖的《牛和鹅》：“我们”听说牛看人觉得人很大，所以怕人；鹅看人觉得人很小，所以欺负人，于是不怕牛却怕鹅；一次“我”被鹅追着咬，吓得要命，金奎叔抓住鹅的长脖子把它甩开，告诉“我”鹅没什么可怕的。引导孩子体会“我”前后看法的变化，懂得看问题要换个角度，并学习在书上写批注。只讲情节，不整段引用课文。',
         },
         techniques: [],
-        practice: bank('u7.ox-goose'),
+        practice: bank('u7.ox-goose', { dictation: true }),
       },
       {
         slug: 'tiger',
@@ -853,7 +951,7 @@ export const ywG4a: Book = {
             '讲叶至善的《一只窝囊的大老虎》：“我”小时候很想上台演戏，被安排演一只老虎，演出时没演好，台下的观众哄堂大笑，“我”觉得自己成了一只窝囊的大老虎。引导孩子找出“我”演出前的期待、演出时的慌张、演出后的难过，理解“窝囊”的意思，用批注写下自己的感受。只讲情节梗概，不引用课文原句。',
         },
         techniques: [],
-        practice: bank('u7.tiger'),
+        practice: bank('u7.tiger', { dictation: true }),
       },
       {
         slug: 'top',
@@ -949,6 +1047,30 @@ export const ywG4a: Book = {
         techniques: [],
         practice: bank('u7.heart-beat'),
       },
+      {
+        slug: 'garden',
+        title: '语文园地七：蔬菜名称和惯用语',
+        objectives: [
+          '会读会写韭菜、芹菜、辣椒、红薯、莲藕、芋头',
+          '理解打头阵、挑大梁、占上风、破天荒、栽跟头、敲边鼓、开绿灯、碰钉子等惯用语',
+          '能在合适的情境中用上惯用语',
+        ],
+        keyPoints: [
+          '重点：惯用语的字面意思和实际意思不一样，要理解它的比喻义',
+          '难点：根据情境选对惯用语，如“开绿灯”是允许，“碰钉子”是被拒绝',
+          '常见错误：“挑大梁”的“挑”读成 tiāo',
+        ],
+        prerequisites: ['yw-g4a.u7.ox-goose'],
+        localContexts: ['学校接力赛', '班级文艺演出'],
+        lecture: {
+          title: '语文园地七：惯用语',
+          minutes: 8,
+          focus:
+            '讲语文园地七的两组词：蔬菜名称（韭菜、芹菜、辣椒、红薯、莲藕、芋头，多是草字头）和八个惯用语（打头阵、挑大梁、占上风、破天荒、栽跟头、敲边鼓、开绿灯、碰钉子）。先讲每个惯用语的字面意思，再讲比喻义，用接力赛、借书、演出等生活情境练习选用。',
+        },
+        techniques: [],
+        practice: bank('u7.garden', { dictation: true }),
+      },
     ]),
     // ------------------------------------------------------------------ 八
     unit(B, 8, '家国情怀', [
@@ -973,7 +1095,7 @@ export const ywG4a: Book = {
             '讲题目的来历和意思：2019 年习近平主席访问意大利时说“我将无我，不负人民”，意思是全心全意为人民服务，把自己全部奉献给人民，决不辜负人民。结合课文内容和生活中为人民服务的人（医生、消防员、边防战士等），引导孩子理解“无我”“不负”的含义，积累相关词语。不引用未核对的课文原句。',
         },
         techniques: [],
-        practice: bank('u8.selfless'),
+        practice: bank('u8.selfless', { dictation: true }),
       },
       {
         slug: 'rise',
@@ -996,7 +1118,7 @@ export const ywG4a: Book = {
             '讲少年周恩来的故事：他十二岁离开家乡到东北，伯父告诉他“中华不振”；他在租界亲眼看到一个中国妇女的亲人被外国人的汽车轧死，却没有地方说理；于是在修身课上校长问大家为什么读书时，他清晰而坚定地回答“为中华之崛起而读书”。讲清旧中国积贫积弱的背景，引导孩子理解“崛起”“振兴”，想一想自己为什么读书。',
         },
         techniques: [],
-        practice: bank('u8.rise'),
+        practice: bank('u8.rise', { dictation: true }),
       },
       {
         slug: 'yanan',
@@ -1042,7 +1164,7 @@ export const ywG4a: Book = {
             '逐首讲读：《凉州词》（王翰）写将士出征前痛饮葡萄美酒，“醉卧沙场君莫笑，古来征战几人回”写出豪迈与悲壮；《出塞》（王昌龄）“秦时明月汉时关”写边关历史悠久，“但使龙城飞将在，不教胡马度阴山”盼望有李广那样的名将守边；《夏日绝句》（李清照）借项羽不肯过江东的故事，赞美宁死不屈的英雄气概。结合注释串讲诗意，体会爱国情怀，指导背诵。',
         },
         techniques: [],
-        practice: bank('u8.ancient-poems'),
+        practice: bank('u8.ancient-poems', { dictation: true }),
       },
       {
         slug: 'letter',
@@ -1067,6 +1189,29 @@ export const ywG4a: Book = {
         },
         techniques: [],
         practice: bank('u8.letter'),
+      },
+      {
+        slug: 'garden',
+        title: '语文园地八：赞美英雄和正直的词语',
+        objectives: [
+          '会读会写志存高远、精忠报国、大义凛然、英勇无畏、视死如归、铁面无私、秉公执法、刚正不阿',
+          '分清哪些词赞美英雄不怕牺牲，哪些词赞美为人公正',
+          '能在合适的语境中使用这些词语',
+        ],
+        keyPoints: [
+          '重点：大义凛然、英勇无畏、视死如归写不怕牺牲；铁面无私、秉公执法、刚正不阿写公正；志存高远、精忠报国写志向',
+          '难点：读准“凛 lǐn”“阿 ē”；词语用在合适的对象上',
+          '常见错误：“刚正不阿”的“阿”读成 ā',
+        ],
+        prerequisites: ['yw-g4a.u8.rise'],
+        lecture: {
+          title: '语文园地八：英雄与正直',
+          minutes: 8,
+          focus:
+            '讲语文园地八的八个四字词语，分成三类：写志向（志存高远、精忠报国）、写不怕牺牲（大义凛然、英勇无畏、视死如归）、写公正（铁面无私、秉公执法、刚正不阿）。结合周恩来立志、岳飞精忠报国、包公断案等故事讲词义，再练习在句子里用对。',
+        },
+        techniques: [],
+        practice: bank('u8.garden', { dictation: true }),
       },
     ]),
   ],

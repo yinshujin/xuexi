@@ -3,8 +3,11 @@ import { unit } from './helpers';
 
 const B = 'yw-g2a';
 
-/** Routine practice plus 拔高 / 创新 questions of one knowledge point in the yw2.words bank. */
-function words(v: string): PracticeSpec[] {
+/**
+ * Routine practice plus 拔高 / 创新 questions of one knowledge point in the yw2.words bank, and
+ * 看拼音写词语 from the class's 词语听写表 (yw2.dictation) where the list has usable words.
+ */
+function words(v: string, dictation = true): PracticeSpec[] {
   return [
     { generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: v },
     {
@@ -21,13 +24,20 @@ function words(v: string): PracticeSpec[] {
       minDifficulty: 3,
       maxDifficulty: 5,
     },
+    ...(dictation
+      ? [
+          {
+            generatorId: 'yw2.dictation',
+            variant: v,
+            minDifficulty: 1,
+            maxDifficulty: 5,
+            label: '看拼音写词语',
+          } as PracticeSpec,
+        ]
+      : []),
   ];
 }
 
-/**
- * 统编版 语文 二年级上册（2024 修订，2025 年秋首次使用；2026 年秋深圳二年级使用）。
- * 本文件收前四个单元（目录以家长拍摄的新版目录照片为准）。目录核对情况见 sourceNote。
- */
 export const ywG2a: Book = {
   id: B,
   subject: 'chinese',
@@ -44,6 +54,10 @@ export const ywG2a: Book = {
     '不确定：①各语文园地的具体栏目没有拍到，园地知识点只讲与本单元课文相关的字词句运用（量词、的地得、近反义词、标点、多音字等通用内容）和快乐读书吧的读书方法；',
     '②《彩虹》《去外婆家》是新版新增或调整的课文，原文未核实，只讲题目相关的字词和通用语言知识，不引用原句；③《数星星的孩子》《黄山奇石》《日月潭》《葡萄沟》按 2017 版同名课文的内容要点讲，新版字句是否改动未核实，不整句引用现代文；两首古诗按通行原文；',
     '④第一、二单元各课原文按 2017 版课文（奥数网、古文之家等转录）核对，课程每页只引用一两句关键句；各课会写字表未核实，不列完整生字表。',
+    '五至八单元目录（没有拍到目录页，按网络检索摘要，2026-09 核对）：第五单元·阅读：11 坐井观天、12 寒号鸟、13 我要的是葫芦、语文园地五；第六单元·阅读：14 八角楼上、15 朱德的扁担、16 难忘的泼水节、17 刘胡兰、语文园地六；',
+    '第七单元·阅读：18 古诗二首（江雪、敕勒歌）、19 雾在哪里、20 雪孩子、语文园地七；第八单元·阅读：21 称赞、22 纸船和风筝、23 快乐的小河、语文园地八（检索摘要称新版删去《狐假虎威》《风娃娃》，新增《称赞》《快乐的小河》；第 23 课的听写词语“游戏、跳高、眼泪、水花、田野、远方”等与《快乐的小河》吻合）。',
+    '各课听写词语：家长拍摄的班级“语文课本听写词语”表（第一至八单元，含各语文园地），是本册生字词的主要依据；练习题尽量用表中词语出题。',
+    '不确定：⑤《快乐的小河》原文未核实，只讲题目和听写词语相关的内容；⑥五至八单元的其他课文按 2017 版同名课文的内容要点讲，不整句引用现代文；《江雪》《敕勒歌》按通行原文。',
   ].join(''),
   units: [
     // ------------------------------------------------------------------ 一
@@ -79,23 +93,7 @@ export const ywG2a: Book = {
               '教“看变化图、按顺序讲故事”的方法：用四张小图（后腿、前腿、尾巴变短、变成青蛙）配“过了几天”“遇到谁”“说了什么”，示范把故事讲完整；对比顺序颠倒、漏掉一次相遇的错误讲法，最后请孩子自己讲一遍。',
           },
         ],
-        practice: [
-          { generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.tadpole' },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u1.tadpole#stretch',
-            tier: 'stretch',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u1.tadpole#creative',
-            tier: 'creative',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-        ],
+        practice: words('u1.tadpole'),
       },
       {
         slug: 'what-am-i',
@@ -127,23 +125,7 @@ export const ywG2a: Book = {
               '教区分三个动词：雨从空中“落”下来；冰雹又硬又重，“打”下来；雪花又轻又慢，“飘”下来。用做动作、比轻重的方法帮助理解，再用“树叶（　）下来”“冰雹（　）在屋顶上”等练习选词，并区分风字旁的“飘”和三点水的“漂”。',
           },
         ],
-        practice: [
-          { generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u1.what-am-i' },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u1.what-am-i#stretch',
-            tier: 'stretch',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u1.what-am-i#creative',
-            tier: 'creative',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-        ],
+        practice: words('u1.what-am-i'),
       },
       {
         slug: 'plant-mothers',
@@ -166,28 +148,7 @@ export const ywG2a: Book = {
           focus:
             '从“孩子长大要离开妈妈”的关键句导入；逐一讲清蒲公英（像降落伞，靠风）、苍耳（带刺的铠甲，挂住动物皮毛）、豌豆（太阳晒得豆荚炸开，蹦着跳着离开）三种办法，用表格整理“植物—办法—靠谁帮忙”；识字讲“豌、苍、甲、娃”等字；朗读时读出押韵；最后鼓励观察身边植物。',
         },
-        practice: [
-          {
-            generatorId: 'yw2.words',
-            minDifficulty: 1,
-            maxDifficulty: 5,
-            variant: 'u1.plant-mothers',
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u1.plant-mothers#stretch',
-            tier: 'stretch',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u1.plant-mothers#creative',
-            tier: 'creative',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-        ],
+        practice: words('u1.plant-mothers'),
       },
       {
         slug: 'garden',
@@ -245,28 +206,7 @@ export const ywG2a: Book = {
               '教选量词的方法：看样子（又大又平的一片沙滩、长长的一条帆船/小溪），看种类（军舰用“艘”，桥用“座”或“孔”，旗用“面”）；用配对游戏练习，并纠正什么都用“个”的错误。',
           },
         ],
-        practice: [
-          {
-            generatorId: 'yw2.words',
-            minDifficulty: 1,
-            maxDifficulty: 5,
-            variant: 'u2.scene-song',
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.scene-song#stretch',
-            tier: 'stretch',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.scene-song#creative',
-            tier: 'creative',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-        ],
+        practice: words('u2.scene-song'),
       },
       {
         slug: 'tree-song',
@@ -298,23 +238,7 @@ export const ywG2a: Book = {
               '教“看偏旁猜字义”的识字方法：带木字旁的字大多和树木、木头有关（杨、松、柏、桐、桌、椅）；示范用“加一加”（木+公=松，木+白=柏）识字；提醒木字旁在左边时第四笔写点不写捺。',
           },
         ],
-        practice: [
-          { generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.tree-song' },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.tree-song#stretch',
-            tier: 'stretch',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.tree-song#creative',
-            tier: 'creative',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-        ],
+        practice: words('u2.tree-song'),
       },
       {
         slug: 'clap-song',
@@ -337,23 +261,7 @@ export const ywG2a: Book = {
           focus:
             '用拍手游戏导入，只引用首句“你拍一，我拍一，动物世界很新奇”；按儿歌认识孔雀、锦鸡、雄鹰、大雁、猛虎、黄鹂、百灵、熊猫等动物，讲“雁群会写字”；识字讲“鸟”在右边（鸡、鹂）和在下面（鹰）的不同位置；最后说说保护动物，联系红树林候鸟。',
         },
-        practice: [
-          { generatorId: 'yw2.words', minDifficulty: 1, maxDifficulty: 5, variant: 'u2.clap-song' },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.clap-song#stretch',
-            tier: 'stretch',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.clap-song#creative',
-            tier: 'creative',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-        ],
+        practice: words('u2.clap-song'),
       },
       {
         slug: 'farm-seasons',
@@ -376,28 +284,30 @@ export const ywG2a: Book = {
           focus:
             '以“一年四季农民伯伯在忙什么”导入，引用春季和秋季两句关键句；用表格梳理四季的景物和农事（春：花草蝴蝶、麦苗桑叶；夏：采桑插秧；秋：稻谷丰收；冬：新棉衣、农事了）；识字讲“季、吹、农、事、忙”等字；联系我们吃的米饭来自农民的辛苦劳动。',
         },
-        practice: [
-          {
-            generatorId: 'yw2.words',
-            minDifficulty: 1,
-            maxDifficulty: 5,
-            variant: 'u2.farm-seasons',
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.farm-seasons#stretch',
-            tier: 'stretch',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
-          {
-            generatorId: 'yw2.words',
-            variant: 'u2.farm-seasons#creative',
-            tier: 'creative',
-            minDifficulty: 3,
-            maxDifficulty: 5,
-          },
+        practice: words('u2.farm-seasons'),
+      },
+      {
+        slug: 'garden-2',
+        title: '语文园地二',
+        objectives: [
+          '复习识字单元的字词：数量词、木字旁和鸟字旁、四季和农事的词语',
+          '认识由意思相反的字组成的词（美丑、长短、高低），会写“美丑、真诚”',
+          '会真诚地称赞和感谢别人',
         ],
+        keyPoints: [
+          '重点：“美丑”由两个意思相反的字组成；“真诚”就是真心实意',
+          '难点：给事物选对量词，按偏旁给字分类',
+          '常见错误：“诚”写成“城”；“丑”写成“五”',
+        ],
+        prerequisites: ['yw-g2a.u2.farm-seasons'],
+        localContexts: ['仙湖植物园认树', '给帮助过自己的人说声谢谢'],
+        lecture: {
+          title: '语文园地二',
+          minutes: 9,
+          focus:
+            '用本单元四首儿歌串起复习：数量词搭配、木字旁和鸟字旁、四季和农事；再认识“美丑、长短、高低”这样由意思相反的字组成的词，写好“真诚”，练习真诚地称赞别人。园地的具体栏目未核实，只讲通用的字词句运用。',
+        },
+        practice: words('u2.garden-2'),
       },
     ]),
     // ------------------------------------------------------------------ 三
@@ -638,6 +548,409 @@ export const ywG2a: Book = {
             '用本单元的古诗、黄山、日月潭、葡萄沟串起复习：四字词语的意思和用法、带三点水和山的字、峰和蜂、的地得、量词和多音字（更、都、好、倒）；最后示范用“在哪里—有什么—美在哪里”介绍一处深圳的风景。园地的具体栏目未核实，只讲通用的字词句运用。',
         },
         practice: words('u4.garden-4'),
+      },
+    ]),
+    // ------------------------------------------------------------------ 五
+    unit(B, 5, '阅读：想一想，明道理', [
+      {
+        slug: 'well-frog',
+        title: '坐井观天',
+        objectives: [
+          '读懂青蛙和小鸟对“天有多大”的争论，知道他们为什么说得不一样',
+          '明白“坐井观天”比喻看到的很少，还自以为了不起',
+          '会写“口渴、喝水、回答、观看、相信、抬头”等词语',
+        ],
+        keyPoints: [
+          '重点：青蛙在井里只能看到井口那么大的天，小鸟飞了很远，知道天无边无际',
+          '难点：理解“说大话”和“坐井观天”的意思，说出自己的想法',
+          '常见错误：“渴”和“喝”分不清（口渴要水，三点水；喝水用嘴，口字旁）；“观”写成“欢”',
+        ],
+        prerequisites: [],
+        localContexts: ['深圳湾公园看到的大海和天空', '小区里的水井盖和雨水井'],
+        lecture: {
+          title: '坐井观天',
+          minutes: 10,
+          focus:
+            '用“井里的青蛙和天上的小鸟”情境导入，讲青蛙和小鸟三次对话里对“天有多大”的不同看法，想一想为什么青蛙觉得天只有井口那么大；理解“坐井观天”“说大话”；识字写字讲“渴—喝”“观—欢”“答、抬、信”；最后说说青蛙跳出井口会看到什么。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u5.well-frog'),
+      },
+      {
+        slug: 'hanhao-bird',
+        title: '寒号鸟',
+        objectives: [
+          '知道喜鹊勤劳地做窝过冬，寒号鸟懒惰不做窝，最后冻死了',
+          '明白今天能做的事不要拖到明天',
+          '会写“寒冷、冰冻、过冬、赶快、清早、天亮、一阵”等词语',
+        ],
+        keyPoints: [
+          '重点：对比喜鹊和寒号鸟的做法和结果',
+          '难点：“当作”的“当”读 dàng；体会寒号鸟“得过且过”的想法',
+          '常见错误：“冷、冻、冰”是两点水，写成三点水；“寒”下面的两点漏写',
+        ],
+        prerequisites: [],
+        localContexts: ['深圳的冬天也有寒潮', '小区树上的喜鹊窝'],
+        lecture: {
+          title: '寒号鸟',
+          minutes: 10,
+          focus:
+            '以“冬天快到了，小鸟们在忙什么”导入，用表格对比喜鹊和寒号鸟：喜鹊一早起来就忙着做窝，寒号鸟整天玩、睡觉，劝它也不听，寒冬到了只能在崖缝里发抖，最后冻死；识字讲两点水的“冷、冻、冰”，多音字“当作（dàng）”；最后联系自己：今天的作业今天做。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u5.hanhao-bird'),
+      },
+      {
+        slug: 'gourd',
+        title: '我要的是葫芦',
+        objectives: [
+          '知道种葫芦的人只想要葫芦，不管叶子上的虫子，最后小葫芦都落了',
+          '明白叶子和果实是有联系的，做事要看到事物之间的联系',
+          '会写“种树、邻居、奇怪、从前、以后、一棵、自言自语”等词语',
+        ],
+        keyPoints: [
+          '重点：叶子长得好，葫芦才能长得好',
+          '难点：理解种葫芦的人为什么不听邻居的劝告',
+          '常见错误：“种树”的“种”读 zhòng，“种子”的“种”读 zhǒng；“邻”的右边是双耳旁',
+        ],
+        prerequisites: [],
+        localContexts: ['阳台上种的小番茄', '学校种植园'],
+        lecture: {
+          title: '我要的是葫芦',
+          minutes: 10,
+          focus:
+            '以一张挂满小葫芦的图导入，讲种葫芦的人怎样盼葫芦、看见叶子上有虫却不管、邻居劝他也不听，最后小葫芦慢慢变黄都落了；用“叶子—葫芦”的连线图讲清两者的关系；识字讲“葫芦、邻居、奇怪、自言自语”，多音字“种”；最后联系生活说说要看到事物之间的联系。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u5.gourd'),
+      },
+      {
+        slug: 'garden-5',
+        title: '语文园地五',
+        objectives: [
+          '复习本单元的字词：渴和喝、两点水的字、多音字（相、当、种、觉）',
+          '能说出三个寓言故事各告诉我们什么道理',
+          '会写“货物、科学”，能用“奇怪”“赶快”等词说句子',
+        ],
+        keyPoints: [
+          '重点：读寓言，想道理——坐井观天、寒号鸟、我要的是葫芦',
+          '难点：把故事里的道理用到自己的生活中',
+          '常见错误：“科”写成“棵”；“货”下面的“贝”写成“见”',
+        ],
+        prerequisites: ['yw-g2a.u5.gourd'],
+        localContexts: ['深圳港的集装箱货物', '深圳科学馆'],
+        lecture: {
+          title: '语文园地五',
+          minutes: 9,
+          focus:
+            '用本单元三个寓言故事串起复习：每个故事说出一个道理；字词复习“渴—喝”、两点水、“货物、科学”和多音字（相、当、种、觉）；再用“奇怪、赶快”等词说句子。园地的具体栏目未核实，只讲通用的字词句运用。',
+        },
+        practice: words('u5.garden-5'),
+      },
+    ]),
+    // ------------------------------------------------------------------ 六
+    unit(B, 6, '阅读：伟人和英雄', [
+      {
+        slug: 'bajiao-tower',
+        title: '八角楼上',
+        objectives: [
+          '知道毛主席在井冈山的八角楼上，深夜还在油灯下工作',
+          '理解“星星之火”的意思，体会革命领袖的辛苦',
+          '会写“年代、胜利、道路、明亮、凝视、中国”等词语',
+        ],
+        keyPoints: [
+          '重点：毛主席深夜在油灯下写文章，为中国革命的胜利操心',
+          '难点：理解“星星之火，可以燎原”——小小的火星能烧遍原野，比喻小力量会发展壮大',
+          '常见错误：“凝”是两点水；“胜”的左边是月字旁',
+        ],
+        prerequisites: [],
+        localContexts: ['深圳的革命纪念馆', '夜里亮着的一盏台灯'],
+        lecture: {
+          title: '八角楼上',
+          minutes: 9,
+          focus:
+            '以一盏小油灯的图片导入，讲井冈山八角楼上，毛主席深夜在油灯下凝视远方、写文章的情景，知道那是艰苦的革命年代；理解“凝视”“星星之火”；识字讲“凝、胜、代、路”；最后说说我们今天明亮的生活来之不易。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u6.bajiao-tower'),
+      },
+      {
+        slug: 'zhude-pole',
+        title: '朱德的扁担',
+        objectives: [
+          '知道朱德同志和红军战士一起挑粮，战士们藏起他的扁担，他又做了一根写上“朱德记”',
+          '体会朱德和战士同甘共苦的品质',
+          '会写“同志、红军、敌人、战士、常常、非常、白天、戴着”等词语',
+        ],
+        keyPoints: [
+          '重点：朱德同志和战士们一样挑粮，扁担上写着“朱德记”',
+          '难点：理解战士们为什么藏起扁担、朱德为什么又做了一根',
+          '常见错误：“戴帽子”的“戴”写成“带”；“敌”写成“故”',
+        ],
+        prerequisites: [],
+        localContexts: ['学校大扫除老师和同学一起干', '爷爷家的扁担'],
+        lecture: {
+          title: '朱德的扁担',
+          minutes: 10,
+          focus:
+            '以一根写着名字的扁担导入，讲红军在井冈山要到山下挑粮，朱德同志也和战士们一起挑；战士们心疼他，把扁担藏了起来，他又找来竹子做了一根，写上“朱德记”三个字；识字讲“敌、战、军、扁担”，辨析“带—戴”；最后说说“同甘共苦”。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u6.zhude-pole'),
+      },
+      {
+        slug: 'water-festival',
+        title: '难忘的泼水节',
+        objectives: [
+          '知道泼水节是傣族人民的节日，周总理和傣族人民一起过泼水节',
+          '体会傣族人民和周总理一起过节的欢乐和难忘',
+          '会写“难忘、火红、人民、总理、四面八方、欢乐、令人”等词语',
+        ],
+        keyPoints: [
+          '重点：人们互相泼水表示祝福；这一天周总理来了，所以令人难忘',
+          '难点：理解“四面八方”“令人难忘”',
+          '常见错误：“泼”写成“波”；“为了”和“因为”用混',
+        ],
+        prerequisites: [],
+        localContexts: ['深圳的民俗文化村', '春节全家人一起过节'],
+        lecture: {
+          title: '难忘的泼水节',
+          minutes: 10,
+          focus:
+            '以泼水节的图片导入，介绍傣族人民的泼水节，互相泼水表示祝福；讲这一年周总理来到傣族人民中间，和大家一起泼水、祝福，人们从四面八方赶来，火红的凤凰花开了，大家欢乐极了；识字讲“泼、傣、总、令”，辨析“因为—为了”。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u6.water-festival'),
+      },
+      {
+        slug: 'liu-hulan',
+        title: '刘胡兰',
+        objectives: [
+          '知道刘胡兰是一位年轻的革命英雄，面对敌人毫不畏惧',
+          '记住毛主席为刘胡兰的题词“生的伟大，死的光荣”',
+          '会写“山村、共产党、现在、大声、消息、几岁、一点儿”等词语',
+        ],
+        keyPoints: [
+          '重点：刘胡兰面对敌人一点儿也不害怕，坚强勇敢',
+          '难点：理解“生的伟大，死的光荣”',
+          '常见错误：“党”的上面写错；“岁”写成“多”',
+        ],
+        prerequisites: [],
+        localContexts: ['清明节去烈士陵园献花', '少先队员的红领巾'],
+        lecture: {
+          title: '刘胡兰',
+          minutes: 9,
+          focus:
+            '以清明节献花的情境导入，讲山村里的刘胡兰小小年纪参加革命，被敌人抓住后面对威胁一点儿也不害怕，英勇牺牲，毛主席题词“生的伟大，死的光荣”；识字讲“党、产、派、岁”；最后说说我们应该怎样纪念英雄。按 2017 版同名课文的内容要点讲，语言温和，不整句引用原文。',
+        },
+        practice: words('u6.liu-hulan'),
+      },
+      {
+        slug: 'garden-6',
+        title: '语文园地六',
+        objectives: [
+          '复习本单元的字词：带和戴、因为和为了、多音字（角、挑、乐、几、难）',
+          '分清“抄、炒、吵”，会写“抄写、炒菜”',
+          '能说说本单元伟人和英雄的故事给自己的启发',
+        ],
+        keyPoints: [
+          '重点：“抄、炒、吵”右边都是“少”——用手抄，用火炒，用口吵',
+          '难点：用学过的词说说英雄的品质',
+          '常见错误：“抄写”写成“炒写”；“吵架”写成“炒架”',
+        ],
+        prerequisites: ['yw-g2a.u6.liu-hulan'],
+        localContexts: ['在家帮妈妈炒菜', '课堂上抄写生字'],
+        lecture: {
+          title: '语文园地六',
+          minutes: 9,
+          focus:
+            '用本单元的四个故事串起复习：毛主席、朱德、周总理、刘胡兰各有什么让人敬佩的地方；字词复习“抄—炒—吵”（看偏旁想意思）、“带—戴”、“因为—为了”和多音字（角、挑、乐、几、难）。园地的具体栏目未核实，只讲通用的字词句运用。',
+        },
+        practice: words('u6.garden-6'),
+      },
+    ]),
+    // ------------------------------------------------------------------ 七
+    unit(B, 7, '阅读：冬天和想象', [
+      {
+        slug: 'poems',
+        title: '古诗二首：江雪 敕勒歌',
+        objectives: [
+          '能正确、有节奏地朗读并背诵《江雪》《敕勒歌》',
+          '知道《江雪》是唐代柳宗元写的，《敕勒歌》是北朝民歌，能说出诗句的大意',
+          '会写“孤舟、独自、破灭、阴山、田野、高低”等词语',
+        ],
+        keyPoints: [
+          '重点：字义——绝（没有了）、径（小路）、孤舟（一只小船）、似（像）、见（露出来）',
+          '难点：体会《江雪》的安静孤单和《敕勒歌》草原的辽阔',
+          '常见错误：“孤”写成“狐”；“风吹草低见牛羊”的“见”理解成“看见”',
+        ],
+        prerequisites: [],
+        localContexts: ['冬天去北方看雪', '内蒙古草原的照片'],
+        lecture: {
+          title: '古诗二首：江雪 敕勒歌',
+          minutes: 11,
+          focus:
+            '先读《江雪》（唐·柳宗元）：千山鸟飞绝，万径人踪灭。孤舟蓑笠翁，独钓寒江雪。讲“绝、径、踪、孤舟、蓑笠翁”，想象大雪中江上独钓的画面。再读《敕勒歌》（北朝民歌）：敕勒川，阴山下。天似穹庐，笼盖四野。天苍苍，野茫茫，风吹草低见牛羊。讲“川、似、穹庐、苍苍、茫茫、见（露出来）”，体会草原的辽阔。最后比较两首诗的画面，练习背诵。',
+        },
+        practice: words('u7.poems'),
+      },
+      {
+        slug: 'fog',
+        title: '雾在哪里',
+        objectives: [
+          '读懂雾像一个淘气的孩子，把大海、船只、城市、行人都藏了起来',
+          '会用“无论……都……”说句子',
+          '会写“于是、无论、船只、同时、行人、一切、出现、消失、散步”等词语',
+        ],
+        keyPoints: [
+          '重点：雾来了，一切都看不见了；雾走了，一切又出现了',
+          '难点：用拟人的方法想象雾说的话和做的事',
+          '常见错误：“雾”的雨字头漏写；“消失”和“出现”意思弄反',
+        ],
+        prerequisites: ['yw-g2a.u1.what-am-i'],
+        localContexts: ['深圳冬春季早上的大雾', '雾中的深圳湾大桥'],
+        lecture: {
+          title: '雾在哪里',
+          minutes: 10,
+          focus:
+            '以大雾天的照片导入，讲雾像一个淘气的孩子，把大海、船只、天空、城市、行人一样样藏起来，最后连自己也藏起来，一切又出现了；理解“无论……都……”“一切”“消失—出现”；识字讲“雾、论、船、散、消”，多音字“切”；最后说说大雾天要注意什么。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u7.fog'),
+      },
+      {
+        slug: 'snow-child',
+        title: '雪孩子',
+        objectives: [
+          '读懂雪孩子冲进火里救出小白兔，自己化成了水汽，又变成白云',
+          '体会雪孩子舍己救人的品质',
+          '会写“伙伴、唱歌、回家、着火、树林、水汽、白云、得救、关闭”等词语',
+        ],
+        keyPoints: [
+          '重点：雪孩子不顾自己，救出了好朋友小白兔',
+          '难点：理解雪孩子为什么会变成白云（雪—水—水汽—云）',
+          '常见错误：“着火”的“着”读 zháo；“汽”和“气”分不清（水汽是三点水）',
+        ],
+        prerequisites: ['yw-g2a.u1.what-am-i'],
+        localContexts: ['冬天去北方堆雪人', '学校的消防演练'],
+        lecture: {
+          title: '雪孩子',
+          minutes: 10,
+          focus:
+            '以堆雪人导入，讲兔妈妈堆的雪孩子和小白兔一起玩，小白兔家着火时，雪孩子冲进火里救出小白兔，自己却化成了水，变成水汽升到空中成了白云；联系《我是什么》讲水的变化；识字讲“伙伴、救、汽、闭”，多音字“着”；最后讲着火时要马上告诉大人、离开危险。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u7.snow-child'),
+      },
+      {
+        slug: 'garden-7',
+        title: '语文园地七',
+        objectives: [
+          '复习本单元的字词：古诗词语、“无论……都……”、多音字（似、切、着、散）',
+          '会写“饥饿、车库、安宁”，认识食字旁',
+          '能用学过的词说说冬天的景色',
+        ],
+        keyPoints: [
+          '重点：食字旁的字多和吃有关（饥、饿、饭）',
+          '难点：用上“寒冷、冰冻、雪花”等词把冬天说具体',
+          '常见错误：“车库”写成“车裤”；“饿”右边写成“我”以外的字',
+        ],
+        prerequisites: ['yw-g2a.u7.snow-child'],
+        localContexts: ['小区的地下车库', '冬夜安宁的小区'],
+        lecture: {
+          title: '语文园地七',
+          minutes: 9,
+          focus:
+            '用本单元的古诗、雾、雪孩子串起复习：冬天和想象；字词复习食字旁（饥、饿、饭）、“库—裤”、“安宁”、“无论……都……”和多音字（似、切、着、散）；最后用学过的词说说冬天。园地的具体栏目未核实，只讲通用的字词句运用。',
+        },
+        practice: words('u7.garden-7'),
+      },
+    ]),
+    // ------------------------------------------------------------------ 八
+    unit(B, 8, '阅读：朋友和心情', [
+      {
+        slug: 'praise',
+        title: '称赞',
+        objectives: [
+          '读懂小刺猬和小獾互相称赞，称赞让大家更有信心',
+          '学会真诚地称赞别人',
+          '会写“椅子、仔细、能干、自信、木工、从来、怎么、这么”等词语',
+        ],
+        keyPoints: [
+          '重点：真诚的称赞能给别人带来信心和快乐',
+          '难点：称赞要具体、真诚，说出别人好在哪里',
+          '常见错误：“仔细”的“仔”读 zǐ；“椅”写成“倚”',
+        ],
+        prerequisites: [],
+        localContexts: ['同学的作品展', '给家人的一句夸奖'],
+        lecture: {
+          title: '称赞',
+          minutes: 9,
+          focus:
+            '以“你被人夸过吗”导入，讲小獾学做木工，做得不太好，小刺猬仔细看了看，真诚地称赞他“你真能干”，小獾更有信心了，也称赞了小刺猬；讨论称赞要真诚、要说出好在哪里；识字讲“椅、赞、仔、称”；最后练习真诚地称赞身边的人。按 2017 版同名课文的内容要点讲，新版字句是否改动未核实，不整句引用原文。',
+        },
+        practice: words('u8.praise'),
+      },
+      {
+        slug: 'paper-boat',
+        title: '纸船和风筝',
+        objectives: [
+          '读懂松鼠和小熊用纸船和风筝结下友谊，吵架后又和好',
+          '懂得朋友之间要互相关心、珍惜友谊',
+          '会写“折纸、抓住、吵架、难过、快乐、和好、句子、但是、可是”等词语',
+        ],
+        keyPoints: [
+          '重点：纸船和风筝让松鼠和小熊成了好朋友，也让他们重新和好',
+          '难点：体会吵架后两人心里的难过和和好后的快乐',
+          '常见错误：“折”写成“拆”；“吵”写成“炒”',
+        ],
+        prerequisites: [],
+        localContexts: ['折纸船放进公园的小溪', '在深圳湾公园放风筝'],
+        lecture: {
+          title: '纸船和风筝',
+          minutes: 10,
+          focus:
+            '以一只纸船和一只风筝导入，讲松鼠住在山上、小熊住在山下，松鼠折纸船顺着小溪漂给小熊，小熊扎风筝顺着风飘给松鼠，他们成了好朋友；后来吵了一架，都很难过，最后又用纸船和风筝和好了；识字讲“折、抓、吵、架”，多音字“和”；最后说说和朋友闹矛盾时怎么办。按 2017 版同名课文的内容要点讲，不整句引用原文。',
+        },
+        practice: words('u8.paper-boat'),
+      },
+      {
+        slug: 'happy-river',
+        title: '快乐的小河',
+        objectives: [
+          '读懂小河一路流向远方，遇到困难也能勇敢快乐',
+          '懂得遇到困难要勇敢、乐观',
+          '会写“游戏、可爱、跳高、咱们、眼泪、水花、青草、田野、远方”等词语',
+        ],
+        keyPoints: [
+          '重点：小河从难过到勇敢快乐的变化',
+          '难点：把小河的心情和自己的生活联系起来',
+          '常见错误：“泪”写成“洞”；“咱们”的“咱”读 zán',
+        ],
+        prerequisites: [],
+        localContexts: ['深圳的大沙河', '体育课上的跳高'],
+        lecture: {
+          title: '快乐的小河',
+          minutes: 9,
+          focus:
+            '以一条欢快流淌的小河导入，讲小河一路流过青草地和田野、流向远方，途中遇到挡路的石头也曾难过流泪，后来学会勇敢面对，重新快乐地向前流；识字讲“泪、咱、戏、跳”，多音字“少”；最后说说自己遇到困难时怎样让心情变好。本课是新版新增课文，原文未核实，不引用课文原句，只讲题目和生字词相关的内容。',
+        },
+        practice: words('u8.happy-river'),
+      },
+      {
+        slug: 'garden-8',
+        title: '语文园地八',
+        objectives: [
+          '复习本单元的字词：称赞的话、的地得、多音字（称、和、少、重）',
+          '会写“狼群、蛇虫”，认识反犬旁和虫字旁的字',
+          '能真诚地称赞别人，和朋友友好相处',
+        ],
+        keyPoints: [
+          '重点：反犬旁的字多和兽类有关（狼、猴、狐），虫字旁的字多和虫类有关（蛇、蛙）',
+          '难点：称赞和感谢的话说得真诚、具体',
+          '常见错误：“狼”写成“浪”；“蛇”的右边写错',
+        ],
+        prerequisites: ['yw-g2a.u8.happy-river'],
+        localContexts: ['深圳野生动物园的狼', '郊野公园里要小心蛇虫'],
+        lecture: {
+          title: '语文园地八',
+          minutes: 9,
+          focus:
+            '用本单元的称赞、纸船和风筝、快乐的小河串起复习：怎样做一个好朋友；字词复习反犬旁和虫字旁（狼、蛇）、的地得、句末标点和多音字（称、和、少、重）；最后练习说一句真诚称赞的话。园地的具体栏目未核实，只讲通用的字词句运用。',
+        },
+        practice: words('u8.garden-8', false),
       },
     ]),
   ],

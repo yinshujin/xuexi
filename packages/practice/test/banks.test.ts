@@ -9,6 +9,8 @@ import { YW_G2A } from '../src/banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../src/banks/yw-g4a';
 import { YW_G4A_POLY } from '../src/banks/yw-g4a-poly';
 import { XZ_G2A, XZ_G2A_GAMES } from '../src/banks/xz-g2a';
+import { XZ_G4A } from '../src/banks/xz-g4a';
+import { XZ_G4A_GAMES } from '../src/banks/xz-g4a-games';
 
 /**
  * Data rules for the 语文 / 英语 item banks. The generators assume these hold
@@ -189,30 +191,57 @@ describe('写作 banks', () => {
     }
   });
 
-  it('xz-g2a: game material is well formed', () => {
-    const kps = new Set(XZ_G2A.items.map((it) => it.kp));
-    for (const b of XZ_G2A_GAMES.build) {
+  it.each([
+    ['xz-g2a', XZ_G2A, XZ_G2A_GAMES],
+    ['xz-g4a', XZ_G4A, XZ_G4A_GAMES],
+  ] as const)('%s: game material is well formed', (_id, bank, games) => {
+    const kps = new Set(bank.items.map((it) => it.kp));
+    for (const b of games.build) {
       expect(kps.has(b.kp), b.kp).toBe(true);
       expect(b.chunks.length, b.chunks.join('')).toBeGreaterThanOrEqual(3);
       expect(new Set(b.chunks).size, b.chunks.join('')).toBe(b.chunks.length);
       for (const d of b.decoys ?? []) expect(b.chunks, b.chunks.join('')).not.toContain(d);
     }
-    for (const m of XZ_G2A_GAMES.match) {
+    for (const m of games.match) {
       expect(kps.has(m.kp), m.kp).toBe(true);
       expect(m.pairs.length).toBeGreaterThanOrEqual(4);
       expect(m.pairs.length).toBeLessThanOrEqual(5);
       expect(new Set(m.pairs.map((p) => p[0])).size, m.title).toBe(m.pairs.length);
       expect(new Set(m.pairs.map((p) => p[1])).size, m.title).toBe(m.pairs.length);
     }
-    for (const s of XZ_G2A_GAMES.sort) {
+    for (const s of games.sort) {
       expect(kps.has(s.kp), s.kp).toBe(true);
       expect(s.sentences.length, s.prompt).toBe(4);
       expect(new Set(s.sentences).size, s.prompt).toBe(4);
     }
     // Every unit has material for 连连看 and 拼一拼.
     for (let u = 1; u <= 8; u++) {
-      expect(XZ_G2A_GAMES.build.some((b) => b.kp.startsWith(`u${u}.`)), `u${u} build`).toBe(true);
-      expect(XZ_G2A_GAMES.match.some((b) => b.kp.startsWith(`u${u}.`)), `u${u} match`).toBe(true);
+      expect(games.build.some((b) => b.kp.startsWith(`u${u}.`)), `u${u} build`).toBe(true);
+      expect(games.match.some((b) => b.kp.startsWith(`u${u}.`)), `u${u} match`).toBe(true);
     }
+  });
+
+  it('xz-g4a', () => {
+    checkItems('xz-g4a', 'xz4.skills', XZ_G4A.items, false);
+    expect(XZ_G4A.polyphones).toEqual([]);
+    const kps = [...new Set(XZ_G4A.items.map((it) => it.kp))];
+    expect(kps.length).toBe(16);
+    for (const kp of kps) {
+      const of = XZ_G4A.items.filter((it) => it.kp === kp);
+      const routine = of.filter((it) => !it.tier);
+      expect(routine.length, `${kp}: routine items`).toBeGreaterThanOrEqual(20);
+      for (const level of [1, 2, 3]) expect(routine.filter((it) => it.level === level).length, `${kp}: level ${level}`).toBeGreaterThanOrEqual(6);
+      for (const tier of ['stretch', 'creative'])
+        expect(of.filter((it) => it.tier === tier).length, `${kp}: ${tier} items`).toBeGreaterThanOrEqual(4);
+    }
+    for (let u = 1; u <= 8; u++) {
+      const unit = XZ_G4A.items.filter((it) => it.kp.startsWith(`u${u}.`) && !it.tier);
+      expect(new Set(unit.map((it) => it.kp)).size, `u${u}`).toBe(2);
+      expect(new Set(unit.map((it) => it.prompt)).size, `u${u}: distinct routine prompts`).toBeGreaterThanOrEqual(40);
+    }
+    // The right answer should not give itself away as the one long option: at most two thirds of the
+    // items may have the answer as their longest option (long but vague or off-topic distractors).
+    const longest = XZ_G4A.items.filter((it) => [...it.answer].length > Math.max(...it.wrong.map(([w]) => [...w].length)));
+    expect(longest.length / XZ_G4A.items.length).toBeLessThan(2 / 3);
   });
 });

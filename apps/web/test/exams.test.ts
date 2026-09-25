@@ -105,7 +105,7 @@ describe('单元测试 papers', () => {
 });
 
 describe('连连看 / 拼一拼', () => {
-  it('the papers of a 语文 / 英语 unit together include 连连看 and 拼一拼, and each paper some games', () => {
+  it('the papers of a 语文 / 英语 / 写作 unit together include 连连看 and 拼一拼, and each paper some games', () => {
     for (const u of units) {
       const papers = unitPapers(u.id);
       const kinds = new Set(papers.flatMap((p) => p.items.flatMap((it) => (it.game ? [it.game.kind] : []))));

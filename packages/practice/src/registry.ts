@@ -36,6 +36,7 @@ import {
   yw4Polyphone,
   yw4Words,
   xz2Skills,
+  xz4Skills,
 } from './generators/lang-banks';
 import type { GenerateOptions, GradeResult, Question, Response } from './types';
 
@@ -78,6 +79,7 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   en2Words,
   en4Words,
   xz2Skills,
+  xz4Skills,
 ] as readonly PracticeGenerator[];
 
 const BY_ID = new Map<string, PracticeGenerator>(ALL_GENERATORS.map((g) => [g.id, g]));

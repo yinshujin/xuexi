@@ -4,6 +4,7 @@ import {
   EN_G4A,
   seedFrom,
   XZ_G2A_GAMES,
+  XZ_G4A_GAMES,
   YW_G2A_WORDS,
   YW_G4A_WORDS,
   type DictWord,
@@ -16,7 +17,7 @@ import { coreSpecs, makeQuestion } from '../learning';
 export const EN_BANKS: Record<string, EnglishBank> = { 'en-g2a': EN_G2A, 'en-g4a': EN_G4A };
 export const DICTATION: Record<string, Record<string, DictWord[]>> = { 'yw-g2a': YW_G2A_WORDS, 'yw-g4a': YW_G4A_WORDS };
 /** 写作 books: 拼一拼 sentences, 连连看 pairs and 排序 passages (see WritingGames). */
-export const XZ_GAMES: Record<string, WritingGames> = { 'xz-g2a': XZ_G2A_GAMES };
+export const XZ_GAMES: Record<string, WritingGames> = { 'xz-g2a': XZ_G2A_GAMES, 'xz-g4a': XZ_G4A_GAMES };
 
 /**
  * 写作: the game material of a unit (knowledge points the papers cover), one

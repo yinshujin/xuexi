@@ -16,6 +16,7 @@ import { pictureBuilder, pictureInfo } from './picture';
 import { sortBuilder, sortInfo } from './sort';
 import { classifyBuilder, classifyInfo } from './classify';
 import { judgeBuilder, judgeInfo, timedBuilder, timedInfo } from './judge';
+import { readingBuilder, readingInfo } from './reading';
 import type { Game, GameBuilder, GameContext, GameInfo, UnitGame } from './types';
 import { variantOf } from './util';
 
@@ -29,6 +30,8 @@ export { spellCorrect } from './spell';
 export { sortCorrect } from './sort';
 export { CLASSIFY_SLIPS, classifySlips } from './classify';
 export { JUDGE_SLIPS, timedEarned, timedRule } from './judge';
+export { circled, readingAnswerText, readingGivenText, readingLabel, readingRight, readingScore, type ReadingAnswer } from './reading';
+export { isNumberQuestion, READING, type ReadingPassage, type ReadingQuestion } from './reading-data';
 export { gameAvailable, loadGameEnv, type GameEnv } from './env';
 
 /** Every game kind's builder (order matters only as the start of the rotation). */
@@ -44,6 +47,7 @@ export const BUILDERS: GameBuilder[] = [
   classifyBuilder,
   judgeBuilder,
   timedBuilder,
+  readingBuilder,
 ];
 
 /** Every game kind's text description, by kind. */
@@ -59,6 +63,7 @@ const INFO: Record<string, GameInfo> = {
   classify: classifyInfo as GameInfo,
   judge: judgeInfo as GameInfo,
   timed: timedInfo as GameInfo,
+  reading: readingInfo as GameInfo,
 };
 
 /** Game questions per paper. */

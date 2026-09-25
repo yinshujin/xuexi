@@ -12,6 +12,7 @@ import { SortView } from './SortView';
 import { ClassifyView } from './ClassifyView';
 import { JudgeView } from './JudgeView';
 import { TimedView } from './TimedView';
+import { ReadingView } from './ReadingView';
 import type { GameViewProps } from './types';
 
 export type { GameOutcome, GameViewProps } from './types';
@@ -28,4 +29,5 @@ export const GAME_VIEWS: Record<string, ComponentType<GameViewProps<Game>>> = {
   classify: ClassifyView as ComponentType<GameViewProps<Game>>,
   judge: JudgeView as ComponentType<GameViewProps<Game>>,
   timed: TimedView as ComponentType<GameViewProps<Game>>,
+  reading: ReadingView as ComponentType<GameViewProps<Game>>,
 };

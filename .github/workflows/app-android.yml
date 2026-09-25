@@ -102,6 +102,25 @@ jobs:
           done
           grep -c 'RECORD_AUDIO\|MODIFY_AUDIO_SETTINGS' AndroidManifest.xml | grep -qx 2
           grep uses-permission AndroidManifest.xml
+      # Android only installs over the old app when the versionCode goes up
+      # (the Huawei and vivo installers refuse an equal one), so every build gets
+      # a larger one: minutes since 2026-01-01 UTC, which also stays increasing
+      # for manual and tag builds. The version name carries the run number.
+      - name: Stamp a new version
+        working-directory: shells/tauri/src-tauri
+        run: |
+          set -euo pipefail
+          CODE=$(( ($(date -u +%s) - 1767225600) / 60 ))
+          NAME="0.1.${{ github.run_number }}"
+          node -e '
+            const fs = require("fs"); const f = "tauri.conf.json";
+            const c = JSON.parse(fs.readFileSync(f, "utf8"));
+            c.version = process.argv[1];
+            c.bundle.android = { ...(c.bundle.android ?? {}), versionCode: Number(process.argv[2]) };
+            fs.writeFileSync(f, JSON.stringify(c, null, 2) + "\n");
+          ' "$NAME" "$CODE"
+          echo "APP_VERSION=$NAME" >> "$GITHUB_ENV"
+          echo "::notice::versionName $NAME, versionCode $CODE"
       - name: Build release APK
         working-directory: shells/tauri
         # 64-bit ARM only: the Huawei tablet (HarmonyOS 4) and the vivo phone are arm64, and
@@ -132,6 +151,8 @@ jobs:
             --out dist/xuexi.apk dist/aligned.apk
           rm -f dist/aligned.apk release.jks
           "$BT/apksigner" verify --print-certs dist/*.apk | head -n 3
+          # The stamped version must be the one in the APK, or updates break again.
+          "$BT/aapt" dump badging dist/xuexi.apk | head -n 1 | tee /dev/stderr | grep -q "versionName='$APP_VERSION'"
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: xuexi-android
@@ -153,7 +174,7 @@ jobs:
         with:
           tag_name: app-latest
           name: 最新 App（自动构建）
-          body: 每次代码或课程更新后自动构建，已内置当时所有的讲解课和技巧课。华为平板和 vivo 手机下载 xuexi.apk 覆盖安装即可，学习记录不会丢。
+          body: 版本 ${{ env.APP_VERSION }}。每次代码或课程更新后自动构建（版本号自动递增），已内置当时所有的讲解课和技巧课。华为平板和 vivo 手机下载 xuexi.apk 覆盖安装即可，学习记录不会丢。
           files: dist/xuexi.apk
           overwrite_files: true
           make_latest: true

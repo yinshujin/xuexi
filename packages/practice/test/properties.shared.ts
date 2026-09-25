@@ -1,5 +1,5 @@
 // Shared by properties.*.test.ts (not a test file itself).
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { GENERATORS, type ErrorTag } from '@xuexi/shared';
 import { ALL_GENERATORS, generateQuestion, getGenerator, gradeQuestion } from '../src/registry';
 import type { Answer, Question, Response } from '../src/types';
@@ -86,88 +86,100 @@ function answerMatchesWidget(q: Question, a: Answer): boolean {
 const HEAVY = 60_000;
 
 export function generatorProperties(include: (id: string) => boolean, seeds = 300): void {
-describe.each(ALL_GENERATORS.filter((g) => include(g.id)).map((g) => [g.id, g] as const))('%s', (id, gen) => {
-  const tags = allowed(id);
-  it.each(gen.variants)(
-    'variant %s: deterministic, verified, graded, diagnosed within catalog tags',
-    (variant) => {
-      for (let difficulty = 1; difficulty <= 5; difficulty++) {
-        for (let seed = 0; seed < seeds; seed++) {
-          const q = generateQuestion(id, { difficulty, seed, variant });
-          // Deterministic.
-          expect(generateQuestion(id, { difficulty, seed, variant })).toEqual(q);
-          expect(q.key).toBe(`${id}:${difficulty}:${seed}:${variant}`);
-          // Well-formed.
-          expect(answerMatchesWidget(q, q.answer), q.key).toBe(true);
-          expect(q.steps.length, q.key).toBeGreaterThan(0);
-          for (const st of q.steps) expect(st.text.trim().length, q.key).toBeGreaterThan(0);
-          expect(q.hint.length, q.key).toBeGreaterThan(0);
-          expect(q.targetSeconds, q.key).toBeGreaterThan(0);
-          if (q.answer.type === 'number') {
-            expect(Number.isInteger(q.answer.value), q.key).toBe(true);
-            if (id !== 'g4.negative') expect(q.answer.value, q.key).toBeGreaterThanOrEqual(0);
-            // Hints must not reveal the worked result.
-            const last = [...q.steps].reverse().find((st) => st.formula)?.formula;
-            if (last) expect(q.hint.includes(last), q.key).toBe(false);
-          }
-          if (q.widget === 'choice') {
-            expect(q.options!.length, q.key).toBeGreaterThanOrEqual(2);
-            expect(new Set(q.options).size, q.key).toBe(q.options!.length);
-          }
-          if (q.widget === 'vertical') expect(q.vertical, q.key).toBeDefined();
-          if (q.widget === 'angle') expect(q.angle, q.key).toBeDefined();
-          // Independently verified answer.
-          expect(q.answer, `${q.key} ${q.prompt}`).toEqual(expectedAnswer(q));
-          // Grading.
-          expect(gradeQuestion(q, exactResponse(q))).toMatchObject({
-            correct: true,
-            errorTags: [],
-          });
-          for (const r of perturbed(q)) {
-            const g = gradeQuestion(q, r);
-            expect(g.correct, `${q.key} ${JSON.stringify(r)}`).toBe(false);
-            expect(g.errorTags.length).toBeGreaterThan(0);
-            expect(g.feedback.length).toBeGreaterThan(0);
-            for (const t of g.errorTags) {
-              if (t !== 'careless') expect(tags.has(t), `${q.key}: ${t} not allowed`).toBe(true);
+  // The cases are fully synchronous: without a turn of the event loop between
+  // them the worker never reads vitest's RPC replies and times out after 60 s.
+  afterEach(() => new Promise<void>((resolve) => setTimeout(resolve, 0)));
+
+  describe.each(ALL_GENERATORS.filter((g) => include(g.id)).map((g) => [g.id, g] as const))(
+    '%s',
+    (id, gen) => {
+      const tags = allowed(id);
+      it.each(gen.variants)(
+        'variant %s: deterministic, verified, graded, diagnosed within catalog tags',
+        (variant) => {
+          for (let difficulty = 1; difficulty <= 5; difficulty++) {
+            for (let seed = 0; seed < seeds; seed++) {
+              const q = generateQuestion(id, { difficulty, seed, variant });
+              // Deterministic.
+              expect(generateQuestion(id, { difficulty, seed, variant })).toEqual(q);
+              expect(q.key).toBe(`${id}:${difficulty}:${seed}:${variant}`);
+              // Well-formed.
+              expect(answerMatchesWidget(q, q.answer), q.key).toBe(true);
+              expect(q.steps.length, q.key).toBeGreaterThan(0);
+              for (const st of q.steps) expect(st.text.trim().length, q.key).toBeGreaterThan(0);
+              expect(q.hint.length, q.key).toBeGreaterThan(0);
+              expect(q.targetSeconds, q.key).toBeGreaterThan(0);
+              if (q.answer.type === 'number') {
+                expect(Number.isInteger(q.answer.value), q.key).toBe(true);
+                if (id !== 'g4.negative') expect(q.answer.value, q.key).toBeGreaterThanOrEqual(0);
+                // Hints must not reveal the worked result.
+                const last = [...q.steps].reverse().find((st) => st.formula)?.formula;
+                if (last) expect(q.hint.includes(last), q.key).toBe(false);
+              }
+              if (q.widget === 'choice') {
+                expect(q.options!.length, q.key).toBeGreaterThanOrEqual(2);
+                expect(new Set(q.options).size, q.key).toBe(q.options!.length);
+              }
+              if (q.widget === 'vertical') expect(q.vertical, q.key).toBeDefined();
+              if (q.widget === 'angle') expect(q.angle, q.key).toBeDefined();
+              // Independently verified answer.
+              expect(q.answer, `${q.key} ${q.prompt}`).toEqual(expectedAnswer(q));
+              // Grading.
+              expect(gradeQuestion(q, exactResponse(q))).toMatchObject({
+                correct: true,
+                errorTags: [],
+              });
+              for (const r of perturbed(q)) {
+                const g = gradeQuestion(q, r);
+                expect(g.correct, `${q.key} ${JSON.stringify(r)}`).toBe(false);
+                expect(g.errorTags.length).toBeGreaterThan(0);
+                expect(g.feedback.length).toBeGreaterThan(0);
+                for (const t of g.errorTags) {
+                  if (t !== 'careless')
+                    expect(tags.has(t), `${q.key}: ${t} not allowed`).toBe(true);
+                }
+              }
             }
           }
-        }
-      }
-    },
-    HEAVY,
-  );
+        },
+        HEAVY,
+      );
 
-  it('targetFor builds valid questions for every supported tag and null otherwise', () => {
-    for (const tag of gen.targets) {
-      expect(tags.has(tag), `${id} targets ${tag}`).toBe(true);
-      for (const variant of gen.variants) {
-        for (let difficulty = 1; difficulty <= 5; difficulty++) {
-          for (let seed = 0; seed < 40; seed++) {
-            const q = gen.targetFor!(tag, { difficulty, seed, variant })!;
-            expect(q.variant).toBe(`${variant}@${tag}`);
-            expect(q.answer).toEqual(expectedAnswer(q));
-            expect(gradeQuestion(q, exactResponse(q)).correct).toBe(true);
-            // Reproducible from its own key parts.
-            expect(generateQuestion(id, { difficulty, seed, variant: q.variant })).toEqual(q);
+      it(
+        'targetFor builds valid questions for every supported tag and null otherwise',
+        () => {
+          for (const tag of gen.targets) {
+            expect(tags.has(tag), `${id} targets ${tag}`).toBe(true);
+            for (const variant of gen.variants) {
+              for (let difficulty = 1; difficulty <= 5; difficulty++) {
+                for (let seed = 0; seed < 40; seed++) {
+                  const q = gen.targetFor!(tag, { difficulty, seed, variant })!;
+                  expect(q.variant).toBe(`${variant}@${tag}`);
+                  expect(q.answer).toEqual(expectedAnswer(q));
+                  expect(gradeQuestion(q, exactResponse(q)).correct).toBe(true);
+                  // Reproducible from its own key parts.
+                  expect(generateQuestion(id, { difficulty, seed, variant: q.variant })).toEqual(q);
+                }
+              }
+            }
           }
-        }
-      }
-    }
-    expect(gen.targetFor!('careless', { difficulty: 1, seed: 1 })).toBeNull();
-  }, HEAVY);
+          expect(gen.targetFor!('careless', { difficulty: 1, seed: 1 })).toBeNull();
+        },
+        HEAVY,
+      );
 
-  it('empty responses are not diagnosed', () => {
-    const q = gen.generate({ difficulty: 3, seed: 1 });
-    const empty: Response =
-      q.answer.type === 'number'
-        ? { type: 'number', value: null }
-        : q.answer.type === 'choice'
-          ? { type: 'choice', index: null }
-          : q.answer.type === 'compare'
-            ? { type: 'compare', value: null }
-            : { type: 'division', quotient: null, remainder: null };
-    expect(getGenerator(id).grade(q, empty)).toMatchObject({ correct: false, errorTags: [] });
-  });
-});
+      it('empty responses are not diagnosed', () => {
+        const q = gen.generate({ difficulty: 3, seed: 1 });
+        const empty: Response =
+          q.answer.type === 'number'
+            ? { type: 'number', value: null }
+            : q.answer.type === 'choice'
+              ? { type: 'choice', index: null }
+              : q.answer.type === 'compare'
+                ? { type: 'compare', value: null }
+                : { type: 'division', quotient: null, remainder: null };
+        expect(getGenerator(id).grade(q, empty)).toMatchObject({ correct: false, errorTags: [] });
+      });
+    },
+  );
 }

@@ -82,6 +82,9 @@ function answerMatchesWidget(q: Question, a: Answer): boolean {
  * deterministic, independently verified, graded, diagnosed within catalog tags.
  * Split across several test files so they run in parallel.
  */
+/** Each case loops over hundreds of questions; CI runners are slower than a laptop. */
+const HEAVY = 60_000;
+
 export function generatorProperties(include: (id: string) => boolean, seeds = 300): void {
 describe.each(ALL_GENERATORS.filter((g) => include(g.id)).map((g) => [g.id, g] as const))('%s', (id, gen) => {
   const tags = allowed(id);
@@ -132,6 +135,7 @@ describe.each(ALL_GENERATORS.filter((g) => include(g.id)).map((g) => [g.id, g] a
         }
       }
     },
+    HEAVY,
   );
 
   it('targetFor builds valid questions for every supported tag and null otherwise', () => {
@@ -151,7 +155,7 @@ describe.each(ALL_GENERATORS.filter((g) => include(g.id)).map((g) => [g.id, g] a
       }
     }
     expect(gen.targetFor!('careless', { difficulty: 1, seed: 1 })).toBeNull();
-  });
+  }, HEAVY);
 
   it('empty responses are not diagnosed', () => {
     const q = gen.generate({ difficulty: 3, seed: 1 });

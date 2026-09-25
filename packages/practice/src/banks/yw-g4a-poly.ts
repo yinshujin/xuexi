@@ -339,8 +339,8 @@ export const YW_G4A_POLY: Polyphone[] = [
       { pinyin: 'qiǎng', meaning: '硬要、勉强', words: ['勉强', '强迫'] },
     ],
     sentences: [
-      { text: '那个穷苦的女人很「强」壮，也很勤俭。', pinyin: 'qiáng' },
-      { text: '齐威王每个等级的马都比田忌的「强」。', pinyin: 'qiáng' },
+      { text: '那个穷苦的女人很「强」壮，也很勤劳。', pinyin: 'qiáng' },
+      { text: '孙膑的办法让田忌以「强」对弱，赢了两场。', pinyin: 'qiáng' },
     ],
   },
   {
@@ -361,7 +361,7 @@ export const YW_G4A_POLY: Polyphone[] = [
       { pinyin: 'dān', meaning: '承担、负责；挂念', words: ['担心', '分担', '担任'] },
       { pinyin: 'dàn', meaning: '挑的东西；责任', words: ['担子', '重担'] },
     ],
-    sentences: [{ text: '善良的上帝分「担」了我的愁苦。', pinyin: 'dān' }],
+    sentences: [{ text: '母亲每天出去干活，一个人「担」起了全家的生活。', pinyin: 'dān' }],
   },
   {
     kp: 'u2.peas',
@@ -401,7 +401,7 @@ export const YW_G4A_POLY: Polyphone[] = [
       { pinyin: 'zhǒng', meaning: '种子；种类', words: ['种子', '各种', '种类'] },
       { pinyin: 'zhòng', meaning: '把种子或幼苗埋在土里', words: ['种地', '种花', '种树'] },
     ],
-    sentences: [{ text: '是上帝亲自「种」下了这颗豌豆。', pinyin: 'zhòng' }],
+    sentences: [{ text: '春天，农民伯伯在田里「种」下了豌豆。', pinyin: 'zhòng' }],
   },
   {
     kp: 'u2.peas',
@@ -411,7 +411,7 @@ export const YW_G4A_POLY: Polyphone[] = [
       { pinyin: 'yīng', meaning: '应该、应当', words: ['应该', '应当'] },
       { pinyin: 'yìng', meaning: '回答、配合；适合', words: ['应用', '适应', '反应'] },
     ],
-    sentences: [{ text: '她「应」该到天上的姐姐那儿去。', pinyin: 'yīng' }],
+    sentences: [{ text: '小女孩的病「应」该会一天天好起来。', pinyin: 'yīng' }],
   },
   {
     kp: 'u2.peas',
@@ -465,7 +465,7 @@ export const YW_G4A_POLY: Polyphone[] = [
     ],
     sentences: [
       { text: '屋子里拉满了绳子，绳子上「系」着铃铛。', pinyin: 'jì' },
-      { text: '母亲把线的一端「系」在窗槛上。', pinyin: 'jì' },
+      { text: '母亲从窗台上牵了一根绳子，「系」到窗框上。', pinyin: 'jì' },
     ],
   },
   {
@@ -562,7 +562,7 @@ export const YW_G4A_POLY: Polyphone[] = [
       { pinyin: 'xìng', meaning: '对事物喜爱的情绪', words: ['高兴', '兴趣', '扫兴'] },
       { pinyin: 'xīng', meaning: '旺盛；开始、发动', words: ['兴奋', '兴旺', '复兴'] },
     ],
-    sentences: [{ text: '田忌输了比赛，觉得很扫「兴」。', pinyin: 'xìng' }],
+    sentences: [{ text: '第一场输了，田忌一点也不扫「兴」，还是不动声色。', pinyin: 'xìng' }],
   },
   {
     kp: 'u2.horse-race',
@@ -572,7 +572,7 @@ export const YW_G4A_POLY: Polyphone[] = [
       { pinyin: 'sàng', meaning: '失去；情绪低落', words: ['丧气', '丧失', '垂头丧气'] },
       { pinyin: 'sāng', meaning: '跟人去世有关的事', words: ['丧事', '丧礼'] },
     ],
-    sentences: [{ text: '田忌垂头「丧」气地准备离开赛马场。', pinyin: 'sàng' }],
+    sentences: [{ text: '比赛输了一场，也不要垂头「丧」气。', pinyin: 'sàng' }],
   },
   {
     kp: 'u2.horse-race',

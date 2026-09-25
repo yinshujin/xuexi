@@ -206,6 +206,7 @@ export const YW_G4A_WORDS: DictationList = {
     { w: '飘动', py: 'piāo dòng' },
     { w: '奔流不息', py: 'bēn liú bù xī' },
     { w: '茂盛', py: 'mào shèng' },
+    { w: '精疲力竭', py: 'jīng pí lì jié' },
   ],
   'u4.jingwei': [
     { w: '名曰', py: 'míng yuē' },
@@ -327,11 +328,6 @@ export const YW_G4A_WORDS: DictationList = {
     { w: '隔开', py: 'gé kāi' },
     { w: '扶手', py: 'fú shǒu' },
     { w: '建筑', py: 'jiàn zhù' },
-    { w: '耸立', py: 'sǒng lì' },
-    { w: '半山腰', py: 'bàn shān yāo' },
-    { w: '金碧辉煌', py: 'jīn bì huī huáng' },
-    { w: '镜子', py: 'jìng zi' },
-    { w: '隐隐约约', py: 'yǐn yǐn yuē yuē' },
   ],
   'u6.summer-palace': [
     { w: '柱子', py: 'zhù zi' },
@@ -341,6 +337,11 @@ export const YW_G4A_WORDS: DictationList = {
     { w: '绕过', py: 'rào guò' },
     { w: '一幅画', py: 'yì fú huà' },
     { w: '栽种', py: 'zāi zhòng' },
+    { w: '耸立', py: 'sǒng lì' },
+    { w: '半山腰', py: 'bàn shān yāo' },
+    { w: '金碧辉煌', py: 'jīn bì huī huáng' },
+    { w: '镜子', py: 'jìng zi' },
+    { w: '隐隐约约', py: 'yǐn yǐn yuē yuē' },
   ],
   'u6.garden': [
     { w: '游人', py: 'yóu rén' },

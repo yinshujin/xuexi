@@ -78,6 +78,8 @@ function entryOf(book: Book, path: string, files: BookManifest['files'], builtAt
     id: book.id,
     title: book.title,
     level: book.level,
+    ...(book.grade ? { grade: book.grade } : {}),
+    ...(book.topic ? { topic: book.topic } : {}),
     path,
     pages: book.pages.length,
     words: countWords(book),

@@ -56,6 +56,10 @@ export interface Book {
   title: string;
   /** Reading level as the series names it: "A", "B", … (RAZ) or "1", "2" … */
   level: string;
+  /** School grade the book is chosen for (the shelf puts a child's grade first). */
+  grade?: number;
+  /** Shelf section, e.g. "动物", "自然与科学". */
+  topic?: string;
   source: { name: string; url?: string; license: string; attribution?: string };
   private: boolean;
   cover?: string;
@@ -91,6 +95,8 @@ export interface BookEntry {
   id: string;
   title: string;
   level: string;
+  grade?: number;
+  topic?: string;
   /** Bundle-relative directory ending with "/": "books/<id>/v1/". */
   path: string;
   pages: number;
@@ -115,6 +121,8 @@ export function assertBook(value: unknown): asserts value is Book {
   if (typeof b.level !== 'string' || !b.level) throw new Error('book.level 缺失');
   if (!b.source || typeof b.source.name !== 'string' || typeof b.source.license !== 'string') throw new Error('book.source 缺失');
   if (typeof b.private !== 'boolean') throw new Error('book.private 缺失');
+  if (b.grade !== undefined && !(Number.isInteger(b.grade) && b.grade >= 1 && b.grade <= 9)) throw new Error('book.grade 无效');
+  if (b.topic !== undefined && (typeof b.topic !== 'string' || !b.topic || b.topic.length > 20)) throw new Error('book.topic 无效');
   if (!Array.isArray(b.pages) || b.pages.length === 0) throw new Error('book.pages 为空');
   if (b.cover !== undefined && !SAFE_PATH.test(b.cover)) throw new Error(`book.cover 路径无效: ${b.cover}`);
   b.pages.forEach((p, i) => {

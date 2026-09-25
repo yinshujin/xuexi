@@ -8,6 +8,8 @@ import { bookDir, saveBook, slugify } from './store';
 
 export interface ImportCommon {
   level: string;
+  grade?: number;
+  topic?: string;
   id?: string;
   title?: string;
   /** A JSON file with the questions, or the questions themselves. */
@@ -79,6 +81,8 @@ export function importBookDash(paths: Paths, langDir: string, o: ImportCommon): 
     id,
     title,
     level: o.level,
+    ...(o.grade ? { grade: o.grade } : {}),
+    ...(o.topic ? { topic: o.topic } : {}),
     source: {
       name: 'Book Dash',
       url: `https://bookdash.org/books/${slug}/`,
@@ -98,13 +102,15 @@ export function importBookDash(paths: Paths, langDir: string, o: ImportCommon): 
 
 /** The sample list in content/books-sample/samples.json. */
 export interface SampleList {
-  books: Array<{ slug: string; level: string; quiz?: BookQuizQuestion[] }>;
+  books: Array<{ slug: string; level: string; grade?: number; topic?: string; quiz?: BookQuizQuestion[] }>;
 }
 
 /** Import every book of the sample list from a checkout of bookdash/bookdash-books. */
 export function importBookDashSamples(paths: Paths, repoDir: string, samplesFile: string): Book[] {
   const list = JSON.parse(readFileSync(samplesFile, 'utf8')) as SampleList;
-  return list.books.map((s) => importBookDash(paths, join(repoDir, s.slug, 'en'), { level: s.level, quiz: s.quiz }));
+  return list.books.map((s) =>
+    importBookDash(paths, join(repoDir, s.slug, 'en'), { level: s.level, grade: s.grade, topic: s.topic, quiz: s.quiz }),
+  );
 }
 
 function python(args: string[]): Promise<string> {
@@ -154,6 +160,8 @@ export async function importPdf(paths: Paths, pdf: string, o: PdfImportOptions):
     id,
     title,
     level: o.level,
+    ...(o.grade ? { grade: o.grade } : {}),
+    ...(o.topic ? { topic: o.topic } : {}),
     source: { name: o.source ?? '家庭自有', license: o.license ?? '仅限家庭自用，请勿分享' },
     private: o.private ?? true,
     cover: pages[0]?.image,

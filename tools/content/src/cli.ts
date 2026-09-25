@@ -60,7 +60,7 @@ const HELP = `用法：pnpm content <命令> [选项]
   builtin <课程包.zip ...> [--out 目录]
                                   把课程包文件解包到 apps/web/public/builtin，构建 App 时一起打包（装好就能上课）
   —— 绘本跟读（原图 + 逐句朗读 + 跟读录音）——
-  book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M] [--keep-blank]
+  book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M] [--keep-blank] [--grade 2] [--topic 动物]
                                   导入自己有版权的绘本 PDF（如 RAZ Plus 订阅里下载的），默认私有
   book import-bookdash <目录/en> --level A [--quiz 题目.json]   导入 Book Dash 开放绘本（CC BY 4.0）
   book import-samples <bookdash-books 目录>   导入 content/books-sample/samples.json 里的示例绘本
@@ -131,6 +131,8 @@ async function main() {
       license: { type: 'string' },
       'allow-silent': { type: 'boolean' },
       'keep-blank': { type: 'boolean' },
+      grade: { type: 'string' },
+      topic: { type: 'string' },
       samples: { type: 'string' },
     },
   });
@@ -348,7 +350,14 @@ async function main() {
       if (sub === 'import-bookdash') {
         const dir = positionals[1];
         if (!dir || !values.level) throw new Error('用法：book import-bookdash <书目录/en> --level A [--id X] [--quiz 题目.json]');
-        const b = importBookDash(paths, dir, { level: values.level, id: values.id, title: values.title, quiz: values.quiz });
+        const b = importBookDash(paths, dir, {
+          level: values.level,
+          id: values.id,
+          title: values.title,
+          quiz: values.quiz,
+          grade: values.grade ? Number(values.grade) : undefined,
+          topic: values.topic,
+        });
         log(`✓ ${b.id}：《${b.title}》${b.pages.length} 页，级别 ${b.level}`);
       } else if (sub === 'import-samples') {
         const repo = positionals[1];
@@ -364,6 +373,8 @@ async function main() {
         }
         const b = await importPdf(paths, pdf, {
           keepBlank: values['keep-blank'],
+          grade: values.grade ? Number(values.grade) : undefined,
+          topic: values.topic,
           level: values.level,
           id: values.id,
           title: values.title,

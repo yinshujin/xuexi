@@ -135,9 +135,9 @@ describe('picture books', () => {
   it('imports the sample list with its quizzes', () => {
     const list = join(tmp, 'samples.json');
     const quiz = [{ question: 'Who swims?', options: ['Fish', 'Crab'], answer: 0 }];
-    writeFileSync(list, JSON.stringify({ books: [{ slug: 'little-fish', level: 'B', quiz }] }));
+    writeFileSync(list, JSON.stringify({ books: [{ slug: 'little-fish', level: 'B', grade: 2, topic: '动物', quiz }] }));
     const [b] = importBookDashSamples(paths(), repo, list);
-    expect(loadBook(paths(), b.id).quiz).toEqual(quiz);
+    expect(loadBook(paths(), b.id)).toMatchObject({ quiz, grade: 2, topic: '动物' });
   });
 
   it('refuses to export a book without narration unless asked', async () => {
@@ -166,7 +166,7 @@ describe('picture books', () => {
     const r = await exportBooks(p, { out });
     expect(r.books).toHaveLength(1);
     // Captions are not the book's text: not counted as words read.
-    expect(r.books[0]).toMatchObject({ id: 'bookdash-little-fish', pages: 3, words: 11, private: false });
+    expect(r.books[0]).toMatchObject({ id: 'bookdash-little-fish', pages: 3, words: 11, private: false, grade: 2, topic: '动物' });
     const bundle = await readBundle(unzipSync(new Uint8Array(readFileSync(out))));
     expect(bundle.skipped).toEqual([]);
     expect(bundle.packs).toEqual([]);

@@ -27,7 +27,7 @@ export function ListenView({ game, onDone, done }: GameViewProps<ListenGame>) {
           {!done && (
             <button
               type="button"
-              onClick={() => onDone({ correct: true, missedWords: [], given: '没有声音，跳过（不扣分）' })}
+              onClick={() => onDone({ correct: true, skipped: true, missedWords: [], given: '没有声音，跳过（不扣分）' })}
               className="rounded-2xl border-b-4 border-amber-600 bg-amber-400 px-8 py-3 text-xl font-bold text-white active:translate-y-0.5"
             >
               跳过这题

@@ -8,6 +8,11 @@ export interface GameOutcome {
   missedWords: string[];
   /** What the child did, for going over the paper. */
   given: string;
+  /**
+   * Not the child's fault (no sound, 讯飞 unreachable …): the question is left
+   * out of the score's ups and downs (counted as right, no XP, streak kept).
+   */
+  skipped?: boolean;
 }
 
 export interface GameViewProps<G extends Game = Game> {

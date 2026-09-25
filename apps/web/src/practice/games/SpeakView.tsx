@@ -169,7 +169,7 @@ export function SpeakView({ game, onDone, done, env }: GameViewProps<SpeakGame>)
   };
 
   const skip = () =>
-    onDone({ correct: true, missedWords: [], given: `${trouble}，这题不扣分` });
+    onDone({ correct: true, skipped: true, missedWords: [], given: `${trouble}，这题不扣分` });
 
   const big = printed.length === 1 ? 'text-5xl' : printed.length <= 4 ? 'text-4xl' : 'text-3xl';
   return (

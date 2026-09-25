@@ -58,7 +58,8 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2}'],
+        // hanzi/*.json: stroke data for 写汉字 (a few MB), so the installed web app can write offline too.
+        globPatterns: ['**/*.{js,css,html,svg,png,woff2}', 'hanzi/*.json'],
         // Courses bundled into the native apps are served from the app itself.
         globIgnores: ['builtin/**'],
         maximumFileSizeToCacheInBytes: 8 * 1024 * 1024,

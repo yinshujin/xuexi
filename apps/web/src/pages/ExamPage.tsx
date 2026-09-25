@@ -127,7 +127,16 @@ export function ExamMap({ child, query }: { child: ChildProfile; query: URLSearc
 
 // ================================================================ one paper
 
-type Feedback = { correct: boolean; answer: string; xp: number; cheer?: string };
+type Feedback = {
+  correct: boolean;
+  answer: string;
+  xp: number;
+  cheer?: string;
+  /** Not the child's fault: shown neutral, no answer. */
+  skipped?: boolean;
+  /** Questions worth several points (a reading passage, 限时挑战): points got out of the weight. */
+  partial?: { got: number; of: number };
+};
 
 export function ExamPage({ child, paperId, back }: { child: ChildProfile; paperId: string; back: string }) {
   const paper = findPaper(paperId);
@@ -167,22 +176,30 @@ function ExamRun({ child, paper: full, back }: { child: ChildProfile; paper: Exa
   const item = paper.items[idx];
   const question = useMemo<Question | null>(() => (item?.ref ? makeQuestion(item.ref) : null), [item]);
 
-  const answered = (a: ExamAnswer & { given?: string }, answer: string) => {
+  const answered = (a: ExamAnswer & { given?: string }, answer: string, extra: { skipped?: boolean; weight?: number } = {}) => {
     setAnswers((xs) => {
       const next = [...xs];
       next[idx] = a;
       return next;
     });
+    if (extra.skipped) {
+      // Not the child's fault: no XP, the streak stays as it was.
+      setFeedback({ correct: true, answer, xp: 0, skipped: true });
+      return;
+    }
+    const weight = extra.weight ?? 1;
+    const got = a.earned ?? (a.correct ? weight : 0);
     const c = a.correct ? combo + 1 : 0;
-    const gain = answerXp(a.correct, c);
+    // A question worth several points gives XP for every point got.
+    const gain = weight > 1 ? got * 10 + (a.correct && c >= 3 ? 5 : 0) : answerXp(a.correct, c);
     setCombo(c);
     setBestCombo((b) => Math.max(b, c));
     setXp((x) => x + gain);
     const cheer = a.correct ? COMBO_CHEERS[c] : undefined;
     if (cheer) sfx.combo();
-    else if (a.correct) sfx.right();
+    else if (a.correct || got > 0) sfx.right();
     else sfx.wrong();
-    setFeedback({ correct: a.correct, answer, xp: gain, cheer });
+    setFeedback({ correct: a.correct, answer, xp: gain, cheer, ...(weight > 1 ? { partial: { got, of: weight } } : {}) });
   };
 
   const onQuestion = async (o: { response: ExamAnswer['response']; result: { correct: boolean; errorTags: string[] }; durationMs: number }) => {
@@ -207,7 +224,10 @@ function ExamRun({ child, paper: full, back }: { child: ChildProfile; paper: Exa
 
   const onGame = (o: GameOutcome) => {
     if (!item?.game) return;
-    answered({ correct: o.correct, response: null, given: o.given, earned: o.earned }, gameAnswerText(item.game));
+    answered({ correct: o.correct, response: null, given: o.given, earned: o.earned }, gameAnswerText(item.game), {
+      skipped: o.skipped,
+      weight: item.game.weight ?? 1,
+    });
     // 语文 words matched / built wrong come back in 看拼音写词语.
     if (o.missedWords.length) void saveResults(child.id, item.kpId, [], o.missedWords);
   };
@@ -267,7 +287,7 @@ function ExamRun({ child, paper: full, back }: { child: ChildProfile; paper: Exa
               </span>
             ))}
           </div>
-          <div className="text-slate-500">答对得 ⚡10 XP，连对 3 题以上每题再加 5。有连连看、拼一拼，最后是拔高题和创新题！</div>
+          <div className="text-slate-500">答对得 ⚡10 XP，连对 3 题以上每题再加 5。题型有连连看、拼一拼、听一听、开口读、拼单词、看图、排序、分类、判断、⚡限时挑战、写汉字和阅读，最后是拔高题和创新题！</div>
           {best && (
             <div className="text-lg">
               最好成绩 {medalOf(best.best) ? MEDAL_ICON[medalOf(best.best)!] : ''} <b>{best.best}</b> 分 · 考过 {best.times} 次
@@ -323,24 +343,39 @@ function ExamRun({ child, paper: full, back }: { child: ChildProfile; paper: Exa
       {feedback && (
         <div
           className={`xx-rise fixed inset-x-0 bottom-0 z-40 border-t-2 px-4 pb-[max(env(safe-area-inset-bottom),16px)] pt-4 ${
-            feedback.correct ? 'border-emerald-300 bg-emerald-100' : 'border-rose-300 bg-rose-100'
+            feedback.skipped
+              ? 'border-slate-300 bg-slate-100'
+              : feedback.correct
+                ? 'border-emerald-300 bg-emerald-100'
+                : feedback.partial?.got
+                  ? 'border-amber-300 bg-amber-100'
+                  : 'border-rose-300 bg-rose-100'
           }`}
         >
           <div className="mx-auto flex max-w-3xl flex-wrap items-center gap-4">
-            <div className="text-5xl">{feedback.correct ? '🎉' : '💪'}</div>
+            <div className="text-5xl">{feedback.skipped ? '👌' : feedback.correct ? '🎉' : feedback.partial?.got ? '👍' : '💪'}</div>
             <div className="min-w-0 flex-1">
-              <div className={`text-2xl font-black ${feedback.correct ? 'text-emerald-700' : 'text-rose-700'}`}>
-                {feedback.cheer ?? (feedback.correct ? '答对了！' : '差一点！')}
+              <div className={`text-2xl font-black ${feedback.skipped ? 'text-slate-700' : feedback.correct ? 'text-emerald-700' : feedback.partial?.got ? 'text-amber-700' : 'text-rose-700'}`}>
+                {feedback.skipped
+                  ? '这题先跳过，不扣分'
+                  : feedback.cheer ??
+                    (feedback.partial
+                      ? feedback.correct
+                        ? `全对！得 ${feedback.partial.got} 分`
+                        : `得了 ${feedback.partial.got} / ${feedback.partial.of} 分`
+                      : feedback.correct
+                        ? '答对了！'
+                        : '差一点！')}
                 {feedback.xp > 0 && <span className="xx-pop ml-3 inline-block text-amber-600">+{feedback.xp} XP</span>}
               </div>
-              {!feedback.correct && <div className="text-lg text-rose-800">正确答案：{feedback.answer}</div>}
+              {!feedback.correct && !feedback.skipped && <div className="text-lg text-rose-800">正确答案：{feedback.answer}</div>}
             </div>
             <button
               type="button"
               onClick={next}
               autoFocus
               className={`rounded-2xl border-b-4 px-10 py-3 text-xl font-bold text-white active:translate-y-0.5 ${
-                feedback.correct ? 'border-emerald-700 bg-emerald-500' : 'border-rose-700 bg-rose-500'
+                feedback.skipped ? 'border-sky-700 bg-sky-500' : feedback.correct ? 'border-emerald-700 bg-emerald-500' : feedback.partial?.got ? 'border-amber-700 bg-amber-500' : 'border-rose-700 bg-rose-500'
               }`}
             >
               {idx + 1 >= paper.items.length ? '看成绩' : '继续'}

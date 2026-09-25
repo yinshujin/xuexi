@@ -1,8 +1,8 @@
 /**
  * 单元测试: two or three fixed papers for every unit, each covering all the
  * unit's knowledge points (every one at least twice, its question types in
- * turn, mid to top difficulty), then up to two game questions (连连看 /
- * 拼一拼, see games.ts), ending with one 拔高 and one 创新 question.
+ * turn, mid to top difficulty), then game questions (连连看, 拼一拼, 听音,
+ * 开口读 … see games/), ending with one 拔高 and one 创新 question.
  * Papers are built from fixed seeds, so paper A is the same paper on every
  * device and every time; questions do not repeat within or across a unit's
  * papers while the banks have fresh ones.
@@ -12,7 +12,7 @@ import { EXAM_EVENT_PREFIX, type LearningEvent, type LessonEvent } from '@xuexi/
 import type { Question, Response } from '@xuexi/practice';
 import { seedFrom } from '@xuexi/practice';
 import { coreSpecs, makeQuestion, tierSpecs, type ChallengeTier, type SessionItem } from './learning';
-import { unitGames, type Game } from './games';
+import { GAME_SLOTS, gamesFor, type Game } from './games';
 
 /** A question of a paper: a practice question (`ref`) or a game question (`game`). */
 export interface ExamItem {
@@ -151,7 +151,8 @@ function buildPaper(book: Book, unit: Unit, paper: number, used: Set<string>): {
   const id = `${unit.id}.${'ABC'[paper]}`;
   const challengeKps = (tier: ChallengeTier) => kps.filter((kp) => tierSpecs(kp, tier).length > 0);
   const tiers = (['stretch', 'creative'] as const).filter((t) => challengeKps(t).length > 0);
-  const coreTotal = Math.max(PAPER_SIZE - tiers.length, kps.length * MIN_PER_KP);
+  const games = gamesFor(book, unit, paper);
+  const coreTotal = Math.max(PAPER_SIZE - tiers.length - Math.min(games.length, GAME_SLOTS), kps.length * MIN_PER_KP);
   const items: ExamItem[] = [];
   const inPaper = new Set<string>();
   let repeats = 0;
@@ -168,7 +169,7 @@ function buildPaper(book: Book, unit: Unit, paper: number, used: Set<string>): {
       if (got.repeat) repeats++;
     }
   });
-  for (const g of unitGames(book, unit, paper)) items.push({ kpId: g.kpId, kpTitle: g.kpTitle, game: g.game });
+  for (const g of games) items.push({ kpId: g.kpId, kpTitle: g.kpTitle, game: g.game });
   // One 拔高 and one 创新 at the end, from different knowledge points on each paper.
   for (const tier of tiers) {
     const pool = challengeKps(tier);
@@ -226,7 +227,12 @@ export function findPaper(id: string): ExamPaper | undefined {
 export interface ExamAnswer {
   correct: boolean;
   response: Response | null;
+  /** Points earned out of the item's weight (default: all when correct). */
+  earned?: number;
 }
+
+/** Points a question is worth: 1, or a game's weight (a reading passage with 4 questions: 4). */
+export const itemWeight = (it: ExamItem) => it.game?.weight ?? 1;
 
 export interface ExamResult {
   score: number;
@@ -235,20 +241,26 @@ export interface ExamResult {
   byKp: Array<{ kpId: string; title: string; correct: number; total: number }>;
 }
 
-/** 100 points shared equally by the questions; unanswered questions score nothing. */
+/**
+ * 100 points shared by the questions by weight (a game such as a reading
+ * passage can be worth several); unanswered questions score nothing.
+ * `correct` / `total` and the per-knowledge-point rows count points.
+ */
 export function scoreExam(paper: ExamPaper, answers: Array<ExamAnswer | undefined>): ExamResult {
   const byKp = new Map<string, { kpId: string; title: string; correct: number; total: number }>();
   for (const k of paper.kps) byKp.set(k.id, { kpId: k.id, title: k.title, correct: 0, total: 0 });
   let correct = 0;
+  let total = 0;
   paper.items.forEach((it, i) => {
+    const w = itemWeight(it);
+    const a = answers[i];
+    const got = a ? Math.max(0, Math.min(w, a.earned ?? (a.correct ? w : 0))) : 0;
     const row = byKp.get(it.kpId)!;
-    row.total++;
-    if (answers[i]?.correct) {
-      row.correct++;
-      correct++;
-    }
+    row.total += w;
+    row.correct += got;
+    total += w;
+    correct += got;
   });
-  const total = paper.items.length;
   return { score: total ? Math.round((100 * correct) / total) : 0, correct, total, byKp: [...byKp.values()] };
 }
 

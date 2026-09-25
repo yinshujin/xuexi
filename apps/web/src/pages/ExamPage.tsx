@@ -21,13 +21,13 @@ import {
   type ExamAnswer,
   type ExamPaper,
 } from '../lib/exams';
-import { gameAnswerText } from '../lib/games';
+import { gameAnswerText, gameAvailable, gamePrompt, loadGameEnv, type GameEnv } from '../lib/games';
 import { saveResults } from '../lib/dictation';
 import { sfx } from '../lib/sfx';
 import { uuid } from '../lib/format';
 import { Btn, Card, Empty, Page } from '../components/ui';
 import { answerText, QuestionView } from '../practice/QuestionView';
-import { MatchGameView, OrderGameView, type GameOutcome } from '../practice/GameViews';
+import { GAME_VIEWS, type GameOutcome } from '../practice/games';
 
 const SUBJECT_TONE = { math: 'from-sky-500 to-cyan-400', chinese: 'from-rose-500 to-orange-400', english: 'from-violet-500 to-fuchsia-400' } as const;
 
@@ -141,8 +141,17 @@ export function ExamPage({ child, paperId, back }: { child: ChildProfile; paperI
   return <ExamRun key={paper.id} child={child} paper={paper} back={back} />;
 }
 
-function ExamRun({ child, paper, back }: { child: ChildProfile; paper: ExamPaper; back: string }) {
+function ExamRun({ child, paper: full, back }: { child: ChildProfile; paper: ExamPaper; back: string }) {
   const { addEvent, deviceId, eventsOf } = useApp();
+  // Games this device cannot run (开口读 without 讯飞, 听音 without the audio pack …) are left out.
+  const [env, setEnv] = useState<GameEnv | null>(null);
+  useEffect(() => {
+    void loadGameEnv().then(setEnv);
+  }, []);
+  const paper = useMemo(
+    () => (env ? { ...full, items: full.items.filter((it) => !it.game || gameAvailable(it.game, env)) } : full),
+    [full, env],
+  );
   const best = examHistory(eventsOf(child.id)).get(paper.id);
   const [stage, setStage] = useState<'intro' | 'run' | 'result'>('intro');
   const [idx, setIdx] = useState(0);
@@ -198,7 +207,7 @@ function ExamRun({ child, paper, back }: { child: ChildProfile; paper: ExamPaper
 
   const onGame = (o: GameOutcome) => {
     if (!item?.game) return;
-    answered({ correct: o.correct, response: null, given: o.given }, gameAnswerText(item.game));
+    answered({ correct: o.correct, response: null, given: o.given, earned: o.earned }, gameAnswerText(item.game));
     // 语文 words matched / built wrong come back in 看拼音写词语.
     if (o.missedWords.length) void saveResults(child.id, item.kpId, [], o.missedWords);
   };
@@ -266,6 +275,7 @@ function ExamRun({ child, paper, back }: { child: ChildProfile; paper: ExamPaper
           )}
           <button
             type="button"
+            disabled={!env}
             onClick={() => {
               started.current = Date.now();
               setStage('run');
@@ -284,6 +294,7 @@ function ExamRun({ child, paper, back }: { child: ChildProfile; paper: ExamPaper
 
   // ---------------------------------------------------------------- questions
   const progress = (idx + (feedback ? 1 : 0)) / paper.items.length;
+  const GameView = item.game ? GAME_VIEWS[item.game.kind] : undefined;
   return (
     <div className="mx-auto flex min-h-full max-w-3xl flex-col px-4 pb-44 pt-[max(env(safe-area-inset-top),12px)]">
       <header className="mb-4 flex items-center gap-3">
@@ -304,8 +315,9 @@ function ExamRun({ child, paper, back }: { child: ChildProfile; paper: ExamPaper
         {question && (
           <QuestionView key={`${paper.id}-${idx}`} question={question} grade={gradeQuestion} onFirstAnswer={(o) => void onQuestion(o)} onNext={() => {}} oneShot />
         )}
-        {item.game?.kind === 'match' && <MatchGameView key={`${paper.id}-${idx}`} game={item.game} onDone={onGame} />}
-        {item.game?.kind === 'order' && <OrderGameView key={`${paper.id}-${idx}`} game={item.game} onDone={onGame} done={!!feedback} />}
+        {GameView && item.game && env && (
+          <GameView key={`${paper.id}-${idx}`} game={item.game} onDone={onGame} done={!!feedback} env={env} childId={child.id} />
+        )}
       </Card>
 
       {feedback && (
@@ -473,7 +485,7 @@ function ExamResult({
                 <li key={i} className="py-3">
                   <div className="whitespace-pre-line text-lg">
                     <b className="mr-2 text-slate-400">{i + 1}.</b>
-                    {q ? q.prompt : it.game?.kind === 'order' ? `${it.game.title}：${it.game.prompt}` : it.game?.title}
+                    {q ? q.prompt : it.game ? gamePrompt(it.game) : ''}
                   </div>
                   <div className="text-rose-700">你的答案：{q ? responseText(q, a?.response ?? null) : (a?.given ?? '没有作答')}</div>
                   <div className="text-emerald-700">正确答案：{q ? answerText(q) : it.game ? gameAnswerText(it.game) : ''}</div>

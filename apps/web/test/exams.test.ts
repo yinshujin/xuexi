@@ -141,3 +141,24 @@ describe('连连看 / 拼一拼', () => {
     }
   });
 });
+
+describe('game registry', () => {
+  it('every game kind in the papers has a view, a prompt and an answer text', async () => {
+    const { GAME_VIEWS } = await import('../src/practice/games');
+    const { gameAnswerText, gamePrompt } = await import('../src/lib/games');
+    const kinds = new Set<string>();
+    for (const u of units) {
+      for (const p of unitPapers(u.id)) {
+        for (const it of p.items) {
+          if (!it.game) continue;
+          kinds.add(it.game.kind);
+          expect(GAME_VIEWS[it.game.kind], it.game.kind).toBeTruthy();
+          expect(gamePrompt(it.game).length, `${p.id} ${it.game.kind}`).toBeGreaterThan(0);
+          expect(gameAnswerText(it.game).length, `${p.id} ${it.game.kind}`).toBeGreaterThan(0);
+          expect(it.game.weight ?? 1).toBeGreaterThan(0);
+        }
+      }
+    }
+    expect(kinds.size).toBeGreaterThanOrEqual(2);
+  });
+});

@@ -163,6 +163,7 @@ export const YW_G2A_WORDS: DictationList = {
     { w: '很多', py: 'hěn duō' },
     { w: '汉代', py: 'hàn dài' },
     { w: '变化', py: 'biàn huà' },
+    { w: '珍珠', py: 'zhēn zhū' },
   ],
   'u3.garden-3': [
     { w: '图形', py: 'tú xíng' },
@@ -457,6 +458,24 @@ export const YW_G2A_WORDS: DictationList = {
  * almost the same) pinyin, e.g. 是的 for 似的 (shì de), 当做 for 当作: never offered as a wrong spelling.
  */
 export const YW_G2A_SOUNDALIKE_WORDS: readonly string[] = [
-  '是的', '当做', '水气', '细语', '战事', '可视', '出线', '一味', '水份', '视界',
-  '身处', '初来', '行状', '子细', '初发', '心理', '有得', '知事', '要事', '巨子',
+  '是的',
+  '当做',
+  '水气',
+  '细语',
+  '战事',
+  '可视',
+  '出线',
+  '一味',
+  '水份',
+  '视界',
+  '身处',
+  '初来',
+  '行状',
+  '子细',
+  '初发',
+  '心理',
+  '有得',
+  '知事',
+  '要事',
+  '巨子',
 ];

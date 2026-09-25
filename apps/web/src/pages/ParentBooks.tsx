@@ -81,6 +81,12 @@ export function ParentBooks() {
                   ? `读到 ${Math.round(Math.max(...r.map((e) => e.progress)) * 100)}%，还没读完`
                   : '还没读过'}
               {lastQuiz && `；小测 ${lastQuiz.quizCorrect}/${lastQuiz.quizTotal}`}
+              {(() => {
+                const scored = [...finished].reverse().find((e) => e.readTotal);
+                return scored
+                  ? `；跟读过关 ${scored.readPassed}/${scored.readTotal} 句${scored.readScore !== undefined ? `，平均 ${scored.readScore} 分` : ''}`
+                  : '';
+              })()}
             </div>
             <div className="flex flex-wrap items-center gap-3 text-sm">
               <span className="text-slate-400">{b.private ? '家庭自有 · 请勿外传' : b.source}</span>
@@ -156,6 +162,11 @@ function Recordings({ list, onClear }: { list: Recording[]; onClear: () => void 
           <span>{playing === r.id ? '🔊' : '▶'}</span>
           <span className="w-12 shrink-0 text-sm text-slate-400">第{r.page + 1}页</span>
           <span className="flex-1">{r.text}</span>
+          {r.score !== undefined && (
+            <span className={`rounded-lg px-1.5 text-sm ${r.passed ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-900'}`}>
+              {r.score} 分
+            </span>
+          )}
         </button>
       ))}
       <button

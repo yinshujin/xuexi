@@ -89,6 +89,8 @@ function validateSettings(s: unknown): string | null {
   if (!inRange(s.dailyMinutes, 0, 1440)) return 'settings.dailyMinutes must be 0..1440';
   if (!inRange(s.eyeBreakMinutes, 0, 1440)) return 'settings.eyeBreakMinutes must be 0..1440';
   if (!inRange(s.masteryAccuracy, 0, 1)) return 'settings.masteryAccuracy must be 0..1';
+  if (s.readPassScore !== undefined && !inRange(s.readPassScore, 0, 100))
+    return 'settings.readPassScore must be 0..100';
   if (s.practiceSize !== undefined && !inRange(s.practiceSize, 1, 100))
     return 'settings.practiceSize must be 1..100';
   if (s.parentPinHash !== undefined && !isStr(s.parentPinHash, 256))

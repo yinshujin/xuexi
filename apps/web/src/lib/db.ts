@@ -25,6 +25,9 @@ export interface RecordingRow {
   text: string;
   at: number;
   blob: Blob;
+  /** 跟读评分 of this take (0–100) and whether it reached the pass line. */
+  score?: number;
+  passed?: boolean;
 }
 
 class XuexiDb extends Dexie {

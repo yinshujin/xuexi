@@ -55,6 +55,10 @@ export interface LessonEvent extends EventBase {
   readMode?: BookReadMode;
   quizCorrect?: number;
   quizTotal?: number;
+  /** 跟读评分: sentences that reached the pass line, sentences scored, average score. */
+  readPassed?: number;
+  readTotal?: number;
+  readScore?: number;
 }
 
 /** 听读 (listen), 跟读 (repeat after the voice, recording), 自己读 (read alone). */
@@ -80,6 +84,8 @@ export interface FamilySettings {
   masteryAccuracy: number;
   /** Questions per 专项练习 / 加练 set (older family docs lack it: use PRACTICE_SIZE_DEFAULT). */
   practiceSize?: number;
+  /** 跟读评分 pass line (0–100); unset = 70. */
+  readPassScore?: number;
   /** SHA-256 hex of the parent PIN (salted with the family id). */
   parentPinHash?: string;
 }

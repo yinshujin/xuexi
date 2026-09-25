@@ -12,6 +12,7 @@ import { Btn, Card, Empty, Page } from '../components/ui';
 import { NumberPad } from '../practice/NumberPad';
 import { ReportView } from './ReportView';
 import { ParentBooks } from './ParentBooks';
+import { ScoringCard } from './ScoringCard';
 
 const AVATARS = ['🐼', '🦊', '🐯', '🐰', '🐬', '🦄', '🐧', '🐻', '🐱', '🐶', '🚀', '⚽'];
 
@@ -351,7 +352,7 @@ function OfflineTab() {
 
 function SettingsTab() {
   const { family, saveFamily, auth, sync, syncNow, logout } = useApp();
-  const [s, setS] = useState<FamilySettings>({ practiceSize: PRACTICE_SIZE_DEFAULT, ...family.settings });
+  const [s, setS] = useState<FamilySettings>({ practiceSize: PRACTICE_SIZE_DEFAULT, readPassScore: 70, ...family.settings });
   const [saved, setSaved] = useState(false);
   const num = (k: keyof FamilySettings, label: string, min: number, max: number, step = 1, fmt = (v: number) => String(v)) => (
     <label className="mb-4 block">
@@ -379,6 +380,7 @@ function SettingsTab() {
         {num('eyeBreakMinutes', '护眼提醒间隔', 10, 40, 5, (v) => `${v} 分钟`)}
         {num('masteryAccuracy', '掌握标准（最近 10 题正确率）', 0.7, 1, 0.05, (v) => `${Math.round(v * 100)}%`)}
         {num('practiceSize', '专项练习 / 加练每组题数', 10, 30, 5, (v) => `${v} 题`)}
+        {num('readPassScore', '绘本跟读评分的过关线', 50, 90, 5, (v) => `${v} 分`)}
         <Btn
           onClick={async () => {
             await saveFamily({ settings: { ...s, parentPinHash: family.settings.parentPinHash } });
@@ -421,6 +423,7 @@ function SettingsTab() {
           </Btn>
         </div>
       </Card>
+      <ScoringCard />
       <BackupCard />
       <VersionCard />
     </div>

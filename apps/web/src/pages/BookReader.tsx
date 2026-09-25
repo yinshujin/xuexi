@@ -3,6 +3,22 @@ import { wordKey, type BookWord } from '@xuexi/course-pack';
 import { BOOK_EVENT_PREFIX, type BookReadMode } from '@xuexi/shared';
 import { openBook, recordingId, recordingsOf, saveRecording, type OpenedBook } from '../lib/books';
 import { recordLimitMs, wordAt, wordTimings } from '../lib/reading';
+import {
+  alignWords,
+  bookStars,
+  CHEER,
+  cheerBand,
+  loadScoringConfig,
+  MERCY_AFTER,
+  PASS_SCORE_DEFAULT,
+  passed,
+  sayCheer,
+  scoreRecording,
+  type ReadingScore,
+  type ScoringConfig,
+  type WordState,
+} from '../lib/scoring';
+import { hush } from '../lib/scoring/grade';
 import { useApp } from '../lib/store';
 import { navigate } from '../lib/router';
 import { uuid } from '../lib/format';
@@ -10,7 +26,19 @@ import { Btn, Stars } from '../components/ui';
 
 type Screen = 'start' | 'read' | 'quiz' | 'done';
 /** What the reader is doing right now (跟读 shows the child whose turn it is). */
-type Phase = 'idle' | 'model' | 'record' | 'shadow' | 'playback';
+type Phase = 'idle' | 'model' | 'record' | 'shadow' | 'scoring' | 'playback';
+
+/** 跟读评分 result of one sentence, for colouring its words. */
+interface Graded {
+  score: ReadingScore;
+  states: Array<WordState | undefined>;
+}
+
+/** What happened to a sentence in 跟读 with scoring: passed, or let through after tries / an error. */
+interface SentenceResult {
+  passed: boolean;
+  overall?: number;
+}
 
 const MODES: Array<{ id: BookReadMode; icon: string; label: string; hint: string }> = [
   { id: 'listen', icon: '🎧', label: '听读', hint: '听着读，一页一页自动翻' },
@@ -18,13 +46,17 @@ const MODES: Array<{ id: BookReadMode; icon: string; label: string; hint: string
   { id: 'self', icon: '📖', label: '自己读', hint: '自己读，不会的词点一下' },
 ];
 
+/** Printed words of a sentence, as the reader shows them. */
+const tokens = (text: string) => text.split(/\s+/).filter(Boolean);
+
 function pickMime(): string | undefined {
   if (typeof MediaRecorder === 'undefined') return undefined;
   return ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4', 'audio/ogg;codecs=opus'].find((t) => MediaRecorder.isTypeSupported?.(t));
 }
 
 export function BookReader({ childId, bookId, back }: { childId: string; bookId: string; back: string }) {
-  const { addEvent, deviceId } = useApp();
+  const { addEvent, deviceId, family } = useApp();
+  const passScore = family.settings.readPassScore ?? PASS_SCORE_DEFAULT;
   const [opened, setOpened] = useState<OpenedBook | null>(null);
   const [error, setError] = useState('');
   const [screen, setScreen] = useState<Screen>('start');
@@ -42,6 +74,11 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
   const [layout, setLayout] = useState<'stack' | 'side'>('stack');
   /** Quiz narration: -1 = the question is being read, i = option i, null = quiet. */
   const [readingOpt, setReadingOpt] = useState<number | null>(null);
+  /** 跟读评分: set when the parent entered 讯飞 credentials on this device. */
+  const [scoring, setScoring] = useState<ScoringConfig | null>(null);
+  const [graded, setGraded] = useState<Record<string, Graded>>({});
+  const [feedback, setFeedback] = useState<{ text: string; tone: 'good' | 'try' | 'info'; score?: ReadingScore; tries?: number } | null>(null);
+  const results = useRef(new Map<string, SentenceResult>());
 
   const audio = useRef<HTMLAudioElement | null>(null);
   const run = useRef(0);
@@ -70,6 +107,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       (e: Error) => !cancelled && setError(e.message),
     );
     audio.current = new Audio();
+    void loadScoringConfig().then(setScoring);
     return () => {
       cancelled = true;
       stopAll();
@@ -232,6 +270,12 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       rec.start();
     });
 
+  /**
+   * 跟读: the child reads the sentence back (recorded). With 跟读评分 on, the
+   * reading is scored: below the pass line the child hears the sentence again
+   * and tries again; after MERCY_AFTER tries (or when scoring is unavailable)
+   * the sentence is let through without counting as passed.
+   */
   const repeatTurn = async (r: number, pi: number, si: number): Promise<boolean> => {
     const clip = durations.current.get(`${pi}:${si}`) ?? 2000;
     const stream = await ensureMic();
@@ -241,25 +285,68 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       setPhase('shadow');
       return sleep(r, clip * 1.5 + 800);
     }
-    setPhase('record');
-    const blob = await recordFor(r, stream, recordLimitMs(clip));
-    if (r !== run.current) return false;
-    if (blob) {
+    const s = pages[pi].sentences[si];
+    const key = `${pi}:${si}`;
+    for (let tries = 0; ; ) {
+      hush(); // the cheer voice must not end up in the recording
+      setWord(-1);
+      setPhase('record');
+      const blob = await recordFor(r, stream, recordLimitMs(clip));
+      if (r !== run.current) return false;
+      if (!blob) break;
+      let done = true;
+      let result: ReadingScore | undefined;
+      let ok: boolean | undefined;
+      if (scoring) {
+        setPhase('scoring');
+        const out = await scoreRecording(blob, s.text, scoring);
+        if (r !== run.current) return false;
+        if (out.kind === 'error') {
+          // Not the child's fault: let the sentence through, without a star.
+          results.current.set(key, { passed: false });
+          setFeedback({ text: `${out.message}，这一句先过`, tone: 'info' });
+        } else {
+          const heard = out.kind === 'scored' && !out.score.unclear ? out.score : undefined;
+          result = heard;
+          ok = heard ? passed(heard, passScore) : false;
+          if (!ok) tries++;
+          const mercy = !ok && tries >= MERCY_AFTER;
+          done = ok || mercy;
+          if (heard) {
+            setGraded((g) => ({ ...g, [key]: { score: heard, states: alignWords(tokens(s.text), heard.words) } }));
+          }
+          const text =
+            out.kind === 'quiet' ? '几乎没录到声音，大声一点再读一遍。' : CHEER[cheerBand(out.score, passScore, { mercy })];
+          setFeedback({ text, tone: ok ? 'good' : mercy || out.kind !== 'scored' || out.score.unclear ? 'info' : 'try', score: heard, tries });
+          sayCheer(text);
+          if (done) results.current.set(key, { passed: !!ok, overall: heard?.overall });
+        }
+      }
       await saveRecording({
         id: recordingId(childId, bookId, pi, si),
         childId,
         bookId,
         page: pi,
         sentence: si,
-        text: pages[pi].sentences[si].text,
+        text: s.text,
         at: Date.now(),
         blob,
+        ...(result ? { score: result.overall, passed: ok } : {}),
       });
-      setPhase('playback');
-      const url = URL.createObjectURL(blob);
-      const ok = await play(r, url);
-      URL.revokeObjectURL(url);
-      if (!ok) return false;
+      if (done) {
+        if (!(await sleep(r, scoring ? 900 : 0))) return false;
+        setPhase('playback');
+        const url = URL.createObjectURL(blob);
+        const played = await play(r, url);
+        URL.revokeObjectURL(url);
+        if (!played) return false;
+        break;
+      }
+      // Try again: hear the sentence once more, then read it back.
+      if (!(await sleep(r, 1800))) return false;
+      hush();
+      setPhase('model');
+      if (!(await playSentence(r, pi, si))) return false;
     }
     setPhase('idle');
     return sleep(r, 400);
@@ -269,6 +356,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
     setPage(pi);
     setSentence(-1);
     setWord(-1);
+    setFeedback(null);
     maxPage.current = Math.max(maxPage.current, pi);
   };
 
@@ -349,8 +437,21 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       durationMs: Date.now() - started.current,
       readMode: modeRef.current,
       ...(quiz ? { quizCorrect: quiz.correct, quizTotal: quiz.total } : {}),
+      ...readingSummary(),
     });
   };
+
+  /** 跟读评分 over the book: sentences passed, sentences scored, average score. */
+  function readingSummary(): { readPassed?: number; readTotal?: number; readScore?: number } {
+    const all = [...results.current.values()];
+    if (all.length === 0) return {};
+    const scores = all.flatMap((x) => (x.overall === undefined ? [] : [x.overall]));
+    return {
+      readPassed: all.filter((x) => x.passed).length,
+      readTotal: all.length,
+      ...(scores.length ? { readScore: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) } : {}),
+    };
+  }
 
   // Leaving by the system back button still records how far the child read.
   const recordRef = useRef(record);
@@ -455,6 +556,9 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
                   setMode(m.id);
                   modeRef.current = m.id;
                   recorded.current = false;
+                  results.current.clear();
+                  setGraded({});
+                  setFeedback(null);
                   started.current = Date.now();
                   setScreen('read');
                   goPage(0);
@@ -564,7 +668,18 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
   // ---- done ----
   if (screen === 'done') {
     const total = book.quiz?.length ?? 0;
-    const stars = total === 0 ? 3 : correct === total ? 3 : correct >= total / 2 ? 2 : 1;
+    const read = readingSummary();
+    // With 跟读评分 the stars come from the sentences really passed; otherwise from the quiz.
+    const stars =
+      read.readTotal !== undefined
+        ? bookStars(read.readPassed ?? 0, read.readTotal)
+        : total === 0
+          ? 3
+          : correct === total
+            ? 3
+            : correct >= total / 2
+              ? 2
+              : 1;
     return (
       <div className="flex h-full flex-col bg-amber-50">
         {header}
@@ -574,6 +689,11 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
           <div className="text-5xl">
             <Stars n={stars} />
           </div>
+          {read.readTotal !== undefined && (
+            <div className="text-xl text-slate-600">
+              跟读过关 {read.readPassed}/{read.readTotal} 句{read.readScore !== undefined ? `，平均 ${read.readScore} 分` : ''}
+            </div>
+          )}
           {total > 0 && (
             <div className="text-xl text-slate-600">
               小测答对 {correct}/{total} 题
@@ -643,18 +763,30 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
                     {caption && si === 0 && (
                       <span className="mr-2 rounded-md bg-amber-100 px-1.5 align-middle text-base not-italic text-amber-800">🖼 看图说一说</span>
                     )}
-                    {words.map((w, wi) => (
-                      <button
-                        key={wi}
-                        type="button"
-                        onClick={() => void tapWord(page, si, wi)}
-                        className={`mr-[0.3em] inline rounded-md px-0.5 transition-colors ${
-                          active && wi === word ? 'bg-amber-300' : active && phase === 'record' ? 'text-rose-700' : ''
-                        }`}
-                      >
-                        {w}
-                      </button>
-                    ))}
+                    {words.map((w, wi) => {
+                      // 跟读评分: green = read well, red = missed or misread (tap it to hear it).
+                      const verdict = graded[`${page}:${si}`]?.states[wi];
+                      const tone =
+                        active && wi === word
+                          ? 'bg-amber-300'
+                          : verdict === 'ok'
+                            ? 'text-emerald-700'
+                            : verdict
+                              ? 'text-rose-600 underline decoration-2 underline-offset-4'
+                              : active && phase === 'record'
+                                ? 'text-rose-700'
+                                : '';
+                      return (
+                        <button
+                          key={wi}
+                          type="button"
+                          onClick={() => void tapWord(page, si, wi)}
+                          className={`mr-[0.3em] inline rounded-md px-0.5 transition-colors ${tone}`}
+                        >
+                          {w}
+                        </button>
+                      );
+                    })}
                     {!auto && (
                       <button type="button" aria-label="听这一句" className="mr-2 align-middle text-xl" onClick={() => void tapSentence(page, si)}>
                         🔊
@@ -681,6 +813,8 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
             </>
           )}
           {phase === 'shadow' && <span className="text-rose-600">🗣️ 跟着读一遍</span>}
+          {phase === 'scoring' && <span className="animate-pulse text-sky-700">⏳ 评分中…</span>}
+          {feedback && phase !== 'record' && phase !== 'scoring' && <ScoreCard feedback={feedback} />}
           {phase === 'playback' && <span className="text-emerald-700">👂 听听你读的</span>}
           {micError && phase !== 'record' && <span className="text-sm text-slate-500">{micError}</span>}
         </div>
@@ -729,6 +863,22 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
         )}
       </footer>
     </div>
+  );
+}
+
+function ScoreCard({ feedback }: { feedback: { text: string; tone: 'good' | 'try' | 'info'; score?: ReadingScore; tries?: number } }) {
+  const color = feedback.tone === 'good' ? 'bg-emerald-50 text-emerald-800' : feedback.tone === 'try' ? 'bg-amber-50 text-amber-900' : 'bg-slate-100 text-slate-700';
+  const s = feedback.score;
+  return (
+    <span className={`flex flex-wrap items-center justify-center gap-x-3 gap-y-1 rounded-2xl px-4 py-2 ${color}`}>
+      {s && <b className="text-2xl">{s.overall} 分</b>}
+      <span>{feedback.text}</span>
+      {s && (
+        <span className="text-sm opacity-80">
+          准确 {s.accuracy} · 流利 {s.fluency} · 完整 {s.completeness}
+        </span>
+      )}
+    </span>
   );
 }
 

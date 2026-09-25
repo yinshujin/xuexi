@@ -22,3 +22,6 @@ content/state.json
 apps/web/public/builtin/
 content/books/
 content/tts-cache/
+
+# Claude Code agent worktrees (temporary copies of the repo)
+.claude/worktrees/

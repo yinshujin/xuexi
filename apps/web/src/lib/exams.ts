@@ -12,7 +12,7 @@ import { EXAM_EVENT_PREFIX, type LearningEvent, type LessonEvent } from '@xuexi/
 import type { Question, Response } from '@xuexi/practice';
 import { seedFrom } from '@xuexi/practice';
 import { coreSpecs, makeQuestion, tierSpecs, type ChallengeTier, type SessionItem } from './learning';
-import { GAME_SLOTS, gamesFor, type Game } from './games';
+import { gamesFor, type Game } from './games';
 
 /** A question of a paper: a practice question (`ref`) or a game question (`game`). */
 export interface ExamItem {
@@ -152,7 +152,7 @@ function buildPaper(book: Book, unit: Unit, paper: number, used: Set<string>): {
   const challengeKps = (tier: ChallengeTier) => kps.filter((kp) => tierSpecs(kp, tier).length > 0);
   const tiers = (['stretch', 'creative'] as const).filter((t) => challengeKps(t).length > 0);
   const games = gamesFor(book, unit, paper);
-  const coreTotal = Math.max(PAPER_SIZE - tiers.length - Math.min(games.length, GAME_SLOTS), kps.length * MIN_PER_KP);
+  const coreTotal = Math.max(PAPER_SIZE - tiers.length - games.length, kps.length * MIN_PER_KP);
   const items: ExamItem[] = [];
   const inPaper = new Set<string>();
   let repeats = 0;

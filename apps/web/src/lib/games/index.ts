@@ -35,12 +35,19 @@ export function gamesFor(book: Book, unit: Unit, paper: number, builders: GameBu
     const ctx: GameContext = { book, unit, paper, rng: createRng(seedFrom(seed)), seed, kpOf: (v) => kps.get(v) };
     return b.build(ctx);
   });
-  // One game per kind, kinds rotated by paper; a second round only if slots are left.
-  const picked: UnitGame[] = [];
-  for (let round = 0; picked.length < GAME_SLOTS && byBuilder.some((c) => c.length > round); round++) {
-    for (let k = 0; k < builders.length && picked.length < GAME_SLOTS; k++) {
-      const c = byBuilder[(k + paper) % builders.length][round];
-      if (c) picked.push(c);
+  // Kinds marked `always` first; then one game per kind, the kinds taken from
+  // a different start on each paper (A: kinds 0–4, B: 5–9, …) so the papers
+  // together show every kind; a second round only if slots are left.
+  const picked: UnitGame[] = builders.flatMap((b, i) => (b.always && byBuilder[i][0] ? [byBuilder[i][0]] : []));
+  const rotating = builders.map((b, i) => (b.always ? [] : byBuilder[i]));
+  let slots = GAME_SLOTS;
+  for (let round = 0; slots > 0 && rotating.some((c) => c.length > round); round++) {
+    for (let k = 0; k < builders.length && slots > 0; k++) {
+      const c = rotating[(k + paper * GAME_SLOTS) % builders.length][round];
+      if (c) {
+        picked.push(c);
+        slots--;
+      }
     }
   }
   return picked;

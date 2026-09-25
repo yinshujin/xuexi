@@ -70,6 +70,8 @@ export interface GameContext {
 export interface GameBuilder {
   /** Unique id, also used to rotate kinds between papers. */
   id: string;
+  /** In every paper that has a candidate, on top of the rotating slots (e.g. the reading passage). */
+  always?: boolean;
   /** Candidates for this unit and paper (none when the unit has no material for it). */
   build(ctx: GameContext): UnitGame[];
 }

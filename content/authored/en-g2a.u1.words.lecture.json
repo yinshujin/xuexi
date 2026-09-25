@@ -1,0 +1,692 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u1.words.lecture",
+  "title": "五种感官：看、听、闻、尝、摸",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "魔术表演开始啦！"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "眼睛、耳朵、鼻子、嘴巴和小手，都是我们的好帮手。"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "👀 眼睛",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "👂 耳朵",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "👃 鼻子",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "👄 嘴巴",
+              "color": "purple"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "小朋友们好！今天学校里有一场魔术表演。"
+        },
+        {
+          "say": "看魔术的时候，我们要用眼睛看，用耳朵听。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "眼睛、耳朵、鼻子、嘴巴和小手，能帮我们看、听、闻、尝、摸。"
+        },
+        {
+          "say": "这五件本领，用英语怎么说呢？我们一起来学。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：see 和 hear",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "看见和听见"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "see 看见",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "hear 听见",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "指眼睛说 see，指耳朵说 hear。"
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "魔术师拿出一顶帽子，我们用眼睛看。看见，跟我读。"
+        },
+        {
+          "say": "see, see",
+          "lang": "en"
+        },
+        {
+          "say": "一边读，一边指指自己的眼睛。"
+        },
+        {
+          "say": "see",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "帽子里传出“喵”的一声，我们用耳朵听。听见，跟我读。"
+        },
+        {
+          "say": "hear, hear",
+          "lang": "en"
+        },
+        {
+          "say": "一边读，一边指指自己的耳朵。"
+        },
+        {
+          "say": "hear",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "眼睛看，耳朵听，不要弄混哦。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：smell、taste、feel",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "闻、尝、摸"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "smell 闻",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "taste 尝",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "feel 摸；感觉",
+              "color": "green"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "魔术师变出一朵花，我们用鼻子闻一闻。闻，跟我读。"
+        },
+        {
+          "say": "smell, smell",
+          "lang": "en"
+        },
+        {
+          "say": "最后有两个相同的字母，读的时候舌尖轻轻顶住上牙。"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "又变出一颗荔枝，用嘴巴尝一尝。尝，跟我读。"
+        },
+        {
+          "say": "taste, taste",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "最后变出一只小猫，用手轻轻摸一摸。摸、感觉，跟我读。"
+        },
+        {
+          "say": "feel, feel",
+          "lang": "en"
+        },
+        {
+          "say": "五个词连起来再读一遍。"
+        },
+        {
+          "say": "see, hear, smell, taste, feel",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "魔术师和 Kitty"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Magician:",
+              "Look! What can you see?"
+            ],
+            [
+              "Kitty:",
+              "I can see a hat."
+            ],
+            [
+              "Magician:",
+              "What can you hear?"
+            ],
+            [
+              "Kitty:",
+              "I can hear a cat."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "魔术师在和台下的小朋友对话，我们一句一句跟着读。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "魔术师问：你能看见什么？"
+        },
+        {
+          "say": "Look! What can you see?",
+          "lang": "en"
+        },
+        {
+          "say": "小朋友回答：我能看见一顶帽子。"
+        },
+        {
+          "say": "I can see a hat.",
+          "lang": "en"
+        },
+        {
+          "say": "魔术师又问：你能听见什么？"
+        },
+        {
+          "say": "What can you hear?",
+          "lang": "en"
+        },
+        {
+          "say": "小朋友回答：我能听见一只猫。"
+        },
+        {
+          "say": "I can hear a cat.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "字母组合：-at 家族",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Sounds：-at"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "cat 猫",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "hat 帽子",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "bat 蝙蝠",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "mat 垫子",
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "c + at → cat    h + at → hat"
+        }
+      ],
+      "script": [
+        {
+          "say": "刚才的猫和帽子，是一个单词家族里的好朋友。它们结尾的音都一样。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "先读开头的音，再读结尾的音，连起来就是一个词。跟我读。"
+        },
+        {
+          "say": "c, at, cat. h, at, hat.",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "蝙蝠，跟我读。"
+        },
+        {
+          "say": "bat, bat",
+          "lang": "en"
+        },
+        {
+          "laser": "c1d"
+        },
+        {
+          "say": "垫子，跟我读。"
+        },
+        {
+          "say": "mat, mat",
+          "lang": "en"
+        },
+        {
+          "say": "这一家都押韵，一起读。"
+        },
+        {
+          "say": "cat, hat, bat, mat",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "字母组合：-ap 家族",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Sounds：-ap"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "map 地图",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "tap 水龙头",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "nap 小睡",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "mat 垫子 ↔ map 地图：听清最后一个音！"
+        }
+      ],
+      "script": [
+        {
+          "say": "再认识另一个家族，结尾的音是双唇合上再张开。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "地图，跟我读。"
+        },
+        {
+          "say": "map, map",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "水龙头，跟我读。"
+        },
+        {
+          "say": "tap, tap",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "小睡一会儿，跟我读。"
+        },
+        {
+          "say": "nap, nap",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "垫子和地图，只有最后一个音不一样。听一听。"
+        },
+        {
+          "say": "mat, map",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "英文小儿歌"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "See, see, I can see.",
+            "Hear, hear, I can hear.",
+            "Cat, hat, bat, mat.",
+            "Map, tap, nap."
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "我们来念一首拍手小儿歌，老师读一句，你跟一句。"
+        },
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "See, see, I can see.",
+          "lang": "en"
+        },
+        {
+          "say": "Hear, hear, I can hear.",
+          "lang": "en"
+        },
+        {
+          "say": "念到这一家时，拍一下手。"
+        },
+        {
+          "say": "Cat, hat, bat, mat.",
+          "lang": "en"
+        },
+        {
+          "say": "Map, tap, nap.",
+          "lang": "en"
+        },
+        {
+          "say": "边拍手边念，单词和它们的家族一下子就记住了！"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "今天学会了"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "see / hear",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "smell / taste",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "feel",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "cat / map",
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "同一家族：结尾一样，只换开头。"
+        }
+      ],
+      "script": [
+        {
+          "say": "一句话小结：五种感官，看、听、闻、尝、摸；单词家族，结尾一样换开头。"
+        },
+        {
+          "say": "see, hear, smell, taste, feel",
+          "lang": "en"
+        },
+        {
+          "say": "回家闭上眼睛，闻一闻、尝一尝、摸一摸，再用英语说给爸爸妈妈听吧！"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "下面我们做几道判断题，想一想说得对不对。",
+      "questions": [
+        {
+          "question": "hear 的意思是“听见”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "hear 是听见，see 才是看见。"
+        },
+        {
+          "question": "用鼻子闻一闻，英语是 taste。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "用鼻子闻是 smell，taste 是用嘴巴尝。"
+        },
+        {
+          "question": "cat 和 hat 在同一个单词家族里。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "cat 和 hat 结尾都是 at，属于 -at 家族。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "接下来是选择题，选出正确的答案。",
+      "questions": [
+        {
+          "question": "“看见”用英语怎么说？",
+          "options": [
+            "hear",
+            "see",
+            "feel"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "see 是看见。"
+        },
+        {
+          "question": "用手摸一摸小猫，是：",
+          "options": [
+            "feel",
+            "smell",
+            "taste"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "用手摸是 feel。"
+        },
+        {
+          "question": "哪个单词和 map 的结尾音一样？",
+          "options": [
+            "mat",
+            "tap",
+            "cat"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "map 和 tap 都在 -ap 家族。"
+        },
+        {
+          "question": "c + at = ？",
+          "options": [
+            "cat",
+            "hat",
+            "map"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "c 和 at 拼在一起是 cat。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空和情景交际，选出最合适的一项。",
+      "questions": [
+        {
+          "question": "用嘴巴尝一尝荔枝，是（　）。",
+          "options": [
+            "taste",
+            "hear",
+            "see"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "用嘴巴尝是 taste。"
+        },
+        {
+          "question": "魔术师问：What can you see? 你看见一顶帽子，回答：I can see a （　）.",
+          "options": [
+            "hat",
+            "map",
+            "mat"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "帽子是 hat。"
+        },
+        {
+          "question": "把 cat 开头的 c 换成 m，变成（　）。",
+          "options": [
+            "mat",
+            "map",
+            "hat"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "cat 换开头 m，变成 mat（垫子）。"
+        }
+      ]
+    }
+  ]
+}

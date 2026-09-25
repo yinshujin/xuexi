@@ -1,0 +1,514 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u3.talk.lecture",
+  "title": "你最喜欢什么玩具？",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "What is your favourite toy?"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "你最喜欢哪个玩具？说给好朋友听！"
+        }
+      ],
+      "script": [
+        {
+          "say": "小朋友们好！这个单元的大问题是：你最喜欢什么玩具？跟我读。"
+        },
+        {
+          "say": "What is your favourite toy?",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "今天我们学会问别人，也学会说自己最喜欢的玩具。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "问句：What's your favourite toy?",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "你最喜欢的玩具是什么？"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "favourite 最喜欢的",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "toy 玩具",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "What's your favourite toy?"
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "先学一个新词，意思是“最喜欢的”。跟我读。"
+        },
+        {
+          "say": "favourite, favourite",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "问别人最喜欢的玩具是什么，这样问。跟我读。"
+        },
+        {
+          "say": "What's your favourite toy?",
+          "lang": "en"
+        },
+        {
+          "say": "再读一遍，句末语调往下走。"
+        },
+        {
+          "say": "What's your favourite toy?",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "答句：My favourite toy is …",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "我最喜欢的玩具是……"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "My favourite toy is my robot."
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "My favourite toy is my doll."
+        },
+        {
+          "id": "t3",
+          "kind": "text",
+          "text": "I like my ball."
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "回答时，先说“我最喜欢的玩具是”，再说玩具。跟我读。"
+        },
+        {
+          "say": "My favourite toy is my robot.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t2"
+        },
+        {
+          "say": "换一个玩具，只要换最后的词。"
+        },
+        {
+          "say": "My favourite toy is my doll.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t3"
+        },
+        {
+          "say": "也可以简单地说：我喜欢我的球。"
+        },
+        {
+          "say": "I like my ball.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "猜玩具游戏",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "A game：猜猜是什么？"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Is it a ball?",
+              "Yes, it is."
+            ],
+            [
+              "Is it a doll?",
+              "No, it isn't."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "玩具藏在盒子里，我们来猜一猜。猜的时候这样问。跟我读。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "Is it a ball?",
+          "lang": "en"
+        },
+        {
+          "say": "猜对了，回答：是的，它是。"
+        },
+        {
+          "say": "Yes, it is.",
+          "lang": "en"
+        },
+        {
+          "say": "猜错了，回答：不，它不是。"
+        },
+        {
+          "say": "No, it isn't.",
+          "lang": "en"
+        },
+        {
+          "say": "记住：说是的，后面跟它是；说不，后面跟它不是。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "聊聊最喜欢的玩具"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Kitty:",
+              "What's your favourite toy?"
+            ],
+            [
+              "Sam:",
+              "My favourite toy is my robot."
+            ],
+            [
+              "Sam:",
+              "What's your favourite toy?"
+            ],
+            [
+              "Kitty:",
+              "My favourite toy is my toy bear."
+            ],
+            [
+              "Sam:",
+              "I like toy bears too!"
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "两个好朋友在聊最喜欢的玩具。我们一句一句跟着读。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "What's your favourite toy?",
+          "lang": "en"
+        },
+        {
+          "say": "My favourite toy is my robot.",
+          "lang": "en"
+        },
+        {
+          "say": "另一个小朋友也反过来问一问。"
+        },
+        {
+          "say": "What's your favourite toy?",
+          "lang": "en"
+        },
+        {
+          "say": "My favourite toy is my toy bear.",
+          "lang": "en"
+        },
+        {
+          "say": "I like toy bears too!",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小提示",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "说对、写对"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "favourite 有字母 u",
+            "别忘了 my",
+            "Yes, it is.",
+            "No, it isn't."
+          ]
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "第一，“最喜欢的”这个词比较长，中间有一个容易漏掉的字母，写的时候要看仔细。"
+        },
+        {
+          "say": "第二，说自己的玩具，前面别忘了“我的”。"
+        },
+        {
+          "say": "第三，回答猜玩具的问题，是的和它是在一起，不和它不是在一起。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "学法口诀"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "问最喜欢用什么",
+            "回答先说我最爱",
+            "猜玩具就问是不是",
+            "是就说是，不是说不"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "我们来念学法口诀，老师念一句，你跟一句。"
+        },
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "问最喜欢用什么。"
+        },
+        {
+          "say": "回答先说我最爱。"
+        },
+        {
+          "say": "猜玩具就问是不是，是就说是，不是说不。"
+        },
+        {
+          "say": "按口诀的顺序，问答就不会乱。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "今天学会了"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "What's your favourite toy?"
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "My favourite toy is my robot."
+        }
+      ],
+      "script": [
+        {
+          "say": "一句话小结：问最喜欢的玩具，回答我最喜欢的玩具是什么。"
+        },
+        {
+          "say": "What's your favourite toy? My favourite toy is my robot.",
+          "lang": "en"
+        },
+        {
+          "say": "明天和同学交换玩具时，用英语聊一聊吧！"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "下面我们做几道判断题，想一想说得对不对。",
+      "questions": [
+        {
+          "question": "favourite 的意思是“最喜欢的”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "favourite 就是最喜欢的。"
+        },
+        {
+          "question": "回答 Is it a ball? 可以说 Yes, it isn't.",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "Yes 后面接 it is，No 后面接 it isn't。"
+        },
+        {
+          "question": "“你最喜欢的玩具是什么？”是 What's your favourite toy?",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "问最喜欢的玩具：What's your favourite toy?"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "接下来是选择题，选出正确的答案。",
+      "questions": [
+        {
+          "question": "— What's your favourite toy?\n— （　）",
+          "options": [
+            "My favourite toy is my doll.",
+            "Yes, it is.",
+            "No, it isn't."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "要说出最喜欢的玩具。"
+        },
+        {
+          "question": "猜玩具时，你想问“它是一个机器人吗？”",
+          "options": [
+            "Is it a robot?",
+            "It's a robot.",
+            "I like my robot."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "问“它是……吗？”用 Is it a…?"
+        },
+        {
+          "question": "朋友猜对了，你说：",
+          "options": [
+            "Yes, it is.",
+            "No, it isn't.",
+            "Is it a ball?"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "猜对了说 Yes, it is."
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空和情景交际，选出最合适的一项。",
+      "questions": [
+        {
+          "question": "My favourite （　） is my ball.",
+          "options": [
+            "toy",
+            "bed",
+            "red"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "My favourite toy is… 我最喜欢的玩具是……"
+        },
+        {
+          "question": "— Is it a doll?\n— No, （　）.",
+          "options": [
+            "it isn't",
+            "it is",
+            "I am"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "No 后面接 it isn't。"
+        },
+        {
+          "question": "你想告诉朋友你最喜欢拼图，你说：（　）",
+          "options": [
+            "My favourite toy is my jigsaw puzzle.",
+            "My favourite toy is my toy plane.",
+            "What's your favourite toy?"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "拼图是 jigsaw puzzle。"
+        }
+      ]
+    }
+  ]
+}

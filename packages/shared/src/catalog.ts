@@ -25,6 +25,8 @@ export const ERROR_TAGS = {
   // ---- measuring ----
   'ruler-read': '刻度尺读数错（没有用末端刻度减起点刻度）',
   'measure-count': '量的次数和“尺子”长短的关系弄反',
+  // ---- 猜数游戏 ----
+  'guess-range': '猜数时范围想错（边界包不包括、从中间猜）',
   // ---- big numbers ----
   'zero-reading': '数中间或末尾的 0 读写错',
   'place-value': '数位 / 计数单位弄错',
@@ -51,6 +53,9 @@ export const ERROR_TAGS = {
   'perp-parallel': '垂直与平行的概念弄错',
   // ---- negative numbers ----
   'negative-compare': '负数比较大小方向弄反',
+  // ---- word problems / counting figures ----
+  'relation-confused': '数量关系用错（该乘用了除、该减用了加，或漏了一部分）',
+  'figure-count': '数图形没有有序地数（只数了基本图形或有遗漏）',
   // ---- 语文 ----
   'char-pinyin': '字音读错（声调、平翘舌、前后鼻音）',
   polyphone: '多音字的读音和意思没对上',
@@ -61,6 +66,7 @@ export const ERROR_TAGS = {
   'en-spelling': '英语单词拼写错误',
   'en-sentence': '英语句型或答语用错',
   // ---- generic ----
+  reasoning: '拔高 / 创新题思路没理清',
   careless: '粗心（与典型错误都不符）',
 } as const;
 
@@ -129,6 +135,12 @@ export const GENERATORS = [
     grade: 2,
     title: '测量（刻度尺量长度、比较测量结果）',
     errorTags: ['ruler-read', 'measure-count'],
+  },
+  {
+    id: 'g2.guess',
+    grade: 2,
+    title: '猜数游戏（根据回答确定范围、从中间猜）',
+    errorTags: ['guess-range'],
   },
   // ---------------- 四年级 ----------------
   {
@@ -204,10 +216,63 @@ export const GENERATORS = [
     errorTags: ['line-type', 'perp-parallel'],
   },
   {
+    id: 'g4.quantity',
+    grade: 4,
+    title: '运用数量关系解决问题（总量与分量、单价数量总价、速度时间路程、相遇）',
+    errorTags: ['relation-confused'],
+  },
+  {
+    id: 'g4.figures',
+    grade: 4,
+    title: '数图形的学问（数线段、射线、角、三角形、长方形）',
+    errorTags: ['figure-count'],
+  },
+  {
     id: 'g4.negative',
     grade: 4,
     title: '生活中的负数',
     errorTags: ['negative-compare'],
+  },
+  // ---------------- 拔高题 / 创新题 ----------------
+  {
+    id: 'g2.challenge',
+    grade: 2,
+    title: '二年级数学拔高题、创新题',
+    errorTags: [
+      'reasoning',
+      'carry-missed',
+      'borrow-missed',
+      'op-confused',
+      'order-of-ops',
+      'measure-count',
+      'ruler-read',
+      'unit-rate',
+      'unit-choice',
+      'mul-meaning',
+      'table-add-confused',
+      'table-neighbor',
+      'div-wrong-table',
+      'guess-range',
+    ],
+  },
+  {
+    id: 'g4.challenge',
+    grade: 4,
+    title: '四年级数学拔高题、创新题',
+    errorTags: [
+      'reasoning',
+      'zero-reading',
+      'place-value',
+      'rewrite-vs-approx',
+      'rounding',
+      'perp-parallel',
+      'angle-type',
+      'angle-sum',
+      'partial-shift',
+      'trailing-zero',
+      'order-of-ops',
+      'distributive-miss',
+    ],
   },
   // ---------------- 语文 / 英语 (item banks) ----------------
   {

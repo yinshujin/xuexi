@@ -23,6 +23,12 @@ export interface ChoiceItem {
   wrong: Array<[text: string, tag: ErrorTag]>;
   /** Why the answer is right, one or two child-friendly sentences. */
   explain: string;
+  /**
+   * 拔高 (stretch): the same knowledge one step harder (语境辨析、推断、综合).
+   * 创新 (creative): used in a new situation (迁移到新语境、仿写选择、生活运用).
+   * Unset = routine practice.
+   */
+  tier?: 'stretch' | 'creative';
 }
 
 /** A 多音字 with every reading used at this grade. */

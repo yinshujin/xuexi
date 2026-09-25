@@ -1,0 +1,232 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g4a.u2.grammar.lecture",
+  "title": "Where's the owl? 动物在哪里",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入：电视节目《动物的家》",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "TV show: Animal Homes" },
+        { "id": "t1", "kind": "text", "text": "主持人带我们找一找：动物们在哪里？" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "Where's the owl?", "color": "purple" },
+          { "id": "c1b", "text": "It's in the tree.", "color": "green" }
+        ] }
+      ],
+      "script": [
+        { "say": "今天我们一起看一档电视节目，名字叫《动物的家》。" },
+        { "spotlight": "t1" },
+        { "say": "主持人要带我们找一找，动物们都在哪里。" },
+        { "laser": "c1a" },
+        { "say": "主持人先问：猫头鹰在哪里？跟我读。" },
+        { "say": "Where's the owl?", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "回答：它在树上。跟我读。" },
+        { "say": "It's in the tree.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "位置词：in, on, under",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "in · on · under" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "in 在……里面", "color": "blue" },
+          { "id": "c1b", "text": "on 在……上面", "color": "orange" },
+          { "id": "c1c", "text": "under 在……下面", "color": "green" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "in the garden · on the hill · under the tree" }
+      ],
+      "script": [
+        { "say": "找动物之前，先复习三个表示位置的小词。" },
+        { "laser": "c1a" },
+        { "say": "在里面。跟我读。" },
+        { "say": "in, in", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "在上面。跟我读。" },
+        { "say": "on, on", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "在下面。跟我读。" },
+        { "say": "under, under", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "在花园里，在小山上，在树下面。跟我读。" },
+        { "say": "in the garden, on the hill, under the tree", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：一只动物",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Where's the ...? It's ..." },
+        { "id": "g1", "kind": "table", "rows": [
+          ["Where's the owl?", "It's in the tree."],
+          ["Where's the eagle?", "It's on the hill."],
+          ["Where's the panda?", "It's under the tree."]
+        ] },
+        { "id": "t1", "kind": "text", "text": "Where's = Where is　It's = It is" }
+      ],
+      "script": [
+        { "say": "问一只动物在哪里，这样问答。" },
+        { "spotlight": "g1" },
+        { "say": "猫头鹰在哪里？它在树上。" },
+        { "say": "Where's the owl? It's in the tree.", "lang": "en" },
+        { "say": "老鹰在哪里？它在小山上。" },
+        { "say": "Where's the eagle? It's on the hill.", "lang": "en" },
+        { "say": "熊猫在哪里？它在树下面。" },
+        { "say": "Where's the panda? It's under the tree.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "这里的撇号是缩写，把两个词合成了一个。写的时候撇号不能漏。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：很多只动物",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Where are the ...? They're ..." },
+        { "id": "g1", "kind": "table", "rows": [
+          ["Where are the honeybees?", "They're in the garden."],
+          ["Where are the pandas?", "They're under the tree."]
+        ] },
+        { "id": "t1", "kind": "text", "text": "名字后面有 s，是很多只：are / They're" }
+      ],
+      "script": [
+        { "say": "如果是很多只动物呢？问句和答句都要换。" },
+        { "spotlight": "g1" },
+        { "say": "蜜蜂们在哪里？它们在花园里。" },
+        { "say": "Where are the honeybees? They're in the garden.", "lang": "en" },
+        { "say": "熊猫们在哪里？它们在树下面。" },
+        { "say": "Where are the pandas? They're under the tree.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "怎么判断？看动物名字后面有没有那个小尾巴。有尾巴，就是很多只。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "对比：一只还是很多只",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "One or more?" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "the owl → Where's … ? It's …", "color": "purple" },
+          { "id": "c1b", "text": "the owls → Where are … ? They're …", "color": "blue" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "Where's the birds? ✗　Where are the birds? ✓" }
+      ],
+      "script": [
+        { "say": "我们来比一比。" },
+        { "laser": "c1a" },
+        { "say": "一只猫头鹰：" },
+        { "say": "Where's the owl? It's in the tree.", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "很多只猫头鹰：" },
+        { "say": "Where are the owls? They're in the tree.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "很多只小鸟却用了一只的问法，这是常见错误。正确的说法是：" },
+        { "say": "Where are the birds?", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话：节目现场",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Animal Homes" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["Host", "Where's the eagle?"],
+          ["Kids", "It's on the hill."],
+          ["Host", "Where are the honeybees?"],
+          ["Kids", "They're in the garden."],
+          ["Host", "Great! You know animals' homes."]
+        ] }
+      ],
+      "script": [
+        { "say": "节目现场，主持人提问，小朋友们回答。我们一句一句跟读。" },
+        { "spotlight": "g1" },
+        { "say": "主持人：老鹰在哪里？" },
+        { "say": "Where's the eagle?", "lang": "en" },
+        { "say": "小朋友：它在小山上。" },
+        { "say": "It's on the hill.", "lang": "en" },
+        { "say": "主持人：蜜蜂们在哪里？" },
+        { "say": "Where are the honeybees?", "lang": "en" },
+        { "say": "小朋友：它们在花园里。" },
+        { "say": "They're in the garden.", "lang": "en" },
+        { "say": "主持人：太棒了！你们知道动物的家。" },
+        { "say": "Great! You know animals' homes.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "介绍一种喜欢的动物",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "An animal I like" },
+        { "id": "l1", "kind": "bullets", "items": [
+          "I like owls.",
+          "They can see at night.",
+          "They're in the trees."
+        ] },
+        { "id": "t1", "kind": "text", "text": "句首大写，句末句号。" }
+      ],
+      "script": [
+        { "say": "学会了问答，我们用三句话介绍一种喜欢的动物。" },
+        { "spotlight": "l1" },
+        { "say": "I like owls. They can see at night. They're in the trees.", "lang": "en" },
+        { "say": "我喜欢猫头鹰，它们晚上看得见，它们在树上。你也可以换成老鹰、蜜蜂或者熊猫。" },
+        { "spotlight": "t1" },
+        { "say": "写的时候，每句开头字母大写，末尾加句号。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀与小结",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "学法口诀" },
+        { "id": "l1", "kind": "bullets", "items": [
+          "名字没尾是一只",
+          "问答都用它来说",
+          "名字有尾是很多",
+          "问答换成它们说"
+        ] },
+        { "id": "t1", "kind": "text", "text": "One: Where's ...? It's ...　More: Where are ...? They're ..." }
+      ],
+      "script": [
+        { "say": "用口诀记一记。跟我读。" },
+        { "spotlight": "l1" },
+        { "say": "名字没尾是一只，问答都用它来说。" },
+        { "say": "名字有尾是很多，问答换成它们说。" },
+        { "say": "意思是：先看动物名字后面有没有小尾巴。没有尾巴是一只，回答用“它”；有尾巴是很多只，问句要换，回答用“它们”。" },
+        { "spotlight": "t1" },
+        { "say": "一句话小结：一只这样问答，很多只那样问答。" },
+        { "say": "Where's the owl? It's in the tree. Where are the owls? They're in the tree.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先判断对错。",
+      "questions": [
+        { "question": "Where's the honeybees? 是正确的问句。", "options": ["对", "错"], "answer": [1], "analysis": "honeybees 是很多只，要用 Where are the honeybees?" },
+        { "question": "回答 Where's the eagle? 可以说 It's on the hill.", "options": ["对", "错"], "answer": [0], "analysis": "一只老鹰用 It's 回答。" },
+        { "question": "under 的意思是“在……上面”。", "options": ["对", "错"], "answer": [1], "analysis": "under 是“在……下面”，“在……上面”是 on。" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "再来做选择题。",
+      "questions": [
+        { "question": "Where （　） the pandas?", "options": ["is", "are", "do"], "answer": [1], "analysis": "pandas 是很多只，用 are。" },
+        { "question": "— Where's the owl?\n— （　）", "options": ["They're in the tree.", "It's in the tree.", "Yes, it is."], "answer": [1], "analysis": "一只猫头鹰，用 It's 回答位置。" },
+        { "question": "“它们在花园里。”用英语怎么说？", "options": ["It's in the garden.", "They're in the garden.", "They're on the hill."], "answer": [1], "analysis": "“它们”用 They're，花园是 garden。" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后做填空和情景交际。",
+      "questions": [
+        { "question": "The panda is （　） the tree.（在树下）", "options": ["in", "on", "under"], "answer": [2], "analysis": "“在……下面”是 under。" },
+        { "question": "— （　）\n— They're on the flowers.", "options": ["Where are the honeybees?", "Where's the honeybee?", "What are they?"], "answer": [0], "analysis": "答句用 They're 说位置，问的是很多只蜜蜂。" },
+        { "question": "你找不到你的小猫了，你问妈妈（　）", "options": ["Where's my cat?", "Where are my cat?", "What's my cat?"], "answer": [0], "analysis": "一只小猫：Where's my cat?" }
+      ]
+    }
+  ]
+}

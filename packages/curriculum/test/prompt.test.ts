@@ -50,11 +50,11 @@ describe('buildGenerationRequirement', () => {
   });
 
   it('renders a readable example', () => {
-    const ctx = findLesson('bsd-g4a.u6.div-2d-adjust.tech-adjust-quotient');
+    const ctx = findLesson('bsd-g4a.u3.mul-3x2.tech-partial-product-shift');
     expect(ctx).toBeDefined();
     const text = buildGenerationRequirement(ctx!);
     expect(text).toContain('四年级上册');
-    expect(text).toContain('第六单元');
-    expect(text).toContain('试商偏大没有调商');
+    expect(text).toContain('第三单元');
+    expect(text).toContain('部分积没有错位');
   });
 });

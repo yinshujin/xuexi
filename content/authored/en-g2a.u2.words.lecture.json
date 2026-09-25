@@ -1,7 +1,7 @@
 {
   "format": "xuexi-authored@1",
   "lessonId": "en-g2a.u2.words.lecture",
-  "title": "男孩女孩，大大小小",
+  "title": "我的家人：叔叔、阿姨和表兄妹",
   "scenes": [
     {
       "type": "slide",
@@ -10,57 +10,37 @@
         {
           "id": "h1",
           "kind": "heading",
-          "text": "认识新朋友"
-        },
-        {
-          "id": "c1",
-          "kind": "cards",
-          "items": [
-            {
-              "id": "c1a",
-              "text": "Danny 丹尼",
-              "color": "blue"
-            },
-            {
-              "id": "c1b",
-              "text": "Mary 玛丽",
-              "color": "orange"
-            }
-          ]
+          "text": "At Uncle Bob's party"
         },
         {
           "id": "t1",
           "kind": "text",
-          "text": "谁是男孩？谁是女孩？"
+          "text": "今天是鲍勃叔叔的派对，家里来了好多人！"
         }
       ],
       "script": [
         {
-          "say": "小朋友们好！新学期，丹尼认识了一位新朋友，她叫玛丽。"
-        },
-        {
-          "say": "我们先用学过的问候语和他们打个招呼吧。"
-        },
-        {
-          "say": "Good morning, Danny. Good morning, Mary.",
-          "lang": "en"
+          "say": "小朋友们好！今天我们去参加鲍勃叔叔的派对。"
         },
         {
           "spotlight": "t1"
         },
         {
-          "say": "丹尼是男孩，玛丽是女孩。男孩、女孩用英语怎么说呢？我们一起来学。"
+          "say": "派对上有叔叔、阿姨，还有和我们差不多大的表哥表妹。"
+        },
+        {
+          "say": "这些家人用英语怎么称呼呢？我们一起来学。"
         }
       ]
     },
     {
       "type": "slide",
-      "title": "新单词：boy 和 girl",
+      "title": "新单词：uncle、aunt、cousin",
       "blocks": [
         {
           "id": "h1",
           "kind": "heading",
-          "text": "男孩和女孩"
+          "text": "家人的称呼"
         },
         {
           "id": "c1",
@@ -68,225 +48,138 @@
           "items": [
             {
               "id": "c1a",
-              "text": "boy 男孩",
+              "text": "uncle 叔叔；舅舅",
               "color": "blue"
             },
             {
               "id": "c1b",
-              "text": "girl 女孩",
-              "color": "orange"
-            }
-          ]
-        },
-        {
-          "id": "t1",
-          "kind": "text",
-          "text": "一个男孩：a boy    一个女孩：a girl"
-        }
-      ],
-      "script": [
-        {
-          "laser": "c1a"
-        },
-        {
-          "say": "丹尼是一个男孩。男孩，跟我读。"
-        },
-        {
-          "say": "boy, boy",
-          "lang": "en"
-        },
-        {
-          "say": "嘴巴先圆圆的，再轻轻咧开，再读一遍。"
-        },
-        {
-          "say": "boy",
-          "lang": "en"
-        },
-        {
-          "laser": "c1b"
-        },
-        {
-          "say": "玛丽是一个女孩。女孩，跟我读。"
-        },
-        {
-          "say": "girl, girl",
-          "lang": "en"
-        },
-        {
-          "say": "嘴角微微向两边拉，声音拉长一点，再读一遍。"
-        },
-        {
-          "say": "girl",
-          "lang": "en"
-        },
-        {
-          "spotlight": "t1"
-        },
-        {
-          "say": "说“一个男孩”“一个女孩”的时候，前面要加一个小词，跟我读。"
-        },
-        {
-          "say": "a boy, a girl",
-          "lang": "en"
-        }
-      ]
-    },
-    {
-      "type": "slide",
-      "title": "新单词：big 和 small",
-      "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "大和小"
-        },
-        {
-          "id": "c1",
-          "kind": "cards",
-          "items": [
-            {
-              "id": "c1a",
-              "text": "big 大的",
-              "color": "green"
-            },
-            {
-              "id": "c1b",
-              "text": "small 小的",
-              "color": "purple"
-            }
-          ]
-        },
-        {
-          "id": "t1",
-          "kind": "text",
-          "text": "张开双臂：big！缩成一团：small！"
-        }
-      ],
-      "script": [
-        {
-          "say": "看，一只大熊猫，一只小熊猫。大熊猫真大呀！"
-        },
-        {
-          "laser": "c1a"
-        },
-        {
-          "say": "大的，跟我读，张开双臂。"
-        },
-        {
-          "say": "big, big",
-          "lang": "en"
-        },
-        {
-          "say": "最后要收在喉咙里，轻轻一顿，不要读得太重。"
-        },
-        {
-          "say": "big",
-          "lang": "en"
-        },
-        {
-          "laser": "c1b"
-        },
-        {
-          "say": "小熊猫小小的。小的，跟我读，把身体缩成一团。"
-        },
-        {
-          "say": "small, small",
-          "lang": "en"
-        },
-        {
-          "spotlight": "t1"
-        },
-        {
-          "say": "一边做动作一边读，记得更牢！"
-        },
-        {
-          "say": "big, small",
-          "lang": "en"
-        }
-      ]
-    },
-    {
-      "type": "slide",
-      "title": "看图说词",
-      "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "看一看，说一说"
-        },
-        {
-          "id": "c1",
-          "kind": "cards",
-          "items": [
-            {
-              "id": "c1a",
-              "text": "丹尼",
-              "color": "blue"
-            },
-            {
-              "id": "c1b",
-              "text": "玛丽",
+              "text": "aunt 阿姨；姑姑",
               "color": "orange"
             },
             {
               "id": "c1c",
-              "text": "大西瓜",
+              "text": "cousin 堂（表）兄弟姐妹",
               "color": "green"
-            },
-            {
-              "id": "c1d",
-              "text": "小蚂蚁",
-              "color": "purple"
             }
           ]
         }
       ],
       "script": [
         {
-          "say": "老师指一张卡片，你马上说出英语单词。"
-        },
-        {
           "laser": "c1a"
         },
         {
-          "say": "丹尼是——"
+          "say": "爸爸妈妈的兄弟，叔叔、舅舅都叫这个词。跟我读。"
         },
         {
-          "say": "a boy",
+          "say": "uncle, uncle",
           "lang": "en"
         },
         {
           "laser": "c1b"
         },
         {
-          "say": "玛丽是——"
+          "say": "爸爸妈妈的姐妹，阿姨、姑姑都叫这个词。跟我读。"
         },
         {
-          "say": "a girl",
+          "say": "aunt, aunt",
           "lang": "en"
         },
         {
           "laser": "c1c"
         },
         {
-          "say": "大西瓜，它是——"
+          "say": "叔叔阿姨家的孩子，不分男孩女孩，都叫这个词。跟我读。"
         },
         {
-          "say": "big",
+          "say": "cousin, cousin",
           "lang": "en"
         },
         {
-          "laser": "c1d"
+          "say": "三个词连起来读。"
         },
         {
-          "say": "小蚂蚁，它是——"
+          "say": "uncle, aunt, cousin",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：old、young、cute",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "家人什么样？"
         },
         {
-          "say": "small",
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "old 年老的",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "young 年轻的",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "cute 可爱的",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "old ↔ young 意思相反"
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "奶奶八十岁了，年纪大。弯下腰，跟我读。"
+        },
+        {
+          "say": "old, old",
           "lang": "en"
         },
         {
-          "say": "全都说对了，你真棒！"
+          "laser": "c1b"
+        },
+        {
+          "say": "鲍勃叔叔二十多岁，很年轻。跳一跳，跟我读。"
+        },
+        {
+          "say": "young, young",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "小表妹圆圆的脸，真可爱。双手捧着脸，跟我读。"
+        },
+        {
+          "say": "cute, cute",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "年老的和年轻的，意思正好相反，成对记最牢。"
+        },
+        {
+          "say": "old, young",
+          "lang": "en"
         }
       ]
     },
@@ -297,65 +190,204 @@
         {
           "id": "h1",
           "kind": "heading",
-          "text": "丹尼和玛丽"
+          "text": "派对上的对话"
         },
         {
           "id": "g1",
           "kind": "table",
           "rows": [
             [
-              "Danny:",
-              "Hello, I'm Danny. I'm a boy."
+              "Kitty:",
+              "Who's he?"
             ],
             [
-              "Mary:",
-              "Hi, Danny. I'm Mary. I'm a girl."
+              "Sam:",
+              "He's my uncle. He's young."
             ],
             [
-              "Danny:",
-              "How are you, Mary?"
+              "Kitty:",
+              "Who's she?"
             ],
             [
-              "Mary:",
-              "I'm fine. Thank you."
+              "Sam:",
+              "She's my cousin. She's cute."
             ]
           ]
         }
       ],
       "script": [
         {
-          "say": "丹尼和玛丽在互相介绍自己。我们一句一句跟着读。"
+          "say": "派对上，好朋友指着客人问，我们一句一句跟着读。"
         },
         {
           "spotlight": "g1"
         },
         {
-          "say": "Hello, I'm Danny. I'm a boy.",
+          "say": "他是谁？"
+        },
+        {
+          "say": "Who's he?",
           "lang": "en"
         },
         {
-          "say": "玛丽说。"
+          "say": "他是我的叔叔，他很年轻。"
         },
         {
-          "say": "Hi, Danny. I'm Mary. I'm a girl.",
+          "say": "He's my uncle. He's young.",
           "lang": "en"
         },
         {
-          "say": "丹尼用上一单元学的句子问候玛丽。"
+          "say": "她是谁？"
         },
         {
-          "say": "How are you, Mary?",
+          "say": "Who's she?",
           "lang": "en"
         },
         {
-          "say": "玛丽回答。"
+          "say": "她是我的表妹，她很可爱。"
         },
         {
-          "say": "I'm fine. Thank you.",
+          "say": "She's my cousin. She's cute.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "字母组合：-am 家族",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Sounds：-am"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "ham 火腿",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "jam 果酱",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "h + am → ham    j + am → jam"
+        }
+      ],
+      "script": [
+        {
+          "say": "派对的桌上有火腿和果酱，它们是一个单词家族的。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "先读开头，再读结尾，结尾的音要把嘴巴闭上。跟我读。"
+        },
+        {
+          "say": "h, am, ham. j, am, jam.",
           "lang": "en"
         },
         {
-          "say": "你是男孩还是女孩？用英语说一说吧。"
+          "say": "ham, ham. jam, jam.",
+          "lang": "en"
+        },
+        {
+          "say": "两个词结尾一样，押韵。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "字母组合：-an 家族",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Sounds：-an"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "fan 扇子",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "man 男人",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "pan 平底锅",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "van 面包车",
+              "color": "purple"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "ham ↔ fan：最后一个音不一样"
+        }
+      ],
+      "script": [
+        {
+          "say": "再认识一个家族，结尾的音是舌尖顶住上牙。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "fan, fan",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "man, man",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "pan, pan",
+          "lang": "en"
+        },
+        {
+          "laser": "c1d"
+        },
+        {
+          "say": "van, van",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "火腿和扇子，只有最后一个音不同，一个闭嘴，一个舌尖顶上牙。"
+        },
+        {
+          "say": "ham, fan",
+          "lang": "en"
         }
       ]
     },
@@ -372,44 +404,41 @@
           "id": "l1",
           "kind": "bullets",
           "items": [
-            "Boy, boy, a boy.",
-            "Girl, girl, a girl.",
-            "Big, big, big!",
-            "Small, small, small!"
+            "Uncle, aunt, cousin.",
+            "Old, old, young, young.",
+            "Ham, jam.",
+            "Fan, man, pan, van."
           ]
         }
       ],
       "script": [
         {
-          "say": "我们来唱一首拍手小儿歌，老师读一句，你跟一句。"
+          "say": "我们来念拍手小儿歌，老师读一句，你跟一句。"
         },
         {
           "spotlight": "l1"
         },
         {
-          "say": "Boy, boy, a boy.",
+          "say": "Uncle, aunt, cousin.",
           "lang": "en"
         },
         {
-          "say": "Girl, girl, a girl.",
+          "say": "念年老的弯弯腰，念年轻的跳一跳。"
+        },
+        {
+          "say": "Old, old, young, young.",
           "lang": "en"
         },
         {
-          "say": "说大的时候张开双臂。"
-        },
-        {
-          "say": "Big, big, big!",
+          "say": "Ham, jam.",
           "lang": "en"
         },
         {
-          "say": "说小的时候蹲下来。"
-        },
-        {
-          "say": "Small, small, small!",
+          "say": "Fan, man, pan, van.",
           "lang": "en"
         },
         {
-          "say": "边拍手边念，单词一下子就记住了！"
+          "say": "边拍手边念，家人和单词家族都记住了！"
         }
       ]
     },
@@ -428,42 +457,37 @@
           "items": [
             {
               "id": "c1a",
-              "text": "boy",
+              "text": "uncle / aunt",
               "color": "blue"
             },
             {
               "id": "c1b",
-              "text": "girl",
+              "text": "cousin",
               "color": "orange"
             },
             {
               "id": "c1c",
-              "text": "big",
+              "text": "old / young",
               "color": "green"
             },
             {
               "id": "c1d",
-              "text": "small",
+              "text": "cute",
               "color": "purple"
             }
           ]
-        },
-        {
-          "id": "t1",
-          "kind": "text",
-          "text": "一个男孩：a boy；一个女孩：a girl"
         }
       ],
       "script": [
         {
-          "say": "一句话小结：今天学了男孩、女孩、大的、小的四个词。再读一遍。"
+          "say": "一句话小结：叔叔阿姨表兄妹，年老年轻和可爱。"
         },
         {
-          "say": "boy, girl, big, small",
+          "say": "uncle, aunt, cousin, old, young, cute",
           "lang": "en"
         },
         {
-          "say": "回家找一找，家里什么东西大，什么东西小，用英语说给爸爸妈妈听吧！"
+          "say": "回家拿出全家福，用英语说说谁是叔叔，谁是阿姨吧！"
         }
       ]
     },
@@ -473,7 +497,7 @@
       "intro": "下面我们做几道判断题，想一想说得对不对。",
       "questions": [
         {
-          "question": "girl 的意思是“男孩”。",
+          "question": "aunt 的意思是“叔叔”。",
           "options": [
             "对",
             "错"
@@ -481,10 +505,10 @@
           "answer": [
             1
           ],
-          "analysis": "girl 是女孩，boy 才是男孩。"
+          "analysis": "aunt 是阿姨、姑姑，uncle 才是叔叔、舅舅。"
         },
         {
-          "question": "big 的意思是“大的”。",
+          "question": "old 和 young 意思相反。",
           "options": [
             "对",
             "错"
@@ -492,10 +516,10 @@
           "answer": [
             0
           ],
-          "analysis": "big 就是大的，small 是小的。"
+          "analysis": "old 年老的，young 年轻的，意思相反。"
         },
         {
-          "question": "“一个男孩”用英语说 a boy。",
+          "question": "ham 和 jam 在同一个单词家族里。",
           "options": [
             "对",
             "错"
@@ -503,7 +527,7 @@
           "answer": [
             0
           ],
-          "analysis": "一个男孩是 a boy，一个女孩是 a girl。"
+          "analysis": "ham 和 jam 结尾都是 am，属于 -am 家族。"
         }
       ]
     },
@@ -513,52 +537,40 @@
       "intro": "接下来是选择题，选出正确的答案。",
       "questions": [
         {
-          "question": "“小的”用英语怎么说？",
+          "question": "妈妈的妹妹是我的：",
           "options": [
-            "big",
-            "small",
-            "boy"
+            "uncle",
+            "aunt",
+            "cousin"
           ],
           "answer": [
             1
           ],
-          "analysis": "small 是小的，big 是大的。"
+          "analysis": "阿姨是 aunt。"
         },
         {
-          "question": "Mary 是一个女孩，她是：",
+          "question": "“可爱的”用英语怎么说？",
           "options": [
-            "a girl",
-            "a boy",
-            "big"
+            "cute",
+            "old",
+            "young"
           ],
           "answer": [
             0
           ],
-          "analysis": "女孩是 girl，一个女孩说 a girl。"
+          "analysis": "cute 是可爱的。"
         },
         {
-          "question": "和 big 意思相反的词是：",
+          "question": "哪个单词和 fan 的结尾音一样？",
           "options": [
-            "boy",
-            "girl",
-            "small"
-          ],
-          "answer": [
-            2
-          ],
-          "analysis": "big（大的）和 small（小的）意思相反。"
-        },
-        {
-          "question": "“男孩”用英语怎么说？",
-          "options": [
-            "girl",
-            "boy",
-            "big"
+            "ham",
+            "van",
+            "jam"
           ],
           "answer": [
             1
           ],
-          "analysis": "boy 是男孩。"
+          "analysis": "fan 和 van 都在 -an 家族。"
         }
       ]
     },
@@ -568,40 +580,40 @@
       "intro": "最后是填空和情景交际，选出最合适的一项。",
       "questions": [
         {
-          "question": "Hello, I'm Danny. I'm a （　）.（丹尼是男孩）",
+          "question": "叔叔家的孩子是我的（　）。",
           "options": [
-            "girl",
-            "boy",
-            "small"
-          ],
-          "answer": [
-            1
-          ],
-          "analysis": "丹尼是男孩，所以说 I'm a boy."
-        },
-        {
-          "question": "大熊猫说：I'm （　）.",
-          "options": [
-            "big",
-            "small",
-            "girl"
+            "cousin",
+            "uncle",
+            "aunt"
           ],
           "answer": [
             0
           ],
-          "analysis": "大熊猫大大的，说 I'm big."
+          "analysis": "叔叔阿姨家的孩子是 cousin。"
         },
         {
-          "question": "Hi, Danny. I'm Mary. I'm （　） girl.",
+          "question": "奶奶八十岁了，她很（　）。",
           "options": [
-            "a",
-            "big",
-            "small"
+            "old",
+            "young",
+            "cute"
           ],
           "answer": [
             0
           ],
-          "analysis": "说“一个女孩”要在 girl 前面加 a：I'm a girl."
+          "analysis": "年纪大是 old。"
+        },
+        {
+          "question": "把 ham 开头的 h 换成 j，变成（　）。",
+          "options": [
+            "jam",
+            "man",
+            "pan"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "ham 换开头 j，变成 jam（果酱）。"
         }
       ]
     }

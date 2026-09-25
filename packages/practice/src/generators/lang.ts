@@ -21,6 +21,7 @@ import { BLANK, buildChoice, choiceDiagnosis, defineGenerator, step, type Draft,
  *   【词义】morning 的意思是（　）                            English → Chinese
  *   【说一说】“早上”用英语怎么说？                             Chinese → English
  *   【拼写】选出拼写正确的单词：早上                            spelling
+ *   【拔高】【<kind>】… / 【创新】【<kind>】…                        tiered authored items
  */
 
 export interface LangParams {
@@ -32,6 +33,7 @@ interface Template {
   id: string;
   kp: string;
   level: BankLevel;
+  tier?: 'stretch' | 'creative';
   /** Tags a wrong option can carry (for targetFor). */
   tags: ErrorTag[];
   build(rng: Rng): Omit<Draft<LangParams>, 'params'> & { optionTags: Array<ErrorTag | null> };
@@ -45,6 +47,51 @@ const HINTS: Record<string, string> = {
   选词填空: '把每个词放进句子里读一读，哪个最通顺？',
   词义: '联系课文里的句子，想想这个词是什么意思。',
   量词: '想一想平时怎么说，“一（ ）东西”读起来顺不顺。',
+  选句: '把每一句都读一读，看看哪一句最符合题目的要求。',
+  病句: '一句一句读，找找有没有意思重复、缺少部分或搭配不当。',
+  提问: '想一想，弄懂哪个问题最能帮你读懂故事或文章？',
+  辨析: '一项一项对照课文想一想，找出和课文不一样的那一项。',
+  修辞: '想一想这句话把什么比作什么，或把什么当作人来写，这样写好在哪里。',
+  阅读: '先把短文读完，再回到文中找和问题有关的句子。',
+  仿写: '看看例子是怎么写的，选和它写法最像、又最通顺的一句。',
+  运用: '想一想课文里学到的方法或道理，放到这件事里该怎么用。',
+  反义词: '意思正好相反的词，放在一起读一读：大—小，高—矮。',
+  近义词: '意思差不多的词，换进句子里读一读，意思变没变？',
+  课文理解: '回想课文里是怎么写的，再选。',
+  词语搭配: '把词语连起来读一读，平时是这样说的吗？',
+  偏旁: '想想偏旁的意思：带“犭”“虫”的字多和动物有关，带“木”的多和树木有关。',
+  笔画: '按笔顺一笔一笔地书空，数一数。',
+  字形: '看清楚字的每一部分，和形近字比一比。',
+  口语交际: '想一想，这时候怎么说最有礼貌、最清楚？',
+  动物知识: '想一想这种动物平时是什么样子的。',
+  排序: '先找开头，再一句接一句地连起来读。',
+  易混辨析: '把容易混的放进句子里，比一比意思有什么不同。',
+  选出用错的一项: '一项一项放回句子里读，哪一项读起来不对？',
+  推断: '从题目给的线索出发，想一想最可能是怎样的。',
+  综合: '这道题要用到两个知识，一个一个想清楚。',
+  短文阅读: '先把短文读完，再回到文中找答案。',
+  生活运用: '想想学过的知识，用到生活里的这件事上。',
+  分类: '先想想每一个属于哪一类，再找不一样的那个。',
+  谜语: '抓住谜面里的每一个特点，一个一个对照。',
+  根据意思选词: '先弄懂意思，再看哪个词正好是这个意思。',
+  情景交际: 'Think: 这时候说哪一句最合适？读一读每个选项。',
+  看中文选英文: '先想中文意思，再小声读一读每个英文句子。',
+  补全对话: '读一读上下两句，中间应该怎么说才接得上？',
+  选出正确的句子: '一个词一个词地看：大小写、am/is/are、单词拼写。',
+  句子意思: '先认出句子里学过的单词，再想整句的意思。',
+  连词成句: '先找句子开头（大写字母），问句的问号放最后。',
+  配对词: '想一想课文里哪两个词总是一起出现。',
+  找不同: '先想想每个词的意思，再找不同类的那一个。',
+  补全单词: '小声拼一拼，想想这个单词怎么写。',
+  句型选择: '想一想是问句还是回答，用学过的句型。',
+  找错句: '一句一句读，看看哪一句的单词或句型用错了。',
+  对话排序: '先找第一句（打招呼或提问），再一问一答接下去。',
+  读一读: '读一读，想想每个单词的意思。',
+  看图说话: '按题目说的画面想一想，哪句话说的正是这个？',
+  猜一猜: '抓住每一个线索：它能做什么，不能做什么？',
+  补全句子: '想一想 can 和 can\'t、and 和 but 该用哪一个。',
+  字母发音: '小声读一读每个单词，听听那个字母是读短音，还是读字母本身的音（像 cake 里的 a）。',
+  读算式: '看符号换单词：+ 读 plus，− 读 minus，= 读 equals。',
 };
 
 function itemTemplate(item: ChoiceItem, i: number): Template {
@@ -52,6 +99,7 @@ function itemTemplate(item: ChoiceItem, i: number): Template {
     id: `item:${i}`,
     kp: item.kp,
     level: item.level,
+    ...(item.tier ? { tier: item.tier } : {}),
     tags: [...new Set(item.wrong.map(([, t]) => t))],
     build(rng) {
       const c = buildChoice(
@@ -61,7 +109,7 @@ function itemTemplate(item: ChoiceItem, i: number): Template {
       );
       return {
         widget: 'choice',
-        prompt: `【${item.kind}】${item.prompt}`,
+        prompt: `${item.tier === 'stretch' ? '【拔高】' : item.tier === 'creative' ? '【创新】' : ''}【${item.kind}】${item.prompt}`,
         options: c.options,
         answer: { type: 'choice', index: c.index },
         hint: HINTS[item.kind] ?? '读一读题目，想一想课文里学过的内容。',
@@ -349,23 +397,43 @@ function levelWindow(difficulty: number): [number, number] {
 
 function bankGenerator(id: GeneratorId, templates: Template[]): PracticeGenerator<LangParams> {
   if (templates.length === 0) throw new Error(`${id}: empty bank`);
-  const kps = [...new Set(templates.map((t) => t.kp))];
+  const core = templates.filter((t) => !t.tier);
+  const kps = [...new Set(core.map((t) => t.kp))];
+  // `${kp}#stretch` / `${kp}#creative`: 拔高 / 创新 items of a knowledge point.
+  const tiered = [...new Set(templates.filter((t) => t.tier).map((t) => `${t.kp}#${t.tier}`))];
   const targets = [...new Set(templates.flatMap((t) => t.tags))];
-  return defineGenerator<LangParams>({
-    id,
-    variants: ['mixed', ...kps],
-    targets,
-    build({ difficulty, variant, target, rng }) {
-      const byKp = variant === 'mixed' ? templates : templates.filter((t) => t.kp === variant);
-      let pool = byKp.length > 0 ? byKp : templates;
+  // Candidate lists depend only on (variant, target, difficulty); banks have
+  // well over a thousand templates, so compute each list once.
+  const candidates = new Map<string, Template[]>();
+  function candidatesFor(variant: string, target: ErrorTag | undefined, difficulty: number): Template[] {
+    const key = `${variant}|${target ?? ''}|${difficulty}`;
+    const cached = candidates.get(key);
+    if (cached) return cached;
+    let list: Template[];
+    if (variant.includes('#')) {
+      const [kp, tier] = variant.split('#');
+      list = templates.filter((x) => x.kp === kp && x.tier === tier);
+    } else {
+      const byKp = variant === 'mixed' ? core : core.filter((t) => t.kp === variant);
+      let pool = byKp.length > 0 ? byKp : core;
       if (target) {
         const tagged = pool.filter((t) => t.tags.includes(target));
-        pool = tagged.length > 0 ? tagged : templates.filter((t) => t.tags.includes(target));
+        pool = tagged.length > 0 ? tagged : core.filter((t) => t.tags.includes(target));
       }
       const [min, max] = levelWindow(difficulty);
       const inWindow = pool.filter((t) => t.level >= min && t.level <= max);
       const upTo = pool.filter((t) => t.level <= max);
-      const chosen = rng.pick(inWindow.length > 0 ? inWindow : upTo.length > 0 ? upTo : pool);
+      list = inWindow.length > 0 ? inWindow : upTo.length > 0 ? upTo : pool.length > 0 ? pool : templates;
+    }
+    candidates.set(key, list);
+    return list;
+  }
+  return defineGenerator<LangParams>({
+    id,
+    variants: ['mixed', ...kps, ...tiered],
+    targets,
+    build({ difficulty, variant, target, rng }) {
+      const chosen = rng.pick(candidatesFor(variant, target, difficulty));
       const { optionTags, ...draft } = chosen.build(rng);
       return { ...draft, params: { template: chosen.id, optionTags } };
     },

@@ -27,6 +27,11 @@ export interface PracticeSpec {
   variant?: string;
   /** Default is the knowledge point's main practice. */
   label?: string;
+  /**
+   * 拔高 (stretch) / 创新 (creative) questions: asked at the end of a practice
+   * set, never in the routine rotation, and not counted against mastery.
+   */
+  tier?: 'stretch' | 'creative';
 }
 
 export interface KnowledgePoint {

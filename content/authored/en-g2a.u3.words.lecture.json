@@ -1,0 +1,596 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u3.words.lecture",
+  "title": "我的玩具：洋娃娃、机器人和拼图",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "The lost toy"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "玩具箱里的玩具不见了一个，是哪一个呢？"
+        }
+      ],
+      "script": [
+        {
+          "say": "小朋友们好！今天我们来整理玩具箱。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "咦，少了一个玩具！我们先认识玩具箱里的朋友，再找找丢的是谁。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：doll、ball、robot",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "玩具（一）"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "doll 洋娃娃",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "ball 球",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "robot 机器人",
+              "color": "green"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "穿着漂亮裙子的洋娃娃。跟我读。"
+        },
+        {
+          "say": "doll, doll",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "圆圆的，能拍能踢的球。跟我读。"
+        },
+        {
+          "say": "ball, ball",
+          "lang": "en"
+        },
+        {
+          "say": "这两个词最后都有两个相同的字母，舌尖轻轻顶住上牙收尾。"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "会走路的机器人。学机器人走路，跟我读。"
+        },
+        {
+          "say": "robot, robot",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：toy plane、toy bear、jigsaw puzzle",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "玩具（二）"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "toy plane 玩具飞机",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "toy bear 玩具熊",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "jigsaw puzzle 拼图",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "toy = 玩具"
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "先学一个小词，意思是“玩具”。跟我读。"
+        },
+        {
+          "say": "toy, toy",
+          "lang": "en"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "玩具加上飞机，就是玩具飞机。张开双臂飞一飞，跟我读。"
+        },
+        {
+          "say": "toy plane, toy plane",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "玩具加上熊，就是玩具熊。抱一抱，跟我读。"
+        },
+        {
+          "say": "toy bear, toy bear",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "很多小块拼成一幅画，是拼图。跟我读。"
+        },
+        {
+          "say": "jigsaw puzzle, jigsaw puzzle",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "猜一猜，丢的是什么？"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Sam:",
+              "Is it a ball?"
+            ],
+            [
+              "Kitty:",
+              "No, it isn't."
+            ],
+            [
+              "Sam:",
+              "Is it a robot?"
+            ],
+            [
+              "Kitty:",
+              "Yes, it is. I like my robot."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "好朋友帮忙猜，丢的是哪个玩具。我们一句一句跟着读。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "是一个球吗？"
+        },
+        {
+          "say": "Is it a ball?",
+          "lang": "en"
+        },
+        {
+          "say": "不，不是。"
+        },
+        {
+          "say": "No, it isn't.",
+          "lang": "en"
+        },
+        {
+          "say": "是一个机器人吗？"
+        },
+        {
+          "say": "Is it a robot?",
+          "lang": "en"
+        },
+        {
+          "say": "是的！我喜欢我的机器人。"
+        },
+        {
+          "say": "Yes, it is. I like my robot.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "字母组合：-ed 家族",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Sounds：-ed"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "bed 床",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "red 红色的",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "b + ed → bed    r + ed → red"
+        }
+      ],
+      "script": [
+        {
+          "say": "机器人最后在床底下找到了，它是红色的。床和红色是一个家族。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "先读开头，再读结尾，连起来。跟我读。"
+        },
+        {
+          "say": "b, ed, bed. r, ed, red.",
+          "lang": "en"
+        },
+        {
+          "say": "bed, bed. red, red.",
+          "lang": "en"
+        },
+        {
+          "say": "两个词结尾一样，押韵。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "字母组合：-et 家族",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "Sounds：-et"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "net 网",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "pet 宠物",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "wet 湿的",
+              "color": "green"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "net, pet, wet：结尾都是 et"
+        }
+      ],
+      "script": [
+        {
+          "say": "再认识一个家族，结尾的音轻轻一顿。"
+        },
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "net, net",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "pet, pet",
+          "lang": "en"
+        },
+        {
+          "laser": "c1c"
+        },
+        {
+          "say": "wet, wet",
+          "lang": "en"
+        },
+        {
+          "say": "网、宠物、湿的，三个词押韵，一起读。"
+        },
+        {
+          "say": "net, pet, wet",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "英文小儿歌"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "Doll, ball, robot.",
+            "Toy plane, toy bear.",
+            "Bed, red.",
+            "Net, pet, wet."
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "我们来念拍手小儿歌，老师读一句，你跟一句。"
+        },
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "Doll, ball, robot.",
+          "lang": "en"
+        },
+        {
+          "say": "Toy plane, toy bear.",
+          "lang": "en"
+        },
+        {
+          "say": "Bed, red.",
+          "lang": "en"
+        },
+        {
+          "say": "Net, pet, wet.",
+          "lang": "en"
+        },
+        {
+          "say": "边拍手边念，玩具和单词家族都记住了！"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "今天学会了"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "doll / ball",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "robot",
+              "color": "orange"
+            },
+            {
+              "id": "c1c",
+              "text": "toy plane / toy bear",
+              "color": "green"
+            },
+            {
+              "id": "c1d",
+              "text": "jigsaw puzzle",
+              "color": "purple"
+            }
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "一句话小结：六个玩具词，前面有玩具这个词的，就是玩具飞机、玩具熊。"
+        },
+        {
+          "say": "doll, ball, robot, toy plane, toy bear, jigsaw puzzle",
+          "lang": "en"
+        },
+        {
+          "say": "回家打开玩具箱，用英语说说你有哪些玩具吧！"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "下面我们做几道判断题，想一想说得对不对。",
+      "questions": [
+        {
+          "question": "robot 的意思是“机器人”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "robot 就是机器人。"
+        },
+        {
+          "question": "toy bear 的意思是“玩具飞机”。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "toy bear 是玩具熊，toy plane 才是玩具飞机。"
+        },
+        {
+          "question": "bed 和 red 在同一个单词家族里。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "bed 和 red 结尾都是 ed，属于 -ed 家族。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "接下来是选择题，选出正确的答案。",
+      "questions": [
+        {
+          "question": "“拼图”用英语怎么说？",
+          "options": [
+            "jigsaw puzzle",
+            "toy plane",
+            "doll"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "拼图是 jigsaw puzzle。"
+        },
+        {
+          "question": "圆圆的，能拍能踢的玩具是：",
+          "options": [
+            "ball",
+            "doll",
+            "robot"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "球是 ball。"
+        },
+        {
+          "question": "哪个单词和 net 的结尾音一样？",
+          "options": [
+            "bed",
+            "pet",
+            "red"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "net 和 pet 都在 -et 家族。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空和情景交际，选出最合适的一项。",
+      "questions": [
+        {
+          "question": "— Is it a doll?\n— No, it isn't. It's a （　）.（是一个机器人）",
+          "options": [
+            "robot",
+            "ball",
+            "bed"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "机器人是 robot。"
+        },
+        {
+          "question": "toy plane 里的 toy 意思是（　）。",
+          "options": [
+            "玩具",
+            "飞机",
+            "熊"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "toy 是玩具。"
+        },
+        {
+          "question": "把 bed 开头的 b 换成 r，变成（　）。",
+          "options": [
+            "red",
+            "net",
+            "wet"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "bed 换开头 r，变成 red（红色的）。"
+        }
+      ]
+    }
+  ]
+}

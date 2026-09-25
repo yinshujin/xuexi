@@ -19,6 +19,67 @@ const VARIANTS: Record<string, readonly string[]> = {
   'g2.addsub.word': ['mixed', 'add', 'sub', 'compare'],
   'g2.measure': ['mixed', 'ruler', 'informal'],
   'g4.lines': ['mixed', 'lines', 'perpendicular', 'parallel'],
+  'g4.oral.muldiv': ['mixed', 'mul', 'div'],
+  'g4.quantity': ['mixed', 'part-whole', 'unit-price', 'speed', 'meeting'],
+  'g4.figures': ['mixed', 'segments', 'angles', 'shapes'],
+  // 拔高 / 创新: `${family}#${tier}`, one per template family in challenge-g2*.ts.
+  'g2.challenge': [
+    'add#stretch',
+    'add#creative',
+    'sub#stretch',
+    'sub#creative',
+    'compare#stretch',
+    'compare#creative',
+    'addsub#stretch',
+    'addsub#creative',
+    'guess#stretch',
+    'guess#creative',
+    'informal#stretch',
+    'informal#creative',
+    'cm#stretch',
+    'cm#creative',
+    'meter#stretch',
+    'meter#creative',
+    'mul#stretch',
+    'mul#creative',
+    'times#stretch',
+    'times#creative',
+    'table25#stretch',
+    'table25#creative',
+    'table69#stretch',
+    'table69#creative',
+    'div#stretch',
+    'div#creative',
+    'shop#stretch',
+    'shop#creative',
+  ],
+  // 拔高 / 创新: `${family}#${tier}`, one per template family in challenge-g4*.ts.
+  'g4.challenge': [
+    'bignum#stretch',
+    'bignum#creative',
+    'approx#stretch',
+    'approx#creative',
+    'lines#stretch',
+    'lines#creative',
+    'perp#stretch',
+    'perp#creative',
+    'angle#stretch',
+    'angle#creative',
+    'mul#stretch',
+    'mul#creative',
+    'mulest#stretch',
+    'mulest#creative',
+    'order#stretch',
+    'order#creative',
+    'law#stretch',
+    'law#creative',
+    'lawmul#stretch',
+    'lawmul#creative',
+    'quantity#stretch',
+    'quantity#creative',
+    'figures#stretch',
+    'figures#creative',
+  ],
 };
 
 describe('ids', () => {
@@ -169,7 +230,8 @@ describe('语文 / 英语 practice banks', () => {
   it('every bank knowledge point exists in its book and every book knowledge point has practice', () => {
     for (const [gid, bookId] of Object.entries(BANK_BOOK)) {
       for (const v of getGenerator(gid as never).variants) {
-        if (v !== 'mixed') expect(findKnowledgePoint(`${bookId}.${v}`), `${gid}: ${v}`).toBeDefined();
+        // `<kp>#stretch` / `<kp>#creative` serve that knowledge point's 拔高 / 创新 items.
+        if (v !== 'mixed') expect(findKnowledgePoint(`${bookId}.${v.split('#')[0]}`), `${gid}: ${v}`).toBeDefined();
       }
     }
     for (const book of BOOKS.filter((b) => b.subject !== 'math')) {
@@ -178,7 +240,8 @@ describe('语文 / 英语 practice banks', () => {
           expect(k.practice.length, `${k.id} has no practice`).toBeGreaterThan(0);
           for (const p of k.practice) {
             expect(BANK_BOOK[p.generatorId], k.id).toBe(book.id);
-            if (p.variant !== 'mixed') expect(`${book.id}.${p.variant}`, k.id).toBe(k.id);
+            if (p.variant !== 'mixed') expect(`${book.id}.${p.variant?.split('#')[0]}`, k.id).toBe(k.id);
+            if (p.variant?.includes('#')) expect(p.variant.split('#')[1], k.id).toBe(p.tier);
           }
         }
       }

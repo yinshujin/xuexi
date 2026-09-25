@@ -1,23 +1,25 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { findKnowledgePoint } from '@xuexi/curriculum';
-import type { ChildProfile, LearningEvent, PracticeMode } from '@xuexi/shared';
+import { practiceSizeOf, type ChildProfile, type LearningEvent, type PracticeMode } from '@xuexi/shared';
 import { useApp } from '../lib/store';
 import { navigate } from '../lib/router';
 import {
   childKps,
   dailyItems,
+  extraItems,
   gradeQuestion,
+  ItemPicker,
   makeQuestion,
   mistakeItems,
-  nextKpItem,
   progressMap,
+  setShape,
   type SessionItem,
 } from '../lib/learning';
-import { uuid } from '../lib/format';
+import { kvSet } from '../lib/db';
+import { dayKey, uuid } from '../lib/format';
 import { Btn, Card, Empty, Page, Stars } from '../components/ui';
 import { QuestionView, type AnswerOutcome } from '../practice/QuestionView';
 
-const KP_SESSION = 10;
 const SPEED_SECONDS = 60;
 const SPEED_GENERATORS = new Set(['g2.mul.table', 'g2.div.table', 'g2.addsub.2d', 'g4.oral.muldiv']);
 
@@ -27,7 +29,11 @@ const TITLES: Record<string, string> = {
   mistakes: '错题重练',
   review: '到期复习',
   daily: '今日任务',
+  extra: '加练',
 };
+
+/** Set when today's 今日任务 is finished (ChildHome then offers 加练). */
+export const dailyDoneKey = (childId: string, day = dayKey(Date.now())) => `dailyDone:${childId}:${day}`;
 
 interface Result {
   correct: number;
@@ -35,14 +41,21 @@ interface Result {
 }
 
 /** Build the fixed item list for modes that are planned up front. */
-function plannedItems(mode: string, child: ChildProfile, events: LearningEvent[], settings: Parameters<typeof dailyItems>[2]): SessionItem[] {
+function plannedItems(
+  mode: string,
+  child: ChildProfile,
+  events: LearningEvent[],
+  settings: Parameters<typeof dailyItems>[2],
+  picker: ItemPicker,
+): SessionItem[] {
   if (mode === 'mistakes') return mistakeItems(events);
   if (mode === 'daily') return dailyItems(child, events, settings);
+  if (mode === 'extra') return extraItems(child, events, settings, practiceSizeOf(settings), picker);
   if (mode === 'review') {
     const progress = progressMap(events, settings);
     const due = childKps(child).filter((k) => progress.get(k.kp.id)?.reviewDue).slice(0, 4);
     return due.flatMap((k) =>
-      Array.from({ length: 4 }, (_, i) => nextKpItem(events, settings, k.kp, i, 'review')).filter(
+      Array.from({ length: 4 }, (_, i) => picker.next(events, settings, k.kp, i, 'review')).filter(
         (x): x is SessionItem => x !== null,
       ),
     );
@@ -69,14 +82,22 @@ export function PracticePage({
   const kp = kpId ? findKnowledgePoint(kpId)?.kp : undefined;
   const [round, setRound] = useState(0);
 
+  // One picker per set: no question twice in a set, recently seen ones avoided.
+  const picker = useMemo(
+    () => new ItemPicker(eventsRef.current),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [mode, child.id, kpId, round],
+  );
   // Planned modes freeze their list when the session starts.
   const planned = useMemo(
-    () => plannedItems(mode, child, eventsRef.current, family.settings),
+    () => plannedItems(mode, child, eventsRef.current, family.settings, picker),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [mode, child.id, round],
+    [mode, child.id, round, picker],
   );
   const adaptive = mode === 'kp' || mode === 'speed';
-  const total = adaptive ? (mode === 'speed' ? Infinity : KP_SESSION) : planned.length;
+  // 专项: routine questions, then 拔高 / 创新 at the end.
+  const shape = useMemo(() => (kp && mode === 'kp' ? setShape(kp, practiceSizeOf(family.settings)) : []), [kp, mode, family.settings]);
+  const total = adaptive ? (mode === 'speed' ? Infinity : shape.length) : planned.length;
 
   const [index, setIndex] = useState(0);
   const [item, setItem] = useState<SessionItem | null>(null);
@@ -88,8 +109,13 @@ export function PracticePage({
   const pick = (i: number): SessionItem | null => {
     if (!adaptive) return planned[i] ?? null;
     if (!kp) return null;
+    const slot = shape[i];
+    if (mode === 'kp' && slot && slot !== 'core') {
+      const ch = picker.challenge(eventsRef.current, family.settings, kp, slot, 'kp');
+      if (ch) return ch;
+    }
     const filter = mode === 'speed' ? (s: { generatorId: string }) => SPEED_GENERATORS.has(s.generatorId) : undefined;
-    return nextKpItem(eventsRef.current, family.settings, kp, i, mode as PracticeMode, filter);
+    return picker.next(eventsRef.current, family.settings, kp, i, mode as PracticeMode, filter);
   };
 
   useEffect(() => {
@@ -100,6 +126,10 @@ export function PracticePage({
     setDeadline(mode === 'speed' ? Date.now() + SPEED_SECONDS * 1000 : null);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mode, kpId, round, planned]);
+
+  useEffect(() => {
+    if (done && mode === 'daily' && result.total > 0) void kvSet(dailyDoneKey(child.id), true);
+  }, [done, mode, result.total, child.id]);
 
   useEffect(() => {
     if (!deadline || done) return;
@@ -151,7 +181,13 @@ export function PracticePage({
     return (
       <Page title={title} back={back}>
         <Empty>
-          {mode === 'mistakes' ? '错题本是空的，太棒了！🎉' : mode === 'review' ? '现在没有需要复习的知识点。' : '今天没有可做的练习，先去知识地图看看课吧。'}
+          {mode === 'mistakes'
+            ? '错题本是空的，太棒了！🎉'
+            : mode === 'review'
+              ? '现在没有需要复习的知识点。'
+              : mode === 'extra'
+                ? '还没有可以加练的知识点，先去知识地图学一学吧。'
+                : '今天没有可做的练习，先去知识地图看看课吧。'}
         </Empty>
       </Page>
     );
@@ -173,9 +209,14 @@ export function PracticePage({
           <div className="text-lg text-slate-600">
             {stars === 3 ? '太厉害了！' : stars === 2 ? '很不错，再接再厉！' : '做错的题已经放进错题本，明天再来消灭它们！'}
           </div>
-          <div className="flex gap-3">
-            {mode !== 'daily' && (
-              <Btn onClick={() => setRound((r) => r + 1)}>再来一组</Btn>
+          {mode === 'daily' && <div className="text-lg text-emerald-700">今日任务完成啦！还想多练一会儿吗？</div>}
+          <div className="flex flex-wrap justify-center gap-3">
+            {mode === 'daily' ? (
+              <Btn tone="green" onClick={() => navigate(`/c/${child.id}/practice/extra?back=${encodeURIComponent(back)}`)}>
+                💪 加练一组
+              </Btn>
+            ) : (
+              <Btn onClick={() => setRound((r) => r + 1)}>{mode === 'extra' ? '💪 再加练一组' : '再来一组'}</Btn>
             )}
             <Btn tone="plain" onClick={() => navigate(back)}>
               返回

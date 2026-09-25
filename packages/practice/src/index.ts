@@ -82,3 +82,11 @@ export {
   type DailyPracticeSpec,
   type PlannedQuestion,
 } from './daily';
+export {
+  challengeGenerator,
+  shuffledOptions,
+  type ChallengeDraft,
+  type ChallengeParams,
+  type ChallengeTemplate,
+  type ChallengeTier,
+} from './generators/challenge';

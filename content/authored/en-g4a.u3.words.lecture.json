@@ -1,0 +1,234 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g4a.u3.words.lecture",
+  "title": "How do we use numbers? 用英语读算式",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入：数字游戏",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "How do we use numbers?" },
+        { "id": "t1", "kind": "text", "text": "我们怎样使用数字？来玩一个数字游戏！" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "地铁 1 号线", "color": "green" },
+          { "id": "c1b", "text": "超市：8 元", "color": "orange" },
+          { "id": "c1c", "text": "2 + 3 = 5", "color": "blue" }
+        ] }
+      ],
+      "script": [
+        { "say": "今天学第三单元。先跟我读单元的大问题。" },
+        { "spotlight": "h1" },
+        { "say": "How do we use numbers?", "lang": "en" },
+        { "say": "意思是：我们怎样使用数字？" },
+        { "laser": "c1a" },
+        { "say": "坐深圳地铁，要看几号线。" },
+        { "laser": "c1b" },
+        { "say": "去超市买东西，要算一算多少钱。" },
+        { "laser": "c1c" },
+        { "say": "数学课上还要做算式。今天我们学会用英语读算式。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "新单词：加、减、等于、答案",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "New words" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "plus 加 ( + )", "color": "blue" },
+          { "id": "c1b", "text": "minus 减 ( − )", "color": "orange" },
+          { "id": "c1c", "text": "equal 等于 ( = )", "color": "green" },
+          { "id": "c1d", "text": "answer 答案", "color": "purple" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "answer 里的 w 不发音" }
+      ],
+      "script": [
+        { "say": "先学四个和算式有关的词。" },
+        { "laser": "c1a" },
+        { "say": "加号读作这个词，意思是加。跟我读。" },
+        { "say": "plus, plus", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "减号读作这个词，意思是减。跟我读。" },
+        { "say": "minus, minus", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "等号读作这个词，意思是等于。跟我读。" },
+        { "say": "equal, equal", "lang": "en" },
+        { "laser": "c1d" },
+        { "say": "算出来的得数，就是答案。跟我读。" },
+        { "say": "answer, answer", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "注意，答案这个词里藏着一个不发音的字母，写的时候别漏了。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "读算式",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Read the sums" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["2 + 3 = 5", "Two plus three equals five."],
+          ["9 − 4 = 5", "Nine minus four equals five."],
+          ["6 + 6 = 12", "Six plus six equals twelve."]
+        ] },
+        { "id": "t1", "kind": "text", "text": "读算式时，equal 后面加 s：equals" }
+      ],
+      "script": [
+        { "say": "我们来读算式。看符号换单词，数字照着读。" },
+        { "spotlight": "g1" },
+        { "say": "二加三等于五。跟我读。" },
+        { "say": "Two plus three equals five.", "lang": "en" },
+        { "say": "九减四等于五。跟我读。" },
+        { "say": "Nine minus four equals five.", "lang": "en" },
+        { "say": "六加六等于十二。跟我读。" },
+        { "say": "Six plus six equals twelve.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "读整个算式的时候，等于这个词后面要加一个小尾巴。" },
+        { "board": [
+          { "text": "10 − 3 = 7" },
+          { "text": "Ten minus three equals seven." }
+        ] },
+        { "say": "你来试一试：十减三等于七。" },
+        { "say": "Ten minus three equals seven.", "lang": "en" },
+        { "boardClose": true }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "单数和双数",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "odd numbers · even numbers" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "odd numbers 单数：1 3 5 7 9", "color": "orange" },
+          { "id": "c1b", "text": "even numbers 双数：2 4 6 8 10", "color": "blue" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "Seven is an odd number. Four is an even number." }
+      ],
+      "script": [
+        { "say": "数字还可以分成两类。" },
+        { "laser": "c1a" },
+        { "say": "一、三、五、七、九是单数，也叫奇数。跟我读。" },
+        { "say": "odd numbers, odd numbers", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "二、四、六、八、十是双数，也叫偶数。跟我读。" },
+        { "say": "even numbers, even numbers", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "七是单数，四是双数。跟我读。" },
+        { "say": "Seven is an odd number. Four is an even number.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话：数学小游戏",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "A number game" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["Mingming", "What's five plus four?"],
+          ["Amy", "Nine. Five plus four equals nine."],
+          ["Mingming", "Is nine an odd number?"],
+          ["Amy", "Yes. It's an odd number."],
+          ["Mingming", "Good! The answer is right."]
+        ] }
+      ],
+      "script": [
+        { "say": "明明和艾米在玩数学小游戏。我们一句一句跟读。" },
+        { "spotlight": "g1" },
+        { "say": "明明问：五加四是多少？" },
+        { "say": "What's five plus four?", "lang": "en" },
+        { "say": "艾米说：九。五加四等于九。" },
+        { "say": "Nine. Five plus four equals nine.", "lang": "en" },
+        { "say": "明明问：九是单数吗？" },
+        { "say": "Is nine an odd number?", "lang": "en" },
+        { "say": "艾米说：是的，它是单数。" },
+        { "say": "Yes. It's an odd number.", "lang": "en" },
+        { "say": "明明说：好！答案正确。" },
+        { "say": "Good! The answer is right.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "语音：字母 e 的短音",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Sound: e" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "ten 十", "color": "blue" },
+          { "id": "c1b", "text": "pen 钢笔", "color": "green" },
+          { "id": "c1c", "text": "red 红色", "color": "orange" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "对比：he、me 里的 e 读字母本身的音" }
+      ],
+      "script": [
+        { "say": "学发音。这三个单词里的元音字母读短音，嘴巴微微张开，声音短短的。" },
+        { "laser": "c1a" },
+        { "say": "ten, ten", "lang": "en" },
+        { "board": [
+          { "text": "t - e - n → ten" },
+          { "text": "p - e - n → pen" }
+        ] },
+        { "say": "一个音一个音拼，再连起来读。" },
+        { "say": "t, e, n, ten. p, e, n, pen.", "lang": "en" },
+        { "boardClose": true },
+        { "laser": "c1b" },
+        { "say": "pen, pen", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "red, red", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "再听这两个词，这个字母在最后，读它本身的名字，和短音不一样。" },
+        { "say": "he, me", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀与小结",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "学法口诀" },
+        { "id": "l1", "kind": "bullets", "items": [
+          "加号读作加一点",
+          "减号读作少一点",
+          "等号后面是答案",
+          "单数双数分两边"
+        ] },
+        { "id": "t1", "kind": "text", "text": "+ plus　− minus　= equals" }
+      ],
+      "script": [
+        { "say": "用口诀记一记。跟我读。" },
+        { "spotlight": "l1" },
+        { "say": "加号读作加一点，减号读作少一点。" },
+        { "say": "等号后面是答案，单数双数分两边。" },
+        { "say": "看到加号，想到多一点的那个词；看到减号，想到少一点的那个词；等号后面就是答案。" },
+        { "spotlight": "t1" },
+        { "say": "一起读三个符号的英文。" },
+        { "say": "plus, minus, equals", "lang": "en" },
+        { "say": "一句话小结：看符号换单词，就能用英语读算式。" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先判断对错。",
+      "questions": [
+        { "question": "minus 的意思是“加”。", "options": ["对", "错"], "answer": [1], "analysis": "minus 是减，加是 plus。" },
+        { "question": "2、4、6、8 都是 even numbers。", "options": ["对", "错"], "answer": [0], "analysis": "even numbers 是双数，2、4、6、8 都是双数。" },
+        { "question": "he 里的 e 和 ten 里的 e 读音相同。", "options": ["对", "错"], "answer": [1], "analysis": "ten 里的 e 读短音；he 里的 e 读字母本身的音。" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "再来做选择题。",
+      "questions": [
+        { "question": "3 + 4 = 7 用英语读作（　）", "options": ["Three minus four equals seven.", "Three plus four equals seven.", "Four plus three equals eight."], "answer": [1], "analysis": "加号读 plus，等号读 equals。" },
+        { "question": "下面哪个数是 odd number？", "options": ["6", "9", "10"], "answer": [1], "analysis": "odd number 是单数，9 是单数。" },
+        { "question": "哪个单词里的 e 和 red 里的 e 读音相同？", "options": ["bed", "me", "we"], "answer": [0], "analysis": "bed 和 red 里的 e 都读短音。" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后做填空和情景交际。",
+      "questions": [
+        { "question": "Seven （　） two equals five.", "options": ["plus", "minus", "equals"], "answer": [1], "analysis": "7 和 2 得 5，是减法，用 minus。" },
+        { "question": "— What's the （　）?\n— It's ten.", "options": ["answer", "minus", "odd"], "answer": [0], "analysis": "问答案是什么：What's the answer?" },
+        { "question": "同学问你 What's six plus three? 你回答（　）", "options": ["Three.", "Nine.", "Eighteen."], "answer": [1], "analysis": "six plus three 就是 6 + 3 = 9。" }
+      ]
+    }
+  ]
+}

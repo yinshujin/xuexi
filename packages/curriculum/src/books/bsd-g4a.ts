@@ -4,35 +4,40 @@ import { unit } from './helpers';
 const B = 'bsd-g4a';
 
 /**
- * 北师大版 数学 四年级上册 —— 按 2014 版（2013 年教育部审定）目录编码。
- *
- * 重要：2026 年秋季起义务教育各年级完成新教材替换，四年级数学首次使用 2024 修订版，
- * 新版四上的目录与本文件很可能不同（详见 sourceNote）。拿到实体课本后需要核对。
+ * 北师大版 数学 四年级上册（2024 修订版，2026 年秋深圳四年级首次使用）。
+ * 目录按家长拍摄的课本、练习册目录整理（见 sourceNote）；知识点标题用教材课题名。
+ * 第一、二单元沿用原来的知识点 id（已有课程和练习记录）。
  */
 export const bsdG4a: Book = {
   id: B,
   subject: 'math',
   edition: '北师大版',
-  revision: '2014',
+  revision: '2024修订',
   grade: 4,
   term: '上',
-  title: '数学 四年级上册（北师大版 2014 版目录，待与 2026 秋新课本核对）',
+  title: '数学 四年级上册（北师大版 2024 修订）',
   sourceNote: [
-    '本册目录按 2014 版（封面“教育部审定 2013”）编码，已逐页核对该版扫描本（GitHub TapXWorld/ChinaTextbook 仓库「小学/数学/北师大版/义务教育教科书·数学四年级上册」）：',
-    '一 认识更大的数（数一数、认识更大的数、人口普查、国土面积、近似数、从结绳计数说起）；二 线与角（线的认识、相交与垂直、平移与平行、旋转与角、角的度量（一）（二））；',
-    '三 乘法（卫星运行时间、有多少名观众、神奇的计算工具、有趣的算式）；四 运算律（买文具、加法交换律和乘法交换律、加法结合律、乘法结合律、乘法分配律）；',
-    '五 方向与位置（去图书馆、确定位置）；六 除法（买文具、参观花圃、秋游、商不变的规律、路程、时间与速度）；七 生活中的负数（温度、正负数）；数学好玩（滴水实验、编码、数图形的学问，未编码）；八 可能性（不确定性、摸球游戏）。',
-    '【高风险不确定】多方报道（新华网 2026-08-28“今年秋季学期将全面完成义务教育新教材替换”、观察者网/腾讯新闻同期报道）称 2026 年秋小学四、五、六年级数学首次使用 2024 修订版新教材；',
-    '网易号 2026-08 文章称新北师四上相对旧版：旧四上《方向与位置》部分移至新五上，旧四上《除法》部分移至新四下，《生活中的负数》《可能性》整体移出四上。',
-    '由于网络代理屏蔽了国内教材网站，未能取得新版四上的准确目录；网上多篇“2026 秋北师大四上新教材”文章给出的单元列表与旧版完全相同，疑似沿用旧版描述，不可信。',
-    '因此本文件仍用 2014 版目录（与练习生成器 g4.* 的设计一致），请家长对照孩子手中的课本目录修订单元与课时。',
+    '目录来源：家长拍摄的 2026 年秋季新课本和配套练习册目录（2024 修订版；括号内为课本页码）。',
+    '一 认识更大的数（p2：数说祖国、十万有多大、认识更大的数、人口普查、大豆产量、国庆庆典、从结绳计数说起、整理与复习）；综合实践 编码（p19）；',
+    '二 线与角（p23：线的认识、相交与垂直、平移与平行、旋转与角、角的度量（一）（二）、整理与复习）；',
+    '三 整数乘法（二）（p39：找规律、队列表演（一）（二）、卫星运行时间、神奇的计算工具、有趣的算式、电影院、整理与复习）；',
+    '四 我们生活的空间（二）（p58：观察的范围、天安门广场）；五 运算律（p63：生态养殖、加法交换律和乘法交换律、加法结合律、乘法结合律、乘法分配律、整理与复习）；数学好玩 数图形的学问（p77）；',
+    '六 图形的奥秘（p79：切开立体图形、搭建立体大楼、翻滚正方体）；七 运用数量关系解决问题（p85：总量与分量，单价、数量与总价，速度、时间与路程，相遇问题）；',
+    '八 数据的表示和分析（一）（p94：同学的生日、获奖时的年龄）；综合实践 导航给的时间准吗（p99）；总复习（p103）。',
+    '编排：不编号的“综合实践”“数学好玩”放在前一个单元末尾（u1.coding、u5.count-figures、u8.navigation）；整理与复习、总复习不单列知识点。',
+    '第一、二单元沿用 2014 版的知识点 id，标题改成新课题名。对应关系：数说祖国、十万有多大、认识更大的数、从结绳计数说起 → counting-units；人口普查 → read-write-big；',
+    '大豆产量 → compare-big、国庆庆典 → approximation 是推断的（这两课的正文没有看到，按旧版“国土面积”“近似数”的位置推断），已做好的讲解课仍用旧版情境。',
+    '以下也是按课题名推断、需对照课本核实的：找规律 = 积的变化规律与末尾有 0 的乘法；队列表演（一）（二）= 两位数乘两位数（点子图、竖式）；电影院 = 乘法估算；生态养殖 = 混合运算与中括号；',
+    '第四、六、八单元和两个综合实践的具体内容（观察的范围 = 视线与盲区，天安门广场 = 用方向和距离描述位置等）。这些知识点暂时只有课，没有程序化练习。',
+    '旧版的“方向与位置”“除法（除数是两位数）”“生活中的负数”“可能性”不在本册，相应知识点已删除；g4.div.2d、g4.negative 练习保留给以后的册次。',
+    '第一单元的深圳数据来自练习册“数说祖国”一页（深圳 2025 年常住人口、国内旅游总收入、在校学生总数、城乡居民生活用电）。',
   ].join(''),
   units: [
     // ------------------------------------------------------------------ 一
     unit(B, 1, '认识更大的数', [
       {
         slug: 'counting-units',
-        title: '数一数、从结绳计数说起：计数单位与数位顺序表',
+        title: '数说祖国、十万有多大、认识更大的数、从结绳计数说起：计数单位与数位顺序表',
         objectives: [
           '认识计数单位十万、百万、千万、亿',
           '知道相邻两个计数单位之间的进率都是十（十进制计数法）',
@@ -44,7 +49,11 @@ export const bsdG4a: Book = {
           '常见错误：把万位和十万位弄混；以为数位就是计数单位',
         ],
         prerequisites: [],
-        localContexts: ['深圳地铁一年的客流量', '深圳图书馆的藏书量'],
+        localContexts: [
+          '深圳 2025 年常住人口 18248500 人',
+          '深圳地铁一年的客流量',
+          '深圳图书馆的藏书量',
+        ],
         lecture: {
           title: '数一数：认识更大的计数单位',
           minutes: 10,
@@ -61,11 +70,27 @@ export const bsdG4a: Book = {
             remedies: ['place-value'],
           },
         ],
-        practice: [{ generatorId: 'g4.bignum.place', minDifficulty: 1, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g4.bignum.place', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'bignum#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'bignum#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
       {
         slug: 'read-write-big',
-        title: '认识更大的数、人口普查：大数的读法与写法',
+        title: '人口普查：大数的读法与写法',
         objectives: [
           '会读、写亿以内和亿以上的数',
           '会读写中间或末尾有 0 的数',
@@ -77,7 +102,11 @@ export const bsdG4a: Book = {
           '常见错误：每级末尾的 0 也读出来；中间连续几个 0 读成几个“零”；写数时漏写 0 占位',
         ],
         prerequisites: ['bsd-g4a.u1.counting-units'],
-        localContexts: ['深圳常住人口统计数字', '深圳宝安机场年旅客吞吐量'],
+        localContexts: [
+          '深圳 2025 年在校学生总数 2875200 人',
+          '深圳常住人口统计数字',
+          '深圳宝安机场年旅客吞吐量',
+        ],
         lecture: {
           title: '人口普查：大数怎么读、怎么写',
           minutes: 11,
@@ -102,11 +131,27 @@ export const bsdG4a: Book = {
             remedies: ['zero-reading'],
           },
         ],
-        practice: [{ generatorId: 'g4.bignum.read', minDifficulty: 1, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g4.bignum.read', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'bignum#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'bignum#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
       {
         slug: 'compare-big',
-        title: '国土面积：大数比较大小',
+        title: '大豆产量：大数比较大小',
         objectives: [
           '会比较多位数的大小',
           '能把几个大数按顺序排列',
@@ -118,7 +163,11 @@ export const bsdG4a: Book = {
           '常见错误：只比最高位数字而忽略位数；数错位数',
         ],
         prerequisites: ['bsd-g4a.u1.read-write-big'],
-        localContexts: ['广东各城市面积或人口比较', '深圳各区面积比较（南山、福田、宝安、龙岗）'],
+        localContexts: [
+          '深圳 2025 年城乡居民生活用电 21496000000 千瓦时',
+          '广东各城市面积或人口比较',
+          '深圳各区面积比较（南山、福田、宝安、龙岗）',
+        ],
         lecture: {
           title: '国土面积：大数比大小',
           minutes: 9,
@@ -135,11 +184,27 @@ export const bsdG4a: Book = {
             remedies: ['place-value'],
           },
         ],
-        practice: [{ generatorId: 'g4.bignum.compare', minDifficulty: 1, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g4.bignum.compare', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'bignum#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'bignum#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
       {
         slug: 'approximation',
-        title: '近似数：四舍五入与改写',
+        title: '国庆庆典：近似数（四舍五入与改写）',
         objectives: [
           '能区分精确数和近似数',
           '会用“四舍五入”法求一个数的近似数（省略万位或亿位后面的尾数）',
@@ -151,7 +216,11 @@ export const bsdG4a: Book = {
           '常见错误：看错要看的那一位；改写时用了“≈”、省略时用了“=”；忘记写“万”“亿”',
         ],
         prerequisites: ['bsd-g4a.u1.read-write-big'],
-        localContexts: ['深圳湾体育中心观众人数', '欢乐谷国庆假期游客人数'],
+        localContexts: [
+          '深圳 2025 年国内旅游总收入 235670000000 元',
+          '深圳湾体育中心观众人数',
+          '欢乐谷国庆假期游客人数',
+        ],
         lecture: {
           title: '近似数：四舍五入',
           minutes: 11,
@@ -176,7 +245,46 @@ export const bsdG4a: Book = {
             remedies: ['rewrite-vs-approx'],
           },
         ],
-        practice: [{ generatorId: 'g4.bignum.rewrite', minDifficulty: 1, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g4.bignum.rewrite', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'approx#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'approx#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
+      },
+      {
+        slug: 'coding',
+        title: '综合实践：编码',
+        objectives: [
+          '知道邮政编码、身份证号码、车牌号、学号等编码里的数字都有含义',
+          '会从身份证号码里读出出生日期和性别，会看邮政编码',
+          '能为同学设计一个简单、不重复的编码方案',
+        ],
+        keyPoints: [
+          '重点：编码的每一段数字表示什么',
+          '难点：设计编码要唯一、有规律、容易看懂',
+          '常见错误：数错身份证号码中出生日期所在的位数；以为编码可以随便排',
+        ],
+        prerequisites: ['bsd-g4a.u1.read-write-big'],
+        localContexts: ['深圳的邮政编码 518000', '学校运动会选手号码'],
+        lecture: {
+          title: '编码的奥秘：数字里藏着信息',
+          minutes: 10,
+          focus:
+            '按教材“生活中的编码—编码的奥秘—设计编码方案—选手编码交流会”的顺序：先找生活中的编码（电话号码、车牌、邮政编码、身份证号码）；再以身份证号码为例讲每一段的含义（前 6 位地址码，第 7～14 位出生年月日，第 17 位单数表示男、双数表示女，最后一位是校验码），邮政编码 6 位从左到右越来越具体；最后为运动会选手设计编码（年级 + 班级 + 序号 + 性别），说明好的编码要唯一、有规律。只用虚构的号码。',
+        },
+        practice: [],
       },
     ]),
     // ------------------------------------------------------------------ 二
@@ -214,6 +322,20 @@ export const bsdG4a: Book = {
         ],
         practice: [
           { generatorId: 'g4.lines', variant: 'lines', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'lines#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'lines#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
         ],
       },
       {
@@ -239,6 +361,20 @@ export const bsdG4a: Book = {
         },
         practice: [
           { generatorId: 'g4.lines', variant: 'perpendicular', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'perp#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'perp#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
         ],
       },
       {
@@ -281,6 +417,20 @@ export const bsdG4a: Book = {
             maxDifficulty: 5,
             label: '线的综合',
           },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'perp#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'perp#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
         ],
       },
       {
@@ -322,7 +472,23 @@ export const bsdG4a: Book = {
             remedies: ['angle-sum'],
           },
         ],
-        practice: [{ generatorId: 'g4.angle.classify', minDifficulty: 1, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g4.angle.classify', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'angle#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'angle#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
       {
         slug: 'angle-measure',
@@ -355,16 +521,71 @@ export const bsdG4a: Book = {
             remedies: ['protractor-scale'],
           },
         ],
-        practice: [{ generatorId: 'g4.angle.measure', minDifficulty: 1, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g4.angle.measure', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'angle#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'angle#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
     ]),
     // ------------------------------------------------------------------ 三
-    unit(B, 3, '乘法', [
+    unit(B, 3, '整数乘法（二）', [
+      {
+        slug: 'mul-pattern',
+        title: '找规律：积的变化规律与末尾有 0 的乘法',
+        objectives: [
+          '会口算整十、整百数乘整十数（如 30 × 20、300 × 40）',
+          '发现“一个因数不变，另一个因数乘几，积也乘几”的规律',
+          '会用规律直接写出新算式的积',
+        ],
+        keyPoints: [
+          '重点：先算 0 前面的数，再看两个因数末尾一共有几个 0，就在积的末尾添几个 0',
+          '难点：用积的变化规律由已知算式推出新算式的积（如由 12 × 3 = 36 推出 120 × 30 = 3600）',
+          '常见错误：少添或多添 0；0 前面的数相乘又出现 0 时（如 50 × 40）漏写',
+        ],
+        prerequisites: [],
+        localContexts: ['深圳地铁一列车 6 节车厢，每节约 300 人'],
+        lecture: {
+          title: '找规律：积的变化',
+          minutes: 10,
+          focus:
+            '用一组算式（12 × 3、12 × 30、12 × 300；120 × 3、120 × 30）引导观察：一个因数不变，另一个因数乘 10、乘 100，积也乘 10、乘 100。由此归纳整十、整百数乘法的口算方法：先把 0 前面的数相乘，再数两个因数末尾一共有几个 0，在积的末尾添几个 0。例题一 30 × 20、300 × 40；例题二 25 × 40、50 × 60（0 前面的数相乘又出现 0）。只讲乘法，不讲除法的规律。',
+        },
+        practice: [
+          { generatorId: 'g4.oral.muldiv', variant: 'mul', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'mul#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 3,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'mul#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 3,
+          },
+        ],
+      },
       {
         slug: 'mul-3x2',
-        title: '卫星运行时间：三位数乘两位数',
+        title: '队列表演（一）（二）、卫星运行时间：两位数、三位数乘两位数',
         objectives: [
-          '会用竖式计算三位数乘两位数',
+          '会用竖式计算两位数乘两位数、三位数乘两位数',
           '理解每一步部分积的含义，知道第二个部分积为什么从十位写起',
           '会计算因数中间或末尾有 0 的乘法',
         ],
@@ -373,13 +594,13 @@ export const bsdG4a: Book = {
           '难点：用十位上的数去乘时，积的末位要和十位对齐；中间、末尾有 0 的乘法',
           '常见错误：第二个部分积没有错一位；进位忘加；因数末尾有 0 时处理不当；口诀算错',
         ],
-        prerequisites: [],
+        prerequisites: ['bsd-g4a.u3.mul-pattern'],
         localContexts: ['深圳北站高铁每小时发车班次', '深圳地铁每列车载客量'],
         lecture: {
-          title: '卫星运行时间：三位数乘两位数',
+          title: '队列表演、卫星运行时间：用竖式算乘法',
           minutes: 12,
           focus:
-            '以教材“卫星运行时间”情境（卫星绕地球一圈约 114 分，21 圈要多少分）讲 114×21：先用拆分法（114×20 + 114×1）说明算理，再写竖式，强调第二个部分积表示多少个十，末位与十位对齐。第二例讲中间有 0 的乘法（如 408×23，“3 和 0 相乘时要注意”），并简单说明因数末尾有 0 时可先把 0 前面的数相乘再添 0。只用整数，不涉及小数乘法。',
+            '先以“队列表演”情境（每行 14 人，有 12 行）用点子图把 14 × 12 拆成 14 × 10 + 14 × 2，引出两位数乘两位数的竖式，说明第二个部分积表示多少个十、末位和十位对齐；再以“卫星运行时间”情境（绕地球一圈约 114 分，21 圈要多少分）把方法推广到三位数乘两位数，并讲中间有 0 的乘法（如 408 × 23）和因数末尾有 0 时先把 0 前面的数相乘再添 0。只用整数。',
         },
         techniques: [
           {
@@ -410,45 +631,20 @@ export const bsdG4a: Book = {
         practice: [
           { generatorId: 'g4.mul.3x2', minDifficulty: 1, maxDifficulty: 5 },
           {
-            generatorId: 'g4.oral.muldiv',
+            generatorId: 'g4.challenge',
+            variant: 'mul#stretch',
+            tier: 'stretch',
             minDifficulty: 1,
-            maxDifficulty: 3,
-            label: '整十、整百数乘法口算',
+            maxDifficulty: 5,
           },
-        ],
-      },
-      {
-        slug: 'mul-estimate',
-        title: '有多少名观众：乘法估算',
-        objectives: [
-          '会用把因数看成整十、整百数的方法估算乘法',
-          '能根据实际问题选择合适的估算方法',
-          '能用估算判断计算结果是否合理',
-        ],
-        keyPoints: [
-          '重点：把因数看成接近的整十、整百数再口算',
-          '难点：根据问题决定估大还是估小（如钱够不够）',
-          '常见错误：看成近似数时四舍五入出错；估算后又去精确计算',
-        ],
-        prerequisites: ['bsd-g4a.u3.mul-3x2', 'bsd-g4a.u1.approximation'],
-        localContexts: ['深圳湾体育中心“春茧”看台观众', '深圳音乐厅座位数'],
-        lecture: {
-          title: '有多少名观众：估一估',
-          minutes: 10,
-          focus:
-            '以教材“有多少名观众”情境（体育馆每个区的座位数 × 区数）讲乘法估算：把因数看成接近的整十、整百数，如 198×31 ≈ 200×30 = 6000，说出“大约”。例题二讨论“够不够”的问题：钱够不够时要估大，座位够不够时要看估算方向。估算结果用“≈”，不要求精确计算。',
-        },
-        techniques: [
           {
-            slug: 'round-then-multiply',
-            title: '估算两步：看成整十整百，再口算',
-            minutes: 4,
-            focus:
-              '教估算两步：①用四舍五入把每个因数看成最接近的整十或整百数；②口算得出大约数。演示 412×19 ≈ 400×20、286×52 ≈ 300×50 两例，对比 286 看成 200 的四舍五入错误，做 1 道小练习。',
-            remedies: ['rounding'],
+            generatorId: 'g4.challenge',
+            variant: 'mul#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
           },
         ],
-        practice: [{ generatorId: 'g4.mul.estimate', minDifficulty: 1, maxDifficulty: 5 }],
       },
       {
         slug: 'calculator-patterns',
@@ -473,12 +669,110 @@ export const bsdG4a: Book = {
         },
         practice: [],
       },
+      {
+        slug: 'mul-estimate',
+        title: '电影院：乘法估算',
+        objectives: [
+          '会用把因数看成整十、整百数的方法估算乘法',
+          '能根据实际问题选择合适的估算方法',
+          '能用估算判断计算结果是否合理',
+        ],
+        keyPoints: [
+          '重点：把因数看成接近的整十、整百数再口算',
+          '难点：根据问题决定估大还是估小（如钱够不够）',
+          '常见错误：看成近似数时四舍五入出错；估算后又去精确计算',
+        ],
+        prerequisites: ['bsd-g4a.u3.mul-3x2', 'bsd-g4a.u1.approximation'],
+        localContexts: ['深圳湾体育中心“春茧”看台观众', '深圳的电影院一个放映厅的座位数'],
+        lecture: {
+          title: '电影院：座位够不够',
+          minutes: 10,
+          focus:
+            '以教材“电影院”情境（放映厅有 32 排，每排 28 个座位，大约有多少个座位；另一个厅 21 排、每排 32 座，来了 580 人，够不够坐）讲乘法估算：把因数看成接近的整十、整百数，如 32 × 28 ≈ 30 × 30 = 900，说出“大约”。再讨论“够不够”：座位够不够要看估小了还是估大了，钱够不够要估大。估算结果用“≈”，不要求精确计算。',
+        },
+        techniques: [
+          {
+            slug: 'round-then-multiply',
+            title: '估算两步：看成整十整百，再口算',
+            minutes: 4,
+            focus:
+              '教估算两步：①用四舍五入把每个因数看成最接近的整十或整百数；②口算得出大约数。演示 412×19 ≈ 400×20、286×52 ≈ 300×50 两例，对比 286 看成 200 的四舍五入错误，做 1 道小练习。',
+            remedies: ['rounding'],
+          },
+        ],
+        practice: [
+          { generatorId: 'g4.mul.estimate', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'mulest#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'mulest#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
+      },
     ]),
     // ------------------------------------------------------------------ 四
-    unit(B, 4, '运算律', [
+    unit(B, 4, '我们生活的空间（二）', [
+      {
+        slug: 'observe-range',
+        title: '观察的范围',
+        objectives: [
+          '知道观察的位置变了，能看到的范围也会变',
+          '会在示意图上画出视线，找出看不到的地方（盲区）',
+          '能用观察的范围解释生活现象',
+        ],
+        keyPoints: [
+          '重点：视线是从眼睛出发的直线，被挡住的部分看不到',
+          '难点：离遮挡物越近，看到的范围越小',
+          '常见错误：画视线时不经过遮挡物的边缘',
+        ],
+        prerequisites: ['bsd-g4a.u2.lines'],
+        localContexts: ['站在深圳湾公园的围墙后看海', '大货车司机看不到的盲区'],
+        lecture: {
+          title: '观察的范围：视线与盲区',
+          minutes: 9,
+          focus:
+            '以教材“观察的范围”情境（隔着墙或窗户看外面）讲：从眼睛出发经过遮挡物边缘画两条视线，两条视线之间是能看到的范围，被挡住的是盲区；人离遮挡物越近，看到的范围越小。例题一在示意图上画视线判断某个人或物体能不能被看到；例题二说明大货车右转时的盲区，提醒过马路的安全。不涉及计算。',
+        },
+        practice: [],
+      },
+      {
+        slug: 'tiananmen',
+        title: '天安门广场',
+        objectives: [
+          '能看懂简单的平面示意图',
+          '会用方向和距离描述建筑物的位置',
+          '能根据描述在示意图上找到位置',
+        ],
+        keyPoints: [
+          '重点：先说方向（东、南、西、北和东北、东南、西北、西南），再说距离',
+          '难点：观察点不同，同一建筑物的方向说法不同',
+          '常见错误：以自己为中心和以某建筑物为中心的方向弄混',
+        ],
+        prerequisites: [],
+        localContexts: ['深圳市民中心和莲花山公园的位置'],
+        lecture: {
+          title: '天安门广场：描述位置',
+          minutes: 9,
+          focus:
+            '以教材“天安门广场”情境的平面示意图（天安门、人民英雄纪念碑、人民大会堂、国家博物馆）讲：确定观察点，按“上北下南、左西右东”判断方向，再说出大约的距离，完整描述“某建筑物在某建筑物的什么方向，大约多少米”；再换一个观察点重新描述。方向只用八个方向，不涉及角度。',
+        },
+        practice: [],
+      },
+    ]),
+    // ------------------------------------------------------------------ 五
+    unit(B, 5, '运算律', [
       {
         slug: 'mixed-order',
-        title: '买文具：混合运算与中括号',
+        title: '生态养殖：混合运算的顺序与中括号',
         objectives: [
           '掌握四则混合运算的顺序',
           '认识中括号，会计算带小括号和中括号的算式',
@@ -490,12 +784,12 @@ export const bsdG4a: Book = {
           '常见错误：从左往右一路算下去忽略乘除优先；中括号里的小括号没先算',
         ],
         prerequisites: [],
-        localContexts: ['深圳书城买文具', '华强北买计算器和钢笔'],
+        localContexts: ['深圳郊区的生态鱼塘', '深圳书城买文具'],
         lecture: {
-          title: '买文具：混合运算的顺序',
+          title: '生态养殖：混合运算的顺序',
           minutes: 10,
           focus:
-            '以教材“买文具”情境（买 3 个计算器和 1 支钢笔一共多少元，付 100 元找回多少）讲四则混合运算顺序，并认识中括号：先算小括号里的，再算中括号里的。例题一 100-(3×24+9)；例题二带中括号的算式如 9÷[3×(5-2)]。每一步都写脱式，只用整数，不涉及简便计算（后面几课学）。',
+            '以养殖场情境（如买 3 袋饲料和 1 桶药水一共多少元，付 100 元找回多少）讲四则混合运算顺序，并认识中括号：先算小括号里的，再算中括号里的。例题一 100-(3×24+9)；例题二带中括号的算式如 9÷[3×(5-2)]。每一步都写脱式，只用整数，不涉及简便计算（后面几课学）。',
         },
         techniques: [
           {
@@ -509,6 +803,20 @@ export const bsdG4a: Book = {
         ],
         practice: [
           { generatorId: 'g4.law.simplify', minDifficulty: 1, maxDifficulty: 2, label: '运算顺序' },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'order#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'order#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
         ],
       },
       {
@@ -524,7 +832,7 @@ export const bsdG4a: Book = {
           '难点：用字母表示运算律；举例说明',
           '常见错误：以为减法、除法也能交换',
         ],
-        prerequisites: ['bsd-g4a.u4.mixed-order'],
+        prerequisites: ['bsd-g4a.u5.mixed-order'],
         localContexts: ['欢乐谷两个项目排队时间相加'],
         lecture: {
           title: '加法交换律和乘法交换律',
@@ -532,7 +840,23 @@ export const bsdG4a: Book = {
           focus:
             '以教材中“照样子再写一组”的活动，让孩子从 4+6=6+4、3×5=5×3 等算式中发现规律，用自己的话、图示和字母表示加法交换律与乘法交换律；再举反例说明减法、除法一般不能交换。例题：填空 a+□=36+a；用交换律验算。字母只用来表示运算律，不解方程。',
         },
-        practice: [{ generatorId: 'g4.law.simplify', minDifficulty: 1, maxDifficulty: 2 }],
+        practice: [
+          { generatorId: 'g4.law.simplify', minDifficulty: 1, maxDifficulty: 2 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'law#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'law#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
       {
         slug: 'associative-add',
@@ -547,7 +871,7 @@ export const bsdG4a: Book = {
           '难点：先交换再结合，把能凑整的数放在一起',
           '常见错误：凑整时找错搭档（如 38+62 凑成 100 却和别的数组合）；移动数时丢了前面的符号',
         ],
-        prerequisites: ['bsd-g4a.u4.commutative'],
+        prerequisites: ['bsd-g4a.u5.commutative'],
         localContexts: ['深圳湾公园骑行几段路程相加', '购物清单上几样东西的价钱'],
         lecture: {
           title: '加法结合律：凑整真好算',
@@ -565,7 +889,23 @@ export const bsdG4a: Book = {
             remedies: ['pairing'],
           },
         ],
-        practice: [{ generatorId: 'g4.law.simplify', minDifficulty: 1, maxDifficulty: 3 }],
+        practice: [
+          { generatorId: 'g4.law.simplify', minDifficulty: 1, maxDifficulty: 3 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'law#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'law#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
       {
         slug: 'associative-mul',
@@ -580,7 +920,7 @@ export const bsdG4a: Book = {
           '难点：拆数凑整（如 25×32 = 25×4×8）',
           '常见错误：把乘法结合律和分配律混淆（25×(4+8) 算成 25×4×8）；凑整组合记错',
         ],
-        prerequisites: ['bsd-g4a.u4.associative-add'],
+        prerequisites: ['bsd-g4a.u5.associative-add'],
         localContexts: ['书架每层 40 本、共 3 层 6 个书架（深圳图书馆）'],
         lecture: {
           title: '乘法结合律：找 25 和 4',
@@ -598,7 +938,23 @@ export const bsdG4a: Book = {
             remedies: ['pairing'],
           },
         ],
-        practice: [{ generatorId: 'g4.law.simplify', minDifficulty: 2, maxDifficulty: 4 }],
+        practice: [
+          { generatorId: 'g4.law.simplify', minDifficulty: 2, maxDifficulty: 4 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'lawmul#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'lawmul#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
       {
         slug: 'distributive',
@@ -613,7 +969,7 @@ export const bsdG4a: Book = {
           '难点：反用分配律（提取相同因数）和拆数使用（如 102×35）',
           '常见错误：只乘了一个加数（漏乘）；和乘法结合律混淆',
         ],
-        prerequisites: ['bsd-g4a.u4.associative-mul'],
+        prerequisites: ['bsd-g4a.u5.associative-mul'],
         localContexts: ['厨房贴瓷砖（教材情境）', '深圳湾公园两块草坪的面积'],
         lecture: {
           title: '乘法分配律：两块一起算',
@@ -631,354 +987,393 @@ export const bsdG4a: Book = {
             remedies: ['distributive-miss'],
           },
         ],
-        practice: [{ generatorId: 'g4.law.simplify', minDifficulty: 2, maxDifficulty: 5 }],
+        practice: [
+          { generatorId: 'g4.law.simplify', minDifficulty: 2, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'lawmul#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'lawmul#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
       },
-    ]),
-    // ------------------------------------------------------------------ 五
-    unit(B, 5, '方向与位置', [
       {
-        slug: 'describe-route',
-        title: '去图书馆：描述路线',
+        slug: 'count-figures',
+        title: '数学好玩：数图形的学问',
         objectives: [
-          '能根据方向和距离描述行走路线',
-          '能根据描述画出简单的路线图',
-          '会看路线图说出每一段的方向和距离',
+          '会有序地数线段、射线、角、三角形和长方形，不重复、不遗漏',
+          '发现点数和线段条数的规律（2 个点 1 条，3 个点 3 条，4 个点 6 条……）',
+          '能用数线段的方法解决握手、比赛场次、车票种类等问题',
         ],
         keyPoints: [
-          '重点：用“从哪里出发，向哪个方向走多少米到哪里”描述路线',
-          '难点：换一个观察点后方向要重新判断；返程方向相反',
-          '常见错误：返回路线的方向不变；东北、西南方向判断错误',
+          '重点：有序地数——从第一个点出发数完，再从第二个点出发……',
+          '难点：把数角、数三角形、数长方形转化成数线段',
+          '常见错误：只数基本图形；从不同的点出发重复数',
         ],
-        prerequisites: [],
-        localContexts: ['从家到深圳图书馆（福田中心区）的路线', '从学校到莲花山公园'],
+        prerequisites: ['bsd-g4a.u2.lines', 'bsd-g4a.u2.angles-rotation'],
+        localContexts: ['深圳地铁一条线路各站之间的车票', '班级篮球赛每两个班赛一场'],
         lecture: {
-          title: '去图书馆：说说怎么走',
+          title: '数图形的学问：有序地数',
           minutes: 10,
           focus:
-            '以教材“去图书馆”情境的路线图讲解：确定每一段的出发点、方向和距离，按顺序说出路线；再讲返回时每一段方向相反、顺序相反。例题一描述去程，例题二描述返程并画图。方向只用东、南、西、北和东北、东南、西北、西南，不涉及角度（北偏东 30° 等）。',
+            '从“一条线段上有 3 个点、4 个点，一共有几条线段”开始，教有序地数：先数以第一个点为左端点的线段，再数以第二个点为左端点的……得到 3 + 2 + 1；再把数角（从一点出发的射线）、数三角形（从顶点向对边画线段）转化成数线段，最后用同样的方法算握手次数、比赛场次。例题一数线段，例题二数三角形。',
         },
-        practice: [],
-      },
-      {
-        slug: 'number-pairs',
-        title: '确定位置：用数对表示位置',
-        objectives: [
-          '会用数对表示物体在方格图中的位置',
-          '能根据数对找到位置',
-          '知道数对中先写列（横着数）再写行（竖着数）',
+        techniques: [
+          {
+            slug: 'ordered-count',
+            title: '有序数图形：从第一个点数起',
+            minutes: 4,
+            focus:
+              '教有序数图形的口令：给点编上字母，从第一个点出发数完，再从第二个点出发，只往后数不回头，最后把各组相加。演示一条线段上 5 个点和三角形顶点引出 2 条线段两例，对比只数基本图形的错误，做 1 道小练习。',
+            remedies: ['figure-count'],
+          },
         ],
-        keyPoints: [
-          '重点：数对 (列, 行) 的写法和含义',
-          '难点：数对中两个数的顺序不能交换',
-          '常见错误：把 (3, 5) 和 (5, 3) 当成同一个位置',
+        practice: [
+          { generatorId: 'g4.figures', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'figures#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'figures#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
         ],
-        prerequisites: [],
-        localContexts: ['深圳湾体育中心座位号', '教室座位表'],
-        lecture: {
-          title: '确定位置：数对',
-          minutes: 9,
-          focus:
-            '以教材“确定位置”情境（淘气在班级的座位）讲：先横着数第几列，再竖着数第几行，写成数对 (列, 行)。在方格图上演示用数对表示点的位置，例题一写出几个点的数对，例题二根据数对描点并连线。强调 (3,5) 与 (5,3) 不同。不涉及负数坐标。',
-        },
-        practice: [],
       },
     ]),
     // ------------------------------------------------------------------ 六
-    unit(B, 6, '除法', [
+    unit(B, 6, '图形的奥秘', [
       {
-        slug: 'div-by-tens',
-        title: '买文具：除数是整十数的除法',
+        slug: 'cut-solids',
+        title: '切开立体图形',
         objectives: [
-          '会口算整十数、整百数除以整十数',
-          '会用竖式计算三位数除以整十数',
-          '知道商的位置写在哪一位上',
+          '知道用一个平面切开长方体、正方体、圆柱等，切面是一个平面图形',
+          '能说出不同切法得到的切面形状',
+          '能根据切面形状想象是怎样切的',
         ],
         keyPoints: [
-          '重点：想乘算除（60÷30 想 30×2=60）；竖式中商写在被除数的哪一位上',
-          '难点：被除数前两位不够除时商写在个位上',
-          '常见错误：商的位置写错；余数比除数大',
+          '重点：切的方向不同，切面的形状可能不同',
+          '难点：想象斜着切正方体得到的切面',
+          '常见错误：把切面和立体图形的某个面混为一谈',
+        ],
+        prerequisites: [],
+        localContexts: ['切萝卜、切豆腐、切蛋糕'],
+        lecture: {
+          title: '切开立体图形：切面是什么形状',
+          minutes: 9,
+          focus:
+            '用切萝卜块、切豆腐（正方体、长方体）和切火腿肠（圆柱）的生活情境讲：平着切、竖着切、斜着切，切面分别是什么形状（正方形、长方形、三角形、圆等）。先猜再用实物或动画验证。例题一说出切面形状，例题二根据切面形状选择切法。不涉及计算。',
+        },
+        practice: [],
+      },
+      {
+        slug: 'build-blocks',
+        title: '搭建立体大楼',
+        objectives: [
+          '能从正面、侧面、上面观察用小正方体搭成的立体图形，画出看到的形状',
+          '能根据从不同方向看到的形状搭出立体图形',
+          '会数搭成立体图形用了几个小正方体',
+        ],
+        keyPoints: [
+          '重点：从三个方向看到的形状',
+          '难点：根据看到的形状确定小正方体的个数（最多、最少）',
+          '常见错误：漏数被挡住的小正方体',
+        ],
+        prerequisites: [],
+        localContexts: ['用积木搭深圳平安金融中心、京基 100'],
+        lecture: {
+          title: '搭建立体大楼：从三个方向看',
+          minutes: 10,
+          focus:
+            '以用小正方体搭“大楼”的活动讲：分别从正面、左面（侧面）、上面看，画出看到的形状（用方格表示）；再反过来，根据三个方向看到的形状搭出大楼，并数出用了几个小正方体，讨论被挡住的那几个。例题一画出三个方向看到的形状，例题二根据形状数小正方体的个数。',
+        },
+        practice: [],
+      },
+      {
+        slug: 'roll-cube',
+        title: '翻滚正方体',
+        objectives: [
+          '认识正方体的展开图，知道相对的两个面',
+          '能想象正方体翻滚后哪个面朝上',
+          '能判断一个平面图形能不能折成正方体',
+        ],
+        keyPoints: [
+          '重点：正方体相对的面在展开图中不相邻（隔一个）',
+          '难点：想象连续翻滚后每个面的位置',
+          '常见错误：把相邻的面当成相对的面',
+        ],
+        prerequisites: ['bsd-g4a.u6.build-blocks'],
+        localContexts: ['掷骰子：相对两面的点数和是 7'],
+        lecture: {
+          title: '翻滚正方体：哪个面朝上',
+          minutes: 9,
+          focus:
+            '用骰子和写了字的正方体讲：正方体有 6 个面，相对的两个面不相邻；沿着一条棱向前、向右翻滚一次，朝上的面怎样变化，连续翻滚时一步一步记录。再看正方体展开图，找出相对的面（隔一个的两个面相对）。例题一翻滚后哪个面朝上，例题二在展开图中找相对的面。',
+        },
+        practice: [],
+      },
+    ]),
+    // ------------------------------------------------------------------ 七
+    unit(B, 7, '运用数量关系解决问题', [
+      {
+        slug: 'part-whole',
+        title: '总量与分量',
+        objectives: [
+          '理解“总量 = 分量 + 分量”，知道求分量用减法',
+          '会用线段图表示总量与分量的关系',
+          '能解决两步计算的总量、分量问题',
+        ],
+        keyPoints: [
+          '重点：找准总量和各个分量',
+          '难点：分量本身要先用乘法求出来的两步问题',
+          '常见错误：漏加一个分量；求分量时用了加法',
         ],
         prerequisites: ['bsd-g4a.u3.mul-3x2'],
-        localContexts: ['深圳书城买书包、铅笔盒'],
+        localContexts: ['学校食堂买大米和面粉', '荔枝园收获的荔枝和龙眼'],
         lecture: {
-          title: '买文具：除以整十数',
+          title: '总量与分量：画线段图找关系',
           minutes: 10,
           focus:
-            '以教材“买文具”情境（600 元买每个 30 元的文具能买几个；520÷40）讲：口算用“想乘算除”或“去掉相同个数的 0”思考；竖式先看被除数前两位，前两位够除商写在十位上，不够除就看前三位、商写在个位上，余数要比除数小。例题两道：一道整除，一道有余数。只用整十数作除数。',
+            '以购物、收获水果等情境讲“总量 = 分量 + 分量”：先画线段图，标出总量和分量，再列式。例题一两个分量都要先用乘法算（买 12 袋大米每袋 25 千克、15 袋面粉每袋 20 千克，一共多少千克）；例题二已知总量和一个分量，求另一个分量。只用三位数乘两位数和加减，数据是整数。',
         },
         techniques: [
           {
-            slug: 'quotient-position',
-            title: '商写在哪一位：前两位够不够除',
+            slug: 'draw-line',
+            title: '画线段图：先找总量，再找分量',
             minutes: 4,
             focus:
-              '教定商的位置：先看被除数前两位，够除（≥除数）商就写在第二位（十位）上；不够除就看前三位，商写在第三位（个位）上。每一位上除完不够商 1 就写 0。演示 520÷40、280÷40 两例，对比把商写到百位上的错误，做 1 道小练习。',
-            remedies: ['quotient-place'],
+              '教画线段图三步：①画一条长线段表示总量；②分成几段，标出各个分量；③问号在总量上用加法，在分量上用减法。演示“一共”和“其余”两类题，对比漏掉一个分量的错误，做 1 道小练习。',
+            remedies: ['relation-confused'],
           },
         ],
         practice: [
-          { generatorId: 'g4.oral.muldiv', minDifficulty: 1, maxDifficulty: 3 },
-          { generatorId: 'g4.div.2d', minDifficulty: 1, maxDifficulty: 1, label: '除以整十数竖式' },
+          { generatorId: 'g4.quantity', variant: 'part-whole', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'quantity#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'quantity#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
         ],
       },
       {
-        slug: 'div-2d-trial',
-        title: '参观花圃：除数是两位数的除法（试商）',
+        slug: 'unit-price',
+        title: '单价、数量与总价',
         objectives: [
-          '会用“四舍五入”法把除数看作整十数来试商',
-          '会用竖式计算除数是两位数的除法',
-          '会用“商×除数+余数=被除数”验算',
+          '知道单价、数量、总价的含义',
+          '掌握 单价 × 数量 = 总价，及 总价 ÷ 数量 = 单价、总价 ÷ 单价 = 数量',
+          '能用这组关系解决购物问题',
         ],
         keyPoints: [
-          '重点：把除数看作整十数试商（四舍法、五入法）',
-          '难点：试商后积大于被除数或余数大于除数时要调整',
-          '常见错误：试商偏大没有调小；余数不小于除数没有调大；忘记验算',
+          '重点：单价 × 数量 = 总价',
+          '难点：根据问题选用变式（求单价、求数量）',
+          '常见错误：把单价和总价弄混；该乘用了除',
         ],
-        prerequisites: ['bsd-g4a.u6.div-by-tens'],
-        localContexts: ['仙湖植物园花圃摆花（每个花坛 22 盆）', '深圳市花簕杜鹃分盆'],
+        prerequisites: ['bsd-g4a.u7.part-whole'],
+        localContexts: ['学校买校服、足球', '深圳书城买练习本'],
         lecture: {
-          title: '参观花圃：两位数除数怎么试商',
-          minutes: 12,
-          focus:
-            '以教材“参观花圃”情境（154 盆花摆成每坛 22 盆，能摆几坛）讲试商：把 22 看作 20，想 154 里面约有几个 20，试商 7，再用 7×22=154 检验。例题一用“四舍”试商（如 154÷22），例题二用“五入”试商（如 856÷34，商是两位数时也按此方法），每题都用乘法验算。本课先讲如何试商，调商在下一课重点练习。',
-        },
-        techniques: [
-          {
-            slug: 'round-divisor',
-            title: '四舍五入试商法',
-            minutes: 5,
-            focus:
-              '教试商：除数个位是 1~4 用“四舍”看作整十数（如 22→20），个位是 5~9 用“五入”（如 38→40）；用看作的整十数口算试商，再用原除数乘商检查。演示 154÷22、288÷38 两例，说明“四舍”容易商大、“五入”容易商小，做 1 道小练习。',
-            remedies: ['quotient-too-big', 'quotient-too-small'],
-          },
-          {
-            slug: 'check-remainder',
-            title: '余数比除数小 + 验算公式',
-            minutes: 4,
-            focus:
-              '教除法两项检查：①余数必须比除数小；②商×除数+余数=被除数。演示一道余数算错被验算发现的例子（如 250÷36）和一道正确例子，做 1 道小练习。',
-            remedies: ['remainder-error', 'careless'],
-          },
-        ],
-        practice: [{ generatorId: 'g4.div.2d', minDifficulty: 1, maxDifficulty: 3 }],
-      },
-      {
-        slug: 'div-2d-adjust',
-        title: '秋游：调商与商是两位数的除法',
-        objectives: [
-          '试商不合适时会调商（商大了调小，商小了调大）',
-          '会计算商是两位数的除法，知道商中间或末尾有 0 的情况',
-          '能用除法解决租车等实际问题',
-        ],
-        keyPoints: [
-          '重点：调商的方法；商是两位数的除法竖式',
-          '难点：一次调不准要连续调；某一位不够商 1 时要写 0 占位',
-          '常见错误：乘出的积大于被除数还往下减；余数大于除数；商中间漏写 0',
-        ],
-        prerequisites: ['bsd-g4a.u6.div-2d-trial'],
-        localContexts: ['学校秋游租大巴（每辆限乘 46 人）', '去大梅沙海滨公园秋游'],
-        lecture: {
-          title: '秋游：试商不准怎么办',
-          minutes: 12,
-          focus:
-            '以教材“秋游”情境（每辆车限乘若干人，一个年级要租几辆）讲调商：积比被除数大说明商大了，要调小；余数比除数大说明商小了，要调大。例题一一位商的调商（如 184÷23）；例题二商是两位数的除法（如 624÷13 或 527÷18），演示逐位试商、调商，某位不够商 1 写 0。结合实际说明“进一法”（多出的人也要一辆车）。',
-        },
-        techniques: [
-          {
-            slug: 'adjust-quotient',
-            title: '调商口诀：积大商大改小，余大商小改大',
-            minutes: 5,
-            focus:
-              '教调商判断：试商后先乘——积比够减的部分大，商大了，减 1 再试；减后余数比除数大（或等于），商小了，加 1 再试。演示 184÷23（把 23 看作 20 试商 9，积 207 太大，调成 8）和 185÷37（把 37 看作 40 试商 4，余 37 不比除数小，调成 5）两例，对比不调商直接往下算的错误，做 1 道小练习。',
-            remedies: ['quotient-too-big', 'quotient-too-small'],
-          },
-          {
-            slug: 'zero-in-quotient',
-            title: '商中间或末尾的 0 不能丢',
-            minutes: 4,
-            focus:
-              '教“除到哪一位，商就写在哪一位上；不够商 1，就商 0 占位”。演示 816÷27（商 30 余 6）和 945÷31（商 30 余 15）两例，对比把 30 写成 3 的漏 0 错误，做 1 道小练习。',
-            remedies: ['quotient-place'],
-          },
-        ],
-        practice: [{ generatorId: 'g4.div.2d', minDifficulty: 2, maxDifficulty: 5 }],
-      },
-      {
-        slug: 'quotient-invariance',
-        title: '商不变的规律',
-        objectives: [
-          '发现并说出商不变的规律',
-          '会用商不变的规律进行简便计算',
-          '会处理被除数和除数末尾都有 0 的除法',
-        ],
-        keyPoints: [
-          '重点：被除数和除数同时乘或除以同一个数（0 除外），商不变',
-          '难点：用规律简化竖式时余数的处理（余数要添回划去的 0）',
-          '常见错误：只变被除数或只变除数；划去末尾 0 后余数忘记还原',
-        ],
-        prerequisites: ['bsd-g4a.u6.div-2d-adjust'],
-        localContexts: ['超市批发与零售（整箱与单瓶单价）'],
-        lecture: {
-          title: '商不变的规律',
+          title: '单价、数量与总价',
           minutes: 10,
           focus:
-            '通过教材“商不变的规律”中的两组算式（如 8÷2、80÷20、800÷200；48÷24、24÷12）引导孩子观察并用自己的话说出规律；强调“同时”“相同的数”“0 除外”。例题一口算 3600÷300（看成 36÷3）；例题二竖式 1500÷400，划去相同个数的 0 后计算，余数要补回 0（余 300）。',
+            '以学校买足球、校服的情境引出单价（每个多少元）、数量、总价，归纳 单价 × 数量 = 总价，再用同一个例子推出两个变式。例题一求总价（每套校服 125 元，买 36 套）；例题二求单价或数量（除以一位数，或整十数的口算）。数据是整数，除法都能整除。',
         },
-        techniques: [
-          {
-            slug: 'cross-zeros',
-            title: '同时划 0，余数要还原',
-            minutes: 4,
-            focus:
-              '教被除数和除数末尾都有 0 时，同时划去相同个数的 0 再算；商不变，但余数要把划去的 0 添回来。演示 3600÷300 和 1500÷400（商 3 余 300，不是余 3）两例，对比只划被除数的 0、余数不还原的错误，做 1 道小练习。',
-            remedies: ['trailing-zero', 'remainder-error'],
-          },
-        ],
         practice: [
-          { generatorId: 'g4.oral.muldiv', minDifficulty: 2, maxDifficulty: 5 },
-          { generatorId: 'g4.div.2d', minDifficulty: 2, maxDifficulty: 4, label: '除法巩固' },
+          { generatorId: 'g4.quantity', variant: 'unit-price', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'quantity#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'quantity#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
         ],
       },
       {
         slug: 'speed-time-distance',
-        title: '路程、时间与速度',
+        title: '速度、时间与路程',
         objectives: [
           '理解速度的含义，会读写速度单位（如千米/时、米/分）',
-          '掌握 速度×时间=路程 及其变式',
+          '掌握 速度 × 时间 = 路程 及其变式',
           '能用这个关系解决简单行程问题',
         ],
         keyPoints: [
-          '重点：速度 = 路程 ÷ 时间，路程 = 速度 × 时间，时间 = 路程 ÷ 速度',
+          '重点：路程 = 速度 × 时间，速度 = 路程 ÷ 时间，时间 = 路程 ÷ 速度',
           '难点：复合单位“千米/时”的意义',
-          '常见错误：单位写成“千米”；数量关系用反',
+          '常见错误：速度单位写成“千米”；数量关系用反',
         ],
-        prerequisites: ['bsd-g4a.u6.div-2d-trial'],
-        localContexts: ['深圳地铁 11 号线的速度', '深圳北站开出的高铁每时行驶的路程'],
+        prerequisites: ['bsd-g4a.u7.unit-price'],
+        localContexts: ['深圳地铁 11 号线的速度', '深圳北站开出的高铁每小时行驶的路程'],
         lecture: {
-          title: '路程、时间与速度',
+          title: '速度、时间与路程',
           minutes: 10,
           focus:
-            '以教材“路程、时间与速度”情境（动物赛跑，谁跑得快）引出速度：单位时间里走的路程，并写作“千米/时”“米/分”。归纳三个量的关系，例题一求速度（240 米 ÷ 4 分），例题二求路程或时间（汽车每时行 70 千米，2 时行多少）。数据为整数，除法能整除，不涉及小数和相遇问题。',
+            '以“谁跑得快”的比较引出速度：单位时间里行的路程，写作“千米/时”“米/分”。归纳三个量的关系，并和“单价 × 数量 = 总价”对照。例题一求路程（高铁每小时行 300 千米，3 小时行多少）；例题二求速度或时间（除以一位数，或整十数的口算）。数据是整数，不涉及相遇问题。',
+        },
+        techniques: [
+          {
+            slug: 'know-two-find-one',
+            title: '三个量，知二求一',
+            minutes: 4,
+            focus:
+              '教行程题三步：①圈出题目里的速度、时间、路程，看缺哪一个；②缺路程用乘法，缺速度或时间用除法；③检查单位（速度带“/”）。演示求路程和求时间两例，对比把路程 ÷ 时间写成路程 × 时间的错误，做 1 道小练习。',
+            remedies: ['relation-confused'],
+          },
+        ],
+        practice: [
+          { generatorId: 'g4.quantity', variant: 'speed', minDifficulty: 1, maxDifficulty: 5 },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'quantity#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'quantity#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+        ],
+      },
+      {
+        slug: 'meeting',
+        title: '相遇问题',
+        objectives: [
+          '理解“同时出发、相向而行、相遇”的意思',
+          '知道相遇时两人走的路程合起来是两地的距离',
+          '会用“速度和 × 相遇时间 = 总路程”解决问题',
+        ],
+        keyPoints: [
+          '重点：速度和 × 相遇时间 = 两地距离',
+          '难点：画线段图表示两人走的路程',
+          '常见错误：只算了一个人走的路程；把“还相距”当成两地距离',
+        ],
+        prerequisites: ['bsd-g4a.u7.speed-time-distance'],
+        localContexts: ['两人从深圳湾公园步道两端同时出发', '两列地铁在隧道里相向开来'],
+        lecture: {
+          title: '相遇问题：两人一起走完全程',
+          minutes: 10,
+          focus:
+            '用两人从两端同时出发、相向而行的动画讲：每分钟两人一共走近“速度和”米，相遇时两人走的路程合起来就是两地的距离。先画线段图，再给出两种方法：分别算两人的路程再相加，或 速度和 × 时间。例题一求两地距离，例题二求相遇时间（速度和是整十数，口算除法）。',
         },
         practice: [
-          { generatorId: 'g4.div.2d', minDifficulty: 1, maxDifficulty: 3, label: '行程中的除法' },
-        ],
-      },
-    ]),
-    // ------------------------------------------------------------------ 七
-    unit(B, 7, '生活中的负数', [
-      {
-        slug: 'temperature',
-        title: '温度：认识零下温度',
-        objectives: [
-          '会读写零上和零下温度（如 +5 ℃、-2 ℃）',
-          '会在温度计上找到对应温度',
-          '能比较两个温度的高低',
-        ],
-        keyPoints: [
-          '重点：0 ℃ 以下用负数表示，读作“零下”或“负”',
-          '难点：比较两个负数温度（-5 ℃ 比 -20 ℃ 高）',
-          '常见错误：以为 -20 比 -5 大（只看数字）',
-        ],
-        prerequisites: [],
-        localContexts: ['深圳冬天最低气温和北方城市（如哈尔滨）比较', '冰箱冷冻室温度'],
-        lecture: {
-          title: '温度：认识零下温度',
-          minutes: 10,
-          focus:
-            '以教材“温度”情境（几个城市同一天的气温）讲零上、零下温度的读写（+5 ℃ 读作零上 5 摄氏度，-2 ℃ 读作零下 2 摄氏度），在温度计上找位置：越往上越高。例题一读写温度；例题二比较 -5 ℃ 和 -20 ℃。深圳冬天温度可作零上温度对照。不涉及负数的加减运算。',
-        },
-        techniques: [
+          { generatorId: 'g4.quantity', variant: 'meeting', minDifficulty: 1, maxDifficulty: 5 },
           {
-            slug: 'thermometer-compare',
-            title: '温度计上比高低：越靠下越冷',
-            minutes: 4,
-            focus:
-              '教借助竖着的温度计（或数轴）比较：0 以上的都比 0 高，0 以下的都比 0 低；两个零下温度，“零下的数越大，越冷”。演示 -3 ℃ 与 -8 ℃、2 ℃ 与 -10 ℃ 两例，对比“-8 大于 -3”的错误，做 1 道小练习。',
-            remedies: ['negative-compare'],
+            generatorId: 'g4.challenge',
+            variant: 'quantity#stretch',
+            tier: 'stretch',
+            minDifficulty: 1,
+            maxDifficulty: 5,
+          },
+          {
+            generatorId: 'g4.challenge',
+            variant: 'quantity#creative',
+            tier: 'creative',
+            minDifficulty: 1,
+            maxDifficulty: 5,
           },
         ],
-        practice: [{ generatorId: 'g4.negative', minDifficulty: 1, maxDifficulty: 3 }],
-      },
-      {
-        slug: 'positive-negative',
-        title: '正负数：用正负数表示相反意义的量',
-        objectives: [
-          '知道正数、负数、0 的意义，0 既不是正数也不是负数',
-          '会用正负数表示相反意义的量（收入/支出、高于/低于海平面）',
-          '能在数轴上表示简单的正负数并比较大小',
-        ],
-        keyPoints: [
-          '重点：用正负数表示相反意义的量',
-          '难点：规定哪个方向为正，另一个就为负；0 的特殊地位',
-          '常见错误：把 0 当成正数；比较负数大小方向弄反',
-        ],
-        prerequisites: ['bsd-g4a.u7.temperature'],
-        localContexts: ['家庭记账：收入记正、支出记负', '深圳地铁站地下几层（负一层 B1）'],
-        lecture: {
-          title: '正负数：相反意义的量',
-          minutes: 10,
-          focus:
-            '以教材“正负数”情境（珠峰高于海平面、吐鲁番盆地低于海平面；收入与支出）讲用正负数表示相反意义的量，说明 0 既不是正数也不是负数。例题一：家庭收支记录用正负数表示；例题二：在直线上标出 -3、0、+2 并比较大小。可用深圳地铁站负一层（B1）作引入。不讲负数运算。',
-        },
-        techniques: [
-          {
-            slug: 'number-line-compare',
-            title: '数轴比大小：右边的总比左边的大',
-            minutes: 4,
-            focus:
-              '教画一条从左到右的数轴，0 在中间，正数在右、负数在左；比较时看谁在右边谁就大，所以 -1 > -5，正数 > 0 > 负数。演示 2 个例子，对比“-5 比 -1 大”的错误，做 1 道小练习。',
-            remedies: ['negative-compare'],
-          },
-        ],
-        practice: [{ generatorId: 'g4.negative', minDifficulty: 1, maxDifficulty: 5 }],
       },
     ]),
     // ------------------------------------------------------------------ 八
-    unit(B, 8, '可能性', [
+    unit(B, 8, '数据的表示和分析（一）', [
       {
-        slug: 'certainty',
-        title: '不确定性：一定、可能、不可能',
+        slug: 'birthdays',
+        title: '同学的生日',
         objectives: [
-          '能用“一定”“可能”“不可能”描述事件',
-          '知道有些事情的结果是不确定的',
-          '能举出生活中的确定和不确定事件',
+          '会用调查、记录的方法收集数据，并分类整理成统计表',
+          '认识条形统计图，能根据统计表画条形统计图',
+          '能从统计图中读出信息并提出问题',
         ],
         keyPoints: [
-          '重点：区分确定事件与不确定事件',
-          '难点：说清判断理由',
-          '常见错误：把“可能性小”说成“不可能”',
+          '重点：用统计表和条形统计图表示数据',
+          '难点：根据数据的大小选择一格表示几',
+          '常见错误：直条画得高低和数据不符；漏掉标题和单位',
         ],
         prerequisites: [],
-        localContexts: ['深圳夏天会不会下雨', '掷硬币决定谁先玩'],
+        localContexts: ['班里同学生日所在的月份', '深圳各季节的天数'],
         lecture: {
-          title: '不确定性：一定、可能、不可能',
-          minutes: 8,
+          title: '同学的生日：整理数据、画统计图',
+          minutes: 10,
           focus:
-            '以教材“不确定性”情境（抛硬币哪面朝上、盒子里摸球）讲“一定”“可能”“不可能”，每个判断都要说理由。例题一：盒子里只有红球，摸出的一定是红球、不可能是白球；例题二：抛硬币可能正面朝上也可能反面朝上。不计算概率分数。',
+            '以调查全班同学生日所在的月份（或季节）为例：先记录，再用画“正”字的方法整理成统计表，然后画条形统计图（一格表示 1 人），最后读图回答“哪个月过生日的人最多、比最少的多几人”。只用整数，不涉及平均数。',
         },
         practice: [],
       },
       {
-        slug: 'likelihood',
-        title: '摸球游戏：可能性的大小',
+        slug: 'award-age',
+        title: '获奖时的年龄',
         objectives: [
-          '知道事件发生的可能性有大有小',
-          '能根据球的数量判断摸到哪种颜色的可能性大',
-          '会设计一个满足要求的摸球或转盘游戏',
+          '会把数据按范围分段整理（如 30～39 岁）',
+          '能读懂一格表示多个单位的条形统计图',
+          '能根据统计结果作出简单的判断',
         ],
         keyPoints: [
-          '重点：哪种颜色的球多，摸到它的可能性就大',
-          '难点：可能性大不等于一定摸到',
-          '常见错误：把可能性大理解成“一定”',
+          '重点：分段整理数据',
+          '难点：一格表示 2、5、10 时读出直条表示的数',
+          '常见错误：分段时同一个数据数了两次或漏数',
         ],
-        prerequisites: ['bsd-g4a.u8.certainty'],
-        localContexts: ['欢乐谷游戏转盘', '商场抽奖箱'],
+        prerequisites: ['bsd-g4a.u8.birthdays'],
+        localContexts: ['深圳马拉松参赛者的年龄段'],
         lecture: {
-          title: '摸球游戏：可能性的大小',
+          title: '获奖时的年龄：分段整理数据',
+          minutes: 10,
+          focus:
+            '以一组获奖者（如科学家）获奖时的年龄为例：先确定分段（每 10 岁一段），逐个数据画记，整理成统计表，再画一格表示 2 人的条形统计图，读图说出哪个年龄段获奖的人最多。数据用整数，不涉及平均数和折线统计图。',
+        },
+        practice: [],
+      },
+      {
+        slug: 'navigation',
+        title: '综合实践：导航给的时间准吗',
+        objectives: [
+          '知道导航预估的时间是根据路程和速度估计出来的',
+          '会记录实际出行时间，和导航给的时间比较',
+          '能用数据说明导航的时间什么时候准、什么时候不准',
+        ],
+        keyPoints: [
+          '重点：路程、速度与时间的关系在生活中的应用',
+          '难点：收集、整理多次出行的数据并作比较',
+          '常见错误：只根据一次记录就下结论',
+        ],
+        prerequisites: ['bsd-g4a.u7.speed-time-distance', 'bsd-g4a.u8.birthdays'],
+        localContexts: ['从家到学校的导航时间', '周末去深圳湾公园的导航时间'],
+        lecture: {
+          title: '导航给的时间准吗：记录与比较',
           minutes: 9,
           focus:
-            '以教材“摸球游戏”情境（盒子里红球、白球数量不同）先猜后做实验记录，发现数量多的颜色摸到的次数多，可能性大；但每次摸到哪种颜色仍不确定。例题一比较三个盒子摸到红球的可能性；例题二设计一个转盘，让指针停在蓝色的可能性最大。不用分数表示可能性。',
+            '以家长开车或乘地铁用手机导航为情境：记录几次出行导航预估的时间和实际用的时间，整理成统计表，算出相差几分钟，讨论堵车、红绿灯、天气对时间的影响，说明导航是用“路程 ÷ 速度”估计时间的。例题用虚构的整数数据，不涉及小数。',
         },
         practice: [],
       },

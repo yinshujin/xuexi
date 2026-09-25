@@ -3,6 +3,10 @@
  * answer from what the child sees (prompt / options / widget spec) with code
  * that shares nothing with the generators.
  */
+import { g2Challenge } from '../src/generators/challenge-g2';
+import { g4Challenge } from '../src/generators/challenge-g4';
+import { g4Figures } from '../src/generators/g4-figures';
+import { g4Quantity } from '../src/generators/g4-quantity';
 import type { Answer, Question } from '../src/types';
 import type { ChoiceItem, EnWord, Polyphone } from '../src/banks/types';
 import { EN_G2A } from '../src/banks/en-g2a';
@@ -108,6 +112,21 @@ export function expectedAnswer(q: Question): Answer {
   const p = q.prompt;
   const lhs = (s: string) => s.slice(s.indexOf('：') + 1).split(' = ')[0];
   switch (q.generatorId) {
+    case 'g2.challenge':
+    case 'g4.challenge': {
+      // Each template's own independent solver (enumeration / another method).
+      const gen = (q.generatorId === 'g2.challenge' ? g2Challenge : g4Challenge) as typeof g2Challenge;
+      const params = gen.derive({ difficulty: q.difficulty, seed: q.seed, variant: q.variant });
+      const t = gen.templates.find((x) => x.id === params.template)!;
+      return t.solve(params.p);
+    }
+    case 'g4.quantity':
+    case 'g4.figures': {
+      // Each template's own independent solver (simulation / enumeration).
+      const gen = (q.generatorId === 'g4.quantity' ? g4Quantity : g4Figures) as typeof g4Quantity;
+      const params = gen.derive({ difficulty: q.difficulty, seed: q.seed, variant: q.variant });
+      return gen.templates.find((x) => x.id === params.template)!.solve(params.p);
+    }
     case 'yw2.words':
       return langAnswer(q, YW_G2A.items, YW_G2A.polyphones, []);
     case 'yw4.words':
@@ -133,6 +152,8 @@ export function expectedAnswer(q: Question): Answer {
     }
     case 'g2.measure':
       return measureAnswer(q);
+    case 'g2.guess':
+      return guessAnswer(q);
     case 'g4.lines':
       return linesAnswer(q);
     case 'g2.addsub.chain':
@@ -416,6 +437,38 @@ function wordAnswer(story: string): number {
 
 // -------------------------------------------------------------- measuring
 
+/** 猜数游戏：从对话里读出每个问题和回答，一个一个数去试。 */
+function guessAnswer(q: Question): Answer {
+  const p = q.prompt;
+  const N = Number(/1~(\d+)/.exec(p)![1]);
+  const rules = [...p.matchAll(/“(?:比 (\d+) (大|小)|是 (\d+) )吗？”小明：“(对|不对)。”/g)].map(
+    (m) => {
+      const yes = m[4] === '对';
+      if (m[3] !== undefined) return (n: number) => (n === Number(m[3])) === yes;
+      const x = Number(m[1]);
+      return (n: number) => (m[2] === '大' ? n > x : n < x) === yes;
+    },
+  );
+  const left: number[] = [];
+  for (let n = 1; n <= N; n++) if (rules.every((r) => r(n))) left.push(n);
+  const question = p.split('\n').pop()!;
+  if (q.widget === 'choice') {
+    // Best question: the one whose worse outcome leaves the fewest numbers.
+    const worst = (o: string) => {
+      const x = Number(/比 (\d+) 大/.exec(o)![1]);
+      const big = left.filter((n) => n > x).length;
+      return Math.max(big, left.length - big);
+    };
+    const best = Math.min(...q.options!.map(worst));
+    return onlyMatching(q, (o) => worst(o) === best);
+  }
+  if (question.includes('最小')) return { type: 'number', value: Math.min(...left) };
+  if (question.includes('最大')) return { type: 'number', value: Math.max(...left) };
+  if (question.includes('几个')) return { type: 'number', value: left.length };
+  if (left.length !== 1) throw new Error(`${q.key}: ${left.length} numbers left`);
+  return { type: 'number', value: left[0] };
+}
+
 function measureAnswer(q: Question): Answer {
   const p = q.prompt;
   if (q.ruler) return { type: 'number', value: q.ruler.to - q.ruler.from };
@@ -557,7 +610,7 @@ function langAnswer(q: Question, items: ChoiceItem[], polys: Polyphone[], words:
     if (hits.length !== 1) throw new Error(`${q.key}: "${text}" found ${hits.length}× in ${opts.join(' | ')}`);
     return { type: 'choice', index: hits[0] };
   };
-  const m = /^【(.+?)】([\s\S]*)$/.exec(q.prompt);
+  const m = /^(?:【(?:拔高|创新)】)?【(.+?)】([\s\S]*)$/.exec(q.prompt);
   if (!m) throw new Error(`${q.key}: no kind label: ${q.prompt}`);
   const [, kind, body] = m;
   const item = items.find((it) => it.kind === kind && it.prompt === body);

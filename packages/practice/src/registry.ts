@@ -4,6 +4,7 @@ import { g2AddSub2d } from './generators/g2-addsub-2d';
 import { g2AddSubChain } from './generators/g2-addsub-chain';
 import { g2AddSubWord } from './generators/g2-addsub-word';
 import { g2DivTable } from './generators/g2-div-table';
+import { g2Guess } from './generators/g2-guess';
 import { g2Measure } from './generators/g2-measure';
 import { g2MulMeaning } from './generators/g2-mul-meaning';
 import { g2MulTable } from './generators/g2-mul-table';
@@ -18,8 +19,12 @@ import { g4Lines } from './generators/g4-lines';
 import { g4LawSimplify } from './generators/g4-law-simplify';
 import { g4Mul3x2 } from './generators/g4-mul-3x2';
 import { g4MulEstimate } from './generators/g4-mul-estimate';
+import { g4Figures } from './generators/g4-figures';
 import { g4Negative } from './generators/g4-negative';
+import { g4Quantity } from './generators/g4-quantity';
 import { g4OralMulDiv } from './generators/g4-oral-muldiv';
+import { g2Challenge } from './generators/challenge-g2';
+import { g4Challenge } from './generators/challenge-g4';
 import { en2Words, en4Words, yw2Words, yw4Polyphone, yw4Words } from './generators/lang-banks';
 import type { GenerateOptions, GradeResult, Question, Response } from './types';
 
@@ -34,6 +39,7 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g2UnitMoney,
   g2UnitLength,
   g2Measure,
+  g2Guess,
   g4BignumPlace,
   g4BignumRead,
   g4BignumRewrite,
@@ -46,7 +52,11 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g4AngleMeasure,
   g4AngleClassify,
   g4Lines,
+  g4Quantity,
+  g4Figures,
   g4Negative,
+  g2Challenge,
+  g4Challenge,
   yw2Words,
   yw4Words,
   yw4Polyphone,

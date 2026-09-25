@@ -1,620 +1,227 @@
 {
   "format": "xuexi-authored@1",
   "lessonId": "en-g4a.u2.words.lecture",
-  "title": "Can you swim?：会做的事情单词",
+  "title": "Where do animals live? 动物和它们的家",
   "scenes": [
     {
       "type": "slide",
-      "title": "情境导入",
+      "title": "情境导入：去野生动物园",
       "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "Unit 2 Can you swim?"
-        },
-        {
-          "id": "t1",
-          "kind": "text",
-          "text": "学校要开运动会啦！你会做什么？"
-        }
+        { "id": "h1", "kind": "heading", "text": "Where do animals live?" },
+        { "id": "t1", "kind": "text", "text": "动物住在哪里？周末去深圳野生动物园看一看！" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "people 住在 city、farm", "color": "blue" },
+          { "id": "c1b", "text": "animals 住在哪里？", "color": "green" }
+        ] }
       ],
       "script": [
-        {
-          "say": "同学们好！今天我们开始学第二单元。先跟我读单元的名字。"
-        },
-        {
-          "spotlight": "h1"
-        },
-        {
-          "say": "Can you swim? Can you swim?",
-          "lang": "en"
-        },
-        {
-          "say": "意思是：你会游泳吗？"
-        },
-        {
-          "spotlight": "t1"
-        },
-        {
-          "say": "学校要开运动会啦。每个人都有自己的本领，你会做什么呢？"
-        },
-        {
-          "say": "今天我们就来学说各种本领的单词，一边做动作，一边说。"
-        }
+        { "say": "上个单元我们知道了人们住在城市、农场。那动物住在哪里呢？跟我读第二单元的大问题。" },
+        { "spotlight": "h1" },
+        { "say": "Where do animals live?", "lang": "en" },
+        { "say": "意思是：动物住在哪里？" },
+        { "spotlight": "t1" },
+        { "say": "这个周末，我们去深圳野生动物园，认识几种动物，看看它们的家。" }
       ]
     },
     {
       "type": "slide",
-      "title": "新单词：swim, skate, ride a bicycle",
+      "title": "新单词：三种会飞的动物",
       "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "新单词（一）"
-        },
-        {
-          "id": "c1",
-          "kind": "cards",
-          "items": [
-            {
-              "id": "c1a",
-              "text": "swim 游泳",
-              "color": "blue"
-            },
-            {
-              "id": "c1b",
-              "text": "skate 滑冰",
-              "color": "orange"
-            },
-            {
-              "id": "c1c",
-              "text": "ride a bicycle 骑自行车",
-              "color": "green"
-            }
-          ]
-        }
+        { "id": "h1", "kind": "heading", "text": "New words" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "eagle 老鹰", "color": "orange" },
+          { "id": "c1b", "text": "owl 猫头鹰", "color": "purple" },
+          { "id": "c1c", "text": "honeybee 蜜蜂", "color": "green" }
+        ] },
+        { "id": "l1", "kind": "bullets", "items": [
+          "老鹰：飞得很高",
+          "猫头鹰：晚上醒着",
+          "蜜蜂：会做蜂蜜"
+        ] }
       ],
       "script": [
-        {
-          "laser": "c1a"
-        },
-        {
-          "say": "双手向前划，像在水里游。这个词是游泳。跟我读。"
-        },
-        {
-          "say": "swim, swim",
-          "lang": "en"
-        },
-        {
-          "laser": "c1b"
-        },
-        {
-          "say": "两只脚左右滑，这个词是滑冰。跟我读。"
-        },
-        {
-          "say": "skate, skate",
-          "lang": "en"
-        },
-        {
-          "laser": "c1c"
-        },
-        {
-          "say": "双手握车把，脚下踩呀踩，这是骑自行车。跟我读。"
-        },
-        {
-          "say": "ride a bicycle, ride a bicycle",
-          "lang": "en"
-        },
-        {
-          "say": "注意，骑和自行车中间还有一个小词，不能漏掉。"
-        },
-        {
-          "say": "我们再连起来读一遍。"
-        },
-        {
-          "say": "swim, skate, ride a bicycle",
-          "lang": "en"
-        }
+        { "say": "先看第一种动物，它飞得又高又快，是老鹰。跟我读。" },
+        { "laser": "c1a" },
+        { "say": "eagle, eagle", "lang": "en" },
+        { "say": "第二种动物白天睡觉，晚上醒着捉老鼠，是猫头鹰。跟我读。" },
+        { "laser": "c1b" },
+        { "say": "owl, owl", "lang": "en" },
+        { "say": "第三种动物小小的，会做甜甜的蜂蜜，是蜜蜂。跟我读。" },
+        { "laser": "c1c" },
+        { "say": "honeybee, honeybee", "lang": "en" },
+        { "say": "蜜蜂这个词很长，它是蜂蜜和蜜蜂两个小词拼在一起的。" },
+        { "say": "honey, bee, honeybee", "lang": "en" },
+        { "spotlight": "l1" },
+        { "say": "记住它们的本领：老鹰飞得高，猫头鹰晚上醒着，蜜蜂会做蜂蜜。" }
       ]
     },
     {
       "type": "slide",
-      "title": "新单词：run fast, jump high, fly",
+      "title": "复习单词：动物和家",
       "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "新单词（二）"
-        },
-        {
-          "id": "c1",
-          "kind": "cards",
-          "items": [
-            {
-              "id": "c1a",
-              "text": "run fast 跑得快",
-              "color": "blue"
-            },
-            {
-              "id": "c1b",
-              "text": "jump high 跳得高",
-              "color": "orange"
-            },
-            {
-              "id": "c1c",
-              "text": "fly 飞",
-              "color": "green"
-            }
-          ]
-        },
-        {
-          "id": "t1",
-          "kind": "text",
-          "text": "A bird can fly."
-        }
+        { "id": "h1", "kind": "heading", "text": "Animals and homes" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "panda 熊猫", "color": "gray" },
+          { "id": "c1b", "text": "fish 鱼", "color": "blue" },
+          { "id": "c1c", "text": "tree 树", "color": "green" },
+          { "id": "c1d", "text": "nest 鸟窝", "color": "orange" }
+        ] }
       ],
       "script": [
-        {
-          "laser": "c1a"
-        },
-        {
-          "say": "原地快快跑，这个短语是跑得快。跟我读。"
-        },
-        {
-          "say": "run fast, run fast",
-          "lang": "en"
-        },
-        {
-          "say": "后面这个词表示快，放在跑的后面，说明跑得怎么样。"
-        },
-        {
-          "laser": "c1b"
-        },
-        {
-          "say": "用力往上跳，这个短语是跳得高。跟我读。"
-        },
-        {
-          "say": "jump high, jump high",
-          "lang": "en"
-        },
-        {
-          "say": "后面这个词表示高，说明跳得怎么样。"
-        },
-        {
-          "laser": "c1c"
-        },
-        {
-          "say": "张开手臂像小鸟，这个词是飞。跟我读。"
-        },
-        {
-          "say": "fly, fly",
-          "lang": "en"
-        },
-        {
-          "spotlight": "t1"
-        },
-        {
-          "say": "小鸟会飞。跟我读。"
-        },
-        {
-          "say": "A bird can fly.",
-          "lang": "en"
-        }
+        { "say": "再复习几个学过的词。" },
+        { "laser": "c1a" },
+        { "say": "熊猫。跟我读。" },
+        { "say": "panda, panda", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "鱼。跟我读。" },
+        { "say": "fish, fish", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "树。跟我读。" },
+        { "say": "tree, tree", "lang": "en" },
+        { "laser": "c1d" },
+        { "say": "鸟窝，小鸟的家。跟我读。" },
+        { "say": "nest, nest", "lang": "en" }
       ]
     },
     {
       "type": "slide",
-      "title": "复习学过的动作词",
+      "title": "动物的家：简单句",
       "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "复习：学过的动作词"
-        },
-        {
-          "id": "c1",
-          "kind": "cards",
-          "items": [
-            {
-              "id": "c1a",
-              "text": "draw 画画",
-              "color": "blue"
-            },
-            {
-              "id": "c1b",
-              "text": "sing 唱歌",
-              "color": "orange"
-            },
-            {
-              "id": "c1c",
-              "text": "dance 跳舞",
-              "color": "green"
-            }
-          ]
-        }
+        { "id": "h1", "kind": "heading", "text": "Animals' homes" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["owl 猫头鹰", "An owl lives in a tree."],
+          ["eagle 老鹰", "An eagle lives on a hill."],
+          ["fish 鱼", "Fish live in water."]
+        ] },
+        { "id": "t1", "kind": "text", "text": "an owl, an eagle：元音开头用 an" }
       ],
       "script": [
-        {
-          "say": "这些动作词我们以前学过，一起复习一下。"
-        },
-        {
-          "laser": "c1a"
-        },
-        {
-          "say": "画画。跟我读。"
-        },
-        {
-          "say": "draw, draw",
-          "lang": "en"
-        },
-        {
-          "laser": "c1b"
-        },
-        {
-          "say": "唱歌。跟我读。"
-        },
-        {
-          "say": "sing, sing",
-          "lang": "en"
-        },
-        {
-          "laser": "c1c"
-        },
-        {
-          "say": "跳舞。跟我读。"
-        },
-        {
-          "say": "dance, dance",
-          "lang": "en"
-        }
+        { "say": "动物们住在哪里？我们用简单的句子说一说。" },
+        { "spotlight": "g1" },
+        { "say": "猫头鹰住在树上。跟我读。" },
+        { "say": "An owl lives in a tree.", "lang": "en" },
+        { "say": "老鹰住在小山上。跟我读。" },
+        { "say": "An eagle lives on a hill.", "lang": "en" },
+        { "say": "鱼住在水里。跟我读。" },
+        { "say": "Fish live in water.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "你发现了吗？猫头鹰和老鹰前面不是一个小词，而是另一个，因为它们开头是元音的读音。" },
+        { "say": "an owl, an eagle", "lang": "en" }
       ]
     },
     {
       "type": "slide",
-      "title": "情景对话",
+      "title": "情景对话：在动物园",
       "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "情景对话：运动会上"
-        },
-        {
-          "id": "g1",
-          "kind": "table",
-          "rows": [
-            [
-              "角色",
-              "说什么"
-            ],
-            [
-              "Peter",
-              "Look, Kitty! I can run fast."
-            ],
-            [
-              "Kitty",
-              "I can run fast too."
-            ],
-            [
-              "Peter",
-              "I can jump high."
-            ],
-            [
-              "Kitty",
-              "Great! I can jump high too."
-            ]
-          ]
-        }
+        { "id": "h1", "kind": "heading", "text": "At the zoo" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["Lily", "Look! It's an eagle."],
+          ["Tom", "It can fly high."],
+          ["Lily", "What's that in the tree?"],
+          ["Tom", "It's an owl. It sleeps in the day."],
+          ["Lily", "And look at the honeybees!"]
+        ] }
       ],
       "script": [
-        {
-          "say": "运动会上，彼得和凯蒂在比本领。我们来听一听。"
-        },
-        {
-          "spotlight": "g1"
-        },
-        {
-          "say": "彼得说：看，凯蒂！我跑得快。"
-        },
-        {
-          "say": "Look, Kitty! I can run fast.",
-          "lang": "en"
-        },
-        {
-          "say": "凯蒂说：我也跑得快。"
-        },
-        {
-          "say": "I can run fast too.",
-          "lang": "en"
-        },
-        {
-          "say": "彼得说：我跳得高。"
-        },
-        {
-          "say": "I can jump high.",
-          "lang": "en"
-        },
-        {
-          "say": "凯蒂说：真棒！我也跳得高。"
-        },
-        {
-          "say": "Great! I can jump high too.",
-          "lang": "en"
-        },
-        {
-          "say": "现在跟我一句一句读。"
-        },
-        {
-          "say": "Look, Kitty! I can run fast.",
-          "lang": "en"
-        },
-        {
-          "say": "I can run fast too.",
-          "lang": "en"
-        },
-        {
-          "say": "I can jump high.",
-          "lang": "en"
-        },
-        {
-          "say": "Great! I can jump high too.",
-          "lang": "en"
-        },
-        {
-          "say": "说自己会做什么，就在动作前面加上我会。你也试着换上游泳、滑冰说一说。"
-        }
+        { "say": "莉莉和汤姆在动物园里。我们一句一句跟读。" },
+        { "spotlight": "g1" },
+        { "say": "莉莉说：看！是一只老鹰。" },
+        { "say": "Look! It's an eagle.", "lang": "en" },
+        { "say": "汤姆说：它能飞得很高。" },
+        { "say": "It can fly high.", "lang": "en" },
+        { "say": "莉莉问：树上那是什么？" },
+        { "say": "What's that in the tree?", "lang": "en" },
+        { "say": "汤姆说：是一只猫头鹰，它白天睡觉。" },
+        { "say": "It's an owl. It sleeps in the day.", "lang": "en" },
+        { "say": "莉莉说：再看看那些蜜蜂！" },
+        { "say": "And look at the honeybees!", "lang": "en" }
       ]
     },
     {
       "type": "slide",
-      "title": "书写小提示",
+      "title": "语音：字母 i 的短音",
       "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "书写小提示"
-        },
-        {
-          "id": "t1",
-          "kind": "text",
-          "text": "bicycle：b-i-c-y-c-l-e"
-        },
-        {
-          "id": "t2",
-          "kind": "text",
-          "text": "ride a bicycle（别漏掉 a）"
-        }
+        { "id": "h1", "kind": "heading", "text": "Sound: i" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "big 大的", "color": "blue" },
+          { "id": "c1b", "text": "fish 鱼", "color": "green" },
+          { "id": "c1c", "text": "six 六", "color": "orange" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "对比：kite、five 里的 i 读字母本身的音" }
       ],
       "script": [
-        {
-          "spotlight": "t1"
-        },
-        {
-          "say": "自行车这个词比较长，我们一个字母一个字母地拼。跟我读。"
-        },
-        {
-          "say": "b, i, c, y, c, l, e, bicycle",
-          "lang": "en"
-        },
-        {
-          "say": "中间有两个一样的字母，拼写时要细心。"
-        },
-        {
-          "spotlight": "t2"
-        },
-        {
-          "say": "写短语的时候，骑和自行车中间的小词不能漏。跟我读。"
-        },
-        {
-          "say": "ride a bicycle",
-          "lang": "en"
-        }
+        { "say": "学发音。这三个单词里的元音字母读短音，嘴角微微咧开，声音短短的。" },
+        { "laser": "c1a" },
+        { "say": "big, big", "lang": "en" },
+        { "board": [
+          { "text": "b - i - g → big" },
+          { "text": "f - i - sh → fish" }
+        ] },
+        { "say": "一个音一个音拼，再连起来读。" },
+        { "say": "b, i, g, big. f, i, sh, fish.", "lang": "en" },
+        { "boardClose": true },
+        { "laser": "c1b" },
+        { "say": "fish, fish", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "six, six", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "再听这两个词，结尾有一个不发音的字母，前面的字母读它本身的名字。" },
+        { "say": "kite, five", "lang": "en" }
       ]
     },
     {
       "type": "slide",
-      "title": "学法口诀",
+      "title": "学法口诀与小结",
       "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "学法口诀"
-        },
-        {
-          "id": "l1",
-          "kind": "bullets",
-          "items": [
-            "做个动作说个词",
-            "跑快跳高连着说",
-            "骑自行车别漏词",
-            "边做边说记得牢"
-          ]
-        }
+        { "id": "h1", "kind": "heading", "text": "学法口诀" },
+        { "id": "l1", "kind": "bullets", "items": [
+          "老鹰高飞住山上",
+          "猫头鹰夜里醒",
+          "蜜蜂花间做蜂蜜",
+          "短音咧嘴轻轻读"
+        ] },
+        { "id": "t1", "kind": "text", "text": "Chant: A big pig and six fish." }
       ],
       "script": [
-        {
-          "spotlight": "l1"
-        },
-        {
-          "say": "我们来学口诀。老师先读一遍。"
-        },
-        {
-          "say": "做个动作说个词，跑快跳高连着说，骑自行车别漏词，边做边说记得牢。"
-        },
-        {
-          "say": "跟我读一遍。做个动作说个词，跑快跳高连着说，骑自行车别漏词，边做边说记得牢。"
-        },
-        {
-          "say": "跑得快、跳得高都是两个词连在一起的短语，要连着说。"
-        }
-      ]
-    },
-    {
-      "type": "slide",
-      "title": "一句话小结",
-      "blocks": [
-        {
-          "id": "h1",
-          "kind": "heading",
-          "text": "一句话小结"
-        },
-        {
-          "id": "t1",
-          "kind": "text",
-          "text": "swim, skate, ride a bicycle, run fast, jump high, fly"
-        }
-      ],
-      "script": [
-        {
-          "spotlight": "t1"
-        },
-        {
-          "say": "一句话小结：今天学了六个本领单词，做着动作说，记得又快又牢。"
-        },
-        {
-          "say": "最后再读一遍。"
-        },
-        {
-          "say": "swim, skate, ride a bicycle, run fast, jump high, fly",
-          "lang": "en"
-        }
+        { "say": "用口诀记一记。跟我读。" },
+        { "spotlight": "l1" },
+        { "say": "老鹰高飞住山上，猫头鹰夜里醒。" },
+        { "say": "蜜蜂花间做蜂蜜，短音咧嘴轻轻读。" },
+        { "say": "前三句说三种新动物的本领和家，最后一句提醒短音的读法。" },
+        { "spotlight": "t1" },
+        { "say": "再拍手读一句英文小儿歌。" },
+        { "say": "A big pig and six fish. A big pig and six fish.", "lang": "en" },
+        { "say": "一句话小结：今天认识了老鹰、猫头鹰和蜜蜂，还学了短音。" }
       ]
     },
     {
       "type": "quiz",
       "title": "判断题",
-      "intro": "先来做判断题，对的选对，错的选错。",
+      "intro": "先判断对错。",
       "questions": [
-        {
-          "question": "“swim” 的意思是“游泳”。",
-          "options": [
-            "对",
-            "错"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "对。swim 就是游泳。"
-        },
-        {
-          "question": "“jump high” 的意思是“跑得快”。",
-          "options": [
-            "对",
-            "错"
-          ],
-          "answer": [
-            1
-          ],
-          "analysis": "错。jump high 是跳得高；跑得快是 run fast。"
-        },
-        {
-          "question": "“骑自行车”可以写成 ride bicycle。",
-          "options": [
-            "对",
-            "错"
-          ],
-          "answer": [
-            1
-          ],
-          "analysis": "错。中间不能漏掉 a，要写 ride a bicycle。"
-        }
+        { "question": "owl 的意思是“老鹰”。", "options": ["对", "错"], "answer": [1], "analysis": "owl 是猫头鹰，老鹰是 eagle。" },
+        { "question": "honeybee 会做蜂蜜。", "options": ["对", "错"], "answer": [0], "analysis": "honeybee 是蜜蜂，会做蜂蜜 honey。" },
+        { "question": "fish 和 kite 里的 i 读音相同。", "options": ["对", "错"], "answer": [1], "analysis": "fish 里的 i 读短音；kite 里的 i 读字母本身的音。" }
       ]
     },
     {
       "type": "quiz",
       "title": "选择题",
-      "intro": "再来做选择题，选出正确答案。",
+      "intro": "再来做选择题。",
       "questions": [
-        {
-          "question": "“滑冰”用英语怎么说？",
-          "options": [
-            "skate",
-            "swim",
-            "sing"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "skate 是滑冰；swim 是游泳；sing 是唱歌。"
-        },
-        {
-          "question": "“跑得快”是哪一个？",
-          "options": [
-            "run fast",
-            "jump high",
-            "ride a bicycle"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "run fast 是跑得快。"
-        },
-        {
-          "question": "下面哪个单词拼写正确？",
-          "options": [
-            "bicycle",
-            "bicicle",
-            "bycicle"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "自行车的拼写是 b-i-c-y-c-l-e。"
-        },
-        {
-          "question": "在游泳池里，我们可以：",
-          "options": [
-            "swim",
-            "skate",
-            "ride a bicycle"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "游泳池里可以游泳，swim。"
-        }
+        { "question": "“老鹰”用英语怎么说？", "options": ["owl", "eagle", "panda"], "answer": [1], "analysis": "eagle 是老鹰。" },
+        { "question": "哪个单词里的 i 和 big 里的 i 读音相同？", "options": ["five", "six", "kite"], "answer": [1], "analysis": "six 和 big 里的 i 都读短音。" },
+        { "question": "下面哪种动物不会飞？", "options": ["eagle", "honeybee", "panda"], "answer": [2], "analysis": "熊猫不会飞。" }
       ]
     },
     {
       "type": "quiz",
       "title": "填空与情景交际",
-      "intro": "最后是填空题，选一个词填进括号里。",
+      "intro": "最后做填空和情景交际。",
       "questions": [
-        {
-          "question": "I can （　） a bicycle.",
-          "options": [
-            "ride",
-            "run",
-            "jump"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "骑自行车是 ride a bicycle。"
-        },
-        {
-          "question": "我跑得快。I can run （　）.",
-          "options": [
-            "fast",
-            "high",
-            "swim"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "跑得快是 run fast。"
-        },
-        {
-          "question": "A bird can （　）.",
-          "options": [
-            "fly",
-            "skate",
-            "ride a bicycle"
-          ],
-          "answer": [
-            0
-          ],
-          "analysis": "小鸟会飞：A bird can fly."
-        }
+        { "question": "Birds live in a （　） in the tree.", "options": ["nest", "flat", "street"], "answer": [0], "analysis": "小鸟住在树上的鸟窝 nest 里。" },
+        { "question": "I can see （　） owl.", "options": ["a", "an", "two"], "answer": [1], "analysis": "owl 以元音开头，用 an。" },
+        { "question": "你在植物园看到花丛里有很多蜜蜂，你对同学说（　）", "options": ["Look! Honeybees!", "Look! Eagles!", "Look! Owls!"], "answer": [0], "analysis": "蜜蜂是 honeybees。" }
       ]
     }
   ]

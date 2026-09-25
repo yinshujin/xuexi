@@ -1,0 +1,219 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g4a.u3.grammar.lecture",
+  "title": "How many apples do we have? 做水果沙拉",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入：做水果沙拉",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Let's make a fruit salad!" },
+        { "id": "t1", "kind": "text", "text": "周末和妈妈做水果沙拉，先数一数家里有多少水果。" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "How many apples do we have?", "color": "orange" },
+          { "id": "c1b", "text": "We have six.", "color": "green" }
+        ] }
+      ],
+      "script": [
+        { "say": "周末到了，我们和妈妈一起做水果沙拉。跟我读。" },
+        { "say": "Let's make a fruit salad!", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "做之前，先数一数家里有多少水果。" },
+        { "laser": "c1a" },
+        { "say": "妈妈问：我们有多少个苹果？跟我读。" },
+        { "say": "How many apples do we have?", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "我们回答：我们有六个。跟我读。" },
+        { "say": "We have six.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "单词：水果和问数量",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Words" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "apple 苹果", "color": "orange" },
+          { "id": "c1b", "text": "banana 香蕉", "color": "green" },
+          { "id": "c1c", "text": "pear 梨", "color": "blue" },
+          { "id": "c1d", "text": "how many 多少（个）", "color": "purple" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "have 有" }
+      ],
+      "script": [
+        { "say": "先复习三种水果。" },
+        { "laser": "c1a" },
+        { "say": "苹果。跟我读。" },
+        { "say": "apple, apple", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "香蕉。跟我读。" },
+        { "say": "banana, banana", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "梨。跟我读。" },
+        { "say": "pear, pear", "lang": "en" },
+        { "laser": "c1d" },
+        { "say": "问多少个，要用这两个词连在一起。跟我读。" },
+        { "say": "how many, how many", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "还有一个词，意思是有。跟我读。" },
+        { "say": "have, have", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：How many … do we have?",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "How many ... do we have?" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["How many apples do we have?", "We have six."],
+          ["How many bananas do we have?", "We have two bananas."],
+          ["How many pears do we have?", "We have four."]
+        ] },
+        { "id": "t1", "kind": "text", "text": "How many 后面加 s：apples, bananas, pears" }
+      ],
+      "script": [
+        { "say": "我们一问一答，把家里的水果数清楚。" },
+        { "spotlight": "g1" },
+        { "say": "我们有多少个苹果？我们有六个。" },
+        { "say": "How many apples do we have? We have six.", "lang": "en" },
+        { "say": "我们有多少根香蕉？我们有两根香蕉。" },
+        { "say": "How many bananas do we have? We have two bananas.", "lang": "en" },
+        { "say": "我们有多少个梨？我们有四个。" },
+        { "say": "How many pears do we have? We have four.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "注意！问多少个的时候，东西不止一个，水果名字后面要加一个小尾巴。" },
+        { "say": "apples, bananas, pears", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：We don't have …",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "We don't have ..." },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "We have apples. 有", "color": "green" },
+          { "id": "c1b", "text": "We don't have oranges. 没有", "color": "gray" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "don't = do not　We not have ... ✗" }
+      ],
+      "script": [
+        { "say": "如果家里没有某种水果，怎么说呢？" },
+        { "laser": "c1a" },
+        { "say": "我们有苹果。" },
+        { "say": "We have apples.", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "我们没有橙子。在有的前面加上表示不的那个词。跟我读。" },
+        { "say": "We don't have oranges.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "这个词是两个词的缩写。千万不能只加一个不字，那样是错的。" },
+        { "say": "We don't have oranges. We don't have oranges.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话：做沙拉",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Making a fruit salad" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["Mum", "How many apples do we have?"],
+          ["Amy", "We have two."],
+          ["Mum", "How many bananas do we have?"],
+          ["Amy", "We don't have bananas. We have four pears."],
+          ["Mum", "OK. Let's make a fruit salad!"]
+        ] }
+      ],
+      "script": [
+        { "say": "艾米和妈妈在厨房里。我们一句一句跟读。" },
+        { "spotlight": "g1" },
+        { "say": "妈妈：我们有多少个苹果？" },
+        { "say": "How many apples do we have?", "lang": "en" },
+        { "say": "艾米：我们有两个。" },
+        { "say": "We have two.", "lang": "en" },
+        { "say": "妈妈：我们有多少根香蕉？" },
+        { "say": "How many bananas do we have?", "lang": "en" },
+        { "say": "艾米：我们没有香蕉，我们有四个梨。" },
+        { "say": "We don't have bananas. We have four pears.", "lang": "en" },
+        { "say": "妈妈：好，我们来做水果沙拉吧！" },
+        { "say": "OK. Let's make a fruit salad!", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "算一算：一共有几个",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "How many in all?" },
+        { "id": "t1", "kind": "text", "text": "2 个苹果 + 4 个梨 = 几个水果？" }
+      ],
+      "script": [
+        { "say": "艾米家有两个苹果和四个梨，一共有几个水果？用上节课的单词算一算。" },
+        { "spotlight": "t1" },
+        { "board": [
+          { "text": "2 + 4 = 6" },
+          { "text": "Two plus four equals six." },
+          { "text": "We have six." }
+        ] },
+        { "say": "二加四等于六。跟我读。" },
+        { "say": "Two plus four equals six.", "lang": "en" },
+        { "say": "所以我们一共有六个水果。" },
+        { "say": "We have six.", "lang": "en" },
+        { "boardClose": true }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀与小结",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "学法口诀" },
+        { "id": "l1", "kind": "bullets", "items": [
+          "问有几个用多少",
+          "后面东西加尾巴",
+          "有就说我们有",
+          "没有前面加个不"
+        ] },
+        { "id": "t1", "kind": "text", "text": "Chant: How many, how many? Add an s!" }
+      ],
+      "script": [
+        { "say": "用口诀记一记。跟我读。" },
+        { "spotlight": "l1" },
+        { "say": "问有几个用多少，后面东西加尾巴。" },
+        { "say": "有就说我们有，没有前面加个不。" },
+        { "say": "问数量用多少个的句型，后面的名词加小尾巴；有就直接说，没有就在有的前面加上缩写的不。" },
+        { "spotlight": "t1" },
+        { "say": "再拍手读英文小儿歌。" },
+        { "say": "How many, how many? Add an s, add an s!", "lang": "en" },
+        { "say": "一句话小结：问有多少个，就这样问答。" },
+        { "say": "How many apples do we have? We have six.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先判断对错。",
+      "questions": [
+        { "question": "How many apple do we have? 是正确的问句。", "options": ["对", "错"], "answer": [1], "analysis": "How many 后面要用复数 apples。" },
+        { "question": "“我们没有梨。”可以说 We don't have pears.", "options": ["对", "错"], "answer": [0], "analysis": "“没有”用 don't have。" },
+        { "question": "We not have bananas. 这句话是对的。", "options": ["对", "错"], "answer": [1], "analysis": "要说 We don't have bananas." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "再来做选择题。",
+      "questions": [
+        { "question": "How many （　） do we have?", "options": ["pear", "pears", "a pear"], "answer": [1], "analysis": "How many 后面用复数 pears。" },
+        { "question": "— How many bananas do we have?\n— （　）", "options": ["We have three.", "Yes, we do.", "We are three."], "answer": [0], "analysis": "问有多少个，答 We have + 数字。" },
+        { "question": "“我们有八个苹果。”用英语怎么说？", "options": ["We have eight apples.", "We has eight apples.", "We don't have eight apples."], "answer": [0], "analysis": "We 后面用 have，八个苹果是 eight apples。" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后做填空和情景交际。",
+      "questions": [
+        { "question": "How many eggs （　） we have?", "options": ["are", "do", "is"], "answer": [1], "analysis": "句型是 How many … do we have?" },
+        { "question": "We have five apples. We （　） have pears.", "options": ["don't", "not", "doesn't"], "answer": [0], "analysis": "We 的否定用 don't have。" },
+        { "question": "做沙拉前，你想知道家里有几个苹果，你问妈妈（　）", "options": ["Do you like apples?", "How many apples do we have?", "Where are the apples?"], "answer": [1], "analysis": "问“有几个”用 How many … do we have?" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,556 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u1.talk.lecture",
+  "title": "我能用眼睛看，用耳朵听",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "What can you do with your five senses?"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "我们的五种感官，能做什么呢？"
+        }
+      ],
+      "script": [
+        {
+          "say": "小朋友们好！上节课我们学了看、听、闻、尝、摸五个词。"
+        },
+        {
+          "say": "今天单元的大问题是：你能用五种感官做什么？跟我读。"
+        },
+        {
+          "say": "What can you do with your five senses?",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "我们要学会用一句完整的英语，说出每种感官的本领。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：see 和 hear",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "眼睛看，耳朵听"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "eyes 眼睛",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "ears 耳朵",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "I can see with my eyes."
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "I can hear with my ears."
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "先复习身体部位。眼睛，跟我读。"
+        },
+        {
+          "say": "eyes, eyes",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "耳朵，跟我读。"
+        },
+        {
+          "say": "ears, ears",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "我能用眼睛看。跟我读。"
+        },
+        {
+          "say": "I can see with my eyes.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t2"
+        },
+        {
+          "say": "我能用耳朵听。跟我读。"
+        },
+        {
+          "say": "I can hear with my ears.",
+          "lang": "en"
+        },
+        {
+          "say": "句子里的这个小词，意思是“用”。跟我读。"
+        },
+        {
+          "say": "with, with",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：smell、taste、feel",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "闻、尝、摸"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "nose 鼻子",
+              "I can smell with my nose."
+            ],
+            [
+              "mouth 嘴巴",
+              "I can taste with my mouth."
+            ],
+            [
+              "hands 手",
+              "I can feel with my hands."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "换一种感官，句子只要换两个地方：本领和身体部位。"
+        },
+        {
+          "say": "我能用鼻子闻。跟我读。"
+        },
+        {
+          "say": "I can smell with my nose.",
+          "lang": "en"
+        },
+        {
+          "say": "我能用嘴巴尝。跟我读。"
+        },
+        {
+          "say": "I can taste with my mouth.",
+          "lang": "en"
+        },
+        {
+          "say": "我能用手摸。跟我读。"
+        },
+        {
+          "say": "I can feel with my hands.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "问答：What can you see?",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "你能看见什么？"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "What can you see?  I can see a cat."
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "What can you hear?  I can hear a cat."
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "想问别人能看见什么，这样问。跟我读。"
+        },
+        {
+          "say": "What can you see?",
+          "lang": "en"
+        },
+        {
+          "say": "回答时，用“我能看见”加上看到的东西。"
+        },
+        {
+          "say": "I can see a cat.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t2"
+        },
+        {
+          "say": "问能听见什么，把看换成听。"
+        },
+        {
+          "say": "What can you hear?",
+          "lang": "en"
+        },
+        {
+          "say": "I can hear a cat.",
+          "lang": "en"
+        },
+        {
+          "say": "问的是看，就用看回答；问的是听，就用听回答。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "魔术表演"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Magician:",
+              "What can you see?"
+            ],
+            [
+              "Kitty:",
+              "I can see a hat."
+            ],
+            [
+              "Magician:",
+              "What can you hear?"
+            ],
+            [
+              "Kitty:",
+              "I can hear a cat."
+            ],
+            [
+              "Magician:",
+              "What can you do with your nose?"
+            ],
+            [
+              "Kitty:",
+              "I can smell with my nose."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "魔术师和小朋友在对话。我们一句一句跟着读。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "What can you see?",
+          "lang": "en"
+        },
+        {
+          "say": "I can see a hat.",
+          "lang": "en"
+        },
+        {
+          "say": "What can you hear?",
+          "lang": "en"
+        },
+        {
+          "say": "I can hear a cat.",
+          "lang": "en"
+        },
+        {
+          "say": "魔术师最后问：你能用鼻子做什么？"
+        },
+        {
+          "say": "What can you do with your nose?",
+          "lang": "en"
+        },
+        {
+          "say": "I can smell with my nose.",
+          "lang": "en"
+        },
+        {
+          "say": "你也可以换成嘴巴和手，自己编一编。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小提示",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "说对、写对"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "看 see 配 eyes",
+            "听 hear 配 ears",
+            "I 永远大写",
+            "句末别忘句号"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "第一，本领和身体部位要配对，眼睛才能看，耳朵才能听。"
+        },
+        {
+          "say": "说成“我能用眼睛听”，就闹笑话啦。"
+        },
+        {
+          "say": "第二，句子开头的“我”，永远写成大写字母，句子最后要写句号。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "学法口诀"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "眼睛看，耳朵听",
+            "鼻子闻，嘴巴尝",
+            "小手摸一摸",
+            "感官本领真不少"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "我们来念学法口诀，老师念一句，你跟一句。"
+        },
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "眼睛看，耳朵听。"
+        },
+        {
+          "say": "鼻子闻，嘴巴尝。"
+        },
+        {
+          "say": "小手摸一摸，感官本领真不少。"
+        },
+        {
+          "say": "说句子的时候，先想好用哪种感官，再配上对的身体部位。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "今天学会了"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "I can see with my eyes."
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "What can you see?  I can see a cat."
+        }
+      ],
+      "script": [
+        {
+          "say": "一句话小结：我能用什么做什么，本领和身体部位要配对。"
+        },
+        {
+          "say": "I can see with my eyes. I can hear with my ears.",
+          "lang": "en"
+        },
+        {
+          "say": "今天在深圳湾公园散步时，说说你看见了什么，听见了什么吧！"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "下面我们做几道判断题，想一想说得对不对。",
+      "questions": [
+        {
+          "question": "I can hear with my eyes. 这句话说得对。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "听要用耳朵：I can hear with my ears."
+        },
+        {
+          "question": "“我能用鼻子闻”是 I can smell with my nose.",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "smell 是闻，nose 是鼻子。"
+        },
+        {
+          "question": "别人问 What can you see?，要回答 I can hear a cat.",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "问看见什么，要用 I can see… 回答。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "接下来是选择题，选出正确的答案。",
+      "questions": [
+        {
+          "question": "I can taste with my （　）.",
+          "options": [
+            "mouth",
+            "ears",
+            "eyes"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "用嘴巴尝：taste with my mouth。"
+        },
+        {
+          "question": "“你能听见什么？”用英语怎么说？",
+          "options": [
+            "What can you see?",
+            "What can you hear?",
+            "I can hear."
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "hear 是听见。"
+        },
+        {
+          "question": "哪一句说的是用手？",
+          "options": [
+            "I can feel with my hands.",
+            "I can see with my eyes.",
+            "I can smell with my nose."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "用手摸是 feel。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空和情景交际，选出最合适的一项。",
+      "questions": [
+        {
+          "question": "I can see （　） my eyes.",
+          "options": [
+            "with",
+            "and",
+            "is"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "with 是“用”：see with my eyes。"
+        },
+        {
+          "question": "— What can you hear?\n— （　）",
+          "options": [
+            "I can hear a cat.",
+            "I can see a cat.",
+            "I can hear with my eyes."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "问听见什么，用 I can hear… 回答。"
+        },
+        {
+          "question": "玩蒙眼猜东西游戏，你用手摸一摸，说：（　）",
+          "options": [
+            "I can feel with my hands.",
+            "I can see with my eyes.",
+            "I can taste with my hands."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "用手摸：I can feel with my hands."
+        }
+      ]
+    }
+  ]
+}

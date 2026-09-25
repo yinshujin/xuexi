@@ -8,8 +8,12 @@ import { BOOKS, type Book } from '../src/index';
  * (Currently every emitted tag is covered.)
  */
 const DOCUMENTED_UNCOVERED: Record<string, ErrorTag[]> = {
-  'bsd-g2a': [],
-  'bsd-g4a': [],
+  // reasoning: a wrong 拔高 / 创新 (g2.challenge) answer that matches no typical mistake;
+  // there is no single technique for it, the worked solution of each question explains it.
+  'bsd-g2a': ['reasoning'],
+  // reasoning: a wrong 拔高 / 创新 (g4.challenge) answer that matches no typical mistake;
+  // there is no single technique for it, the worked solution of each question explains it.
+  'bsd-g4a': ['reasoning'],
 };
 
 function coverage(book: Book) {
@@ -54,6 +58,7 @@ describe('error tag coverage by technique lessons', () => {
       `[coverage] generators not linked from any book: ${unlinked.join(', ') || '(none)'}`,
     );
     // g2.unit.money: 人民币 is not in the 2024-revised 二年级上册.
-    expect(unlinked).toEqual(['g2.unit.money']);
+    // g4.div.2d, g4.negative: not in the 2024-edition 四上; kept for later books.
+    expect(unlinked).toEqual(['g2.unit.money', 'g4.div.2d', 'g4.negative']);
   });
 });

@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
 import { findKnowledgePoint } from '@xuexi/curriculum';
-import { GENERATORS, type ChildProfile } from '@xuexi/shared';
+import { GENERATORS, practiceSizeOf, type ChildProfile } from '@xuexi/shared';
 import { useApp } from '../lib/store';
 import { href } from '../lib/router';
-import { progressMap } from '../lib/learning';
+import { coreSpecs, progressMap, setShape } from '../lib/learning';
 import { minutes } from '../lib/format';
 import { Card, Empty, Page } from '../components/ui';
 
@@ -18,7 +18,9 @@ export function KpPage({ child, kpId }: { child: ChildProfile; kpId: string }) {
   const { kp, unit } = ref;
   const watched = new Set(events.filter((e) => e.type === 'lesson' && e.completed).map((e) => (e.type === 'lesson' ? e.lessonId : '')));
   const back = encodeURIComponent(`/c/${child.id}/kp/${kpId}`);
-  const hasSpeed = kp.practice.some((p) => SPEED_GENERATORS.has(p.generatorId));
+  const hasSpeed = coreSpecs(kp).some((p) => SPEED_GENERATORS.has(p.generatorId));
+  const shape = setShape(kp, practiceSizeOf(family.settings));
+  const challenges = shape.filter((x) => x !== 'core').length;
 
   return (
     <Page title={kp.title} back={`/c/${child.id}/map`}>
@@ -84,9 +86,10 @@ export function KpPage({ child, kpId }: { child: ChildProfile; kpId: string }) {
             <Card className="flex items-center gap-3 bg-sky-500 text-white ring-0 transition active:scale-95">
               <span className="text-4xl">🎯</span>
               <span className="flex-1">
-                <span className="block text-xl font-bold">专项练习 10 题</span>
+                <span className="block text-xl font-bold">专项练习 {shape.length} 题</span>
                 <span className="opacity-90">
-                  {kp.practice.map((p) => GENERATORS.find((g) => g.id === p.generatorId)?.title).join('、')}
+                  {[...new Set(coreSpecs(kp).map((p) => GENERATORS.find((g) => g.id === p.generatorId)?.title))].join('、')}
+                  {challenges > 0 && `，最后 ${challenges} 道拔高题、创新题`}
                 </span>
               </span>
             </Card>

@@ -1,0 +1,539 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g2a.u2.talk.lecture",
+  "title": "这是我的叔叔，他很年轻",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "What do you like about your family?"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "看看全家福，介绍一下你的家人吧！"
+        }
+      ],
+      "script": [
+        {
+          "say": "小朋友们好！这个单元的大问题是：你喜欢家人的什么？跟我读。"
+        },
+        {
+          "say": "What do you like about your family?",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "今天我们拿出全家福，学着用英语介绍家人。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：This is my …",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "这是我的……"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "This is my uncle."
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "This is my aunt."
+        },
+        {
+          "id": "t3",
+          "kind": "text",
+          "text": "This is my cousin."
+        }
+      ],
+      "script": [
+        {
+          "say": "介绍家人，先说“这是我的”，再说是谁。"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "这是我的叔叔。跟我读。"
+        },
+        {
+          "say": "This is my uncle.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t2"
+        },
+        {
+          "say": "这是我的阿姨。跟我读。"
+        },
+        {
+          "say": "This is my aunt.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t3"
+        },
+        {
+          "say": "这是我的表妹。跟我读。"
+        },
+        {
+          "say": "This is my cousin.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：He's / She's …",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "他怎么样？她怎么样？"
+        },
+        {
+          "id": "c1",
+          "kind": "cards",
+          "items": [
+            {
+              "id": "c1a",
+              "text": "He's = He is 他是",
+              "color": "blue"
+            },
+            {
+              "id": "c1b",
+              "text": "She's = She is 她是",
+              "color": "orange"
+            }
+          ]
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "This is my uncle. He's young."
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "This is my aunt. She's cute."
+        }
+      ],
+      "script": [
+        {
+          "laser": "c1a"
+        },
+        {
+          "say": "说男的，用这个词，意思是“他是”。跟我读。"
+        },
+        {
+          "say": "He's, He's",
+          "lang": "en"
+        },
+        {
+          "laser": "c1b"
+        },
+        {
+          "say": "说女的，用这个词，意思是“她是”。跟我读。"
+        },
+        {
+          "say": "She's, She's",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t1"
+        },
+        {
+          "say": "叔叔是男的，所以说他很年轻。"
+        },
+        {
+          "say": "This is my uncle. He's young.",
+          "lang": "en"
+        },
+        {
+          "spotlight": "t2"
+        },
+        {
+          "say": "阿姨是女的，所以说她很可爱。"
+        },
+        {
+          "say": "This is my aunt. She's cute.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "问答：Who's he? Who's she?",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "他是谁？她是谁？"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Who's he?",
+              "He's my uncle."
+            ],
+            [
+              "Who's she?",
+              "She's my aunt."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "想问“他是谁”，这样问。跟我读。"
+        },
+        {
+          "say": "Who's he?",
+          "lang": "en"
+        },
+        {
+          "say": "回答：他是我的叔叔。"
+        },
+        {
+          "say": "He's my uncle.",
+          "lang": "en"
+        },
+        {
+          "say": "问“她是谁”，把他换成她。"
+        },
+        {
+          "say": "Who's she?",
+          "lang": "en"
+        },
+        {
+          "say": "She's my aunt.",
+          "lang": "en"
+        },
+        {
+          "say": "问的是他，就用他回答；问的是她，就用她回答。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "At Uncle Bob's party"
+        },
+        {
+          "id": "g1",
+          "kind": "table",
+          "rows": [
+            [
+              "Kitty:",
+              "Who's he?"
+            ],
+            [
+              "Sam:",
+              "He's my uncle. He's young."
+            ],
+            [
+              "Kitty:",
+              "Who's she?"
+            ],
+            [
+              "Sam:",
+              "She's my grandma. She's old."
+            ],
+            [
+              "Kitty:",
+              "This is my cousin. She's cute."
+            ]
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "鲍勃叔叔的派对上，两个好朋友在聊天。我们一句一句跟着读。"
+        },
+        {
+          "spotlight": "g1"
+        },
+        {
+          "say": "Who's he?",
+          "lang": "en"
+        },
+        {
+          "say": "He's my uncle. He's young.",
+          "lang": "en"
+        },
+        {
+          "say": "Who's she?",
+          "lang": "en"
+        },
+        {
+          "say": "She's my grandma. She's old.",
+          "lang": "en"
+        },
+        {
+          "say": "最后，另一个小朋友也介绍了自己的表妹。"
+        },
+        {
+          "say": "This is my cousin. She's cute.",
+          "lang": "en"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小提示",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "说对、写对"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "男的用 He's",
+            "女的用 She's",
+            "He's 中间有一撇",
+            "句首字母要大写"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "第一，先看是男的还是女的：男的用“他是”，女的用“她是”。"
+        },
+        {
+          "say": "第二，“他是”“她是”是两个词缩在一起的，中间的一撇不能漏。"
+        },
+        {
+          "say": "第三，句子开头的第一个字母要大写。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "学法口诀"
+        },
+        {
+          "id": "l1",
+          "kind": "bullets",
+          "items": [
+            "介绍家人这是我",
+            "男的用他女用她",
+            "年老年轻和可爱",
+            "说说家人真快乐"
+          ]
+        }
+      ],
+      "script": [
+        {
+          "say": "我们来念学法口诀，老师念一句，你跟一句。"
+        },
+        {
+          "spotlight": "l1"
+        },
+        {
+          "say": "介绍家人这是我。"
+        },
+        {
+          "say": "男的用他女用她。"
+        },
+        {
+          "say": "年老年轻和可爱，说说家人真快乐。"
+        },
+        {
+          "say": "记住：先看男女，再选他还是她。"
+        }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "小结",
+      "blocks": [
+        {
+          "id": "h1",
+          "kind": "heading",
+          "text": "今天学会了"
+        },
+        {
+          "id": "t1",
+          "kind": "text",
+          "text": "This is my uncle. He's young."
+        },
+        {
+          "id": "t2",
+          "kind": "text",
+          "text": "Who's she?  She's my aunt."
+        }
+      ],
+      "script": [
+        {
+          "say": "一句话小结：介绍家人说“这是我的”，男的用他，女的用她。"
+        },
+        {
+          "say": "This is my uncle. He's young. Who's she? She's my aunt.",
+          "lang": "en"
+        },
+        {
+          "say": "回家对着全家福，给爸爸妈妈介绍一下家人吧！"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "下面我们做几道判断题，想一想说得对不对。",
+      "questions": [
+        {
+          "question": "介绍阿姨可以说：This is my aunt. He's young.",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            1
+          ],
+          "analysis": "阿姨是女的，要用 She's。"
+        },
+        {
+          "question": "Who's he? 的意思是“他是谁？”",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "Who's he? 就是“他是谁？”"
+        },
+        {
+          "question": "He's 是 He is 的缩写。",
+          "options": [
+            "对",
+            "错"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "He's = He is，中间有一撇。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "接下来是选择题，选出正确的答案。",
+      "questions": [
+        {
+          "question": "This is my uncle. （　） old.",
+          "options": [
+            "He's",
+            "She's",
+            "I'm"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "uncle 是男的，用 He's。"
+        },
+        {
+          "question": "“她是谁？”用英语怎么说？",
+          "options": [
+            "Who's she?",
+            "Who's he?",
+            "She's my aunt."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "问她是谁：Who's she?"
+        },
+        {
+          "question": "— Who's he?\n— （　）",
+          "options": [
+            "He's my cousin.",
+            "She's my aunt.",
+            "This is my aunt."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "问他是谁，用 He's my… 回答。"
+        }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后是填空和情景交际，选出最合适的一项。",
+      "questions": [
+        {
+          "question": "This is my aunt. She's （　）.（阿姨二十五岁）",
+          "options": [
+            "young",
+            "old",
+            "uncle"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "二十五岁很年轻：young。"
+        },
+        {
+          "question": "你向朋友介绍你的表妹，你说：（　）",
+          "options": [
+            "This is my cousin.",
+            "This is my uncle.",
+            "Who's she?"
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "介绍用 This is my…，表妹是 cousin。"
+        },
+        {
+          "question": "你想夸小表妹可爱，你说：（　）",
+          "options": [
+            "She's cute.",
+            "He's cute.",
+            "She's old."
+          ],
+          "answer": [
+            0
+          ],
+          "analysis": "表妹是女孩，用 She's，可爱是 cute。"
+        }
+      ]
+    }
+  ]
+}

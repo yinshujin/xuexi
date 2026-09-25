@@ -1,0 +1,241 @@
+{
+  "format": "xuexi-authored@1",
+  "lessonId": "en-g4a.u1.grammar.lecture",
+  "title": "Where do you live? 说说你住在哪里",
+  "scenes": [
+    {
+      "type": "slide",
+      "title": "情境导入：小记者采访",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "A student reporter" },
+        { "id": "t1", "kind": "text", "text": "小记者在深圳街头采访：你住在哪里？" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "Where do you live?", "color": "blue" },
+          { "id": "c1b", "text": "I live in a flat.", "color": "orange" }
+        ] }
+      ],
+      "script": [
+        { "say": "今天我们当一回小记者，到深圳的街头去采访。" },
+        { "spotlight": "t1" },
+        { "say": "小记者想知道大家住在哪里。他会这样问，跟我读。" },
+        { "laser": "c1a" },
+        { "say": "Where do you live?", "lang": "en" },
+        { "say": "意思是：你住在哪里？" },
+        { "laser": "c1b" },
+        { "say": "被采访的小朋友回答：我住在一套公寓里。跟我读。" },
+        { "say": "I live in a flat.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "复习单词和新词",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Words" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "live 居住", "color": "blue" },
+          { "id": "c1b", "text": "where 在哪里", "color": "orange" },
+          { "id": "c1c", "text": "home 家", "color": "green" },
+          { "id": "c1d", "text": "people 人们", "color": "purple" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "city · flat · house · farm · street · country" }
+      ],
+      "script": [
+        { "say": "先学四个问答要用的词。" },
+        { "laser": "c1a" },
+        { "say": "居住。跟我读。" },
+        { "say": "live, live", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "在哪里。跟我读。" },
+        { "say": "where, where", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "家。跟我读。" },
+        { "say": "home, home", "lang": "en" },
+        { "laser": "c1d" },
+        { "say": "人们。跟我读。" },
+        { "say": "people, people", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "再复习上节课的地方单词，一起读。" },
+        { "say": "city, flat, house, farm, street, country", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "句型：Where do you live?",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Where do you live?" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["问", "Where do you live?"],
+          ["答", "I live in a flat in Shenzhen."],
+          ["问", "Where do they live?"],
+          ["答", "They live on a farm in the country."]
+        ] },
+        { "id": "t1", "kind": "text", "text": "问句里的 do 是小帮手，不能漏！" }
+      ],
+      "script": [
+        { "say": "我们来看完整的问答。" },
+        { "spotlight": "g1" },
+        { "say": "问自己的朋友，跟我读。" },
+        { "say": "Where do you live?", "lang": "en" },
+        { "say": "回答：我住在深圳的一套公寓里。" },
+        { "say": "I live in a flat in Shenzhen.", "lang": "en" },
+        { "say": "问别的人，比如爷爷奶奶，要问他们住在哪里。" },
+        { "say": "Where do they live?", "lang": "en" },
+        { "say": "回答：他们住在乡村的一个农场上。" },
+        { "say": "They live on a farm in the country.", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "注意！问句里有一个小帮手，放在在哪里后面，千万不能漏掉。" },
+        { "say": "Where do you live? Where do you live?", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "介词：in 还是 on",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "in or on?" },
+        { "id": "c1", "kind": "cards", "items": [
+          { "id": "c1a", "text": "in the city / in a flat", "color": "blue" },
+          { "id": "c1b", "text": "in a house / in the country", "color": "green" },
+          { "id": "c1c", "text": "on a farm", "color": "orange" }
+        ] },
+        { "id": "t1", "kind": "text", "text": "I live in a farm. ✗　I live on a farm. ✓" }
+      ],
+      "script": [
+        { "say": "住在什么地方，前面要加一个小词。大多数地方都用表示“在里面”的那个词。" },
+        { "laser": "c1a" },
+        { "say": "in the city, in a flat", "lang": "en" },
+        { "laser": "c1b" },
+        { "say": "in a house, in the country", "lang": "en" },
+        { "laser": "c1c" },
+        { "say": "只有农场特别，住在农场上，要用表示“在上面”的那个词。跟我读。" },
+        { "say": "on a farm, on a farm", "lang": "en" },
+        { "spotlight": "t1" },
+        { "say": "所以第一句是错的，第二句才对。" },
+        { "say": "I live on a farm.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "替换练习",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "I live in ..." },
+        { "id": "g1", "kind": "table", "rows": [
+          ["I live in", "a flat / a house"],
+          ["We live in", "the city / the country"],
+          ["They live on", "a farm"]
+        ] }
+      ],
+      "script": [
+        { "say": "我们换一换词来说。先说我住在哪里。" },
+        { "spotlight": "g1" },
+        { "say": "I live in a flat. I live in a house.", "lang": "en" },
+        { "say": "再说我们住在哪里。" },
+        { "say": "We live in the city. We live in the country.", "lang": "en" },
+        { "say": "最后说他们住在农场上，别忘了用在上面的那个小词。" },
+        { "say": "They live on a farm.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "情景对话：小记者采访",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "Reporter's interview" },
+        { "id": "g1", "kind": "table", "rows": [
+          ["Reporter", "Hello! Where do you live?"],
+          ["Kate", "I live in a flat in Shenzhen."],
+          ["Reporter", "Where do your grandparents live?"],
+          ["Kate", "They live on a farm in the country."],
+          ["Reporter", "Thank you, Kate!"]
+        ] }
+      ],
+      "script": [
+        { "say": "小记者采访凯特。我们一句一句跟读。" },
+        { "spotlight": "g1" },
+        { "say": "小记者：你好！你住在哪里？" },
+        { "say": "Hello! Where do you live?", "lang": "en" },
+        { "say": "凯特：我住在深圳的一套公寓里。" },
+        { "say": "I live in a flat in Shenzhen.", "lang": "en" },
+        { "say": "小记者：你的爷爷奶奶住在哪里？" },
+        { "say": "Where do your grandparents live?", "lang": "en" },
+        { "say": "凯特：他们住在乡村的一个农场上。" },
+        { "say": "They live on a farm in the country.", "lang": "en" },
+        { "say": "小记者：谢谢你，凯特！" },
+        { "say": "Thank you, Kate!", "lang": "en" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "书写提示与介绍我的家",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "About my home" },
+        { "id": "l1", "kind": "bullets", "items": [
+          "My home is in Shenzhen.",
+          "I live in a flat.",
+          "It is on Green Street."
+        ] },
+        { "id": "t1", "kind": "text", "text": "句首大写，问句用问号，其他用句号。" }
+      ],
+      "script": [
+        { "say": "学会了问答，我们用三句话介绍自己的家。" },
+        { "spotlight": "l1" },
+        { "say": "My home is in Shenzhen. I live in a flat. It is on Green Street.", "lang": "en" },
+        { "say": "你可以把城市、公寓和街道换成自己家的。" },
+        { "spotlight": "t1" },
+        { "say": "写的时候注意：每句开头字母大写，问句末尾用问号，其他句子用句号。" }
+      ]
+    },
+    {
+      "type": "slide",
+      "title": "学法口诀与小结",
+      "blocks": [
+        { "id": "h1", "kind": "heading", "text": "学法口诀" },
+        { "id": "l1", "kind": "bullets", "items": [
+          "问住哪里别忘帮手",
+          "城里楼里房子里",
+          "乡村里面也一样",
+          "农场上面换个词"
+        ] },
+        { "id": "t1", "kind": "text", "text": "Where do you live? I live in / on ..." }
+      ],
+      "script": [
+        { "say": "我们用口诀记住今天的句型。跟我读。" },
+        { "spotlight": "l1" },
+        { "say": "问住哪里别忘帮手，城里楼里房子里。" },
+        { "say": "乡村里面也一样，农场上面换个词。" },
+        { "say": "第一句提醒问句里的小帮手不能漏；中间两句说城市、公寓、房子、乡村都用在里面；最后一句说农场要用在上面。" },
+        { "spotlight": "t1" },
+        { "say": "一句话小结：问住在哪里，就这样问答。" },
+        { "say": "Where do you live? I live in a flat.", "lang": "en" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "判断题",
+      "intro": "先判断对错。",
+      "questions": [
+        { "question": "Where you live? 是正确的问句。", "options": ["对", "错"], "answer": [1], "analysis": "问句里要有 do：Where do you live?" },
+        { "question": "“他们住在农场上”可以说 They live on a farm.", "options": ["对", "错"], "answer": [0], "analysis": "住在农场上用 on a farm。" },
+        { "question": "I live on a flat. 这句话是对的。", "options": ["对", "错"], "answer": [1], "analysis": "住在公寓里用 in：I live in a flat." }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "选择题",
+      "intro": "再来做选择题。",
+      "questions": [
+        { "question": "“你住在哪里？”用英语怎么说？", "options": ["Where are you?", "Where do you live?", "What do you like?"], "answer": [1], "analysis": "问住在哪里：Where do you live?" },
+        { "question": "They live （　） the country.", "options": ["in", "on", "at"], "answer": [0], "analysis": "住在乡村用 in the country。" },
+        { "question": "选出正确的句子。", "options": ["I lives in a house.", "I live in a house.", "I live a house."], "answer": [1], "analysis": "I 后面用 live，house 前面要有 in a。" }
+      ]
+    },
+    {
+      "type": "quiz",
+      "title": "填空与情景交际",
+      "intro": "最后做填空和情景交际。",
+      "questions": [
+        { "question": "Where （　） they live?", "options": ["do", "are", "is"], "answer": [0], "analysis": "句型是 Where do they live?" },
+        { "question": "— Where do you live?\n— （　）", "options": ["Yes, I do.", "I live in a flat in the city.", "I like the city."], "answer": [1], "analysis": "问住在哪里，就答 I live in …" },
+        { "question": "小记者想问你的爷爷奶奶住在哪里，他说（　）", "options": ["Where do your grandparents live?", "Where do you live?", "How are your grandparents?"], "answer": [0], "analysis": "问爷爷奶奶住在哪里：Where do your grandparents live?" }
+      ]
+    }
+  ]
+}

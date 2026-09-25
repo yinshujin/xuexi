@@ -78,6 +78,8 @@ export interface FamilySettings {
   eyeBreakMinutes: number;
   /** Accuracy over the recent window required for mastery (0..1). */
   masteryAccuracy: number;
+  /** Questions per 专项练习 / 加练 set (older family docs lack it: use PRACTICE_SIZE_DEFAULT). */
+  practiceSize?: number;
   /** SHA-256 hex of the parent PIN (salted with the family id). */
   parentPinHash?: string;
 }
@@ -94,7 +96,15 @@ export const DEFAULT_SETTINGS: FamilySettings = {
   dailyMinutes: 30,
   eyeBreakMinutes: 20,
   masteryAccuracy: 0.9,
+  practiceSize: 15,
 };
+
+export const PRACTICE_SIZE_DEFAULT = 15;
+
+export function practiceSizeOf(s: FamilySettings): number {
+  const n = s.practiceSize ?? PRACTICE_SIZE_DEFAULT;
+  return Math.min(30, Math.max(5, Math.round(n)));
+}
 
 // ---------------- Sync API contract ----------------
 

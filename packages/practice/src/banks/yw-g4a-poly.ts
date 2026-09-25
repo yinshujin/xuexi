@@ -628,6 +628,40 @@ export const YW_G4A_POLY: Polyphone[] = [
     sentences: [{ text: '他们把各自的马「分」成上、中、下三等。', pinyin: 'fēn' }],
   },
 
+  // ------------------------------------------------------------------ 古诗三首（第三单元）
+  {
+    kp: 'u3.ancient-poems',
+    level: 2,
+    char: '铺',
+    readings: [
+      { pinyin: 'pū', meaning: '把东西展开或摊平', words: ['铺开', '铺床', '平铺'] },
+      { pinyin: 'pù', meaning: '商店；床', words: ['店铺', '床铺', '铺子'] },
+    ],
+    sentences: [{ text: '一道残阳「铺」水中，半江瑟瑟半江红。', pinyin: 'pū' }],
+  },
+
+  // ------------------------------------------------------------------ 爬山虎的脚
+  {
+    kp: 'u3.ivy',
+    level: 2,
+    char: '角',
+    readings: [
+      { pinyin: 'jiǎo', meaning: '动物头上的角；物体的边角', words: ['触角', '牛角', '墙角', '三角形'] },
+      { pinyin: 'jué', meaning: '戏里的人物', words: ['角色', '主角', '配角'] },
+    ],
+    sentences: [{ text: '爬山虎的细丝像蜗牛的触「角」。', pinyin: 'jiǎo' }],
+  },
+  {
+    kp: 'u3.ivy',
+    level: 2,
+    char: '曲',
+    readings: [
+      { pinyin: 'qū', meaning: '弯，不直', words: ['弯曲', '曲折', '曲线'] },
+      { pinyin: 'qǔ', meaning: '歌曲、乐曲', words: ['歌曲', '乐曲', '曲子'] },
+    ],
+    sentences: [{ text: '细丝原来是直的，碰到墙后就弯「曲」了。', pinyin: 'qū' }],
+  },
+
   // ------------------------------------------------------------------ 四年级上册常练多音字
   {
     kp: 'u2.polyphones',

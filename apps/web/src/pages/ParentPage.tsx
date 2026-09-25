@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { BOOKS } from '@xuexi/curriculum';
 import type { CatalogEntry } from '@xuexi/course-pack';
 import { sha256Hex } from '@xuexi/course-pack';
-import type { ChildProfile, FamilySettings } from '@xuexi/shared';
+import { PRACTICE_SIZE_DEFAULT, type ChildProfile, type FamilySettings } from '@xuexi/shared';
 import { useApp } from '../lib/store';
 import { downloadPack, importBundle, isDownloaded, removePack, type ImportResult } from '../lib/packs';
 import { buildBackup, mergeChildren, parseBackup, restoreEvents } from '../lib/backup';
@@ -351,7 +351,7 @@ function OfflineTab() {
 
 function SettingsTab() {
   const { family, saveFamily, auth, sync, syncNow, logout } = useApp();
-  const [s, setS] = useState<FamilySettings>(family.settings);
+  const [s, setS] = useState<FamilySettings>({ practiceSize: PRACTICE_SIZE_DEFAULT, ...family.settings });
   const [saved, setSaved] = useState(false);
   const num = (k: keyof FamilySettings, label: string, min: number, max: number, step = 1, fmt = (v: number) => String(v)) => (
     <label className="mb-4 block">
@@ -378,6 +378,7 @@ function SettingsTab() {
         {num('dailyMinutes', '每日学习时长上限', 10, 90, 5, (v) => `${v} 分钟`)}
         {num('eyeBreakMinutes', '护眼提醒间隔', 10, 40, 5, (v) => `${v} 分钟`)}
         {num('masteryAccuracy', '掌握标准（最近 10 题正确率）', 0.7, 1, 0.05, (v) => `${Math.round(v * 100)}%`)}
+        {num('practiceSize', '专项练习 / 加练每组题数', 10, 30, 5, (v) => `${v} 题`)}
         <Btn
           onClick={async () => {
             await saveFamily({ settings: { ...s, parentPinHash: family.settings.parentPinHash } });

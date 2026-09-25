@@ -40,8 +40,8 @@ export function BookShelf({ child }: { child: ChildProfile }) {
     return n;
   }, [eventsOf, child.id]);
 
-  // Books chosen for this child's grade first (by topic), then the family's own
-  // books without a grade (by level), then the other grades' books.
+  // Books chosen for this child's grade first (by level, A → J), then the
+  // family's own books without a grade (by level), then the other grades' books.
   const sections = useMemo(() => {
     const byLevel = (a: BookEntry, b: BookEntry) =>
       a.level.localeCompare(b.level, 'en', { numeric: true }) || a.title.localeCompare(b.title);
@@ -54,7 +54,7 @@ export function BookShelf({ child }: { child: ChildProfile }) {
     return {
       mine: group(
         all.filter((b) => b.grade === child.grade),
-        (b) => b.topic ?? '其他',
+        (b) => `${b.level} 级`,
       ),
       family: group(
         all.filter((b) => !b.grade),
@@ -62,7 +62,7 @@ export function BookShelf({ child }: { child: ChildProfile }) {
       ),
       others: group(
         all.filter((b) => b.grade && b.grade !== child.grade),
-        (b) => `${b.grade} 年级 · ${b.topic ?? '其他'}`,
+        (b) => `${b.grade} 年级 · ${b.level} 级`,
       ),
     };
   }, [books, child.grade]);
@@ -88,6 +88,7 @@ export function BookShelf({ child }: { child: ChildProfile }) {
           <div className="flex flex-1 flex-col gap-1 p-3">
             <span className="line-clamp-2 text-lg font-bold leading-snug">{b.title}</span>
             <span className="text-sm text-slate-500">
+              {b.topic && <span className="mr-1 rounded-md bg-violet-50 px-1.5 text-violet-700">{b.topic}</span>}
               {b.pages} 页 · {b.words} 词
               {reads.get(b.id) ? (
                 <span className="ml-1 text-emerald-600">· 读过 {reads.get(b.id)} 次</span>
@@ -104,7 +105,9 @@ export function BookShelf({ child }: { child: ChildProfile }) {
 
   const section = ([name, list]: [string, BookEntry[]]) => (
     <section key={name}>
-      <h3 className="mb-3 text-xl font-bold text-slate-700">{name}</h3>
+      <h3 className="mb-3 text-xl font-bold text-slate-700">
+        {name} <span className="text-base font-normal text-slate-400">{list.length} 本</span>
+      </h3>
       {shelf(list)}
     </section>
   );

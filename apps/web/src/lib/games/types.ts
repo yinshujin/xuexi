@@ -47,8 +47,83 @@ export interface OrderGame extends GameBase {
   joiner: string;
 }
 
+/** 看图题: emoji pictures (groups of things for 数学, a word's picture for 英语 / 语文), choose one option. */
+export interface PictureGame extends GameBase {
+  kind: 'picture';
+  /** The question under the picture, e.g. 「一共有几个苹果？」. */
+  prompt: string;
+  /** The picture: emoji in groups, each group drawn in its own rounded box (a lone emoji is drawn big, without a box). */
+  groups: string[][];
+  /** Drawn between the boxes, e.g. '➡️' for 平均分给. */
+  between?: string;
+  /** The picture in words, for going over the paper (and screen readers). */
+  alt: string;
+  options: string[];
+  /** Index of the right option. */
+  answer: number;
+  /** 'emoji': the options are pictures (看单词选图). */
+  optionStyle?: 'emoji';
+}
+
+/** 排序: tap all tiles into order (no decoys). */
+export interface SortGame extends GameBase {
+  kind: 'sort';
+  prompt: string;
+  /** The tiles in the right order. */
+  answer: string[];
+  /** The tiles as shown (shuffled). */
+  tiles: string[];
+  /** Shown between the tiles in the answer text, e.g. ' < '. */
+  sep: string;
+  /** Why, per answer tile (e.g. the value or the first letter), for the answer text. */
+  notes?: string[];
+}
+
+/** 分类: put every card into its bucket. */
+export interface ClassifyGame extends GameBase {
+  kind: 'classify';
+  /** Bucket labels (2 or 3). */
+  buckets: string[];
+  /** The cards as shown, each with the index of its bucket. */
+  cards: Array<{ text: string; bucket: number }>;
+}
+
+/** A 对 / 错 statement. */
+export interface JudgeStatement {
+  text: string;
+  truth: boolean;
+  /** The right statement, when this one is wrong. */
+  fix?: string;
+  /** 语文: the word the statement is about. */
+  word?: string;
+}
+
+/** 判断: a few 对 / 错 statements, one after the other. */
+export interface JudgeGame extends GameBase {
+  kind: 'judge';
+  statements: JudgeStatement[];
+}
+
+/** ⚡限时挑战: as many 对 / 错 statements as possible in `seconds`. */
+export interface TimedGame extends GameBase {
+  kind: 'timed';
+  seconds: number;
+  /** Enough statements for a fast child (precomputed, in order). */
+  statements: JudgeStatement[];
+  /** earned = weight with at least full.right right and at most full.wrong wrong; 1 with pass; else 0. */
+  full: { right: number; wrong: number };
+  pass: { right: number; wrong: number };
+}
+
 /** Every game kind. New kinds add their interface here. */
-export type Game = MatchGame | OrderGame;
+export type Game =
+  | MatchGame
+  | OrderGame
+  | PictureGame
+  | SortGame
+  | ClassifyGame
+  | JudgeGame
+  | TimedGame;
 
 export interface UnitGame {
   kpId: string;

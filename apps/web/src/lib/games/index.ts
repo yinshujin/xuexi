@@ -8,21 +8,41 @@ import type { Book, Unit } from '@xuexi/curriculum';
 import { createRng, seedFrom } from '@xuexi/practice';
 import { matchBuilder, matchInfo } from './match';
 import { orderBuilder, orderInfo } from './order';
+import { pictureBuilder, pictureInfo } from './picture';
+import { sortBuilder, sortInfo } from './sort';
+import { classifyBuilder, classifyInfo } from './classify';
+import { judgeBuilder, judgeInfo, timedBuilder, timedInfo } from './judge';
 import type { Game, GameBuilder, GameContext, GameInfo, UnitGame } from './types';
 import { variantOf } from './util';
 
 export type * from './types';
 export { MATCH_SLIPS } from './match';
 export { orderCorrect } from './order';
+export { sortCorrect } from './sort';
+export { CLASSIFY_SLIPS, classifySlips } from './classify';
+export { JUDGE_SLIPS, timedEarned, timedRule } from './judge';
 export { gameAvailable, loadGameEnv, type GameEnv } from './env';
 
 /** Every game kind's builder (order matters only as the start of the rotation). */
-export const BUILDERS: GameBuilder[] = [matchBuilder, orderBuilder];
+export const BUILDERS: GameBuilder[] = [
+  matchBuilder,
+  orderBuilder,
+  pictureBuilder,
+  sortBuilder,
+  classifyBuilder,
+  judgeBuilder,
+  timedBuilder,
+];
 
 /** Every game kind's text description, by kind. */
 const INFO: Record<string, GameInfo> = {
   match: matchInfo as GameInfo,
   order: orderInfo as GameInfo,
+  picture: pictureInfo as GameInfo,
+  sort: sortInfo as GameInfo,
+  classify: classifyInfo as GameInfo,
+  judge: judgeInfo as GameInfo,
+  timed: timedInfo as GameInfo,
 };
 
 /** Game questions per paper. */

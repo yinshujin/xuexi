@@ -1,9 +1,38 @@
 import type { Unit } from '@xuexi/curriculum';
-import { EN_G2A, EN_G4A, seedFrom, YW_G2A_WORDS, YW_G4A_WORDS, type DictWord, type EnglishBank, type Rng } from '@xuexi/practice';
+import {
+  EN_G2A,
+  EN_G4A,
+  seedFrom,
+  XZ_G2A_GAMES,
+  YW_G2A_WORDS,
+  YW_G4A_WORDS,
+  type DictWord,
+  type EnglishBank,
+  type Rng,
+  type WritingGames,
+} from '@xuexi/practice';
 import { coreSpecs, makeQuestion } from '../learning';
 
 export const EN_BANKS: Record<string, EnglishBank> = { 'en-g2a': EN_G2A, 'en-g4a': EN_G4A };
 export const DICTATION: Record<string, Record<string, DictWord[]>> = { 'yw-g2a': YW_G2A_WORDS, 'yw-g4a': YW_G4A_WORDS };
+/** 写作 books: 拼一拼 sentences, 连连看 pairs and 排序 passages (see WritingGames). */
+export const XZ_GAMES: Record<string, WritingGames> = { 'xz-g2a': XZ_G2A_GAMES };
+
+/**
+ * 写作: the game material of a unit (knowledge points the papers cover), one
+ * entry per paper in turn so papers A, B and C differ when the unit has several.
+ */
+export function writingPick<T extends { kp: string }>(
+  list: T[] | undefined,
+  kpOf: (variant: string) => Unit['knowledgePoints'][number] | undefined,
+  paper: number,
+): { item: T; kp: Unit['knowledgePoints'][number] } | null {
+  const mine = (list ?? []).flatMap((item) => {
+    const kp = kpOf(item.kp);
+    return kp && coreSpecs(kp).length > 0 ? [{ item, kp }] : [];
+  });
+  return mine.length ? mine[paper % mine.length] : null;
+}
 
 /** "yw-g2a.u1.tadpole" → "u1.tadpole" (the variant / bank key). */
 export const variantOf = (kpId: string) => kpId.split('.').slice(1).join('.');

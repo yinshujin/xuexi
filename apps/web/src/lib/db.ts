@@ -30,10 +30,36 @@ export interface RecordingRow {
   passed?: boolean;
 }
 
+/**
+ * A handed-in 写作 piece (this device only, like the recordings): what the child
+ * typed or a photo of the page written on paper, and the parent's review.
+ */
+export interface WritingRow {
+  id: string;
+  childId: string;
+  kpId: string;
+  /** WritingTask id, e.g. "xz-g2a.u1.task". */
+  taskId: string;
+  /** Handed in at (epoch ms). */
+  at: number;
+  text?: string;
+  /** JPEG, downscaled to about 1600 px on the long side. */
+  photo?: Blob;
+  /** What the child wrote in the outline boxes (empty strings when skipped). */
+  outline?: string[];
+  /** 家长点评: ⭐1–3 and a short comment. */
+  stars?: 1 | 2 | 3;
+  comment?: string;
+  reviewedAt?: number;
+  /** The child has seen the review (for a 「新点评」 badge). */
+  seenAt?: number;
+}
+
 class XuexiDb extends Dexie {
   events!: Table<StoredEvent, string>;
   kv!: Table<KvRow, string>;
   recordings!: Table<RecordingRow, string>;
+  writings!: Table<WritingRow, string>;
 
   constructor() {
     super('xuexi');
@@ -43,6 +69,9 @@ class XuexiDb extends Dexie {
     });
     this.version(2).stores({
       recordings: 'id, childId, bookId, [childId+bookId], at',
+    });
+    this.version(3).stores({
+      writings: 'id, childId, taskId, [childId+taskId], at',
     });
   }
 }

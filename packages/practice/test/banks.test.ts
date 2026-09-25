@@ -8,6 +8,7 @@ import { MATH_G4A } from '../src/banks/math-g4a';
 import { YW_G2A } from '../src/banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../src/banks/yw-g4a';
 import { YW_G4A_POLY } from '../src/banks/yw-g4a-poly';
+import { XZ_G2A, XZ_G2A_GAMES } from '../src/banks/xz-g2a';
 
 /**
  * Data rules for the 语文 / 英语 item banks. The generators assume these hold
@@ -154,5 +155,64 @@ describe('数学概念题 banks', () => {
     checkItems('math-g4a', 'g4.concepts', MATH_G4A.items, false);
     expect(MATH_G4A.polyphones).toEqual([]);
     checkCounts(MATH_G4A.items);
+  });
+});
+
+describe('写作 banks', () => {
+  it('xz-g2a: data rules', () => {
+    checkItems('xz-g2a', 'xz2.skills', XZ_G2A.items, false);
+    expect(XZ_G2A.polyphones).toEqual([]);
+  });
+
+  it('xz-g2a: every knowledge point has ≥ 20 routine items (≥ 6 per level), ≥ 4 拔高 and ≥ 4 创新', () => {
+    // Unit papers take about 20 routine questions per knowledge point over papers A–C, mostly levels 2–3.
+    const kps = [...new Set(XZ_G2A.items.map((it) => it.kp))];
+    expect(kps.length).toBe(16);
+    for (const kp of kps) {
+      const of = XZ_G2A.items.filter((it) => it.kp === kp);
+      const routine = of.filter((it) => !it.tier);
+      expect(routine.length, `${kp}: routine items`).toBeGreaterThanOrEqual(20);
+      for (const level of [1, 2, 3]) expect(routine.filter((it) => it.level === level).length, `${kp}: level ${level}`).toBeGreaterThanOrEqual(6);
+      for (const tier of ['stretch', 'creative'])
+        expect(of.filter((it) => it.tier === tier).length, `${kp}: ${tier} items`).toBeGreaterThanOrEqual(4);
+    }
+  });
+
+  it('xz-g2a: every item kind has its own hint', async () => {
+    const { generateQuestion } = await import('../src/registry');
+    const generic = '读一读题目，想一想课文里学过的内容。';
+    for (const kp of [...new Set(XZ_G2A.items.map((it) => it.kp))]) {
+      for (let seed = 0; seed < 60; seed++) {
+        const q = generateQuestion('xz2.skills', { difficulty: 1 + (seed % 5), seed, variant: kp });
+        expect(q.hint, q.prompt).not.toBe(generic);
+      }
+    }
+  });
+
+  it('xz-g2a: game material is well formed', () => {
+    const kps = new Set(XZ_G2A.items.map((it) => it.kp));
+    for (const b of XZ_G2A_GAMES.build) {
+      expect(kps.has(b.kp), b.kp).toBe(true);
+      expect(b.chunks.length, b.chunks.join('')).toBeGreaterThanOrEqual(3);
+      expect(new Set(b.chunks).size, b.chunks.join('')).toBe(b.chunks.length);
+      for (const d of b.decoys ?? []) expect(b.chunks, b.chunks.join('')).not.toContain(d);
+    }
+    for (const m of XZ_G2A_GAMES.match) {
+      expect(kps.has(m.kp), m.kp).toBe(true);
+      expect(m.pairs.length).toBeGreaterThanOrEqual(4);
+      expect(m.pairs.length).toBeLessThanOrEqual(5);
+      expect(new Set(m.pairs.map((p) => p[0])).size, m.title).toBe(m.pairs.length);
+      expect(new Set(m.pairs.map((p) => p[1])).size, m.title).toBe(m.pairs.length);
+    }
+    for (const s of XZ_G2A_GAMES.sort) {
+      expect(kps.has(s.kp), s.kp).toBe(true);
+      expect(s.sentences.length, s.prompt).toBe(4);
+      expect(new Set(s.sentences).size, s.prompt).toBe(4);
+    }
+    // Every unit has material for 连连看 and 拼一拼.
+    for (let u = 1; u <= 8; u++) {
+      expect(XZ_G2A_GAMES.build.some((b) => b.kp.startsWith(`u${u}.`)), `u${u} build`).toBe(true);
+      expect(XZ_G2A_GAMES.match.some((b) => b.kp.startsWith(`u${u}.`)), `u${u} match`).toBe(true);
+    }
   });
 });

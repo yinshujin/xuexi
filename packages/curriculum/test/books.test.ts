@@ -127,14 +127,14 @@ describe('ids', () => {
 
 describe('books', () => {
   it('has the expected books', () => {
-    expect(BOOKS.map((b) => b.id)).toEqual(['bsd-g2a', 'bsd-g4a', 'yw-g2a', 'yw-g4a', 'en-g2a', 'en-g4a']);
-    expect(BOOKS.map((b) => b.subject)).toEqual(['math', 'math', 'chinese', 'chinese', 'english', 'english']);
+    expect(BOOKS.map((b) => b.id)).toEqual(['bsd-g2a', 'bsd-g4a', 'yw-g2a', 'yw-g4a', 'en-g2a', 'en-g4a', 'xz-g2a']);
+    expect(BOOKS.map((b) => b.subject)).toEqual(['math', 'math', 'chinese', 'chinese', 'english', 'english', 'writing']);
     expect(getBook('bsd-g2a')?.grade).toBe(2);
     expect(getBook('bsd-g4a')?.grade).toBe(4);
     expect(getBook('nope')).toBeUndefined();
     for (const b of BOOKS) {
       if (b.subject === 'math') expect(b.edition).toBe('北师大版');
-      if (b.subject === 'chinese') expect(b.edition).toBe('统编版');
+      if (b.subject === 'chinese' || b.subject === 'writing') expect(b.edition).toBe('统编版');
       expect(b.sourceNote.length).toBeGreaterThan(50);
       expect(b.units.length).toBeGreaterThan(0);
       for (const u of b.units) expect(u.knowledgePoints.length, u.id).toBeGreaterThan(0);
@@ -154,15 +154,22 @@ describe('knowledge points', () => {
     }
   });
 
-  it('have exactly one lecture (8–12 min) and 0–3 techniques (3–5 min)', () => {
-    for (const { kp } of kps) {
+  it('have exactly one lecture (8–12 min) and 0–3 techniques (3–5 min); a 写作 练笔 point has a technique instead', () => {
+    for (const { book, kp } of kps) {
       const lectures = kp.lessons.filter((l) => l.kind === 'lecture');
       const techs = kp.lessons.filter((l) => l.kind === 'technique');
-      expect(lectures.length, kp.id).toBe(1);
       expect(techs.length, kp.id).toBeLessThanOrEqual(3);
-      expect(lectures[0].minutes, kp.id).toBeGreaterThanOrEqual(8);
-      expect(lectures[0].minutes, kp.id).toBeLessThanOrEqual(12);
-      expect(lectures[0].remedies, kp.id).toBeUndefined();
+      if (lectures.length === 0) {
+        // 练笔: the method is taught in the unit's 方法 lecture; this point has a writing task and a technique lesson.
+        expect(book.subject, kp.id).toBe('writing');
+        expect(kp.writing, kp.id).toBeDefined();
+        expect(techs.length, kp.id).toBeGreaterThan(0);
+      } else {
+        expect(lectures.length, kp.id).toBe(1);
+        expect(lectures[0].minutes, kp.id).toBeGreaterThanOrEqual(8);
+        expect(lectures[0].minutes, kp.id).toBeLessThanOrEqual(12);
+        expect(lectures[0].remedies, kp.id).toBeUndefined();
+      }
       for (const t of techs) {
         expect(t.minutes, t.id).toBeGreaterThanOrEqual(3);
         expect(t.minutes, t.id).toBeLessThanOrEqual(5);
@@ -231,6 +238,7 @@ describe('语文 / 英语 practice banks', () => {
     'en4.words': 'en-g4a',
     'g2.concepts': 'bsd-g2a',
     'g4.concepts': 'bsd-g4a',
+    'xz2.skills': 'xz-g2a',
   };
   it('every bank knowledge point exists in its book and every book knowledge point has practice', () => {
     for (const [gid, bookId] of Object.entries(BANK_BOOK)) {
@@ -262,6 +270,67 @@ describe('语文 / 英语 practice banks', () => {
         expect(linked, kp.id).toEqual([v, `${v}#stretch`, `${v}#creative`]);
       }
     }
+  });
+});
+
+describe('写作', () => {
+  const writingBooks = BOOKS.filter((b) => b.subject === 'writing');
+
+  it('xz-g2a: 8 units, each a 方法 point (lecture) and a 练笔 point (technique + writing task), both practised in xz2.skills', () => {
+    const book = getBook('xz-g2a')!;
+    expect(book.grade).toBe(2);
+    expect(book.title).toContain('写话');
+    expect(book.units.length).toBe(8);
+    for (const u of book.units) {
+      expect(u.knowledgePoints.length, u.id).toBe(2);
+      const [method, practice] = u.knowledgePoints;
+      expect(method.lessons.map((l) => l.kind), method.id).toEqual(['lecture']);
+      expect(method.writing, method.id).toBeUndefined();
+      expect(practice.id, u.id).toBe(`${method.id}-write`);
+      expect(practice.lessons.map((l) => l.kind), practice.id).toEqual(['technique']);
+      expect(practice.writing, practice.id).toBeDefined();
+      expect(practice.prerequisites, practice.id).toEqual([method.id]);
+      for (const kp of u.knowledgePoints) {
+        const v = kp.id.slice(book.id.length + 1);
+        expect(kp.practice.map((p) => [p.generatorId, p.variant, p.tier]), kp.id).toEqual([
+          ['xz2.skills', v, undefined],
+          ['xz2.skills', `${v}#stretch`, 'stretch'],
+          ['xz2.skills', `${v}#creative`, 'creative'],
+        ]);
+      }
+    }
+  });
+
+  it('writing tasks are complete: prompt, 3–5 tips, outline, checklist, 30–80 characters, an example that is long enough', () => {
+    const ids = new Set<string>();
+    for (const book of writingBooks) {
+      for (const u of book.units) {
+        for (const kp of u.knowledgePoints) {
+          const w = kp.writing;
+          if (!w) continue;
+          expect(w.id, kp.id).toBe(`${u.id}.task`);
+          expect(ids.has(w.id), w.id).toBe(false);
+          ids.add(w.id);
+          expect(w.title.length, w.id).toBeGreaterThan(1);
+          expect(w.prompt.length, w.id).toBeGreaterThan(20);
+          expect(w.tips.length, w.id).toBeGreaterThanOrEqual(3);
+          expect(w.tips.length, w.id).toBeLessThanOrEqual(5);
+          expect(w.outline.length, w.id).toBeGreaterThanOrEqual(2);
+          for (const o of w.outline) expect(o.label.length && o.hint.length, w.id).toBeTruthy();
+          expect(w.checklist.length, w.id).toBeGreaterThanOrEqual(3);
+          if (book.grade === 2) {
+            expect(w.minChars, w.id).toBeGreaterThanOrEqual(30);
+            expect(w.minChars, w.id).toBeLessThanOrEqual(80);
+          }
+          if (w.maxChars !== undefined) expect(w.maxChars, w.id).toBeGreaterThan(w.minChars);
+          // The model text meets its own length requirement (whitespace does not count).
+          const chars = [...(w.example ?? '')].filter((ch) => !/\s/.test(ch)).length;
+          expect(chars, w.id).toBeGreaterThanOrEqual(w.minChars);
+          if (w.maxChars !== undefined) expect(chars, w.id).toBeLessThanOrEqual(w.maxChars);
+        }
+      }
+    }
+    expect(ids.size).toBeGreaterThanOrEqual(8);
   });
 });
 

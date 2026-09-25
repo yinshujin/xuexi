@@ -80,3 +80,18 @@ export interface DictWord {
 
 /** 听写词语 of a book, by knowledge point id without the book prefix ("u3.rainbow"). */
 export type DictationList = Record<string, DictWord[]>;
+
+/**
+ * 写作: material for the 单元闯关 games of a writing book, by knowledge point id
+ * without the book prefix. Every entry has exactly one right answer: the chunks
+ * of a sentence have one natural order, the pairs match one to one, and the
+ * sentences of a passage carry their own order (顺序词, 时间, 故事的先后).
+ */
+export interface WritingGames {
+  /** 拼一拼: a sentence split into chunks, in the right order; `decoys` are chunks that clearly do not fit (e.g. a wrong end mark). */
+  build: Array<{ kp: string; prompt: string; chunks: string[]; decoys?: string[] }>;
+  /** 连连看: 4–5 pairs, all left sides and all right sides different. */
+  match: Array<{ kp: string; title: string; pairs: Array<[string, string]> }>;
+  /** 排序: four sentences of a short passage, in the right order. */
+  sort: Array<{ kp: string; prompt: string; sentences: string[] }>;
+}

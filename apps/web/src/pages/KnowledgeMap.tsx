@@ -91,6 +91,7 @@ export function KnowledgeMap({ child }: { child: ChildProfile }) {
                     <span className="text-sm text-slate-500">
                       {hasLesson ? (lecture && watched.has(lecture.id) ? '✓ 已看讲解' : '📺 有讲解课') : ''}
                       {kp.practice.length > 0 && p ? ` · 练了 ${p.attempts} 题` : ''}
+                      {kp.writing ? ' · ✏️ 写作任务' : ''}
                     </span>
                   </span>
                   {p?.reviewDue && <span title="需要复习">🔁</span>}

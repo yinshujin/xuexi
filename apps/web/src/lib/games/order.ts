@@ -1,7 +1,7 @@
-/** 拼一拼: tap tiles in order — 英语 build the sentence for a situation, 语文 看拼音拼词语. */
+/** 拼一拼: tap tiles in order — 英语 build the sentence for a situation, 语文 看拼音拼词语, 写作 字块拼成一句话. */
 import { displayPinyin } from '@xuexi/practice';
 import type { GameBuilder, GameInfo, OrderGame, UnitGame } from './types';
-import { EN_BANKS, mixed, unitWords } from './util';
+import { EN_BANKS, mixed, unitWords, writingPick, XZ_GAMES } from './util';
 
 export function orderCorrect(g: OrderGame, picked: string[]): boolean {
   return picked.join(g.joiner) === g.answer.join(g.joiner);
@@ -9,7 +9,26 @@ export function orderCorrect(g: OrderGame, picked: string[]): boolean {
 
 export const orderBuilder: GameBuilder = {
   id: 'order',
-  build({ book, unit, rng, kpOf }): UnitGame[] {
+  build({ book, unit, paper, rng, kpOf }): UnitGame[] {
+    if (book.subject === 'writing') {
+      const got = writingPick(XZ_GAMES[book.id]?.build, kpOf, paper);
+      if (!got) return [];
+      const answer = got.item.chunks;
+      return [
+        {
+          kpId: got.kp.id,
+          kpTitle: got.kp.title,
+          game: {
+            kind: 'order',
+            title: '拼一拼：把字块排成一句话',
+            prompt: got.item.prompt,
+            answer,
+            tiles: mixed(rng, [...answer, ...(got.item.decoys ?? [])], (t) => t.join('') === answer.join('')),
+            joiner: '',
+          },
+        },
+      ];
+    }
     if (book.subject === 'english') {
       const bank = EN_BANKS[book.id];
       // A situation from the unit's items, answered by building the sentence.

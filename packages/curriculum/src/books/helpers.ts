@@ -1,5 +1,5 @@
 import type { ErrorTag } from '@xuexi/shared';
-import type { KnowledgePoint, LessonSpec, PracticeSpec, Unit } from '../types';
+import type { KnowledgePoint, LessonSpec, PracticeSpec, Unit, WritingTask } from '../types';
 
 /** Authoring shape for a knowledge point; ids of the KP and its lessons are derived. */
 export interface KpInput {
@@ -11,7 +11,8 @@ export interface KpInput {
   /** Full knowledge point ids. */
   prerequisites?: string[];
   localContexts?: string[];
-  lecture: { title: string; minutes: number; focus: string };
+  /** Every knowledge point has one, except a 写作 练笔 point (it has `writing` and a technique lesson instead). */
+  lecture?: { title: string; minutes: number; focus: string };
   techniques?: Array<{
     slug: string;
     title: string;
@@ -21,18 +22,24 @@ export interface KpInput {
     remedies?: ErrorTag[];
   }>;
   practice: PracticeSpec[];
+  /** 写作: the writing task of this knowledge point. */
+  writing?: WritingTask;
 }
 
 export function kp(unitId: string, input: KpInput): KnowledgePoint {
   const id = `${unitId}.${input.slug}`;
   const lessons: LessonSpec[] = [
-    {
-      id: `${id}.lecture`,
-      kind: 'lecture',
-      title: input.lecture.title,
-      minutes: input.lecture.minutes,
-      focus: input.lecture.focus,
-    },
+    ...(input.lecture
+      ? [
+          {
+            id: `${id}.lecture`,
+            kind: 'lecture',
+            title: input.lecture.title,
+            minutes: input.lecture.minutes,
+            focus: input.lecture.focus,
+          } satisfies LessonSpec,
+        ]
+      : []),
     ...(input.techniques ?? []).map((t): LessonSpec => ({
       id: `${id}.tech-${t.slug}`,
       kind: 'technique',
@@ -53,6 +60,7 @@ export function kp(unitId: string, input: KpInput): KnowledgePoint {
   };
   if (input.localContexts && input.localContexts.length > 0)
     out.localContexts = input.localContexts;
+  if (input.writing) out.writing = input.writing;
   return out;
 }
 

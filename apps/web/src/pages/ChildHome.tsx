@@ -9,6 +9,8 @@ import { kvGet } from '../lib/db';
 import { loadPron } from '../lib/pron';
 import { dailyDoneKey } from './PracticePage';
 import { Card, Page } from '../components/ui';
+import { useWritingStatus } from './WritingPage';
+import { childWritingTasks } from '../lib/writing';
 
 function streakDays(days: Set<string>, now: number): number {
   let n = 0;
@@ -22,6 +24,8 @@ export function ChildHome({ child }: { child: ChildProfile }) {
   const [bookCount, setBookCount] = useState<number | null>(null);
   const [dailyDone, setDailyDone] = useState(false);
   const [pronCount, setPronCount] = useState(0);
+  const writing = useWritingStatus(child);
+  const writingTasks = useMemo(() => childWritingTasks(child), [child]);
   useEffect(() => {
     loadPron(child.id).then((l) => setPronCount(l.length), () => setPronCount(0));
     listBooks().then((b) => setBookCount(b.length), () => setBookCount(0));
@@ -134,6 +138,28 @@ export function ChildHome({ child }: { child: ChildProfile }) {
           <span className="rounded-full bg-white/25 px-5 py-3 text-xl font-bold">闯关 →</span>
         </Card>
       </a>
+      {writingTasks.length > 0 && (
+        <a href={href(`/c/${child.id}/writing`)}>
+          <Card className="mt-4 flex items-center gap-4 bg-gradient-to-r from-amber-400 to-lime-400 text-white ring-0">
+            <span className="text-5xl">✏️</span>
+            <div className="min-w-0 flex-1">
+              <div className="text-2xl font-bold">
+                写作
+                {writing.unseen > 0 && <span className="ml-2 rounded-full bg-rose-500 px-2 py-0.5 align-middle text-sm">{writing.unseen} 条新点评</span>}
+              </div>
+              <div className="text-lg opacity-90">
+                {(() => {
+                  const statuses = writingTasks.map((t) => writing.statusOf(t.task.id));
+                  const done = statuses.filter((s) => s === 'handed-in' || s === 'reviewed').length;
+                  const next = writingTasks.find((t) => writing.statusOf(t.task.id) !== 'handed-in' && writing.statusOf(t.task.id) !== 'reviewed');
+                  return `${writingTasks.length} 个写作任务，交了 ${done} 个${next ? ` · 下一个：${next.task.title}` : ' · 全部完成！'}`;
+                })()}
+              </div>
+            </div>
+            <span className="rounded-full bg-white/25 px-5 py-3 text-xl font-bold">去写 →</span>
+          </Card>
+        </a>
+      )}
       <a href={href(`/c/${child.id}/books`)}>
         <Card className="mt-4 flex items-center gap-4 bg-gradient-to-r from-violet-500 to-fuchsia-400 text-white ring-0">
           <span className="text-5xl">📚</span>

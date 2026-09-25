@@ -16,6 +16,7 @@ import { BookReader } from './pages/BookReader';
 import { PronPage } from './pages/PronPage';
 import { ExamMap, ExamPage } from './pages/ExamPage';
 import { ParentPage } from './pages/ParentPage';
+import { WritingHome, WritingTaskPage } from './pages/WritingPage';
 import { EyeBreak } from './components/EyeBreak';
 import { UpdateBanner } from './components/UpdateBanner';
 
@@ -63,6 +64,14 @@ function ChildRoutes({ childId, parts, query }: { childId: string; parts: string
       break;
     case 'books':
       page = <BookShelf child={profile} />;
+      break;
+    case 'writing':
+      // "#/c/<child>/writing" lists the tasks and 我的作品; "#/c/<child>/writing/<kpId>" is one task.
+      page = arg ? (
+        <WritingTaskPage key={arg} child={profile} kpId={arg} back={query.get('back') ?? `/c/${childId}/writing`} />
+      ) : (
+        <WritingHome child={profile} />
+      );
       break;
     case 'book':
       return <BookReader childId={childId} bookId={arg} back={query.get('back') ?? `/c/${childId}/books`} />;

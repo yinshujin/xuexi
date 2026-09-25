@@ -12,6 +12,7 @@ import { Btn, Card, Empty, Page } from '../components/ui';
 import { NumberPad } from '../practice/NumberPad';
 import { ReportView } from './ReportView';
 import { ParentBooks } from './ParentBooks';
+import { ParentWritings } from './ParentWritings';
 import { ScoringCard } from './ScoringCard';
 
 const AVATARS = ['🐼', '🦊', '🐯', '🐰', '🐬', '🦄', '🐧', '🐻', '🐱', '🐶', '🚀', '⚽'];
@@ -541,6 +542,7 @@ function HanziLicence() {
 
 const TABS = [
   { id: 'report', label: '学习报告' },
+  { id: 'writing', label: '作文' },
   { id: 'children', label: '孩子' },
   { id: 'offline', label: '离线课程' },
   { id: 'books', label: '绘本' },
@@ -564,6 +566,7 @@ export function ParentPage({ tab }: { tab?: string }) {
       {current === 'children' && <ChildrenTab />}
       {current === 'offline' && <OfflineTab />}
       {current === 'books' && <ParentBooks />}
+      {current === 'writing' && <ParentWritings />}
       {current === 'settings' && <SettingsTab />}
     </Page>
   );

@@ -8,21 +8,29 @@ import type { Book, Unit } from '@xuexi/curriculum';
 import { createRng, seedFrom } from '@xuexi/practice';
 import { matchBuilder, matchInfo } from './match';
 import { orderBuilder, orderInfo } from './order';
+import { readingBuilder, readingInfo } from './reading';
 import type { Game, GameBuilder, GameContext, GameInfo, UnitGame } from './types';
 import { variantOf } from './util';
 
 export type * from './types';
 export { MATCH_SLIPS } from './match';
 export { orderCorrect } from './order';
+export { circled, readingAnswerText, readingGivenText, readingLabel, readingRight, readingScore, type ReadingAnswer } from './reading';
+export { isNumberQuestion, READING, type ReadingPassage, type ReadingQuestion } from './reading-data';
 export { gameAvailable, loadGameEnv, type GameEnv } from './env';
 
 /** Every game kind's builder (order matters only as the start of the rotation). */
-export const BUILDERS: GameBuilder[] = [matchBuilder, orderBuilder];
+export const BUILDERS: GameBuilder[] = [
+  matchBuilder,
+  orderBuilder,
+  readingBuilder,
+];
 
 /** Every game kind's text description, by kind. */
 const INFO: Record<string, GameInfo> = {
   match: matchInfo as GameInfo,
   order: orderInfo as GameInfo,
+  reading: readingInfo as GameInfo,
 };
 
 /** Game questions per paper. */

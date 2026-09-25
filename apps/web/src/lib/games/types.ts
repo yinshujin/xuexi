@@ -6,6 +6,7 @@
  */
 import type { Book, KnowledgePoint, Unit } from '@xuexi/curriculum';
 import type { Rng } from '@xuexi/practice';
+import type { ReadingQuestion } from './reading-data/types';
 
 /** What a game needs from the device; games whose needs are not met are left out of the run. */
 export type GameRequirement =
@@ -47,8 +48,21 @@ export interface OrderGame extends GameBase {
   joiner: string;
 }
 
+export interface ReadingGame extends GameBase {
+  kind: 'reading';
+  /** 'read' = 阅读理解 / 情境题组, 'cloze' = 完形填空 (blanks in the text as {1}, {2}, …). */
+  mode: 'read' | 'cloze';
+  passageTitle: string;
+  /** Paragraphs separated by \n. */
+  text: string;
+  /** Choice options already shuffled for this paper. weight = questions.length. */
+  questions: ReadingQuestion[];
+  /** 二年级: larger type. */
+  large: boolean;
+}
+
 /** Every game kind. New kinds add their interface here. */
-export type Game = MatchGame | OrderGame;
+export type Game = MatchGame | OrderGame | ReadingGame;
 
 export interface UnitGame {
   kpId: string;

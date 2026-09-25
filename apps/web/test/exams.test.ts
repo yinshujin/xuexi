@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { BOOKS } from '@xuexi/curriculum';
 import { gradeQuestion, makeQuestion } from '../src/lib/learning';
-import { examHistory, examUnits, findPaper, PAPER_SIZE, questionIdentity, scoreExam, unitPapers } from '../src/lib/exams';
+import { examHistory, examUnits, findPaper, itemWeight, PAPER_SIZE, questionIdentity, scoreExam, unitPapers } from '../src/lib/exams';
 import type { Answer, Question, Response } from '@xuexi/practice';
 import { orderCorrect } from '../src/lib/games';
 
@@ -84,9 +84,13 @@ describe('单元测试 papers', () => {
     const p = unitPapers(units[0].id)[0];
     const answers = p.items.map((_, i) => ({ correct: i % 2 === 0, response: null }));
     const r = scoreExam(p, answers);
-    expect(r.total).toBe(p.items.length);
-    expect(r.score).toBe(Math.round((100 * Math.ceil(p.items.length / 2)) / p.items.length));
-    expect(r.byKp.reduce((t, k) => t + k.total, 0)).toBe(p.items.length);
+    // Points by weight (a 限时挑战 is worth 2).
+    const weights = p.items.map(itemWeight);
+    const total = weights.reduce((t, w) => t + w, 0);
+    const got = weights.reduce((t, w, i) => t + (i % 2 === 0 ? w : 0), 0);
+    expect(r.total).toBe(total);
+    expect(r.score).toBe(Math.round((100 * got) / total));
+    expect(r.byKp.reduce((t, k) => t + k.total, 0)).toBe(total);
     const ev = (score: number, at: number) => ({
       type: 'lesson' as const, id: `e${at}`, childId: 'c', at, deviceId: 'd', lessonId: `exam:${p.id}`,
       packVersion: 1, progress: 1, completed: true, durationMs: 1, examScore: score,

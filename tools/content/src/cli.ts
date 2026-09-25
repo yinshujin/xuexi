@@ -27,6 +27,7 @@ import { importAfricanStorybook, importBookDash, importPdf, importSamples } from
 import { listBooks, loadBook } from './books/store';
 import { edgeBookVoice, narrateBook, sayBookVoice } from './books/tts';
 import { bytes as fmtBytes } from './format-bytes';
+import { buildWordAudioPack } from './word-audio';
 
 const HELP = `用法：pnpm content <命令> [选项]
 
@@ -59,6 +60,9 @@ const HELP = `用法：pnpm content <命令> [选项]
                                   平板或手机，在 App 家长模式 → 离线课程 → 从文件导入（不需要服务器）
   builtin <课程包.zip ...> [--out 目录]
                                   把课程包文件解包到 apps/web/public/builtin，构建 App 时一起打包（装好就能上课）
+  word-audio [--out 文件.zip] [--engine edge|say] [--voice-en 英文语音] [--voice 中文语音] [--tts-cache 目录] [--force]
+                                  单词语音包：英语课本单词和语文听写词语逐个配音（单元闯关的听音选择、拼写用），
+                                  默认 edge-tts（en-US-AnaNeural / zh-CN-XiaoxiaoNeural），输出 xuexi-word-audio.zip
   —— 绘本跟读（原图 + 逐句朗读 + 跟读录音）——
   book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M] [--keep-blank] [--grade 2] [--topic 动物]
                                   导入自己有版权的绘本 PDF（如 RAZ Plus 订阅里下载的），默认私有
@@ -343,7 +347,22 @@ async function main() {
       const out = values.out ?? join(paths.root, 'apps/web/public/builtin');
       const r = await writeBuiltin(zips, out);
       for (const s of r.skipped) log(`⚠ 跳过 ${s}`);
-      log(`App 内置课程：${r.lessons.length} 节，绘本 ${r.books.length} 本（${fmtBytes(r.bytes)}）→ ${out}`);
+      log(`App 内置课程：${r.lessons.length} 节，绘本 ${r.books.length} 本，单词语音 ${r.wordAudio} 个（${fmtBytes(r.bytes)}）→ ${out}`);
+      return;
+    }
+    case 'word-audio': {
+      const say = values.engine === 'say';
+      const out = values.out ?? join(paths.content, 'exports', 'xuexi-word-audio.zip');
+      const r = await buildWordAudioPack({
+        voices: say
+          ? { en: sayBookVoice(values['voice-en'] ?? 'Samantha', 150), zh: sayBookVoice(values.voice ?? 'Tingting', 170) }
+          : { en: edgeBookVoice(values['voice-en'] ?? 'en-US-AnaNeural', '-10%'), zh: edgeBookVoice(values.voice ?? 'zh-CN-XiaoxiaoNeural', '-10%') },
+        cacheDir: values['tts-cache'] ?? join(paths.content, 'tts-cache'),
+        out,
+        force: values.force,
+        log,
+      });
+      log(`单词语音包：${r.words} 个词（新合成 ${r.synthesized} 个，${fmtBytes(r.bytes)}）→ ${r.file}`);
       return;
     }
     case 'book': {

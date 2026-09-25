@@ -101,13 +101,13 @@ describe('单元测试 papers', () => {
 });
 
 describe('连连看 / 拼一拼', () => {
-  it('every 语文 and 英语 paper has one of each; math papers a 连连看 where the unit has sums', () => {
+  it('the papers of a 语文 / 英语 unit together include 连连看 and 拼一拼, and each paper some games', () => {
     for (const u of units) {
-      for (const p of unitPapers(u.id)) {
-        const kinds = p.items.flatMap((it) => (it.game ? [it.game.kind] : []));
-        const subject = p.subject;
-        if (subject !== 'math') expect(kinds.filter((k) => k === 'match' || k === 'order').sort(), p.id).toEqual(['match', 'order']);
-        else expect(kinds.every((k) => k === 'match'), p.id).toBe(true);
+      const papers = unitPapers(u.id);
+      const kinds = new Set(papers.flatMap((p) => p.items.flatMap((it) => (it.game ? [it.game.kind] : []))));
+      if (papers[0].subject !== 'math') {
+        expect([...kinds], u.id).toEqual(expect.arrayContaining(['match', 'order']));
+        for (const p of papers) expect(p.items.some((it) => it.game), p.id).toBe(true);
       }
     }
   });

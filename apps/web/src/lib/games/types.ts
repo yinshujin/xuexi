@@ -61,8 +61,40 @@ export interface WriteItem {
   blanks: number[];
 }
 
+/** 听音选择: hear a word (🔊, from the word audio pack) and choose. */
+export interface ListenGame extends GameBase {
+  kind: 'listen';
+  lang: 'en' | 'zh';
+  /** The word spoken. */
+  say: string;
+  /** What to choose, e.g. 「选出它的意思」. */
+  ask: string;
+  options: string[];
+  /** Index of the right option. */
+  answer: number;
+}
+
+/** 开口读: read an English word or short sentence aloud, scored by 讯飞 ISE. */
+export interface SpeakGame extends GameBase {
+  kind: 'speak';
+  lang: 'en';
+  text: string;
+  /** Chinese meaning shown under a word. */
+  zh?: string;
+}
+
+/** 拼写: see the Chinese meaning (and hear the word when the audio pack is there), spell it with letter tiles. */
+export interface SpellGame extends GameBase {
+  kind: 'spell';
+  zh: string;
+  /** The word as printed ('Monday'); checked case-insensitively. */
+  answer: string;
+  /** Lower-case letter tiles: the word's letters and a few decoys, shuffled. */
+  tiles: string[];
+}
+
 /** Every game kind. New kinds add their interface here. */
-export type Game = MatchGame | OrderGame | WriteGame;
+export type Game = MatchGame | OrderGame | ListenGame | SpeakGame | SpellGame | WriteGame;
 
 export interface UnitGame {
   kpId: string;

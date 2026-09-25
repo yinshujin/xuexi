@@ -65,6 +65,17 @@ export function misspellings(d: DictWord, pool: Map<string, string[]>, real: Set
 }
 
 /**
+ * The wrong versions of a list's words, as the 看拼音选词语 questions offer
+ * them (one character swapped for a homophone of the same book, never a real
+ * word of the list or of `alsoReal`); for the 单元闯关 听音选择.
+ */
+export function soundAlikeWrongs(list: DictationList, alsoReal: readonly string[] = []): (d: DictWord) => string[] {
+  const pool = charPool(list);
+  const real = new Set([...Object.values(list).flatMap((ws) => ws.map((d) => d.w)), ...alsoReal]);
+  return (d) => misspellings(d, pool, real);
+}
+
+/**
  * `alsoReal`: correct words outside the list that a homophone swap would produce
  * with the same pinyin (是的 for 似的, 当做 for 当作); they are never offered as wrong options.
  */

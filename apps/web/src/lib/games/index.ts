@@ -9,6 +9,9 @@ import { createRng, seedFrom } from '@xuexi/practice';
 import { matchBuilder, matchInfo } from './match';
 import { orderBuilder, orderInfo } from './order';
 import { writeBuilder, writeInfo } from './write';
+import { listenBuilder, listenInfo } from './listen';
+import { speakBuilder, speakInfo } from './speak';
+import { spellBuilder, spellInfo } from './spell';
 import type { Game, GameBuilder, GameContext, GameInfo, UnitGame } from './types';
 import { variantOf } from './util';
 
@@ -16,16 +19,29 @@ export type * from './types';
 export { MATCH_SLIPS } from './match';
 export { orderCorrect } from './order';
 export { blanked, writeChars, WRITE_WORDS } from './write';
+export { listenCorrect } from './listen';
+export { SPEAK_MAX_WORDS } from './speak';
+export { spellCorrect } from './spell';
 export { gameAvailable, loadGameEnv, type GameEnv } from './env';
 
 /** Every game kind's builder (order matters only as the start of the rotation). */
-export const BUILDERS: GameBuilder[] = [matchBuilder, orderBuilder, writeBuilder];
+export const BUILDERS: GameBuilder[] = [
+  matchBuilder,
+  orderBuilder,
+  listenBuilder,
+  speakBuilder,
+  spellBuilder,
+  writeBuilder,
+];
 
 /** Every game kind's text description, by kind. */
 const INFO: Record<string, GameInfo> = {
   match: matchInfo as GameInfo,
   order: orderInfo as GameInfo,
   write: writeInfo as GameInfo,
+  listen: listenInfo as GameInfo,
+  speak: speakInfo as GameInfo,
+  spell: spellInfo as GameInfo,
 };
 
 /** Game questions per paper. */

@@ -1,49 +1,224 @@
 {
-  "_note": "Open picture books (Book Dash, CC BY 4.0, https://github.com/bookdash/bookdash-books) used to check the read-along pipeline before importing books from the family's own RAZ subscription. Levels are rough RAZ equivalents.",
+  "_note": "Open picture books (Book Dash, CC BY 4.0, https://github.com/bookdash/bookdash-books) for the two children: 10 for grade 2 (English beginner, RAZ about C to E) and 10 for grade 4 (RAZ about F to J), split by topic. Levels are rough RAZ equivalents. Quiz questions and options are read aloud by TTS, so they avoid symbols and abbreviations.",
   "books": [
     {
       "slug": "come-back-cat",
       "level": "C",
+      "grade": 2,
+      "topic": "动物",
       "quiz": [
-        { "question": "Who does the child want to play with?", "options": ["The cat", "The dog", "The chicken"], "answer": 0, "analysis": "每一页都在喊 “Come back, cat!”，小主人想和猫一起玩。" },
-        { "question": "Where does the child want the cat to stay?", "options": ["In the tree", "In her basket", "On the washline"], "answer": 1, "analysis": "“Sit in your basket. Stay right here!” 主人让猫待在篮子里。" },
-        { "question": "Where is the cat sleeping at the end?", "options": ["In her basket", "Outside", "On the couch"], "answer": 2, "analysis": "最后一页：猫在沙发上睡着了，篮子是空的。" }
+        {"question": "Who runs away?", "options": ["The dog", "The cat", "The snail"], "answer": 1, "analysis": "每一页都在喊 Come back, cat!，一直跑来跑去的是小猫（第1页）。"},
+        {"question": "What does the cat chase outside?", "options": ["Butterflies", "Birds", "A ball"], "answer": 0, "analysis": "第5页图片：Cat runs outside and chases butterflies. 小猫在外面追蝴蝶。"},
+        {"question": "Where does the cat sleep at the end?", "options": ["In her basket", "Outside", "On the couch"], "answer": 2, "analysis": "第11页篮子是空的，第12页小猫在沙发上睡着了。"}
+      ]
+    },
+    {
+      "slug": "sbus-special-shoes",
+      "level": "C",
+      "grade": 2,
+      "topic": "成长与自信",
+      "quiz": [
+        {"question": "What colour are the shoes?", "options": ["Blue", "Green", "Red"], "answer": 2, "analysis": "第1页图片：a pair of big red takkies，是一双红色的大球鞋。"},
+        {"question": "What can he do in the shoes?", "options": ["Dance and spin", "Swim", "Read and write"], "answer": 0, "analysis": "第7页：Watch me dance and spin. 穿上鞋子能跳舞、转圈。"},
+        {"question": "Who tries the shoes at the end?", "options": ["The dog", "The chicken", "The cat"], "answer": 1, "analysis": "第12页图片：The chicken tries the shoes on! 最后小鸡也来试穿。"}
       ]
     },
     {
       "slug": "a-house-for-mouse",
       "level": "D",
+      "grade": 2,
+      "topic": "动物",
       "quiz": [
-        { "question": "What was Mouse looking for?", "options": ["A new house", "Some food", "A friend to play with"], "answer": 0, "analysis": "第一页：Mouse was looking for a new house." },
-        { "question": "Why were Mouse's dreams cold and wet?", "options": ["He slept with Parrot", "He slept with Fish", "He slept with Puppy"], "answer": 1, "analysis": "和鱼一起睡在水里，所以梦是又冷又湿的。" },
-        { "question": "Where did Mouse have warm and cosy dreams?", "options": ["In a bookshelf", "In the pond", "In a tree"], "answer": 0, "analysis": "Mouse found a bookshelf nearby. 最后在书架里睡得又暖和又舒服。" }
+        {"question": "What does Mouse want?", "options": ["Some food", "A new house", "A friend"], "answer": 1, "analysis": "第1页：Mouse was looking for a new house. 小老鼠在找新家。"},
+        {"question": "Mouse sleeps with Fish. How are his dreams?", "options": ["Cold and wet", "Warm and cosy", "Noisy and wild"], "answer": 0, "analysis": "第7到8页：和鱼一起睡在水里，所以梦是 cold and wet，又冷又湿。"},
+        {"question": "Where does Mouse sleep at the end?", "options": ["In the pond", "In a tree", "In a bookshelf"], "answer": 2, "analysis": "第11页：Mouse found a bookshelf nearby. 第12页在书架里睡得又暖和又舒服。"}
+      ]
+    },
+    {
+      "slug": "bathtub-safari",
+      "level": "D",
+      "grade": 2,
+      "topic": "动物",
+      "quiz": [
+        {"question": "What does Jack ride first?", "options": ["A lion", "A crocodile", "A hippo"], "answer": 1, "analysis": "第3页图片：Jack rides on the back of a crocodile. 他先骑上了一只鳄鱼。"},
+        {"question": "Which animal says ROAR?", "options": ["A lion", "A giraffe", "An elephant"], "answer": 0, "analysis": "第10页：ROAR，图片 A lion roars. 是狮子在吼叫。"},
+        {"question": "Where is Jack at the end?", "options": ["In the bath", "In the river", "In bed"], "answer": 2, "analysis": "第12页图片：Jack is fast asleep in bed. 洗完澡，杰克在床上睡着了。"}
+      ]
+    },
+    {
+      "slug": "is-there-anyone-like-me",
+      "level": "E",
+      "grade": 2,
+      "topic": "成长与自信",
+      "quiz": [
+        {"question": "What animal is she?", "options": ["A monkey", "A donkey", "A mouse"], "answer": 1, "analysis": "第1页图片：Donkey lies on the grass. 故事的主人公是一头小毛驴。"},
+        {"question": "Does she find anyone like her?", "options": ["Yes", "No"], "answer": 1, "analysis": "第10页：I couldn't find another me in any single place. 她到处找，也没找到和自己一样的。"},
+        {"question": "How many of you are there?", "options": ["Only one", "Two", "Many"], "answer": 0, "analysis": "第12页：There's only one of you! 世界上只有一个你，每个人都很特别。"}
       ]
     },
     {
       "slug": "i-will-help-you",
       "level": "E",
+      "grade": 2,
+      "topic": "家庭与朋友",
       "quiz": [
-        { "question": "How did Mama Heron get hurt?", "options": ["On barbed wire", "In the river", "In a fight"], "answer": 0, "analysis": "第一页：Mama Heron hurts her wing and leg on barbed wire." },
-        { "question": "What did Lungile lose?", "options": ["His bread", "The money for bread", "His friends"], "answer": 1, "analysis": "他在河里玩，把 Gogo 给他买面包的钱弄丢了。" },
-        { "question": "How did Mama Heron help Lungile?", "options": ["She bought bread for him", "She saw the coins in the water", "She took him home"], "answer": 1, "analysis": "Mama Heron 的眼睛很尖，看到了水里闪光的硬币。先是 Lungile 帮了她，后来她也帮了 Lungile。" }
+        {"question": "Who is hurt?", "options": ["Mama Heron", "Lungile", "Gogo"], "answer": 0, "analysis": "第1页：Mama Heron hurts her wing and leg. 苍鹭妈妈的翅膀和腿受伤了。"},
+        {"question": "What does Lungile lose?", "options": ["His bread", "His push car", "The money"], "answer": 2, "analysis": "第7页：The money is gone. 第10页：他把奶奶给的买面包的钱弄丢了。"},
+        {"question": "Who finds the money?", "options": ["Gogo", "Mama Heron", "His friends"], "answer": 1, "analysis": "第11页：Mama Heron's sharp eyes see the coins. 苍鹭妈妈看到了水里的硬币。先是 Lungile 帮她，后来她也帮了 Lungile。"}
+      ]
+    },
+    {
+      "slug": "a-beautiful-day",
+      "level": "E",
+      "grade": 2,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "Where is the picnic?", "options": ["At school", "By the river", "In the house"], "answer": 1, "analysis": "第2页：Let's have a picnic by the river. 爸爸说去河边野餐。"},
+        {"question": "Who is Jacob?", "options": ["His friend", "His brother", "His dad"], "answer": 0, "analysis": "第2页：Can my friend Jacob come? Jacob 是 Nicholas 的好朋友。"},
+        {"question": "Who wins the race?", "options": ["Nicholas", "Dog", "Donkey"], "answer": 2, "analysis": "第6页：I won, I won, says Donkey. 小毛驴有四条腿，跑赢了。"}
+      ]
+    },
+    {
+      "slug": "whose-button-is-this",
+      "level": "E",
+      "grade": 2,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "Who is Tinny Tim?", "options": ["A toy robot", "A little dog", "A green man"], "answer": 0, "analysis": "第1页图片：Tinny Tim is a toy robot. 第13页也叫他 little robot。"},
+        {"question": "What colour is the button?", "options": ["Red", "Blue", "Yellow"], "answer": 1, "analysis": "第1页图片：A blue button bounces up to him. 是一颗蓝色的纽扣。"},
+        {"question": "Who gets the button?", "options": ["The dog", "The green man", "Ruby Rags"], "answer": 2, "analysis": "第12到13页：布娃娃 Ruby Rags 少了一只纽扣眼睛，Tinny Tim 把纽扣还给了她。"}
+      ]
+    },
+    {
+      "slug": "what-if",
+      "level": "E",
+      "grade": 2,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "What is Nandi doing?", "options": ["Cooking", "Wondering", "Sleeping"], "answer": 1, "analysis": "第2页：She was wondering. 第12页：Just wondering. Nandi 在想象各种有趣的事。"},
+        {"question": "What colour are her boots?", "options": ["Pink", "Blue", "Yellow"], "answer": 0, "analysis": "第9页：my pink gumboots，她的雨靴是粉色的。"},
+        {"question": "Where can the rocket go?", "options": ["To the sea", "To school", "To the moon"], "answer": 2, "analysis": "第5页：Your family could go on holidays to the moon! 房子变成火箭，全家去月亮度假。"}
+      ]
+    },
+    {
+      "slug": "thatos-birthday-surprise",
+      "level": "E",
+      "grade": 2,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "How many days until the birthday?", "options": ["Two days", "Seven days", "Ten days"], "answer": 1, "analysis": "第1页：one week，That's seven whole days! 离生日还有七天。"},
+        {"question": "What day is Thato's birthday?", "options": ["Sunday", "Monday", "Friday"], "answer": 0, "analysis": "第9页：On Sunday it is Thato's birthday. 星期天是他的生日。"},
+        {"question": "What is the big surprise?", "options": ["A rocket", "A big cake", "His big brother"], "answer": 2, "analysis": "第10页：Thato's big brother Kudzai has come to visit. 最好的礼物是哥哥从大城市回来看他。"}
+      ]
+    },
+    {
+      "slug": "karabos-question",
+      "level": "F",
+      "grade": 4,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "What does Katleho do?", "options": ["He throws a ball", "He rides a horse", "He sews a dress"], "answer": 0, "analysis": "第2页：My brother Katleho has a ball to throw. 哥哥 Katleho 在扔球。"},
+        {"question": "Who rides a horse over the mountains in the snow?", "options": ["Grandpa", "Papa", "Uncle Khotso"], "answer": 1, "analysis": "第8页：Papa rides a horse over mountains in snow. 是爸爸。"},
+        {"question": "What is the little child's work?", "options": ["To cook and clean", "To play and grow", "To look after the cows"], "answer": 1, "analysis": "第12页：Your work is to play. Your work is to grow. 小孩子的工作就是玩耍和长大。"}
+      ]
+    },
+    {
+      "slug": "grandpas-gold",
+      "level": "F",
+      "grade": 4,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "What can Giraffe's grandpa do?", "options": ["Build a tall tower", "Cook a big meal", "Catch a whale"], "answer": 0, "analysis": "第2页：My Grandpa can build a tower to the sky. 长颈鹿的爷爷会盖高楼。"},
+        {"question": "Where does Monkey's grandpa keep his gold?", "options": ["In a box", "In his mouth", "Under his bed"], "answer": 1, "analysis": "第6页：He hides it in his mouth. 猴子爷爷把金子藏在嘴里。"},
+        {"question": "What is Grandpa Monkey's gold?", "options": ["Gold coins", "A gold ring", "His gold teeth"], "answer": 2, "analysis": "第9页图片：Some of his teeth are gold. 第11页他把假牙拿了出来。原来金子是金牙！"}
       ]
     },
     {
       "slug": "sleepy-mr-sloth",
       "level": "G",
+      "grade": 4,
+      "topic": "动物",
       "quiz": [
-        { "question": "What does Mr Sloth like best?", "options": ["Climbing", "Swinging", "Sleeping"], "answer": 2, "analysis": "“But sleeping's my favourite, favourite thing!” 他最喜欢睡觉。" },
-        { "question": "Why can't Mr Sloth sleep on the second branch?", "options": ["A giraffe is eating there", "It is too high", "It is raining"], "answer": 0, "analysis": "“A giraffe's eating there!” 长颈鹿在那里吃树叶。" },
-        { "question": "Why does Mr Sloth keep looking for a new branch?", "options": ["He is hungry", "Each branch has a problem", "He wants to play"], "answer": 1, "analysis": "每根树枝上都有麻烦：长颈鹿、蜂窝……所以他一直在找。" }
+        {"question": "What does Mister Sloth like best?", "options": ["Climbing", "Swinging", "Sleeping"], "answer": 2, "analysis": "第2页：But sleeping's my favourite, favourite thing! 他最喜欢睡觉。"},
+        {"question": "Which animal is eating on the first branch?", "options": ["A giraffe", "A snake", "A bird"], "answer": 0, "analysis": "第4页：A giraffe's eating there! 第一根树枝上有长颈鹿在吃树叶。"},
+        {"question": "Why does Mister Sloth keep looking for a new branch?", "options": ["He is hungry", "Each branch has a problem", "He wants to play"], "answer": 1, "analysis": "第4到10页：每根树枝上都有麻烦：长颈鹿、蜜蜂、蛇、吵闹的鸟，所以他一直在找。"}
+      ]
+    },
+    {
+      "slug": "little-ants-big-plan",
+      "level": "G",
+      "grade": 4,
+      "topic": "动物",
+      "quiz": [
+        {"question": "What did Little Ant love to do?", "options": ["Sleep all day", "Read books", "Dance and sing"], "answer": 1, "analysis": "第1页：Little Ant loved to read. 小蚂蚁最喜欢读书。"},
+        {"question": "Why do the ants keep food underground?", "options": ["For a party", "For the winter", "For the Queen's birthday"], "answer": 1, "analysis": "第2页：to store for winter underground. 蚂蚁要为冬天储存食物。"},
+        {"question": "Where did Little Ant find lots of food?", "options": ["At a restaurant", "On a farm", "At a school"], "answer": 0, "analysis": "第6到8页：他从书里读到了餐厅，带大家找到了一家汉堡店。"}
+      ]
+    },
+    {
+      "slug": "lara-the-yellow-ladybird",
+      "level": "G",
+      "grade": 4,
+      "topic": "成长与自信",
+      "quiz": [
+        {"question": "What colour were Lara's wings?", "options": ["Red", "Yellow", "Purple"], "answer": 1, "analysis": "第1页：she had bright yellow wings. 别的瓢虫是红色的，Lara 的翅膀是黄色的。"},
+        {"question": "What did Lara's mother do to cheer her up?", "options": ["She painted Lara's wings red", "She bought her a new dress", "She took her to the park"], "answer": 0, "analysis": "第5页：Lara's mother painted her wings bright red. 妈妈把她的翅膀涂成了红色。"},
+        {"question": "What happened when Lara had red wings?", "options": ["Everyone said hello", "Nobody said hello", "She won a prize"], "answer": 1, "analysis": "第6到7页：第二天路上没人跟她打招呼，同学们也没有。因为黄翅膀才是她自己的特点。"}
+      ]
+    },
+    {
+      "slug": "londi-the-dreaming-girl",
+      "level": "G",
+      "grade": 4,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "What did Londi see in the clouds?", "options": ["Cars and buses", "Geese, fish and sheep", "Houses and trees"], "answer": 1, "analysis": "第2页：Londi saw flying geese, jumping fish, and fluffy sheep. 她把云朵想象成大雁、鱼和绵羊。"},
+        {"question": "What did Gogo ask Londi to do?", "options": ["Fetch the water", "Cook supper", "Go to school"], "answer": 0, "analysis": "第3页：It's time to go and fetch the water. 奶奶让她去打水。"},
+        {"question": "What did Londi find in the bush?", "options": ["A red ball", "A lost dog", "A purple shoe"], "answer": 2, "analysis": "第7页图片：There is a shiny purple shoe in the bush. 她发现了一只亮闪闪的紫色鞋子。"}
+      ]
+    },
+    {
+      "slug": "amazing-daisy",
+      "level": "H",
+      "grade": 4,
+      "topic": "成长与自信",
+      "quiz": [
+        {"question": "What did Daisy want to do when she grew up?", "options": ["Lay lots of eggs", "Fly high into the sky", "Swim in the river"], "answer": 1, "analysis": "第2页：When I grow up, I want to fly high, high into the sky. 小鸡 Daisy 想飞上天。"},
+        {"question": "What did the other chickens do?", "options": ["They laughed at her", "They helped her", "They flew with her"], "answer": 0, "analysis": "第2页：all the other chickens laughed at her. 其他小鸡都嘲笑她。"},
+        {"question": "Who said Daisy could do it?", "options": ["A sparrow", "The farmer", "Mama"], "answer": 2, "analysis": "第7页：You can do it, Mama said. 妈妈一直鼓励她。"}
+      ]
+    },
+    {
+      "slug": "tortoise-finds-his-home",
+      "level": "H",
+      "grade": 4,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "What was Tortoise looking for?", "options": ["Some food", "His house", "His friend"], "answer": 1, "analysis": "第1页：I'm looking for my house. 乌龟在找自己的家。"},
+        {"question": "What happened when the sky turned dark?", "options": ["It began to snow", "The sun came out", "Thunder, lightning and rain came"], "answer": 2, "analysis": "第9页：Thunder roared, lightning flashed, drip, drip came the rain. 打雷、闪电、下雨了。"},
+        {"question": "Where was Tortoise's house?", "options": ["Under a big tree", "His own shell", "In the hills"], "answer": 1, "analysis": "第11页：他缩进壳里，说 Oh, here is my house! 乌龟的壳就是它的家。"}
+      ]
+    },
+    {
+      "slug": "there-must-be-a-rainbow",
+      "level": "I",
+      "grade": 4,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "What was Jabulile's biggest dream?", "options": ["To help people", "To be a farmer", "To be rich"], "answer": 0, "analysis": "第3页：Jabulile's biggest dream was to help people. 她最大的梦想是帮助别人。"},
+        {"question": "What did the storm do to the village?", "options": ["It brought snow", "It blew the roofs off the huts", "It made the river dry"], "answer": 1, "analysis": "第6页：Great gusts of wind blew the roofs off the huts. 大风把屋顶都吹走了。"},
+        {"question": "What came out in the sky after the storm?", "options": ["The moon", "A big rainbow", "Lots of birds"], "answer": 1, "analysis": "第9页：a glorious rainbow appeared in the sky. 暴风雨过后出现了彩虹。"}
       ]
     },
     {
       "slug": "a-tiny-seed",
       "level": "J",
+      "grade": 4,
+      "topic": "人物故事",
       "quiz": [
-        { "question": "Where did Wangari grow up?", "options": ["In the United States", "On the slopes of Mount Kenya", "In a big city"], "answer": 1, "analysis": "第一页：她住在东非肯尼亚山坡上的一个村子里。" },
-        { "question": "What did Wangari teach the women?", "options": ["How to read books", "How to plant trees from seeds", "How to build farms"], "answer": 1, "analysis": "She taught the women how to plant trees from seeds." },
-        { "question": "What prize did Wangari receive?", "options": ["The Nobel Peace Prize", "A school prize", "A prize for farming"], "answer": 0, "analysis": "她是第一位获得诺贝尔和平奖的非洲女性。" }
+        {"question": "Where did Wangari grow up?", "options": ["In the United States", "On the slopes of Mount Kenya", "In a big city"], "answer": 1, "analysis": "第1页：她住在东非肯尼亚山坡上的一个村子里。"},
+        {"question": "What did Wangari teach the women?", "options": ["How to read books", "How to plant trees from seeds", "How to build farms"], "answer": 1, "analysis": "第9页：She taught the women how to plant trees from seeds. 她教妇女们用种子种树。"},
+        {"question": "What prize did Wangari receive?", "options": ["The Nobel Peace Prize", "A school prize", "A prize for farming"], "answer": 0, "analysis": "第11页：她是第一位获得诺贝尔和平奖的非洲女性。"}
       ]
     }
   ]

@@ -1,10 +1,10 @@
+// Shared by properties.*.test.ts (not a test file itself).
 import { describe, expect, it } from 'vitest';
 import { GENERATORS, type ErrorTag } from '@xuexi/shared';
 import { ALL_GENERATORS, generateQuestion, getGenerator, gradeQuestion } from '../src/registry';
 import type { Answer, Question, Response } from '../src/types';
 import { expectedAnswer } from './verify';
 
-const SEEDS = 300;
 const allowed = (id: string) =>
   new Set<ErrorTag>(GENERATORS.find((g) => g.id === id)!.errorTags as readonly ErrorTag[]);
 
@@ -77,13 +77,19 @@ function answerMatchesWidget(q: Question, a: Answer): boolean {
   }
 }
 
-describe.each(ALL_GENERATORS.map((g) => [g.id, g] as const))('%s', (id, gen) => {
+/**
+ * Property checks for every variant of the generators `include` selects:
+ * deterministic, independently verified, graded, diagnosed within catalog tags.
+ * Split across several test files so they run in parallel.
+ */
+export function generatorProperties(include: (id: string) => boolean, seeds = 300): void {
+describe.each(ALL_GENERATORS.filter((g) => include(g.id)).map((g) => [g.id, g] as const))('%s', (id, gen) => {
   const tags = allowed(id);
   it.each(gen.variants)(
     'variant %s: deterministic, verified, graded, diagnosed within catalog tags',
     (variant) => {
       for (let difficulty = 1; difficulty <= 5; difficulty++) {
-        for (let seed = 0; seed < SEEDS; seed++) {
+        for (let seed = 0; seed < seeds; seed++) {
           const q = generateQuestion(id, { difficulty, seed, variant });
           // Deterministic.
           expect(generateQuestion(id, { difficulty, seed, variant })).toEqual(q);
@@ -160,18 +166,4 @@ describe.each(ALL_GENERATORS.map((g) => [g.id, g] as const))('%s', (id, gen) => 
     expect(getGenerator(id).grade(q, empty)).toMatchObject({ correct: false, errorTags: [] });
   });
 });
-
-describe('generator options', () => {
-  it('rejects unknown variants and clamps difficulty', () => {
-    expect(() =>
-      generateQuestion('g2.addsub.2d', { difficulty: 1, seed: 1, variant: 'nope' }),
-    ).toThrow();
-    const q = generateQuestion('g2.addsub.2d', { difficulty: 9, seed: 1 });
-    expect(q.difficulty).toBe(5);
-    expect(q.key).toBe('g2.addsub.2d:5:1');
-    expect(q.variant).toBeUndefined();
-    // Omitted variant == the default variant (same question body).
-    const v = generateQuestion('g2.addsub.2d', { difficulty: 5, seed: 1, variant: 'oral' });
-    expect({ ...v, key: '', variant: undefined }).toEqual({ ...q, key: '', variant: undefined });
-  });
-});
+}

@@ -60,6 +60,9 @@ export function validateEvent(v: unknown): string | null {
     if (!isNum(v.packVersion) || v.packVersion < 0) return 'packVersion must be a number >= 0';
     if (!isNum(v.progress) || v.progress < 0 || v.progress > 1) return 'progress must be in 0..1';
     if (!isBool(v.completed)) return 'completed must be a boolean';
+    if (v.examScore !== undefined && (!isNum(v.examScore) || v.examScore < 0 || v.examScore > 100))
+      return 'examScore must be in 0..100';
+    if (v.xp !== undefined && (!isNum(v.xp) || v.xp < 0 || v.xp > 100_000)) return 'xp must be in 0..100000';
   } else {
     return "type must be 'attempt' or 'lesson'";
   }

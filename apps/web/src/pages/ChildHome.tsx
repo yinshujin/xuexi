@@ -6,6 +6,7 @@ import { attemptsOf, childKps, openMistakes, progressMap } from '../lib/learning
 import { dayKey } from '../lib/format';
 import { listBooks } from '../lib/books';
 import { kvGet } from '../lib/db';
+import { loadPron } from '../lib/pron';
 import { dailyDoneKey } from './PracticePage';
 import { Card, Page } from '../components/ui';
 
@@ -20,7 +21,9 @@ export function ChildHome({ child }: { child: ChildProfile }) {
   const events = eventsOf(child.id);
   const [bookCount, setBookCount] = useState<number | null>(null);
   const [dailyDone, setDailyDone] = useState(false);
+  const [pronCount, setPronCount] = useState(0);
   useEffect(() => {
+    loadPron(child.id).then((l) => setPronCount(l.length), () => setPronCount(0));
     listBooks().then((b) => setBookCount(b.length), () => setBookCount(0));
     kvGet<boolean>(dailyDoneKey(child.id)).then((d) => setDailyDone(!!d));
   }, [child.id]);
@@ -98,7 +101,9 @@ export function ChildHome({ child }: { child: ChildProfile }) {
         <a href={href(`/c/${child.id}/mistakes`)} className={`${tile} bg-white`}>
           <span className="text-5xl">📕</span>
           <span className="text-xl font-bold">错题本</span>
-          <span className="text-slate-500">{stats.mistakes} 道待消灭</span>
+          <span className="text-slate-500">
+            {stats.mistakes} 道待消灭{pronCount > 0 ? ` · ${pronCount} 个单词` : ''}
+          </span>
         </a>
         <a href={href(`/c/${child.id}/practice/review`)} className={`${tile} bg-white ${stats.reviewDue ? '' : 'opacity-60'}`}>
           <span className="text-5xl">🔁</span>
@@ -119,6 +124,16 @@ export function ChildHome({ child }: { child: ChildProfile }) {
           </a>
         )}
       </div>
+      <a href={href(`/c/${child.id}/exams`)}>
+        <Card className="mt-4 flex items-center gap-4 bg-gradient-to-r from-amber-400 to-orange-500 text-white ring-0">
+          <span className="text-5xl">🏆</span>
+          <div className="flex-1">
+            <div className="text-2xl font-bold">单元闯关</div>
+            <div className="text-lg opacity-90">每个单元 2–3 张卷子 · 连连看、拼一拼 · 挣经验拿金牌</div>
+          </div>
+          <span className="rounded-full bg-white/25 px-5 py-3 text-xl font-bold">闯关 →</span>
+        </Card>
+      </a>
       <a href={href(`/c/${child.id}/books`)}>
         <Card className="mt-4 flex items-center gap-4 bg-gradient-to-r from-violet-500 to-fuchsia-400 text-white ring-0">
           <span className="text-5xl">📚</span>

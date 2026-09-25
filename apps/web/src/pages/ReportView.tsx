@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BOOK_EVENT_PREFIX } from '@xuexi/shared';
+import { BOOK_EVENT_PREFIX, EXAM_EVENT_PREFIX } from '@xuexi/shared';
+import { SUBJECT_LABEL } from '@xuexi/curriculum';
+import { examHistory, findPaper, medalOf, MEDAL_ICON } from '../lib/exams';
 import { useApp } from '../lib/store';
 import { attemptsOf, childKps, openMistakes, progressMap, tagLabel } from '../lib/learning';
 import { dayKey } from '../lib/format';
@@ -35,7 +37,7 @@ export function ReportView() {
     const kps = childKps(child).filter((k) => k.kp.practice.length > 0);
     const done = events.filter((e) => e.type === 'lesson' && e.completed);
     const ids = done.map((e) => (e.type === 'lesson' ? e.lessonId : ''));
-    const lessonIds = new Set(ids.filter((id) => !id.startsWith(BOOK_EVENT_PREFIX)));
+    const lessonIds = new Set(ids.filter((id) => !id.startsWith(BOOK_EVENT_PREFIX) && !id.startsWith(EXAM_EVENT_PREFIX)));
     const booksRead = new Set(ids.filter((id) => id.startsWith(BOOK_EVENT_PREFIX))).size;
     return {
       perDay,
@@ -44,6 +46,7 @@ export function ReportView() {
       kps,
       lessonsWatched: lessonIds.size,
       booksRead,
+      exams: [...examHistory(events)].sort((a, b) => b[1].lastAt - a[1].lastAt).slice(0, 12),
       mistakes: openMistakes(events).length,
       total: attempts.length,
     };
@@ -92,6 +95,28 @@ export function ReportView() {
         </div>
       </Card>
 
+      {report.exams.length > 0 && (
+        <Card>
+          <h2 className="mb-2 text-lg font-bold">🏆 单元闯关成绩</h2>
+          <ul className="divide-y divide-slate-100">
+            {report.exams.map(([id, h]) => {
+              const p = findPaper(id);
+              const m = medalOf(h.best);
+              return (
+                <li key={id} className="flex flex-wrap items-center gap-2 py-2">
+                  <span className="flex-1">
+                    {p ? `${SUBJECT_LABEL[p.subject]} 第 ${p.unitIndex} 单元 ${p.unitTitle} · ${p.name}` : id}
+                  </span>
+                  <span>
+                    最好 {m ? MEDAL_ICON[m] : ''}
+                    <b>{h.best}</b> 分 · 最近 {h.last} 分 · 考了 {h.times} 次
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        </Card>
+      )}
       <Card>
         <h3 className="mb-3 text-lg font-bold">最近 30 天常见错因</h3>
         {report.tags.length === 0 ? (

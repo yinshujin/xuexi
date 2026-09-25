@@ -94,3 +94,6 @@ export { YW_G2A_WORDS } from './banks/yw-g2a-words';
 export { YW_G4A_WORDS } from './banks/yw-g4a-words';
 export type { DictWord, DictationList } from './banks/types';
 export { displayPinyin } from './generators/dictation';
+export { EN_G2A } from './banks/en-g2a';
+export { EN_G4A } from './banks/en-g4a';
+export type { EnglishBank, EnWord, ChoiceItem } from './banks/types';

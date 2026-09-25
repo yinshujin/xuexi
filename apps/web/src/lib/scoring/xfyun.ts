@@ -57,8 +57,12 @@ const isFiller = (w: string | undefined) => !w || /^(sil|silv|fil|\.)$/i.test(w)
 
 /** Parse an ISE read_sentence result. */
 export function parseIseXml(xml: string): ReadingScore {
-  const chapter = attrsOf('read_chapter', xml)[0] ?? {};
-  const src = Object.keys(chapter).length ? chapter : (attrsOf('sentence', xml)[0] ?? {});
+  // The scores sit on the first element that has them: the outer tag names the
+  // category (<read_sentence lan=…>) and carries none.
+  const src =
+    ['read_chapter', 'read_sentence', 'read_word', 'sentence']
+      .flatMap((t) => attrsOf(t, xml))
+      .find((a) => a.total_score !== undefined || a.is_rejected !== undefined) ?? {};
   if ((src.is_rejected ?? 'false') === 'true') {
     // Noise / nothing readable: a normal result, not a zero.
     return { overall: 0, accuracy: 0, fluency: 0, completeness: 0, words: [], heard: '', unclear: true };

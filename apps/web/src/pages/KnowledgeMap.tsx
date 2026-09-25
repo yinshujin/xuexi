@@ -61,8 +61,18 @@ export function KnowledgeMap({ child }: { child: ChildProfile }) {
       )}
       {[...byUnit.values()].map((list) => (
         <Card key={`${list[0].bookId}${list[0].unitIndex}`} className="mb-4">
-          <h2 className="mb-3 text-xl font-bold">
-            第 {list[0].unitIndex} 单元 · {list[0].unitTitle}
+          <h2 className="mb-3 flex flex-wrap items-center gap-3 text-xl font-bold">
+            <span className="flex-1">
+              第 {list[0].unitIndex} 单元 · {list[0].unitTitle}
+            </span>
+            {list.some(({ kp }) => kp.practice.some((p) => !p.tier)) && (
+              <a
+                href={href(`/c/${child.id}/exams?book=${list[0].bookId}`)}
+                className="rounded-full bg-amber-100 px-3 py-1 text-base font-bold text-amber-800"
+              >
+                🏆 单元闯关
+              </a>
+            )}
           </h2>
           <div className="grid gap-3 sm:grid-cols-2">
             {list.map(({ kp }) => {

@@ -312,6 +312,7 @@ describe.each(backends)('sync API on $name', ({ make }) => {
         ['bad errorTags', { ...attempt(), errorTags: [1] }],
         ['bad at', { ...attempt(), at: 'now' }],
         ['bad lesson progress', { ...lesson(), progress: 2 }],
+        ['bad exam score', { ...lesson(), examScore: 120 }],
         ['huge event', { ...attempt(), response: 'x'.repeat(20_000) }],
       ];
       for (const [name, bad] of cases) {

@@ -84,7 +84,7 @@ export function ParentBooks() {
               {(() => {
                 const scored = [...finished].reverse().find((e) => e.readTotal);
                 return scored
-                  ? `；跟读过关 ${scored.readPassed}/${scored.readTotal} 句${scored.readScore !== undefined ? `，平均 ${scored.readScore} 分` : ''}`
+                  ? `；跟读${scored.readScore !== undefined ? `总分 ${scored.readScore}，` : ''}过关 ${scored.readPassed}/${scored.readTotal} 页`
                   : '';
               })()}
             </div>

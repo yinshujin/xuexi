@@ -22,11 +22,16 @@ export interface QuestionViewProps {
   onNext: () => void;
   /** Speed drills: move on automatically after a correct answer. */
   autoNext?: boolean;
+  /**
+   * 单元闯关: one try, no hint; the options show right / wrong and the page
+   * around it gives the feedback and the way on (no "下一题" button here).
+   */
+  oneShot?: boolean;
 }
 
 type Phase = 'answering' | 'retry' | 'done';
 
-function answerText(q: Question): string {
+export function answerText(q: Question): string {
   const a = q.answer;
   switch (a.type) {
     case 'number':
@@ -40,7 +45,7 @@ function answerText(q: Question): string {
   }
 }
 
-export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNext }: QuestionViewProps) {
+export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNext, oneShot }: QuestionViewProps) {
   const [phase, setPhase] = useState<Phase>('answering');
   const [text, setText] = useState('');
   const [quotient, setQuotient] = useState('');
@@ -48,6 +53,7 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
   const [divField, setDivField] = useState<'q' | 'r'>('q');
   const [last, setLast] = useState<GradeResult | null>(null);
   const [showSteps, setShowSteps] = useState(false);
+  const [picked, setPicked] = useState<number | null>(null);
   const started = useRef(Date.now());
   const firstReported = useRef(false);
   const firstTryCorrect = useRef(false);
@@ -60,6 +66,7 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
     setDivField('q');
     setLast(null);
     setShowSteps(false);
+    setPicked(null);
     started.current = Date.now();
     firstReported.current = false;
     firstTryCorrect.current = false;
@@ -73,6 +80,10 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
       firstReported.current = true;
       firstTryCorrect.current = result.correct;
       onFirstAnswer({ response, result, durationMs: Date.now() - started.current, hinted: false });
+    }
+    if (oneShot) {
+      setPhase('done');
+      return;
     }
     if (result.correct) {
       setPhase('done');
@@ -94,6 +105,15 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
     input = <VerticalGrid spec={q.vertical} disabled={disabled} onSubmit={submit} />;
   } else if (q.widget === 'choice' || q.widget === 'compare') {
     const opts = q.widget === 'compare' ? ['>', '<', '='] : (q.options ?? []);
+    const right = q.answer.type === 'choice' ? q.answer.index : q.answer.type === 'compare' ? opts.indexOf(q.answer.value) : -1;
+    const shown = (i: number) =>
+      !oneShot || phase !== 'done'
+        ? 'bg-white ring-1 ring-slate-200'
+        : i === right
+          ? 'bg-emerald-100 ring-2 ring-emerald-400'
+          : i === picked
+            ? 'bg-rose-100 ring-2 ring-rose-400'
+            : 'bg-white ring-1 ring-slate-200 opacity-50';
     input = (
       <div className={`mx-auto grid w-full max-w-xl gap-3 ${q.widget === 'compare' ? 'grid-cols-3' : 'sm:grid-cols-2'}`}>
         {opts.map((o, i) => (
@@ -101,10 +121,11 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
             key={o}
             type="button"
             disabled={disabled}
-            onClick={() =>
-              submit(q.widget === 'compare' ? { type: 'compare', value: o as '<' | '>' | '=' } : { type: 'choice', index: i })
-            }
-            className={`min-h-16 rounded-2xl bg-white px-4 py-3 text-2xl font-bold shadow-sm ring-1 ring-slate-200 active:scale-95 disabled:opacity-60 ${
+            onClick={() => {
+              setPicked(i);
+              submit(q.widget === 'compare' ? { type: 'compare', value: o as '<' | '>' | '=' } : { type: 'choice', index: i });
+            }}
+            className={`min-h-16 rounded-2xl px-4 py-3 text-2xl font-bold shadow-sm active:scale-95 ${oneShot ? '' : 'disabled:opacity-60'} ${shown(i)} ${
               q.widget === 'compare' ? 'text-4xl' : 'text-left text-xl font-medium'
             }`}
           >
@@ -165,7 +186,7 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
     <div className="flex flex-col gap-5">
       <div className="whitespace-pre-line text-center text-2xl font-medium leading-relaxed sm:text-3xl">{q.prompt}</div>
       {input}
-      {last && (
+      {last && !oneShot && (
         <div
           className={`rounded-2xl p-4 text-lg ${last.correct ? 'bg-emerald-50 text-emerald-800' : 'bg-amber-50 text-amber-900'}`}
           role="status"
@@ -185,7 +206,7 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
           )}
         </div>
       )}
-      {(showSteps || (phase === 'done' && q.steps.length > 0)) && (
+      {!oneShot && (showSteps || (phase === 'done' && q.steps.length > 0)) && (
         <details open={showSteps} className="rounded-2xl bg-white p-4 ring-1 ring-slate-200">
           <summary className="cursor-pointer text-lg font-bold text-sky-700">看看怎么做</summary>
           <ol className="mt-2 list-decimal space-y-2 pl-6 text-lg">
@@ -198,7 +219,7 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
           </ol>
         </details>
       )}
-      {phase === 'done' && (
+      {phase === 'done' && !oneShot && (
         <button
           type="button"
           onClick={onNext}

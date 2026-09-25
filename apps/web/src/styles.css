@@ -23,3 +23,27 @@ body {
 button {
   touch-action: manipulation;
 }
+
+/* 单元闯关 (game-style exams) */
+@keyframes xx-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  60% { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}
+@keyframes xx-shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-6px); }
+  40%, 80% { transform: translateX(6px); }
+}
+@keyframes xx-rise {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes xx-fall {
+  from { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  to { transform: translateY(105vh) rotate(540deg); opacity: 0.8; }
+}
+.xx-pop { animation: xx-pop 0.35s ease-out both; }
+.xx-shake { animation: xx-shake 0.35s ease-in-out; }
+.xx-rise { animation: xx-rise 0.2s ease-out both; }
+.xx-confetti { position: fixed; top: 0; pointer-events: none; animation: xx-fall linear forwards; z-index: 50; }

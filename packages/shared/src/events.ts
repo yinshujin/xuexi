@@ -55,16 +55,22 @@ export interface LessonEvent extends EventBase {
   readMode?: BookReadMode;
   quizCorrect?: number;
   quizTotal?: number;
-  /** 跟读评分: sentences that reached the pass line, sentences scored, average score. */
+  /** 跟读评分 (page by page): pages that reached the pass line, pages with text, total score (average of the pages read, best try each). */
   readPassed?: number;
   readTotal?: number;
   readScore?: number;
+  /** 单元测试 (lessonId "exam:<paper id>"): the paper's score, 0–100; quizCorrect / quizTotal hold the counts. */
+  examScore?: number;
+  /** 单元闯关: experience points earned (right answers, combos, a full score). */
+  xp?: number;
 }
 
 /** 听读 (listen), 跟读 (repeat after the voice, recording), 自己读 (read alone). */
 export type BookReadMode = 'listen' | 'repeat' | 'self';
 
 export const BOOK_EVENT_PREFIX = 'book:';
+/** 单元测试 results are lesson events with lessonId "exam:<paper id>" (e.g. "exam:bsd-g2a.u1.A"). */
+export const EXAM_EVENT_PREFIX = 'exam:';
 
 export type LearningEvent = AttemptEvent | LessonEvent;
 

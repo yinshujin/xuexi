@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { findKnowledgePoint } from '@xuexi/curriculum';
 import type { ChildProfile } from '@xuexi/shared';
 import { describeQuestionForParent } from '@xuexi/practice';
@@ -6,18 +6,43 @@ import { useApp } from '../lib/store';
 import { href } from '../lib/router';
 import { makeQuestion, openMistakes, tagLabel } from '../lib/learning';
 import { Btn, Card, Empty, Page } from '../components/ui';
+import { CLEAR_AFTER_DAYS, loadPron, practiceOrder, type PronMiss } from '../lib/pron';
 
 export function MistakesPage({ child }: { child: ChildProfile }) {
   const { eventsOf } = useApp();
   const events = eventsOf(child.id);
   const mistakes = useMemo(() => openMistakes(events), [events]);
+  const [pron, setPron] = useState<PronMiss[]>([]);
+  useEffect(() => {
+    loadPron(child.id).then((l) => setPron(practiceOrder(l)));
+  }, [child.id]);
   const byKp = new Map<string, typeof mistakes>();
   for (const m of mistakes) byKp.set(m.kpId, [...(byKp.get(m.kpId) ?? []), m]);
 
   return (
     <Page title="错题本" back={`/c/${child.id}`}>
+      {pron.length > 0 && (
+        <Card className="mb-4 flex flex-col gap-3">
+          <div className="flex flex-wrap items-center gap-4">
+            <span className="flex-1 text-lg">
+              🎤 绘本里有 <b>{pron.length}</b> 个单词还没读准。在 {CLEAR_AFTER_DAYS} 天里都读准，就能消灭它。
+            </span>
+            <a href={href(`/c/${child.id}/pron?back=${encodeURIComponent(`/c/${child.id}/mistakes`)}`)}>
+              <Btn tone="green">练发音</Btn>
+            </a>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {pron.map((p) => (
+              <span key={p.key} className="rounded-xl bg-violet-50 px-3 py-1 text-lg text-violet-800" title={p.sentence}>
+                {p.word}
+                {p.misses > 1 && <sup className="ml-0.5 text-xs text-rose-500">×{p.misses}</sup>}
+              </span>
+            ))}
+          </div>
+        </Card>
+      )}
       {mistakes.length === 0 ? (
-        <Empty>没有错题，太棒了！🎉</Empty>
+        pron.length === 0 && <Empty>没有错题，太棒了！🎉</Empty>
       ) : (
         <>
           <Card className="mb-4 flex items-center gap-4">

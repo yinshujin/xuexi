@@ -2,14 +2,14 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { wordKey, type BookWord } from '@xuexi/course-pack';
 import { BOOK_EVENT_PREFIX, type BookReadMode } from '@xuexi/shared';
 import { openBook, recordingId, recordingsOf, saveRecording, type OpenedBook } from '../lib/books';
-import { recordLimitMs, wordAt, wordTimings } from '../lib/reading';
+import { bookReading, pageLimitMs, splitBySentence, wordAt, wordTimings, type PageScore } from '../lib/reading';
+import { bareWord, saveReading, type ReadWord } from '../lib/pron';
 import {
   alignWords,
   bookStars,
   CHEER,
   cheerBand,
   loadScoringConfig,
-  MERCY_AFTER,
   PASS_SCORE_DEFAULT,
   passed,
   sayCheer,
@@ -25,8 +25,12 @@ import { uuid } from '../lib/format';
 import { Btn, Stars } from '../components/ui';
 
 type Screen = 'start' | 'read' | 'quiz' | 'done';
-/** What the reader is doing right now (跟读 shows the child whose turn it is). */
-type Phase = 'idle' | 'model' | 'record' | 'shadow' | 'scoring' | 'playback';
+/**
+ * What the reader is doing right now. 跟读 goes page by page: the page is read
+ * to the child ('model'), then it waits ('idle') until the child taps 🎤 and
+ * reads the whole page ('record'), which is scored ('scoring').
+ */
+type Phase = 'idle' | 'model' | 'record' | 'scoring' | 'playback';
 
 /** 跟读评分 result of one sentence, for colouring its words. */
 interface Graded {
@@ -34,15 +38,14 @@ interface Graded {
   states: Array<WordState | undefined>;
 }
 
-/** What happened to a sentence in 跟读 with scoring: passed, or let through after tries / an error. */
-interface SentenceResult {
-  passed: boolean;
-  overall?: number;
+/** 跟读评分 of one page: the best try, and its words for the 错题本. */
+interface PageResult extends PageScore {
+  words: ReadWord[];
 }
 
 const MODES: Array<{ id: BookReadMode; icon: string; label: string; hint: string }> = [
   { id: 'listen', icon: '🎧', label: '听读', hint: '听着读，一页一页自动翻' },
-  { id: 'repeat', icon: '🎤', label: '跟读', hint: '听一句，读一句，录下来听听' },
+  { id: 'repeat', icon: '🎤', label: '跟读', hint: '先听一页，再点 🎤 自己读，读完打分' },
   { id: 'self', icon: '📖', label: '自己读', hint: '自己读，不会的词点一下' },
 ];
 
@@ -77,8 +80,13 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
   /** 跟读评分: set when the parent entered 讯飞 credentials on this device. */
   const [scoring, setScoring] = useState<ScoringConfig | null>(null);
   const [graded, setGraded] = useState<Record<string, Graded>>({});
-  const [feedback, setFeedback] = useState<{ text: string; tone: 'good' | 'try' | 'info'; score?: ReadingScore; tries?: number } | null>(null);
-  const results = useRef(new Map<string, SentenceResult>());
+  const [feedback, setFeedback] = useState<{ text: string; tone: 'good' | 'try' | 'info'; score?: ReadingScore } | null>(null);
+  /** 跟读评分 per page (best try); a ref too, for the async steps. */
+  const [pageScores, setPageScores] = useState<Record<number, PageResult>>({});
+  const results = useRef(new Map<number, PageResult>());
+  /** The child's latest reading of each page (跟读), to listen back. */
+  const blobs = useRef(new Map<number, Blob>());
+  const [tries, setTries] = useState<Record<number, number>>({});
 
   const audio = useRef<HTMLAudioElement | null>(null);
   const run = useRef(0);
@@ -88,6 +96,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
   const micAsk = useRef<Promise<MediaStream | null> | null>(null);
   const durations = useRef(new Map<string, number>());
   const maxPage = useRef(0);
+  const pageRef = useRef(0);
   const started = useRef(Date.now());
   const recorded = useRef(false);
   const stage = useRef<HTMLDivElement | null>(null);
@@ -270,116 +279,143 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       rec.start();
     });
 
+  /** The page's own text (not the 看图说一说 captions): what 跟读 asks the child to read. */
+  const readable = (pi: number) => (pages[pi]?.sentences ?? []).map((x, si) => ({ ...x, si })).filter((x) => x.kind !== 'caption');
+
   /**
-   * 跟读: the child reads the sentence back (recorded). With 跟读评分 on, the
-   * reading is scored: below the pass line the child hears the sentence again
-   * and tries again; after MERCY_AFTER tries (or when scoring is unavailable)
-   * the sentence is let through without counting as passed.
+   * 跟读: the child reads the whole page (recorded) after tapping 🎤. With
+   * 跟读评分 on, the reading is scored and its words coloured; the child may
+   * read again, and the page keeps its best try.
    */
-  const repeatTurn = async (r: number, pi: number, si: number): Promise<boolean> => {
-    const clip = durations.current.get(`${pi}:${si}`) ?? 2000;
+  const recordPage = async () => {
+    const pi = pageRef.current;
+    const list = readable(pi);
+    if (list.length === 0) return;
+    stopAll();
+    const r = run.current;
     const stream = await ensureMic();
-    if (r !== run.current) return false;
+    if (r !== run.current || !stream) return;
+    hush(); // the cheer voice must not end up in the recording
+    setFeedback(null);
     setWord(-1);
-    if (!stream) {
-      setPhase('shadow');
-      return sleep(r, clip * 1.5 + 800);
-    }
-    const s = pages[pi].sentences[si];
-    const key = `${pi}:${si}`;
-    for (let tries = 0; ; ) {
-      hush(); // the cheer voice must not end up in the recording
-      setWord(-1);
-      setPhase('record');
-      const blob = await recordFor(r, stream, recordLimitMs(clip));
-      if (r !== run.current) return false;
-      if (!blob) break;
-      let done = true;
-      let result: ReadingScore | undefined;
-      let ok: boolean | undefined;
-      if (scoring) {
-        setPhase('scoring');
-        const out = await scoreRecording(blob, s.text, scoring);
-        if (r !== run.current) return false;
-        if (out.kind === 'error') {
-          // Not the child's fault: let the sentence through, without a star.
-          results.current.set(key, { passed: false });
-          setFeedback({ text: `${out.message}，这一句先过`, tone: 'info' });
-        } else {
-          const heard = out.kind === 'scored' && !out.score.unclear ? out.score : undefined;
-          result = heard;
-          ok = heard ? passed(heard, passScore) : false;
-          if (!ok) tries++;
-          const mercy = !ok && tries >= MERCY_AFTER;
-          done = ok || mercy;
-          if (heard) {
-            setGraded((g) => ({ ...g, [key]: { score: heard, states: alignWords(tokens(s.text), heard.words) } }));
-          }
-          const text =
-            out.kind === 'quiet' ? '几乎没录到声音，大声一点再读一遍。' : CHEER[cheerBand(out.score, passScore, { mercy })];
-          setFeedback({ text, tone: ok ? 'good' : mercy || out.kind !== 'scored' || out.score.unclear ? 'info' : 'try', score: heard, tries });
-          sayCheer(text);
-          if (done) results.current.set(key, { passed: !!ok, overall: heard?.overall });
+    setSentence(-1);
+    setPhase('record');
+    const clips = list.map((x) => durations.current.get(`${pi}:${x.si}`) ?? 1200 + x.text.length * 70);
+    const blob = await recordFor(r, stream, pageLimitMs(clips));
+    if (r !== run.current) return;
+    if (!blob) return setPhase('idle');
+    blobs.current.set(pi, blob);
+    setTries((t) => ({ ...t, [pi]: (t[pi] ?? 0) + 1 }));
+    const text = list.map((x) => x.text).join(' ');
+    let best = true;
+    let scored: { overall: number; passed: boolean } | undefined;
+    if (scoring) {
+      setPhase('scoring');
+      const out = await scoreRecording(blob, text, scoring);
+      if (r !== run.current) return;
+      if (out.kind === 'error') {
+        // Not the child's fault: no score for this try.
+        setFeedback({ text: `${out.message}，可以再读一次或者翻页`, tone: 'info' });
+        best = !results.current.has(pi);
+      } else if (out.kind === 'quiet' || out.score.unclear) {
+        const say = out.kind === 'quiet' ? '几乎没录到声音，大声一点再读一遍。' : CHEER.unclear;
+        setFeedback({ text: say, tone: 'try' });
+        sayCheer(say);
+        best = !results.current.has(pi);
+      } else {
+        const heard = out.score;
+        const ok = passed(heard, passScore);
+        const printed = list.map((x) => tokens(x.text));
+        const states = alignWords(printed.flat(), heard.words);
+        const bySentence = splitBySentence(
+          printed.map((t) => t.length),
+          states,
+        );
+        const prev = results.current.get(pi);
+        best = !prev || heard.overall >= prev.best;
+        // Colour the words of this try (the page score keeps the best one).
+        setGraded((g) => {
+          const next = { ...g };
+          list.forEach((x, k) => (next[`${pi}:${x.si}`] = { score: heard, states: bySentence[k] }));
+          return next;
+        });
+        if (best) {
+          const res: PageResult = {
+            best: heard.overall,
+            passed: ok,
+            words: list.flatMap((x, k) => printed[k].map((token, wi) => ({ token, state: bySentence[k][wi], sentence: x.text }))),
+          };
+          results.current.set(pi, res);
+          setPageScores((m) => ({ ...m, [pi]: res }));
         }
+        const say = CHEER[cheerBand(heard, passScore)];
+        setFeedback({ text: say, tone: ok ? 'good' : 'try', score: heard });
+        sayCheer(say);
+        scored = { overall: heard.overall, passed: ok };
       }
+    }
+    if (best) {
       await saveRecording({
-        id: recordingId(childId, bookId, pi, si),
+        id: recordingId(childId, bookId, pi, 0),
         childId,
         bookId,
         page: pi,
-        sentence: si,
-        text: s.text,
+        sentence: 0,
+        text,
         at: Date.now(),
         blob,
-        ...(result ? { score: result.overall, passed: ok } : {}),
+        ...(scored ? { score: scored.overall, passed: scored.passed } : {}),
       });
-      if (done) {
-        if (!(await sleep(r, scoring ? 900 : 0))) return false;
-        setPhase('playback');
-        const url = URL.createObjectURL(blob);
-        const played = await play(r, url);
-        URL.revokeObjectURL(url);
-        if (!played) return false;
-        break;
-      }
-      // Try again: hear the sentence once more, then read it back.
-      if (!(await sleep(r, 1800))) return false;
-      hush();
-      setPhase('model');
-      if (!(await playSentence(r, pi, si))) return false;
     }
-    setPhase('idle');
-    return sleep(r, 400);
+    if (r === run.current) setPhase('idle');
+  };
+
+  /** 跟读: hear the child's latest reading of this page. */
+  const playMine = async () => {
+    const blob = blobs.current.get(pageRef.current);
+    if (!blob) return;
+    stopAll();
+    const r = run.current;
+    hush();
+    setPhase('playback');
+    const url = URL.createObjectURL(blob);
+    await play(r, url);
+    URL.revokeObjectURL(url);
+    if (r === run.current) setPhase('idle');
   };
 
   const goPage = (pi: number) => {
     setPage(pi);
+    pageRef.current = pi;
     setSentence(-1);
     setWord(-1);
     setFeedback(null);
     maxPage.current = Math.max(maxPage.current, pi);
   };
 
-  /** 听读 / 跟读: read on from (page, sentence), turning the pages. */
+  /**
+   * 听读: read on from (page, sentence), turning the pages. 跟读: read this
+   * page to the child, then wait for them to tap 🎤 (no page turning).
+   */
   const runFrom = async (p: number, s: number) => {
     stopAll();
     const r = run.current;
     setPlaying(true);
+    const repeat = modeRef.current === 'repeat';
     for (let pi = p; pi < pages.length; pi++) {
-      goPage(pi);
+      if (pi !== pageRef.current) goPage(pi);
       const list = pages[pi].sentences;
-      if (list.length === 0 && !(await sleep(r, 2500))) return; // a picture-only page
+      if (list.length === 0 && !repeat && !(await sleep(r, 2500))) return; // a picture-only page
       for (let si = pi === p ? s : 0; si < list.length; si++) {
         setSentence(si);
         setPhase('model');
         if (!(await playSentence(r, pi, si))) return;
-        if (modeRef.current === 'repeat') {
-          if (!(await repeatTurn(r, pi, si))) return;
-        } else if (!(await sleep(r, 350))) return;
+        if (!(await sleep(r, 350))) return;
       }
       setSentence(-1);
       setWord(-1);
       setPhase('idle');
+      if (repeat) return setPlaying(false);
       if (!(await sleep(r, pi + 1 < pages.length ? 900 : 400))) return;
     }
     setPlaying(false);
@@ -412,6 +448,14 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
     if (r === run.current) setWord(wi);
   };
 
+  /** Hear one word from the book's word audio (the 读不准的单词 on the last screen). */
+  const sayWord = async (w: string) => {
+    const src = opened?.url(book?.wordAudio?.[wordKey(w)]);
+    if (!src) return;
+    stopAll();
+    await play(run.current, src);
+  };
+
   const tapSentence = async (pi: number, si: number) => {
     stopAll();
     const r = run.current;
@@ -439,18 +483,27 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       ...(quiz ? { quizCorrect: quiz.correct, quizTotal: quiz.total } : {}),
       ...readingSummary(),
     });
+    // 读不准的单词 go into the 错题本; words read well count towards clearing old ones.
+    const words = [...results.current.values()].flatMap((x) => x.words);
+    if (words.length) await saveReading(childId, { id: book.id, title: book.title }, words);
   };
 
-  /** 跟读评分 over the book: sentences passed, sentences scored, average score. */
+  /** 跟读评分 over the book: pages passed, pages with text, total score (average of the pages read). */
   function readingSummary(): { readPassed?: number; readTotal?: number; readScore?: number } {
-    const all = [...results.current.values()];
-    if (all.length === 0) return {};
-    const scores = all.flatMap((x) => (x.overall === undefined ? [] : [x.overall]));
-    return {
-      readPassed: all.filter((x) => x.passed).length,
-      readTotal: all.length,
-      ...(scores.length ? { readScore: Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) } : {}),
-    };
+    const textPages = pages.filter((_, pi) => readable(pi).length > 0).length;
+    return bookReading(pages.map((_, pi) => results.current.get(pi)), textPages) ?? {};
+  }
+
+  /** Words read wrong or missed in the pages' best tries (for the 错题本). */
+  function missedWords(): string[] {
+    const seen = new Map<string, string>();
+    for (const res of results.current.values()) {
+      for (const w of res.words) {
+        const bare = bareWord(w.token);
+        if (w.state && w.state !== 'ok' && bare.length >= 2) seen.set(wordKey(bare), bare);
+      }
+    }
+    return [...seen.values()];
   }
 
   // Leaving by the system back button still records how far the child read.
@@ -523,6 +576,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       {screen === 'read' && (
         <span className="rounded-full bg-white px-3 py-1 text-slate-600 ring-1 ring-slate-200">
           {MODES.find((m) => m.id === mode)?.icon} {page + 1}/{pages.length}
+          {mode === 'repeat' && pageScores[page] && <b className="ml-2 text-violet-700">{pageScores[page].best}分</b>}
         </span>
       )}
     </header>
@@ -557,6 +611,9 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
                   modeRef.current = m.id;
                   recorded.current = false;
                   results.current.clear();
+                  blobs.current.clear();
+                  setPageScores({});
+                  setTries({});
                   setGraded({});
                   setFeedback(null);
                   started.current = Date.now();
@@ -669,6 +726,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
   if (screen === 'done') {
     const total = book.quiz?.length ?? 0;
     const read = readingSummary();
+    const missed = read.readTotal !== undefined ? missedWords() : [];
     // With 跟读评分 the stars come from the sentences really passed; otherwise from the quiz.
     const stars =
       read.readTotal !== undefined
@@ -689,9 +747,42 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
           <div className="text-5xl">
             <Stars n={stars} />
           </div>
-          {read.readTotal !== undefined && (
-            <div className="text-xl text-slate-600">
-              跟读过关 {read.readPassed}/{read.readTotal} 句{read.readScore !== undefined ? `，平均 ${read.readScore} 分` : ''}
+          {read.readScore !== undefined && (
+            <>
+              <div className="text-2xl font-bold text-violet-700">跟读总分 {read.readScore} 分</div>
+              <div className="text-lg text-slate-600">
+                过关 {read.readPassed}/{read.readTotal} 页（及格线 {passScore} 分）
+              </div>
+              <div className="flex flex-wrap justify-center gap-2">
+                {pages.map((_, pi) =>
+                  readable(pi).length === 0 ? null : (
+                    <span
+                      key={pi}
+                      className={`rounded-lg px-2 py-0.5 text-sm ${
+                        pageScores[pi] === undefined
+                          ? 'bg-slate-100 text-slate-400'
+                          : pageScores[pi].passed
+                            ? 'bg-emerald-100 text-emerald-800'
+                            : 'bg-amber-100 text-amber-900'
+                      }`}
+                    >
+                      第{pi + 1}页 {pageScores[pi] === undefined ? '没读' : `${pageScores[pi].best}分`}
+                    </span>
+                  ),
+                )}
+              </div>
+            </>
+          )}
+          {missed.length > 0 && (
+            <div className="rounded-2xl bg-rose-50 p-3 text-rose-900">
+              <div className="mb-2">这些词还没读准，已经放进错题本，点一下听听：</div>
+              <div className="flex flex-wrap justify-center gap-2">
+                {missed.map((w) => (
+                  <button key={w} type="button" className="rounded-xl bg-white px-3 py-1 text-xl ring-1 ring-rose-200" onClick={() => void sayWord(w)}>
+                    {w} 🔊
+                  </button>
+                ))}
+              </div>
             </div>
           )}
           {total > 0 && (
@@ -706,6 +797,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
               onClick={() => {
                 recorded.current = false;
                 maxPage.current = 0;
+                pageRef.current = -1;
                 goPage(0);
                 setScreen('start');
               }}
@@ -801,22 +893,41 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
       </div>
 
       {mode === 'repeat' && (
-        <div className="mx-3 mt-2 flex min-h-12 items-center justify-center gap-3 text-lg">
-          {phase === 'model' && <span className="text-sky-700">🎧 先听……</span>}
+        <div className="mx-3 mt-2 flex min-h-14 flex-wrap items-center justify-center gap-3 text-lg">
+          {phase === 'model' && <span className="text-sky-700">🎧 先听这一页……</span>}
           {phase === 'record' && (
             <>
-              <span className="animate-pulse text-rose-600">🎤 该你读了！</span>
+              <span className="animate-pulse text-rose-600">🎤 读这一页吧！</span>
               {recUntil && <RecordBar start={recUntil.start} end={recUntil.end} />}
               <Btn tone="danger" className="py-2" onClick={() => finishRec.current?.()}>
                 读完了
               </Btn>
             </>
           )}
-          {phase === 'shadow' && <span className="text-rose-600">🗣️ 跟着读一遍</span>}
           {phase === 'scoring' && <span className="animate-pulse text-sky-700">⏳ 评分中…</span>}
-          {feedback && phase !== 'record' && phase !== 'scoring' && <ScoreCard feedback={feedback} />}
           {phase === 'playback' && <span className="text-emerald-700">👂 听听你读的</span>}
-          {micError && phase !== 'record' && <span className="text-sm text-slate-500">{micError}</span>}
+          {phase === 'idle' &&
+            (readable(page).length === 0 ? (
+              <span className="text-slate-500">🖼 这一页看图听一听，然后点 下一页</span>
+            ) : micError ? (
+              <span className="text-slate-500">🗣️ 跟着读一遍，读完点 下一页（{micError}）</span>
+            ) : (
+              <>
+                {feedback && <ScoreCard feedback={feedback} />}
+                <Btn tone="danger" onClick={() => void recordPage()}>
+                  🎤 {tries[page] ? '再读一次' : '我来读这一页'}
+                </Btn>
+                {blobs.current.has(page) && (
+                  <Btn tone="plain" onClick={() => void playMine()}>
+                    👂 听我读的
+                  </Btn>
+                )}
+                {pageScores[page] && tries[page] > 1 && (
+                  <span className="text-sm text-slate-500">这一页最好 {pageScores[page].best} 分</span>
+                )}
+                {!scoring && !feedback && <span className="text-sm text-slate-400">（家长在设置里开启跟读评分后会打分）</span>}
+              </>
+            ))}
         </div>
       )}
 
@@ -825,7 +936,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
           tone="plain"
           disabled={page === 0}
           onClick={() => {
-            if (auto && playing) void runFrom(page - 1, 0);
+            if ((auto && playing) || mode === 'repeat') void runFrom(page - 1, 0);
             else {
               stopAll();
               goPage(page - 1);
@@ -838,9 +949,10 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
           <Btn
             className="min-w-28"
             tone={playing ? 'plain' : 'green'}
-            onClick={() => (playing ? stopAll() : void runFrom(page, Math.max(0, sentence)))}
+            disabled={phase === 'record' || phase === 'scoring'}
+            onClick={() => (playing ? stopAll() : void runFrom(page, mode === 'repeat' ? 0 : Math.max(0, sentence)))}
           >
-            {playing ? '⏸ 暂停' : '▶ 继续'}
+            {playing ? '⏸ 暂停' : mode === 'repeat' ? '🔊 再听一遍' : '▶ 继续'}
           </Btn>
         )}
         {last ? (
@@ -851,7 +963,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
           <Btn
             tone="plain"
             onClick={() => {
-              if (auto && playing) void runFrom(page + 1, 0);
+              if ((auto && playing) || mode === 'repeat') void runFrom(page + 1, 0);
               else {
                 stopAll();
                 goPage(page + 1);
@@ -930,7 +1042,7 @@ export function MyReading({ childId, bookId }: { childId: string; bookId: string
   return (
     <div className="flex flex-col items-center gap-2">
       <Btn tone="green" onClick={() => (playing ? stop.current() : void playAll())}>
-        {playing ? '⏹ 停' : `▶ 听我读的（${count} 句）`}
+        {playing ? '⏹ 停' : `▶ 听我读的（${count} 段）`}
       </Btn>
       {playing && <div className="text-lg text-slate-600">{playing}</div>}
     </div>

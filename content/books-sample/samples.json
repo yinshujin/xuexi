@@ -1,6 +1,136 @@
 {
-  "_note": "Open picture books (Book Dash, CC BY 4.0, https://github.com/bookdash/bookdash-books) for the two children: 10 for grade 2 (English beginner, RAZ about C to E) and 10 for grade 4 (RAZ about F to J), split by topic. Levels are rough RAZ equivalents. Quiz questions and options are read aloud by TTS, so they avoid symbols and abbreviations.",
+  "_note": "Open picture books (CC BY 4.0) for the two children, 5 per RAZ-like level from A to J: A to E for grade 2 (English beginner), F to J for grade 4, split by topic. Book Dash books (the default, \"slug\": a folder of https://github.com/bookdash/bookdash-books) and African Storybook books (\"source\": \"asb\", \"asbId\": the id on https://www.africanstorybook.org, fetched at import time; only books marked Creative Commons Attribution 4.0; \"title\" is only for reading this list). Levels are rough RAZ equivalents (words per page and sentence length). Quiz questions and options are read aloud by TTS, so they avoid symbols and abbreviations.",
   "books": [
+    {
+      "source": "asb",
+      "asbId": "7292",
+      "title": "What are you doing?",
+      "level": "A",
+      "grade": 2,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "Which one is in the book?", "options": ["I am singing", "I am running", "I am eating"], "answer": 0, "analysis": "第1页：I am singing. 我在唱歌。"},
+        {"question": "Who is waving?", "options": ["He is waving", "She is waving", "They are waving"], "answer": 1, "analysis": "第2页：She is waving. 她在挥手。"},
+        {"question": "What is she doing at the end?", "options": ["Clapping", "Singing", "Listening"], "answer": 2, "analysis": "第7页：She is listening. 她在听。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "33152",
+      "title": "Maria's Family",
+      "level": "A",
+      "grade": 2,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "What is the girl's name?", "options": ["Maria", "Mary", "Mia"], "answer": 0, "analysis": "第1页：I'm Maria. 我是玛丽亚。"},
+        {"question": "Who is the smallest in the family?", "options": ["The uncle", "The baby", "The grandfather"], "answer": 1, "analysis": "第3页：This is the baby. 这是小宝宝。"},
+        {"question": "What is the book about?", "options": ["Maria's school", "Maria's pets", "Maria's family"], "answer": 2, "analysis": "第11页：This is my family. 这本书介绍了玛丽亚的家人。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "22681",
+      "title": "Where Is...?",
+      "level": "A",
+      "grade": 2,
+      "topic": "动物",
+      "quiz": [
+        {"question": "What is the first animal?", "options": ["The ant", "The dog", "The goat"], "answer": 0, "analysis": "第1页：Where is the ant? 小蚂蚁藏在图里，要仔细找。"},
+        {"question": "Which animal is in the book?", "options": ["A lion", "A pig", "A fish"], "answer": 1, "analysis": "第9页：Where is the pig? 书里有小猪，没有狮子和鱼。"},
+        {"question": "What does the book ask on every page?", "options": ["What color is it?", "How big is it?", "Where is the animal?"], "answer": 2, "analysis": "每一页都问 Where is ...? 让我们在图里找一找这只动物在哪儿。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "18966",
+      "title": "Water",
+      "level": "A",
+      "grade": 2,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "What do we drink?", "options": ["Milk", "Water", "Juice"], "answer": 1, "analysis": "第2页：We drink water. 我们喝水。"},
+        {"question": "Which animal lives in water?", "options": ["Crocodiles", "Cows", "Birds"], "answer": 0, "analysis": "第5页：Crocodiles live in water. 鳄鱼生活在水里。"},
+        {"question": "What do we wash with water?", "options": ["Our books", "Our beds", "Our hands"], "answer": 2, "analysis": "第7页：We wash our hands with water. 我们用水洗手，第8页还用水洗衣服。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "13308",
+      "title": "My red ball",
+      "level": "A",
+      "grade": 2,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "What color is the ball?", "options": ["Blue", "Red", "Yellow"], "answer": 1, "analysis": "第3页：My red ball. 我的红色的球。"},
+        {"question": "What does the child do with the ball?", "options": ["Kick it", "Eat it", "Hide it"], "answer": 0, "analysis": "第5到8页：I kick my red ball hard! 我用力踢我的红球。"},
+        {"question": "Where does the ball go?", "options": ["Into the water", "Under the bed", "High up in the sky"], "answer": 2, "analysis": "第15页：It is high up in the sky. 球飞到了高高的天上。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "32403",
+      "title": "One fruit, two fruits",
+      "level": "B",
+      "grade": 2,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "How many bananas are there?", "options": ["Two", "Three", "Four"], "answer": 1, "analysis": "第2页：one banana, two bananas, three bananas. 有三根香蕉。"},
+        {"question": "Which fruit is in the book?", "options": ["Mango", "Peach", "Kiwi"], "answer": 0, "analysis": "第6页：one mango, two mangoes. 书里有芒果。"},
+        {"question": "What are there many of at the end?", "options": ["Apples", "Grapes", "Lemons"], "answer": 1, "analysis": "第15页：one grape, two grapes, many grapes! 最后有好多葡萄。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "10547",
+      "title": "I like to read",
+      "level": "B",
+      "grade": 2,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "What does the boy like to do?", "options": ["Read", "Sing", "Swim"], "answer": 0, "analysis": "第1页：I like to read. 他喜欢读书。"},
+        {"question": "Why can he not read to his sister?", "options": ["She is busy", "She is asleep", "She is at school"], "answer": 1, "analysis": "第3页：My sister is asleep. 妹妹睡着了。"},
+        {"question": "Who does he read to at the end?", "options": ["His father", "His grandmother", "Himself"], "answer": 2, "analysis": "第8页：I can read to myself! 家人都在忙，他就读给自己听。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "9968",
+      "title": "My trip to the zoo",
+      "level": "B",
+      "grade": 2,
+      "topic": "动物",
+      "quiz": [
+        {"question": "Where did the child go?", "options": ["To the zoo", "To school", "To the market"], "answer": 0, "analysis": "第1页：Today I went to the zoo. 今天去了动物园。"},
+        {"question": "Which animals did the child see?", "options": ["Tigers", "Pandas", "Giraffes"], "answer": 2, "analysis": "第5页：I saw giraffes. 看到了长颈鹿。"},
+        {"question": "Who drove them home?", "options": ["Mommy", "Daddy", "Grandpa"], "answer": 1, "analysis": "第8页：But then Daddy drove us home. 爸爸开车送他们回家。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "9653",
+      "title": "What type of teeth?",
+      "level": "B",
+      "grade": 2,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "Which animal has very sharp teeth?", "options": ["A shark", "A cow", "A bird"], "answer": 0, "analysis": "第3页：A shark has very sharp teeth! 鲨鱼的牙齿非常尖。"},
+        {"question": "Which animal does not have teeth?", "options": ["A rat", "A bird", "A lion"], "answer": 1, "analysis": "第5页：A bird does not have teeth. 鸟没有牙齿。"},
+        {"question": "What happened to the girl's front teeth?", "options": ["They grew long", "They turned black", "They fell out"], "answer": 2, "analysis": "第8页：My front teeth fell out! 她的门牙掉了，在换牙呢。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "15575",
+      "title": "I enjoy doing",
+      "level": "B",
+      "grade": 2,
+      "topic": "成长与自信",
+      "quiz": [
+        {"question": "What does the girl enjoy eating?", "options": ["Fruit", "Cake", "Rice"], "answer": 0, "analysis": "第4页：I enjoy eating fruit. 她喜欢吃水果。"},
+        {"question": "Whose stories does she enjoy?", "options": ["Her teacher's", "Her mother's", "Her friend's"], "answer": 1, "analysis": "第6页：I enjoy listening to my mother's stories. 她喜欢听妈妈讲故事。"},
+        {"question": "Where does she enjoy sleeping?", "options": ["On the sofa", "On the floor", "On a big bed"], "answer": 2, "analysis": "第7页：I enjoy sleeping on a big bed. 她喜欢睡在大床上。"}
+      ]
+    },
     {
       "slug": "come-back-cat",
       "level": "C",
@@ -24,6 +154,45 @@
       ]
     },
     {
+      "source": "asb",
+      "asbId": "32460",
+      "title": "Life story of beans",
+      "level": "C",
+      "grade": 2,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "Who gave her the beans?", "options": ["Her friend", "Her teacher", "Her mother"], "answer": 0, "analysis": "第1页：My friend gave me beans from her garden. 朋友送给她豆子。"},
+        {"question": "Which way does the root grow?", "options": ["Up to the sun", "Down", "Over the wall"], "answer": 1, "analysis": "第4页：The seedling grows up to the sun. The root grows down. 芽向上长，根向下长。"},
+        {"question": "When does she pick the bean pods?", "options": ["When they are green", "When they are small", "When they are dry"], "answer": 2, "analysis": "第13页：I pick the bean pods when they are dry. 豆荚干了才摘。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "31988",
+      "title": "Where is Lulu?",
+      "level": "C",
+      "grade": 2,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "Who is looking for Lulu?", "options": ["Ma", "Her teacher", "Her brother"], "answer": 0, "analysis": "第2页：Lulu, it is time to go, calls Ma. 妈妈在找露露。"},
+        {"question": "What is Lulu holding at the start?", "options": ["A ball", "A book", "A doll"], "answer": 1, "analysis": "第1页图片：露露抱着一本书。她们要去图书馆还书。"},
+        {"question": "What do they do at the library?", "options": ["Buy new toys", "Play football", "Return books and borrow more"], "answer": 2, "analysis": "第15页：See, you return books and borrow more. 还了书还可以再借新的书。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "21713",
+      "title": "Tortoise and Rabbit",
+      "level": "C",
+      "grade": 2,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "Who won the race?", "options": ["Rabbit", "Tortoise", "Lion"], "answer": 1, "analysis": "第2页：Tortoise won, slow and steady. 乌龟慢慢地、稳稳地赢了。"},
+        {"question": "Who carried Tortoise over the thorns?", "options": ["Rabbit", "King Lion", "A bird"], "answer": 0, "analysis": "第8页：Rabbit carried Tortoise over thorns. 兔子背着乌龟走过荆棘。"},
+        {"question": "How did Rabbit cross the river?", "options": ["He jumped over it", "He swam", "Tortoise carried him"], "answer": 2, "analysis": "第9页：Tortoise carried Rabbit across. 乌龟背兔子过河，他们互相帮助。"}
+      ]
+    },
+    {
       "slug": "a-house-for-mouse",
       "level": "D",
       "grade": 2,
@@ -43,6 +212,45 @@
         {"question": "What does Jack ride first?", "options": ["A lion", "A crocodile", "A hippo"], "answer": 1, "analysis": "第3页图片：Jack rides on the back of a crocodile. 他先骑上了一只鳄鱼。"},
         {"question": "Which animal says ROAR?", "options": ["A lion", "A giraffe", "An elephant"], "answer": 0, "analysis": "第10页：ROAR，图片 A lion roars. 是狮子在吼叫。"},
         {"question": "Where is Jack at the end?", "options": ["In the bath", "In the river", "In bed"], "answer": 2, "analysis": "第12页图片：Jack is fast asleep in bed. 洗完澡，杰克在床上睡着了。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "9671",
+      "title": "Counting animals",
+      "level": "D",
+      "grade": 2,
+      "topic": "动物",
+      "quiz": [
+        {"question": "How many giraffes are going to drink water?", "options": ["One", "Two", "Three"], "answer": 1, "analysis": "第2页：Two giraffes are going to drink water. 两只长颈鹿。"},
+        {"question": "How many zebras are running to the water?", "options": ["Five", "Six", "Seven"], "answer": 2, "analysis": "第5页：Seven zebras are running to the water. 七匹斑马。"},
+        {"question": "Who drinks water with the lion at the end?", "options": ["The elephant", "The frogs", "The zebras"], "answer": 0, "analysis": "第8页：One elephant is drinking water with the lion. 大象和狮子一起喝水。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "2615",
+      "title": "Where is my bat?",
+      "level": "D",
+      "grade": 2,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "What did the boy lose?", "options": ["His bat", "His ball", "His bag"], "answer": 0, "analysis": "第1页：I have lost my bat. 他的球拍丢了。"},
+        {"question": "Where did he look?", "options": ["In the garden", "Under the bed", "In the car"], "answer": 1, "analysis": "第4页：I looked for it under the bed. 他在床底下找过。"},
+        {"question": "Who had the bat?", "options": ["His teacher", "His dog", "A girl at the window"], "answer": 2, "analysis": "第8页：Oh, you have it! 图里窗外戴帽子的女孩拿着球拍。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "21787",
+      "title": "Petros finds a friend",
+      "level": "D",
+      "grade": 2,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "What did Petros find?", "options": ["A little dog", "A little cat", "A bird"], "answer": 0, "analysis": "第3页：He saw a little dog stuck. 他发现一只被困住的小狗。"},
+        {"question": "Why did the dog run away?", "options": ["It was hungry", "The boys chased it", "It wanted to swim"], "answer": 1, "analysis": "第5页：Petros' friends chased the dog. 朋友们追小狗，小狗吓跑了。"},
+        {"question": "Where did they find the dog?", "options": ["At school", "At home", "At the river"], "answer": 2, "analysis": "第9到11页：小狗在河边，最后跑回了 Petros 身边。"}
       ]
     },
     {
@@ -134,6 +342,43 @@
       ]
     },
     {
+      "slug": "walking-together",
+      "level": "F",
+      "grade": 4,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "Where are the mother and daughter walking to?", "options": ["The market", "The clinic", "School"], "answer": 1, "analysis": "第8页：Here's the clinic at last. 她们走了很远的路去诊所。"},
+        {"question": "Which animal keeps her chicks warm under her wing?", "options": ["A hen", "A donkey", "A duck"], "answer": 0, "analysis": "第3页：She keeps her chicks warm under her wing. 母鸡用翅膀给小鸡取暖。"},
+        {"question": "What does the nurse check with the armband?", "options": ["Her ears", "Her throat", "Her blood pressure"], "answer": 2, "analysis": "第10页：She'll check your blood pressure with this clever armband. 护士用臂带给妈妈量血压。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "15093",
+      "title": "Elephant's nose",
+      "level": "F",
+      "grade": 4,
+      "topic": "动物",
+      "quiz": [
+        {"question": "What was the elephant's nose like a long time ago?", "options": ["Long and thin", "Short and fat", "Pink and small"], "answer": 1, "analysis": "第2页：But a long time ago, the elephant's nose was short and fat. 很久以前大象的鼻子又短又粗。"},
+        {"question": "Who told Baby Elephant to follow him to the river?", "options": ["Crow", "Giraffe", "Rhino"], "answer": 0, "analysis": "第7页：Clever Crow quickly said, Follow me to the river. 是乌鸦。"},
+        {"question": "Who grabbed Baby Elephant's nose?", "options": ["Crow", "Mother elephant", "Crocodile"], "answer": 2, "analysis": "第12页：Crocodile grabbed Baby Elephant's nose in his jaws. 那块会说话的石头其实是鳄鱼。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "14771",
+      "title": "The day the Sun went away",
+      "level": "F",
+      "grade": 4,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "Who did Sun go to visit?", "options": ["Her sister Moon", "The clouds", "The wind"], "answer": 0, "analysis": "第1页：Mother Sun decided to visit her sister, Moon. 太阳去看望妹妹月亮。"},
+        {"question": "Why did the clouds cry?", "options": ["They were cold", "They were sad to see all this", "They were angry with Sun"], "answer": 1, "analysis": "第5页：The clouds were sad to see all this. They started crying. 云的眼泪就是雨。"},
+        {"question": "What color did the sky turn when Sun came back?", "options": ["Grey", "Pink", "Bright blue"], "answer": 2, "analysis": "第8页：Sky was so happy to see Sun that she turned bright blue. 天空变成了明亮的蓝色。"}
+      ]
+    },
+    {
       "slug": "sleepy-mr-sloth",
       "level": "G",
       "grade": 4,
@@ -178,6 +423,17 @@
       ]
     },
     {
+      "slug": "lory-dory",
+      "level": "G",
+      "grade": 4,
+      "topic": "生活与想象",
+      "quiz": [
+        {"question": "Why can people not see Lory Dory?", "options": ["She is always hiding", "She was born invisible", "She lives far away"], "answer": 1, "analysis": "第3页：she was born invisible. 她生下来就是隐形的。"},
+        {"question": "When can people see Lory?", "options": ["When rain hits her head", "When she sings", "When the sun shines"], "answer": 0, "analysis": "第4页：You'd only see Lory when rain hit her head. 雨落在她身上时才能看到她的样子。"},
+        {"question": "How does Lory show the real her?", "options": ["She writes a letter", "She sings a song", "She paints herself"], "answer": 2, "analysis": "第8到10页：她用自己喜欢的东西把自己画出来，to show the real me。"}
+      ]
+    },
+    {
       "slug": "amazing-daisy",
       "level": "H",
       "grade": 4,
@@ -200,6 +456,45 @@
       ]
     },
     {
+      "source": "asb",
+      "asbId": "9792",
+      "title": "Keke's swing",
+      "level": "H",
+      "grade": 4,
+      "topic": "成长与自信",
+      "quiz": [
+        {"question": "Where was Keke's swing?", "options": ["At her school", "At her house", "In the forest"], "answer": 0, "analysis": "第1页：It was the best swing at her school. 秋千在学校里。"},
+        {"question": "What happened when Keke let go of the swing?", "options": ["She flew to the moon", "She fell and hurt her head", "She landed on a bird"], "answer": 1, "analysis": "第7到8页：她从秋千上掉下来，碰伤了头。"},
+        {"question": "What did her teacher promise?", "options": ["To take the swing away", "To buy a new swing", "To go on the swing with her next time"], "answer": 2, "analysis": "第12页：Next time I will be with you on your swing. 老师说下次陪她一起荡。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "21974",
+      "title": "Sun, Moon, and Water",
+      "level": "H",
+      "grade": 4,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "Why did Water never visit Sun?", "options": ["Sun's house was too small", "Sun was not kind", "Water was too busy"], "answer": 0, "analysis": "第3页：Water replied that Sun's house was too small. 水说太阳的房子太小了。"},
+        {"question": "Who is Sun's wife?", "options": ["Water", "Moon", "Wind"], "answer": 1, "analysis": "第5页：Sun returned home to his wife, Moon. 月亮是太阳的妻子。"},
+        {"question": "Where did Sun and Moon go at the end?", "options": ["Into the water", "Under the house", "Up into the sky"], "answer": 2, "analysis": "第12页：Sun and Moon were forced to go up into the sky. 所以太阳和月亮一直在天上。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "10446",
+      "title": "My first pair of shoes",
+      "level": "H",
+      "grade": 4,
+      "topic": "家庭与朋友",
+      "quiz": [
+        {"question": "Where did they buy the shoes?", "options": ["At the market", "At school", "From a friend"], "answer": 0, "analysis": "第5到6页：她们在露天市场上买鞋。"},
+        {"question": "When did they go to buy the shoes?", "options": ["On her birthday", "The day before Christmas", "On a school day"], "answer": 1, "analysis": "第4页：The day before Christmas, my mother woke me up earlier than usual. 圣诞节前一天。"},
+        {"question": "What did her mother see in the morning?", "options": ["The shoes were lost", "The shoes were too small", "She was wearing her new shoes in bed"], "answer": 2, "analysis": "第11到12页：I was wearing my new shoes in bed! 她太喜欢新鞋，穿着鞋睡着了。"}
+      ]
+    },
+    {
       "slug": "there-must-be-a-rainbow",
       "level": "I",
       "grade": 4,
@@ -211,6 +506,54 @@
       ]
     },
     {
+      "slug": "a-dancers-tale",
+      "level": "I",
+      "grade": 4,
+      "topic": "人物故事",
+      "quiz": [
+        {"question": "What kind of dance did Phyllis love?", "options": ["Ballet", "Hip hop", "Folk dance"], "answer": 0, "analysis": "第1到2页：Phyllis was born for ballet. Nothing pleased Phyllis more than ballet. 她最爱芭蕾。"},
+        {"question": "Where did Phyllis go when she was fifteen?", "options": ["Paris", "London", "New York"], "answer": 1, "analysis": "第3页：only fifteen, she travelled to London. 十五岁去了伦敦的皇家芭蕾舞学校。"},
+        {"question": "What did Phyllis and her husband start for children?", "options": ["A hospital", "A library", "A dance school"], "answer": 2, "analysis": "第11页：Their school, Dance For All, 让各种家庭的孩子都能学跳舞。"}
+      ]
+    },
+    {
+      "slug": "sindiwe-and-the-fireflies",
+      "level": "I",
+      "grade": 4,
+      "topic": "人物故事",
+      "quiz": [
+        {"question": "What did Sindiwe dream of being when she was at school?", "options": ["A doctor", "A teacher", "A singer"], "answer": 1, "analysis": "第3页：she dreamed about being a teacher. 她梦想当老师。"},
+        {"question": "Where did Sindiwe work for twenty years?", "options": ["At the United Nations", "At a school", "At a hospital"], "answer": 0, "analysis": "第9页和第11页：她在联合国工作了二十年。"},
+        {"question": "Why do people call her Nomabali?", "options": ["She sings well", "She is very tall", "She is always writing, telling and reading stories"], "answer": 2, "analysis": "第12页：she's always writing, telling and reading stories. 她总在写故事、讲故事、读故事。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "7734",
+      "title": "Rabbit under the tree",
+      "level": "I",
+      "grade": 4,
+      "topic": "动物",
+      "quiz": [
+        {"question": "What fell from the tree?", "options": ["An apple", "A branch", "A bird"], "answer": 0, "analysis": "第1页：An apple fell down from a branch. 树上掉下来一个苹果。"},
+        {"question": "Which animal did Rabbit meet first?", "options": ["Dog", "Chicken", "Cow"], "answer": 1, "analysis": "第3页：She met Chicken. 兔子先遇到了鸡。"},
+        {"question": "Who said Run Rabbit run?", "options": ["The wind", "Cat", "The boy on the bicycle"], "answer": 2, "analysis": "第16页：I'm the one who said, Run Rabbit, run! 是骑自行车的男孩说的，大家白跑了一场。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "22197",
+      "title": "Kariza's questions",
+      "level": "I",
+      "grade": 4,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "What did Kariza love to do?", "options": ["Ask questions", "Draw pictures", "Play games"], "answer": 0, "analysis": "第1页：Kariza loved to ask questions. 她喜欢提问。"},
+        {"question": "What tool helps us see germs?", "options": ["A telescope", "A microscope", "A mirror"], "answer": 1, "analysis": "第4页：A microscope is a tool we use to see things that are too tiny for the human eye to see. 显微镜能看到肉眼看不见的细菌。"},
+        {"question": "Why do we wash our hands before eating?", "options": ["To make them warm", "To make them smell good", "To kill the germs on them"], "answer": 2, "analysis": "第3页和第7页：手看起来干净也可能有细菌，要用清水和肥皂洗掉。"}
+      ]
+    },
+    {
       "slug": "a-tiny-seed",
       "level": "J",
       "grade": 4,
@@ -219,6 +562,54 @@
         {"question": "Where did Wangari grow up?", "options": ["In the United States", "On the slopes of Mount Kenya", "In a big city"], "answer": 1, "analysis": "第1页：她住在东非肯尼亚山坡上的一个村子里。"},
         {"question": "What did Wangari teach the women?", "options": ["How to read books", "How to plant trees from seeds", "How to build farms"], "answer": 1, "analysis": "第9页：She taught the women how to plant trees from seeds. 她教妇女们用种子种树。"},
         {"question": "What prize did Wangari receive?", "options": ["The Nobel Peace Prize", "A school prize", "A prize for farming"], "answer": 0, "analysis": "第11页：她是第一位获得诺贝尔和平奖的非洲女性。"}
+      ]
+    },
+    {
+      "slug": "zanele-situ-my-story",
+      "level": "J",
+      "grade": 4,
+      "topic": "人物故事",
+      "quiz": [
+        {"question": "What happened to Zanele when she was eleven?", "options": ["She could not walk", "She moved to Australia", "She won a medal"], "answer": 0, "analysis": "第2页：when I was eleven years old, I grew tired and weak, and then I couldn't walk. 她十一岁时不能走路了。"},
+        {"question": "Which sport won her the gold medal in Sydney?", "options": ["Swimming", "Javelin", "Running"], "answer": 1, "analysis": "第11页：when I threw my javelin ... I broke the world record and I got a gold medal! 她掷标枪打破世界纪录，拿了金牌。"},
+        {"question": "What is Zanele's motto?", "options": ["Always win first place", "Stay at home and rest", "Keep going and never give up"], "answer": 2, "analysis": "第12页：Keep going, follow your dreams and never give up. 坚持下去，永不放弃。"}
+      ]
+    },
+    {
+      "slug": "sindi-and-the-moon",
+      "level": "J",
+      "grade": 4,
+      "topic": "成长与自信",
+      "quiz": [
+        {"question": "What did Sindi love to do?", "options": ["Sing and dance", "Draw pictures", "Play football"], "answer": 0, "analysis": "第1页：Sindi loved to sing and dance. 辛迪喜欢唱歌跳舞。"},
+        {"question": "Who did Sindi talk to the night before school?", "options": ["Her grandmother", "The moon", "Her teacher"], "answer": 1, "analysis": "第7页：Sindi spoke to the beautiful moon. 她和月亮说话。"},
+        {"question": "How did Sindi feel about school by lunch time?", "options": ["She wanted to go home", "She was scared", "She loved everything about school"], "answer": 2, "analysis": "第12页：By lunch time, Sindi loved everything about school. 到了午饭时她已经爱上了学校。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "920",
+      "title": "King of the birds",
+      "level": "J",
+      "grade": 4,
+      "topic": "动物",
+      "quiz": [
+        {"question": "How did the birds choose their king?", "options": ["The biggest bird", "The one who flies the highest", "The best singer"], "answer": 1, "analysis": "第4页：The one who can fly the highest will be king. 谁飞得最高谁当王。"},
+        {"question": "How did the smallest bird get so high?", "options": ["He held on to Vulture's feathers", "He flew for three days", "He climbed a mountain"], "answer": 0, "analysis": "第6页：He had held onto the great wing feathers of Vulture. 小鸟抓着秃鹫的羽毛被带上了天。"},
+        {"question": "Why does Owl only hunt at night now?", "options": ["He cannot see in the day", "He likes the moon", "He was ashamed that he fell asleep"], "answer": 2, "analysis": "第11到12页：猫头鹰守洞时睡着了，让小鸟逃走，觉得很羞愧，所以白天睡觉、晚上捕猎。"}
+      ]
+    },
+    {
+      "source": "asb",
+      "asbId": "36034",
+      "title": "Let's ride on raindrops",
+      "level": "J",
+      "grade": 4,
+      "topic": "自然与科学",
+      "quiz": [
+        {"question": "What are clouds made from?", "options": ["Smoke", "Water vapour", "Dust"], "answer": 1, "analysis": "第2页：Clouds are made from water that is in the form of gas, called water vapour. 云是由水蒸气组成的。"},
+        {"question": "Where do streams and rivers flow into?", "options": ["The ocean", "The sky", "The desert"], "answer": 0, "analysis": "第7页：The drops join together to form streams and rivers, which flow into the ocean. 小溪和河流流进大海。"},
+        {"question": "What makes water change into vapour?", "options": ["The wind", "The moon", "The hot sun"], "answer": 2, "analysis": "第8页：The hot sun heats the water and it changes from liquid to vapour. 太阳把水晒热，水就变成水蒸气。"}
       ]
     }
   ]

@@ -23,7 +23,7 @@ import { edgeEngine, sayEngine, ttsDraft } from './tts';
 import { exportBundle, exportEachUnit } from './export';
 import { writeBuiltin } from './builtin';
 import { exportBooks } from './books/export';
-import { importBookDash, importBookDashSamples, importPdf } from './books/import';
+import { importAfricanStorybook, importBookDash, importPdf, importSamples } from './books/import';
 import { listBooks, loadBook } from './books/store';
 import { edgeBookVoice, narrateBook, sayBookVoice } from './books/tts';
 import { bytes as fmtBytes } from './format-bytes';
@@ -63,7 +63,8 @@ const HELP = `用法：pnpm content <命令> [选项]
   book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M] [--keep-blank] [--grade 2] [--topic 动物]
                                   导入自己有版权的绘本 PDF（如 RAZ Plus 订阅里下载的），默认私有
   book import-bookdash <目录/en> --level A [--quiz 题目.json]   导入 Book Dash 开放绘本（CC BY 4.0）
-  book import-samples <bookdash-books 目录>   导入 content/books-sample/samples.json 里的示例绘本
+  book import-asb <书号> --level A [--quiz 题目.json]   导入 African Storybook 开放绘本（CC BY 4.0，联网下载，需要 pip3 install pillow）
+  book import-samples <bookdash-books 目录>   导入 content/books-sample/samples.json 里的示例绘本（Book Dash + African Storybook）
   book list                       列出绘本和配音进度
   book tts [--id X] [--level A] [--engine edge|say]   逐句配音（edge 带逐词时间，用于逐词高亮）
   book export [--id a,b] [--level A] [--out 文件.zip]  导出绘本包，传到平板导入
@@ -363,9 +364,21 @@ async function main() {
         const repo = positionals[1];
         if (!repo) throw new Error('用法：book import-samples <bookdash-books 目录> [--samples 清单.json]');
         const samples = values.samples ?? join(REPO_ROOT, 'content', 'books-sample', 'samples.json');
-        for (const b of importBookDashSamples(paths, repo, samples)) {
-          log(`✓ ${b.id}：《${b.title}》${b.pages.length} 页，级别 ${b.level}`);
-        }
+        await importSamples(paths, repo, samples, {
+          onBook: (b) => log(`✓ ${b.id}：《${b.title}》${b.pages.length} 页，级别 ${b.level}`),
+        });
+      } else if (sub === 'import-asb') {
+        const asbId = positionals[1];
+        if (!asbId || !values.level) throw new Error('用法：book import-asb <African Storybook 书号> --level A [--id X] [--quiz 题目.json]');
+        const b = await importAfricanStorybook(paths, asbId, {
+          level: values.level,
+          id: values.id,
+          title: values.title,
+          quiz: values.quiz,
+          grade: values.grade ? Number(values.grade) : undefined,
+          topic: values.topic,
+        });
+        log(`✓ ${b.id}：《${b.title}》${b.pages.length} 页，级别 ${b.level}`);
       } else if (sub === 'import-pdf') {
         const pdf = positionals[1];
         if (!pdf || !values.level) {
@@ -419,7 +432,7 @@ async function main() {
         log('发到平板上，在 App 的 家长模式 → 离线课程 → 选择课程包文件 导入。');
         if (r.books.some((b) => b.private)) log('⚠ 含私有绘本：只在自家设备之间传，不要发到群里或上传到网上。');
       } else {
-        throw new Error('用法：book import-bookdash | import-samples | import-pdf | list | tts | export');
+        throw new Error('用法：book import-bookdash | import-asb | import-samples | import-pdf | list | tts | export');
       }
       return;
     }

@@ -244,13 +244,17 @@ APPID、APISecret、APIKey 粘贴进去，点「测试并保存」。之后「�
 评分需要联网；没有设置时，跟读和以前一样只录音、回放。
 
 读完有 3 道理解小题（书里带题目时），题目和选项会读给孩子听（🔊 听题），也可以单独听某个选项。
-App 里内置了 20 本开放绘本（Book Dash，CC BY 4.0）：二年级、四年级各 10 本，按「动物、家庭与朋友、成长与自信、
-生活与想象、自然与科学、人物故事」分类；书架上先显示适合孩子年级的书，其他年级的收在「更多绘本」里。跟读录音只存在这台设备上，家长模式 → 绘本 里可以回放。
+App 里内置了 51 本开放绘本（African Storybook 和 Book Dash，都是 CC BY 4.0，原图原文）：按 RAZ 的级别从 A 到 J，
+每级 5 本（E 级 6 本）；A–E 级给二年级（A 级每页一句三五个词，逐级加长），F–J 级给四年级。按「动物、家庭与朋友、成长与自信、
+生活与想象、自然与科学、人物故事」分类；书架上先显示适合孩子年级的书，其他年级的收在「更多绘本」里。
+每本书封面下写着作者、插画和版权方。跟读录音只存在这台设备上，家长模式 → 绘本 里可以回放。
 
 ### 先用示例绘本试一试
 
-仓库的 GitHub Releases 里有 **books-sample**（5 本 Book Dash 开放绘本，CC BY 4.0，C–J 级左右），
-下载 `xuexi-books-sample.zip`，在 App 里 家长模式 → 离线课程 → 选择课程包文件 导入即可。
+仓库的 GitHub Releases 里有 **books-sample**（就是上面内置的那些开放绘本，清单在 `content/books-sample/samples.json`），
+旧版 App 可以下载 `xuexi-books-sample.zip`，在 家长模式 → 离线课程 → 选择课程包文件 导入。
+想再加开放绘本：在清单里加一条（Book Dash 写 `slug`；African Storybook 写 `"source": "asb"` 和网站上的书号 `asbId`，
+只收 Creative Commons Attribution 4.0 的书），也可以单本导入 `pnpm content book import-asb <书号> --level B`（需要 `pip3 install pillow`）。
 
 ### 导入自己订阅的 RAZ（只在自己电脑上做）
 

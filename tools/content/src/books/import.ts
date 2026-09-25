@@ -1,8 +1,9 @@
 import { spawn } from 'node:child_process';
-import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { basename, extname, join, resolve } from 'node:path';
 import { assertBook, BOOK_FORMAT, type Book, type BookQuizQuestion } from '@xuexi/course-pack';
 import { REPO_ROOT, type Paths } from '../paths';
+import { ASB_CC_BY_4, asbAttribution, asbReaderUrl, asbViewerUrl, parseAsbViewer } from './asb';
 import { splitSentences } from './sentences';
 import { bookDir, saveBook, slugify } from './store';
 
@@ -34,7 +35,7 @@ export function importBookDash(paths: Paths, langDir: string, o: ImportCommon): 
   const md = readFileSync(join(dir, 'index.md'), 'utf8');
   const [, front = '', body = md] = md.split(/^---$/m);
   const slug = basename(resolve(dir, '..'));
-  const title = o.title ?? (/^title:\s*"?(.+?)"?\s*$/m.exec(front)?.[1] ?? slug);
+  const title = o.title ?? (/^title:\s*"?(.+?)"?\s*$/m.exec(front)?.[1]?.trim() || slug);
   const id = o.id ?? `bookdash-${slugify(slug)}`;
 
   let creator = '';
@@ -100,17 +101,160 @@ export function importBookDash(paths: Paths, langDir: string, o: ImportCommon): 
   return book;
 }
 
-/** The sample list in content/books-sample/samples.json. */
-export interface SampleList {
-  books: Array<{ slug: string; level: string; grade?: number; topic?: string; quiz?: BookQuizQuestion[] }>;
+/** One book of content/books-sample/samples.json: Book Dash (default) or African Storybook. */
+export interface SampleEntry {
+  /** "asb": African Storybook, fetched over the network; otherwise Book Dash. */
+  source?: 'bookdash' | 'asb';
+  /** Book Dash: folder in bookdash/bookdash-books. */
+  slug?: string;
+  /** African Storybook: the book's id on africanstorybook.org. */
+  asbId?: string;
+  /** African Storybook: the book's title, for reading the list (the site's own title is used). */
+  title?: string;
+  level: string;
+  grade?: number;
+  topic?: string;
+  quiz?: BookQuizQuestion[];
 }
 
-/** Import every book of the sample list from a checkout of bookdash/bookdash-books. */
-export function importBookDashSamples(paths: Paths, repoDir: string, samplesFile: string): Book[] {
+/** The sample list in content/books-sample/samples.json. */
+export interface SampleList {
+  books: SampleEntry[];
+}
+
+function readSamples(samplesFile: string): SampleEntry[] {
   const list = JSON.parse(readFileSync(samplesFile, 'utf8')) as SampleList;
-  return list.books.map((s) =>
-    importBookDash(paths, join(repoDir, s.slug, 'en'), { level: s.level, grade: s.grade, topic: s.topic, quiz: s.quiz }),
-  );
+  for (const s of list.books) {
+    if (s.source === 'asb' ? !s.asbId : !s.slug) throw new Error(`${samplesFile}：${JSON.stringify(s).slice(0, 80)} 缺少 ${s.source === 'asb' ? 'asbId' : 'slug'}`);
+  }
+  return list.books;
+}
+
+function importBookDashSample(paths: Paths, repoDir: string, s: SampleEntry): Book {
+  return importBookDash(paths, join(repoDir, s.slug!, 'en'), { level: s.level, grade: s.grade, topic: s.topic, quiz: s.quiz });
+}
+
+/** Import the Book Dash books of the sample list from a checkout of bookdash/bookdash-books. */
+export function importBookDashSamples(paths: Paths, repoDir: string, samplesFile: string): Book[] {
+  return readSamples(samplesFile)
+    .filter((s) => s.source !== 'asb')
+    .map((s) => importBookDashSample(paths, repoDir, s));
+}
+
+/**
+ * Import every book of the sample list, in its order: Book Dash books from a
+ * checkout of bookdash/bookdash-books, African Storybook books over the network.
+ */
+export async function importSamples(paths: Paths, repoDir: string, samplesFile: string, o: AsbFetchOptions = {}): Promise<Book[]> {
+  const out: Book[] = [];
+  for (const s of readSamples(samplesFile)) {
+    const common = { level: s.level, grade: s.grade, topic: s.topic, quiz: s.quiz };
+    const b = s.source === 'asb' ? await importAfricanStorybook(paths, s.asbId!, { ...common, ...o }) : importBookDashSample(paths, repoDir, s);
+    o.onBook?.(b);
+    out.push(b);
+  }
+  return out;
+}
+
+export interface AsbFetchOptions {
+  /** Downloads a URL (default: fetch with retries). Tests pass a fake. */
+  fetch?: (url: string) => Promise<Uint8Array>;
+  /** Converts the downloaded pictures to JPEG (default: scripts/asb_images.py, needs Pillow). */
+  convert?: (jobs: Array<{ src: string; dest: string }>) => Promise<void>;
+  onBook?: (b: Book) => void;
+}
+
+async function download(url: string): Promise<Uint8Array> {
+  let last: unknown;
+  for (let attempt = 1; attempt <= 4; attempt++) {
+    try {
+      const r = await fetch(url, { signal: AbortSignal.timeout(60_000) });
+      if (!r.ok) throw new Error(`HTTP ${r.status}`);
+      return new Uint8Array(await r.arrayBuffer());
+    } catch (e) {
+      last = e;
+      if (attempt < 4) await new Promise((res) => setTimeout(res, 1000 * attempt));
+    }
+  }
+  throw new Error(`下载失败 ${url}：${(last as Error)?.message ?? last}`);
+}
+
+async function convertToJpeg(jobs: Array<{ src: string; dest: string }>, workDir: string): Promise<void> {
+  const file = join(workDir, '.jobs.json');
+  writeFileSync(file, JSON.stringify(jobs));
+  try {
+    await python([join(REPO_ROOT, 'tools', 'content', 'scripts', 'asb_images.py'), file, '--max-width', '1200', '--quality', '80']);
+  } finally {
+    rmSync(file, { force: true });
+  }
+}
+
+/**
+ * An African Storybook book (https://www.africanstorybook.org), fetched from
+ * the site: the pictures become JPEG pages, each line of the page text is
+ * split into sentences exactly as printed. Only CC BY 4.0 books are accepted;
+ * the credits from the back cover go into `source`. Pictures without text at
+ * the start or the end (a closing picture) are left out; wordless pages inside
+ * the story are kept.
+ */
+export async function importAfricanStorybook(
+  paths: Paths,
+  asbId: string,
+  o: ImportCommon & AsbFetchOptions,
+): Promise<Book> {
+  if (!/^\d+$/.test(asbId)) throw new Error(`African Storybook 的书号应该是数字：${asbId}`);
+  const get = o.fetch ?? download;
+  const parsed = parseAsbViewer(new TextDecoder().decode(await get(asbViewerUrl(asbId))));
+  if (parsed.license !== ASB_CC_BY_4) {
+    throw new Error(`《${parsed.title}》（${asbId}）的许可是「${parsed.license || '未注明'}」，只导入 ${ASB_CC_BY_4}`);
+  }
+  if (parsed.credits.Language && parsed.credits.Language !== 'English') {
+    throw new Error(`《${parsed.title}》（${asbId}）不是英文书：${parsed.credits.Language}`);
+  }
+  const text = parsed.pages.map((p) => p.paragraphs.join(' ').trim() !== '');
+  const first = text.indexOf(true);
+  const last = text.lastIndexOf(true);
+  if (first < 0) throw new Error(`《${parsed.title}》（${asbId}）没有文字页`);
+  const kept = parsed.pages.slice(first, last + 1);
+
+  const title = o.title ?? parsed.title;
+  const id = o.id ?? `asb-${asbId}-${slugify(title)}`;
+  const out = bookDir(paths, id);
+  rmSync(out, { recursive: true, force: true });
+  mkdirSync(join(out, 'pages'), { recursive: true });
+
+  const jobs: Array<{ src: string; dest: string }> = [];
+  const fetchPicture = async (url: string, name: string) => {
+    const src = join(out, 'pages', `.${name}.src`);
+    writeFileSync(src, await get(url));
+    jobs.push({ src, dest: join(out, 'pages', `${name}.jpg`) });
+  };
+  const pages: Book['pages'] = [];
+  for (const [i, p] of kept.entries()) {
+    const name = String(i + 1).padStart(2, '0');
+    await fetchPicture(p.image, name);
+    pages.push({ image: `pages/${name}.jpg`, sentences: p.paragraphs.flatMap((t) => splitSentences(t)).map((t) => ({ text: t })) });
+  }
+  if (parsed.cover) await fetchPicture(parsed.cover, 'cover');
+  await (o.convert ?? ((j) => convertToJpeg(j, out)))(jobs);
+
+  const quiz = readQuiz(o.quiz);
+  const book: Book = {
+    format: BOOK_FORMAT,
+    id,
+    title,
+    level: o.level,
+    ...(o.grade ? { grade: o.grade } : {}),
+    ...(o.topic ? { topic: o.topic } : {}),
+    source: { name: 'African Storybook', url: asbReaderUrl(asbId), license: 'CC BY 4.0', attribution: asbAttribution(parsed) },
+    private: false,
+    ...(parsed.cover ? { cover: 'pages/cover.jpg' } : {}),
+    pages,
+    ...(quiz ? { quiz } : {}),
+  };
+  assertBook(book);
+  saveBook(paths, book);
+  return book;
 }
 
 function python(args: string[]): Promise<string> {

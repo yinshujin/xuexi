@@ -1,9 +1,9 @@
 name: Sample books
 
-# Open picture books from Book Dash (CC BY 4.0) listed in
-# content/books-sample/samples.json, narrated with edge-tts (with word timings)
-# and published as the `books-sample` release. They exist to try the 绘本跟读
-# pipeline end to end; books from the family's own subscriptions (RAZ …) are
+# Open picture books from Book Dash and African Storybook (both CC BY 4.0)
+# listed in content/books-sample/samples.json, narrated with edge-tts (with
+# word timings) and published as the `books-sample` release, which the app
+# builds in for 绘本跟读; books from the family's own subscriptions (RAZ …) are
 # private and are only ever prepared on the parent's computer, never here.
 
 on:
@@ -38,7 +38,7 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pip install edge-tts==7.2.8
+      - run: pip install edge-tts==7.2.8 pillow==12.3.0
       - uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
         with:
           path: content/tts-cache
@@ -53,10 +53,12 @@ jobs:
           git sparse-checkout init --no-cone
           {
             echo '/_data/'
-            jq -r '.books[].slug | "/\(.)/en/"' ../content/books-sample/samples.json
+            jq -r '.books[] | select(.source != "asb") | "/\(.slug)/en/"' ../content/books-sample/samples.json
           } | git sparse-checkout set --no-cone --stdin
           git fetch -q --depth 1 --filter=blob:none origin "$BOOKDASH_REV"
           git checkout -q FETCH_HEAD
+      # Book Dash books from the checkout; African Storybook books are downloaded
+      # from africanstorybook.org (pages converted to JPEG with Pillow).
       - name: Import
         run: pnpm content book import-samples bookdash
       - name: Narrate
@@ -65,10 +67,10 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p dist
-          pnpm content book export --title "示例绘本（Book Dash）" --out dist/xuexi-books-sample.zip
+          pnpm content book export --title "开放绘本（African Storybook、Book Dash）" --out dist/xuexi-books-sample.zip
           pnpm -s content book list > dist/list.txt
           {
-            echo "用来试用「绘本跟读」的开放绘本（Book Dash，CC BY 4.0，原图原文）。"
+            echo "「绘本跟读」的开放绘本：A–J 级，每级 5 本左右（African Storybook、Book Dash，CC BY 4.0，原图原文）。"
             echo
             echo "这些绘本已经内置在最新的 App 里（孩子首页「📚 绘本跟读」）。"
             echo "旧版 App 可以下载 xuexi-books-sample.zip，在 家长模式 → 离线课程 → 选择课程包文件 导入。"
@@ -77,7 +79,7 @@ jobs:
             cat dist/list.txt
             echo '```'
             echo
-            echo "绘本来自 [Book Dash](https://bookdash.org)，按 CC BY 4.0 使用，作者署名见每本书的封面页。"
+            echo "绘本来自 [African Storybook](https://www.africanstorybook.org) 和 [Book Dash](https://bookdash.org)，按 CC BY 4.0 使用，作者、插画和版权署名见每本书的封面页。"
           } > dist/release.md
       - name: Move the books-sample tag to this commit
         run: |

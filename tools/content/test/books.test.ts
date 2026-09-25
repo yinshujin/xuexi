@@ -1,5 +1,5 @@
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
@@ -7,7 +7,8 @@ import { unzipSync, zipSync } from 'fflate';
 import { readBundle } from '@xuexi/course-pack';
 import { writeBuiltin } from '../src/builtin';
 import { exportBooks } from '../src/books/export';
-import { importBookDash, importBookDashSamples, importPdf } from '../src/books/import';
+import { asbAttribution, parseAsbViewer } from '../src/books/asb';
+import { importAfricanStorybook, importBookDash, importBookDashSamples, importPdf, importSamples } from '../src/books/import';
 import { splitSentences } from '../src/books/sentences';
 import { loadBook, saveBook } from '../src/books/store';
 import { alignWords, narrateBook, type BookVoice } from '../src/books/tts';
@@ -245,5 +246,157 @@ d.save(sys.argv[1])`,
     expect(b.id).toBe('raz-c-the-big-cat');
     expect(b.pages.map((p) => p.sentences.map((s) => s.text))).toEqual([['I see a cat.', 'The cat is big!'], ['The cat naps.']]);
     expect(readFileSync(join(paths().content, 'books', b.id, b.pages[0].image)).subarray(0, 2)).toEqual(Buffer.from([0xff, 0xd8]));
+  });
+});
+
+describe('African Storybook', () => {
+  const html = readFileSync(new URL('./fixtures/asb-viewer.html', import.meta.url), 'utf8');
+  let tmp: string;
+  const paths = () => getPaths(join(tmp, 'content'));
+  /** Serves the fixture as the viewer page and "png:<url>" for every picture. */
+  const fakeFetch = (page: string) => async (url: string) =>
+    new TextEncoder().encode(url.includes('/newviewer/') ? page : `png:${url}`);
+  /** Stands in for Pillow: "jpeg:" + the downloaded bytes. */
+  const fakeConvert = async (jobs: Array<{ src: string; dest: string }>) => {
+    for (const j of jobs) {
+      writeFileSync(j.dest, `jpeg:${readFileSync(j.src, 'utf8')}`);
+      rmSync(j.src);
+    }
+  };
+
+  beforeAll(() => {
+    tmp = mkdtempSync(join(tmpdir(), 'xuexi-asb-'));
+  });
+  afterAll(() => rmSync(tmp, { recursive: true, force: true }));
+
+  it('parses the viewer page: cover, pages with their lines, credits and licence', () => {
+    const b = parseAsbViewer(html);
+    expect(b.title).toBe('Where is Lulu?');
+    expect(b.cover).toBe('https://www.africanstorybook.org/illustrations/pages/27795.png');
+    expect(b.pages.map((p) => p.image.split('/').pop())).toEqual(['27797.png', '27804.png', '27805.png', '28138.png', '27811.png']);
+    expect(b.pages.map((p) => p.paragraphs)).toEqual([
+      ['"Lulu, it is time to go," calls Ma.'],
+      ['"We have to go," says Ma.', '"But I really like this one!"'],
+      [],
+      ['one apple', 'two apples'],
+      [],
+    ]);
+    expect(b.credits).toEqual({
+      Author: 'Mohale Mashigo',
+      Illustration: 'Clyde Beech, Nkosingiphile Mazibuko',
+      Language: 'English',
+      Level: 'First words',
+    });
+    expect(b.copyright).toBe('© Mohale Mashigo, Clyde Beech, Nkosingiphile Mazibuko and Book Dash');
+    expect(b.license).toBe('Creative Commons: Attribution 4.0');
+    expect(asbAttribution(b)).toBe(
+      '文：Mohale Mashigo；图：Clyde Beech, Nkosingiphile Mazibuko；© Mohale Mashigo, Clyde Beech, Nkosingiphile Mazibuko and Book Dash（African Storybook）',
+    );
+  });
+
+  it('imports a book: JPEG pages, a sentence per line, wordless pages inside kept and at the end dropped', async () => {
+    const quiz = [{ question: 'Who calls Lulu?', options: ['Ma', 'Pa'], answer: 0 }];
+    const b = await importAfricanStorybook(paths(), '31988', {
+      level: 'C',
+      grade: 2,
+      topic: '生活与想象',
+      quiz,
+      fetch: fakeFetch(html),
+      convert: fakeConvert,
+    });
+    expect(b.id).toBe('asb-31988-where-is-lulu');
+    expect(b).toMatchObject({ title: 'Where is Lulu?', level: 'C', grade: 2, topic: '生活与想象', private: false, quiz });
+    expect(b.source).toEqual({
+      name: 'African Storybook',
+      url: 'https://www.africanstorybook.org/reader.php?id=31988',
+      license: 'CC BY 4.0',
+      attribution: expect.stringContaining('文：Mohale Mashigo'),
+    });
+    expect(b.cover).toBe('pages/cover.jpg');
+    expect(b.pages.map((p) => p.image)).toEqual(['pages/01.jpg', 'pages/02.jpg', 'pages/03.jpg', 'pages/04.jpg']);
+    expect(b.pages.map((p) => p.sentences.map((s) => s.text))).toEqual([
+      ['"Lulu, it is time to go," calls Ma.'],
+      ['"We have to go," says Ma.', '"But I really like this one!"'],
+      [],
+      ['one apple', 'two apples'],
+    ]);
+    const dir = join(paths().content, 'books', b.id, 'pages');
+    expect(readFileSync(join(dir, '04.jpg'), 'utf8')).toBe('jpeg:png:https://www.africanstorybook.org/illustrations/pages/28138.png');
+    expect(readFileSync(join(dir, 'cover.jpg'), 'utf8')).toContain('27795.png');
+    expect(readdirSync(dir).sort()).toEqual(['01.jpg', '02.jpg', '03.jpg', '04.jpg', 'cover.jpg']);
+    expect(loadBook(paths(), b.id).pages).toHaveLength(4);
+  });
+
+  it('refuses books that are not CC BY 4.0', async () => {
+    const nc = html.replace('Creative Commons: Attribution 4.0', 'Creative Commons: Attribution-Non Commercial 3.0');
+    await expect(
+      importAfricanStorybook(paths(), '31988', { level: 'C', fetch: fakeFetch(nc), convert: fakeConvert }),
+    ).rejects.toThrow(/Non Commercial/);
+    await expect(
+      importAfricanStorybook(paths(), '31988', { level: 'C', fetch: fakeFetch(html.replace(/<div class="backcover_copyright">[^]*?<\/div>/, '')), convert: fakeConvert }),
+    ).rejects.toThrow(/未注明/);
+  });
+
+  it('imports a sample list with Book Dash and African Storybook books, in order', async () => {
+    const repo = join(tmp, 'bookdash-books');
+    const en = join(repo, 'little-fish', 'en');
+    mkdirSync(join(en, 'images'), { recursive: true });
+    writeFileSync(join(en, 'images', '01.jpg'), 'jpeg');
+    writeFileSync(join(en, 'index.md'), '---\ntitle: "Little Fish"\n---\n\n![](images/01.jpg)\n\nLittle Fish swims.\n');
+    const list = join(tmp, 'samples.json');
+    writeFileSync(
+      list,
+      JSON.stringify({
+        books: [
+          { source: 'asb', asbId: '31988', title: 'Where is Lulu?', level: 'C', grade: 2, topic: '生活与想象' },
+          { slug: 'little-fish', level: 'A', grade: 2, topic: '动物' },
+        ],
+      }),
+    );
+    const books = await importSamples(paths(), repo, list, { fetch: fakeFetch(html), convert: fakeConvert });
+    expect(books.map((b) => b.id)).toEqual(['asb-31988-where-is-lulu', 'bookdash-little-fish']);
+    expect(loadBook(paths(), 'asb-31988-where-is-lulu')).toMatchObject({ level: 'C', topic: '生活与想象' });
+    // The Book Dash-only import leaves the African Storybook books out.
+    expect(importBookDashSamples(paths(), repo, list).map((b) => b.id)).toEqual(['bookdash-little-fish']);
+  });
+
+  let hasPillow = false;
+  try {
+    execFileSync('python3', ['-c', 'import PIL'], { stdio: 'ignore' });
+    hasPillow = true;
+  } catch {
+    /* Pillow is needed only to import African Storybook books (the books workflow installs it). */
+  }
+
+  it.runIf(hasPillow)('converts the PNG pictures to JPEG on white, at most 1200 pixels wide', async () => {
+    const png = join(tmp, 'page.png');
+    // 1600 x 400, transparent left half, red right half.
+    execFileSync('python3', [
+      '-c',
+      `from PIL import Image; import sys
+im = Image.new("RGBA", (1600, 400), (0, 0, 0, 0))
+im.paste((255, 0, 0, 255), (800, 0, 1600, 400))
+im.save(sys.argv[1])`,
+      png,
+    ]);
+    const bytes = new Uint8Array(readFileSync(png));
+    const b = await importAfricanStorybook(paths(), '31988', { level: 'C', fetch: async (u) => (u.includes('/newviewer/') ? new TextEncoder().encode(html) : bytes) });
+    const jpg = join(paths().content, 'books', b.id, b.pages[0].image);
+    expect(readFileSync(jpg).subarray(0, 2)).toEqual(Buffer.from([0xff, 0xd8]));
+    const info = execFileSync('python3', [
+      '-c',
+      `from PIL import Image; import sys
+im = Image.open(sys.argv[1]); print(im.format, im.size[0], im.size[1], *im.getpixel((100, 100)), *im.getpixel((1100, 100)))`,
+      jpg,
+    ])
+      .toString()
+      .trim()
+      .split(' ');
+    expect(info.slice(0, 3)).toEqual(['JPEG', '1200', '300']);
+    const [r1, g1, b1, r2, g2, b2] = info.slice(3).map(Number);
+    expect(Math.min(r1, g1, b1)).toBeGreaterThan(245); // transparent → white
+    expect(r2).toBeGreaterThan(230);
+    expect(Math.max(g2, b2)).toBeLessThan(30);
+    expect(readdirSync(join(paths().content, 'books', b.id, 'pages')).filter((f) => !f.endsWith('.jpg'))).toEqual([]);
   });
 });

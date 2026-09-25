@@ -1,4 +1,4 @@
-import { assertBook, type Book, type BookEntry, type BundleBook } from '@xuexi/course-pack';
+import { assertBook, bookFiles, type Book, type BookEntry, type BundleBook } from '@xuexi/course-pack';
 import { db, kvGet, kvSet, type RecordingRow } from './db';
 
 /**
@@ -32,11 +32,46 @@ const MIME: Record<string, string> = {
   webp: 'image/webp',
 };
 
-const urlOf = (entry: BookEntry, rel: string) => new URL(entry.path + rel, BOOK_BASE).toString();
+/** Books shipped inside the installed app (dist/builtin/books.json, written by `pnpm content builtin`). */
+const builtinBase = () => new URL('builtin/', document.baseURI).toString();
+let builtinList: Promise<BookEntry[]> | null = null;
 
+function loadBuiltin(): Promise<BookEntry[]> {
+  builtinList ??= (async () => {
+    try {
+      const res = await fetch(builtinBase() + 'books.json', { cache: 'no-store' });
+      if (!res.ok || !(res.headers.get('content-type') ?? '').includes('json')) return [];
+      const list = (await res.json()) as BookEntry[];
+      return Array.isArray(list) ? list.map((e) => ({ ...e, origin: 'builtin' as const })) : [];
+    } catch {
+      return [];
+    }
+  })();
+  return builtinList;
+}
+
+const urlOf = (entry: BookEntry, rel: string) =>
+  new URL(entry.path + rel, entry.origin === 'builtin' ? builtinBase() : BOOK_BASE).toString();
+
+/** Imported books and the ones built into the app; an imported copy wins. */
 export async function listBooks(): Promise<BookEntry[]> {
-  const all = Object.values((await kvGet<BookCatalog>(LOCAL_BOOKS_KEY)) ?? {});
-  return all.sort((a, b) => a.level.localeCompare(b.level, 'en', { numeric: true }) || a.title.localeCompare(b.title));
+  const [builtin, local] = await Promise.all([loadBuiltin(), kvGet<BookCatalog>(LOCAL_BOOKS_KEY)]);
+  const all = new Map<string, BookEntry>(builtin.map((b) => [b.id, b]));
+  for (const b of Object.values(local ?? {})) all.set(b.id, b);
+  return [...all.values()].sort((a, b) => a.level.localeCompare(b.level, 'en', { numeric: true }) || a.title.localeCompare(b.title));
+}
+
+/** Fetch one of a book's files: Cache Storage for imported books, the app bundle for built-in ones. */
+async function fetchFile(entry: BookEntry, rel: string): Promise<Response | undefined> {
+  if (entry.origin === 'builtin') {
+    try {
+      const res = await fetch(urlOf(entry, rel));
+      return res.ok ? res : undefined;
+    } catch {
+      return undefined;
+    }
+  }
+  return (await cacheOpen())?.match(urlOf(entry, rel));
 }
 
 /** Store the verified books of a bundle. Returns the entries now on the device. */
@@ -72,6 +107,7 @@ async function removeFiles(entry: BookEntry): Promise<void> {
 }
 
 export async function removeBook(entry: BookEntry): Promise<void> {
+  if (entry.origin === 'builtin') throw new Error('App 自带的绘本不能删除');
   await removeFiles(entry);
   const local = (await kvGet<BookCatalog>(LOCAL_BOOKS_KEY)) ?? {};
   delete local[entry.id];
@@ -88,18 +124,21 @@ export interface OpenedBook {
 }
 
 export async function openBook(id: string): Promise<OpenedBook> {
-  const local = (await kvGet<BookCatalog>(LOCAL_BOOKS_KEY)) ?? {};
-  const entry = local[id];
+  const entry = (await listBooks()).find((b) => b.id === id);
   if (!entry) throw new Error('这本绘本不在这台设备上，请在家长模式里导入');
-  const cache = await cacheOpen();
-  const res = await cache?.match(urlOf(entry, 'book.json'));
+  const res = await fetchFile(entry, 'book.json');
   if (!res) throw new Error('绘本文件丢失，请重新导入');
   const book = await res.json();
   assertBook(book);
   const urls = new Map<string, string>();
-  const rels = new Set<string>([...(book.cover ? [book.cover] : []), ...book.pages.flatMap((p) => [p.image, ...p.sentences.flatMap((s) => (s.audio ? [s.audio] : []))])]);
-  for (const rel of rels) {
-    const hit = await cache!.match(urlOf(entry, rel));
+  if (entry.origin === 'builtin') {
+    // Served from the app itself: no copies needed.
+    for (const rel of bookFiles(book)) urls.set(rel, urlOf(entry, rel));
+    return { entry, book, url: (rel) => (rel ? urls.get(rel) : undefined), release: () => {} };
+  }
+  const cache = await cacheOpen();
+  for (const rel of bookFiles(book)) {
+    const hit = await cache?.match(urlOf(entry, rel));
     if (hit) urls.set(rel, URL.createObjectURL(await hit.blob()));
   }
   return {
@@ -112,21 +151,26 @@ export async function openBook(id: string): Promise<OpenedBook> {
 
 /** Cover images for the shelf (blob: URLs; revoke with the returned function). */
 export async function coverUrls(entries: BookEntry[]): Promise<{ urls: Record<string, string>; release: () => void }> {
-  const cache = await cacheOpen();
   const urls: Record<string, string> = {};
+  const blobs: string[] = [];
   for (const e of entries) {
-    const res = await cache?.match(urlOf(e, 'book.json'));
+    const res = await fetchFile(e, 'book.json');
     if (!res) continue;
     try {
       const book = (await res.json()) as Book;
       const rel = book.cover ?? book.pages[0]?.image;
-      const img = rel ? await cache!.match(urlOf(e, rel)) : undefined;
-      if (img) urls[e.id] = URL.createObjectURL(await img.blob());
+      if (!rel) continue;
+      if (e.origin === 'builtin') {
+        urls[e.id] = urlOf(e, rel);
+        continue;
+      }
+      const img = await fetchFile(e, rel);
+      if (img) blobs.push((urls[e.id] = URL.createObjectURL(await img.blob())));
     } catch {
       /* a broken book shows without a cover */
     }
   }
-  return { urls, release: () => Object.values(urls).forEach((u) => URL.revokeObjectURL(u)) };
+  return { urls, release: () => blobs.forEach((u) => URL.revokeObjectURL(u)) };
 }
 
 // ---- The child's own reading (跟读录音), kept on this device only ----

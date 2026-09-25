@@ -49,19 +49,25 @@ export function importBookDash(paths: Paths, langDir: string, o: ImportCommon): 
 
   const pages: Book['pages'] = [];
   const blocks = body.split(/\n\s*\n/);
+  const alts: string[] = [];
   for (const block of blocks) {
-    const img = /!\[[^\]]*\]\([^)]*?([A-Za-z0-9_-]+\.(?:jpe?g|png))\)/.exec(block);
+    const img = /!\[([^\]]*)\]\([^)]*?([A-Za-z0-9_-]+\.(?:jpe?g|png))\)/.exec(block);
     if (img) {
-      const src = join(dir, 'images', img[1]);
-      const name = `pages/${String(pages.length + 1).padStart(2, '0')}${extname(img[1]).toLowerCase()}`;
+      const src = join(dir, 'images', img[2]);
+      const name = `pages/${String(pages.length + 1).padStart(2, '0')}${extname(img[2]).toLowerCase()}`;
       copyFileSync(src, join(out, name));
       pages.push({ image: name, sentences: [] });
+      alts.push(img[1].trim());
       continue;
     }
     const text = block.replace(/^#.*$/gm, '').replace(/\{:[^}]*\}/g, '').trim();
     if (!text || pages.length === 0) continue;
     pages.at(-1)!.sentences.push(...splitSentences(text).map((t) => ({ text: t })));
   }
+  // A picture-only page gets the book's own description of the picture as 看图说一说.
+  pages.forEach((p, i) => {
+    if (p.sentences.length === 0 && alts[i]) p.sentences = splitSentences(alts[i]).map((t) => ({ text: t, kind: 'caption' as const }));
+  });
   let cover: string | undefined;
   if (existsSync(join(dir, 'images', 'cover.jpg'))) {
     copyFileSync(join(dir, 'images', 'cover.jpg'), join(out, 'pages', 'cover.jpg'));
@@ -81,7 +87,7 @@ export function importBookDash(paths: Paths, langDir: string, o: ImportCommon): 
     },
     private: false,
     ...(cover ? { cover } : {}),
-    // Pages without text (wordless spreads) are kept: the picture tells the story.
+    // Wordless spreads are kept: the picture tells the story.
     pages,
     ...(quiz ? { quiz } : {}),
   };
@@ -119,6 +125,8 @@ export interface PdfImportOptions extends ImportCommon {
   first?: number;
   last?: number;
   dpi?: number;
+  /** Keep pages without text (by default they are dropped: cover, title and copyright pages). */
+  keepBlank?: boolean;
 }
 
 /**
@@ -139,6 +147,8 @@ export async function importPdf(paths: Paths, pdf: string, o: PdfImportOptions):
   const pages = JSON.parse(await python(args)) as Array<{ image: string; text: string }>;
   if (pages.length === 0) throw new Error(`${pdf} 里没有页面`);
   const quiz = readQuiz(o.quiz);
+  const all = pages.map((p) => ({ image: p.image, sentences: splitSentences(p.text).map((t) => ({ text: t })) }));
+  const withText = all.filter((p) => p.sentences.length > 0);
   const book: Book = {
     format: BOOK_FORMAT,
     id,
@@ -147,7 +157,8 @@ export async function importPdf(paths: Paths, pdf: string, o: PdfImportOptions):
     source: { name: o.source ?? '家庭自有', license: o.license ?? '仅限家庭自用，请勿分享' },
     private: o.private ?? true,
     cover: pages[0]?.image,
-    pages: pages.map((p) => ({ image: p.image, sentences: splitSentences(p.text).map((t) => ({ text: t })) })),
+    // A scanned PDF has no text layer at all: keep every page, the text is typed into book.json.
+    pages: o.keepBlank || !withText.length ? all : withText,
     ...(quiz ? { quiz } : {}),
   };
   assertBook(book);

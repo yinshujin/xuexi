@@ -3,8 +3,9 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
-import { unzipSync } from 'fflate';
+import { unzipSync, zipSync } from 'fflate';
 import { readBundle } from '@xuexi/course-pack';
+import { writeBuiltin } from '../src/builtin';
 import { exportBooks } from '../src/books/export';
 import { importBookDash, importBookDashSamples, importPdf } from '../src/books/import';
 import { splitSentences } from '../src/books/sentences';
@@ -99,7 +100,7 @@ describe('picture books', () => {
         'Mr. Crab waves.',
         '{:.page-text}',
         '',
-        '![](images/02.jpg)',
+        '![Crab hides under a rock.](images/02.jpg)',
         '',
         '![](images/03.jpg)',
         '',
@@ -122,9 +123,12 @@ describe('picture books', () => {
     expect(b.pages.map((p) => p.image)).toEqual(['pages/01.jpg', 'pages/02.jpg', 'pages/03.jpg']);
     expect(b.pages.map((p) => p.sentences.map((s) => s.text))).toEqual([
       ['Little Fish swims.', 'Mr. Crab waves.'],
-      [],
+      ['Crab hides under a rock.'],
       ['"Goodbye, Crab!" says Little Fish.'],
     ]);
+    // A picture-only page is described from the picture's own description.
+    expect(b.pages[1].sentences[0].kind).toBe('caption');
+    expect(b.pages[0].sentences[0].kind).toBeUndefined();
     expect(readFileSync(join(paths().content, 'books', b.id, 'pages', '02.jpg'), 'utf8')).toBe('jpeg 02.jpg');
   });
 
@@ -140,35 +144,57 @@ describe('picture books', () => {
     await expect(exportBooks(paths(), { out: join(tmp, 'x.zip') })).rejects.toThrow(/还没有配音/);
   });
 
-  it('narrates with word timings, reuses the cache, and exports a bundle the app accepts', async () => {
+  it('narrates sentences with word timings, each word, and the quiz; reuses the cache; exports a bundle the app accepts', async () => {
     const p = paths();
     const cacheDir = join(tmp, 'cache');
-    expect(await narrateBook(p, loadBook(p, 'bookdash-little-fish'), { voice: fakeVoice, cacheDir })).toBe(3);
+    // 4 sentences + 12 different words + 1 question with 2 options.
+    expect(await narrateBook(p, loadBook(p, 'bookdash-little-fish'), { voice: fakeVoice, cacheDir })).toBe(19);
     const b = loadBook(p, 'bookdash-little-fish');
     const s = b.pages[2].sentences[0];
     expect(s.audio).toBe('audio/p03-s1.mp3');
     expect(s.words?.map((w) => w.w)).toEqual(['"Goodbye,', 'Crab!"', 'says', 'Little', 'Fish.']);
+    expect(Object.keys(b.wordAudio!).sort()).toEqual(
+      ['a', 'crab', 'fish', 'goodbye', 'hides', 'little', 'mr', 'rock', 'says', 'swims', 'under', 'waves'],
+    );
+    expect(b.wordAudio!.crab).toBe('audio/w-crab.mp3');
+    expect(b.quiz![0]).toMatchObject({ audio: 'audio/q01.mp3', optionAudio: ['audio/q01-o1.mp3', 'audio/q01-o2.mp3'] });
+    expect(readFileSync(join(p.content, 'books', b.id, 'audio/q01-o2.mp3'), 'utf8')).toBe('audio:Crab');
     // Nothing left to do the second time.
     expect(await narrateBook(p, b, { voice: fakeVoice, cacheDir })).toBe(0);
 
     const out = join(tmp, 'books.zip');
     const r = await exportBooks(p, { out });
     expect(r.books).toHaveLength(1);
+    // Captions are not the book's text: not counted as words read.
     expect(r.books[0]).toMatchObject({ id: 'bookdash-little-fish', pages: 3, words: 11, private: false });
     const bundle = await readBundle(unzipSync(new Uint8Array(readFileSync(out))));
     expect(bundle.skipped).toEqual([]);
     expect(bundle.packs).toEqual([]);
     expect(bundle.books).toHaveLength(1);
-    expect(Object.keys(bundle.books[0].files).sort()).toEqual([
-      'audio/p01-s1.mp3',
-      'audio/p01-s2.mp3',
-      'audio/p03-s1.mp3',
-      'book.json',
-      'pages/01.jpg',
-      'pages/02.jpg',
-      'pages/03.jpg',
-      'pages/cover.jpg',
-    ]);
+    const files = Object.keys(bundle.books[0].files).sort();
+    expect(files).toContain('audio/p02-s1.mp3');
+    expect(files).toContain('audio/w-goodbye.mp3');
+    expect(files).toContain('audio/q01.mp3');
+    expect(files).toContain('pages/cover.jpg');
+    expect(files).toHaveLength(1 + 4 + 4 + 12 + 3); // book.json, images, sentences, words, quiz
+  });
+
+  it('builds public books into the app, never private ones', async () => {
+    const out = join(tmp, 'builtin');
+    const r = await writeBuiltin([join(tmp, 'books.zip')], out);
+    expect(r.books.map((b) => b.id)).toEqual(['bookdash-little-fish']);
+    expect(JSON.parse(readFileSync(join(out, 'books.json'), 'utf8'))[0].path).toBe('books/bookdash-little-fish/v1/');
+    expect(readFileSync(join(out, 'books/bookdash-little-fish/v1/audio/w-crab.mp3'), 'utf8')).toBe('audio:crab');
+
+    // A private book (e.g. RAZ) in a bundle is left out.
+    const zip = unzipSync(new Uint8Array(readFileSync(join(tmp, 'books.zip'))));
+    const index = JSON.parse(new TextDecoder().decode(zip['bundle.json']));
+    index.books[0].private = true;
+    zip['bundle.json'] = new TextEncoder().encode(JSON.stringify(index));
+    writeFileSync(join(tmp, 'private.zip'), zipSync(zip));
+    const r2 = await writeBuiltin([join(tmp, 'private.zip')], join(tmp, 'builtin2'));
+    expect(r2.books).toEqual([]);
+    expect(r2.skipped[0]).toMatch(/私有/);
   });
 
   it('a tampered file is rejected by the app', async () => {
@@ -202,15 +228,15 @@ describe('picture books', () => {
     /* PyMuPDF is optional: only the parent's computer imports PDFs. */
   }
 
-  it.runIf(hasPyMuPdf)('imports a PDF: page images plus text, private by default', async () => {
+  it.runIf(hasPyMuPdf)('imports a PDF: page images plus text, private by default, pages without text dropped', async () => {
     const pdf = join(tmp, 'book.pdf');
     execFileSync('python3', [
       '-c',
       `import pymupdf, sys
 d = pymupdf.open()
-for t in ["The Big Cat", "I see a cat. The cat is big!", "The cat naps."]:
+for t in ["The Big Cat", "I see a cat. The cat is big!", "", "The cat naps.", ""]:
     p = d.new_page(width=400, height=300)
-    p.insert_text((40, 150), t, fontsize=20)
+    if t: p.insert_text((40, 150), t, fontsize=20)
 d.save(sys.argv[1])`,
       pdf,
     ]);

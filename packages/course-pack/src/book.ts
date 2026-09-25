@@ -21,6 +21,12 @@ export interface BookWord {
 
 export interface BookSentence {
   text: string;
+  /**
+   * "caption": not the book's own text but a short description of a
+   * picture-only page (e.g. from the book's image descriptions), shown and
+   * read as 看图说一说.
+   */
+  kind?: 'caption';
   /** Book-relative path, e.g. "audio/p03-s1.mp3". */
   audio?: string;
   words?: BookWord[];
@@ -38,6 +44,9 @@ export interface BookQuizQuestion {
   /** Index of the correct option. */
   answer: number;
   analysis?: string;
+  /** Narration of the question and of each option (听题选答案). */
+  audio?: string;
+  optionAudio?: string[];
 }
 
 export interface Book {
@@ -52,6 +61,20 @@ export interface Book {
   cover?: string;
   pages: BookPage[];
   quiz?: BookQuizQuestion[];
+  /**
+   * Each word said on its own (tap a word to hear it), keyed by wordKey():
+   * clearer than cutting the word out of the sentence.
+   */
+  wordAudio?: Record<string, string>;
+}
+
+/** Lowercase letters / digits / inner apostrophes: "Cat!"" → "cat", "It's" → "it's". */
+export function wordKey(token: string): string {
+  return token
+    .toLowerCase()
+    .replace(/[‘’]/g, "'")
+    .replace(/[^a-z0-9']/g, '')
+    .replace(/^'+|'+$/g, '');
 }
 
 /** manifest.json of a book pack: every file with its hash. */
@@ -78,7 +101,7 @@ export interface BookEntry {
   /** Short attribution shown on the shelf, e.g. "Book Dash · CC BY 4.0". */
   source: string;
   /** Set by the app for books imported on this device. */
-  origin?: 'local';
+  origin?: 'local' | 'builtin';
 }
 
 const SAFE_PATH = /^(pages|audio)\/[A-Za-z0-9._-]+$/;
@@ -108,6 +131,15 @@ export function assertBook(value: unknown): asserts value is Book {
   for (const q of b.quiz ?? []) {
     if (!q.question || !Array.isArray(q.options) || q.options.length < 2) throw new Error('小测题目无效');
     if (!Number.isInteger(q.answer) || q.answer < 0 || q.answer >= q.options.length) throw new Error(`小测答案序号无效：${q.question}`);
+    if (q.audio !== undefined && !SAFE_PATH.test(q.audio)) throw new Error(`小测音频路径无效: ${q.audio}`);
+    if (q.optionAudio !== undefined) {
+      if (!Array.isArray(q.optionAudio) || q.optionAudio.length !== q.options.length) throw new Error(`小测选项音频数量不对：${q.question}`);
+      for (const a of q.optionAudio) if (!SAFE_PATH.test(a)) throw new Error(`小测音频路径无效: ${a}`);
+    }
+  }
+  if (b.wordAudio !== undefined) {
+    if (typeof b.wordAudio !== 'object' || b.wordAudio === null) throw new Error('wordAudio 无效');
+    for (const a of Object.values(b.wordAudio)) if (typeof a !== 'string' || !SAFE_PATH.test(a)) throw new Error(`单词音频路径无效: ${a}`);
   }
 }
 
@@ -119,12 +151,18 @@ export function bookFiles(b: Book): string[] {
     out.add(p.image);
     for (const s of p.sentences) if (s.audio) out.add(s.audio);
   }
+  for (const q of b.quiz ?? []) {
+    if (q.audio) out.add(q.audio);
+    for (const a of q.optionAudio ?? []) out.add(a);
+  }
+  for (const a of Object.values(b.wordAudio ?? {})) out.add(a);
   return [...out];
 }
 
 export function countWords(b: Book): number {
   return b.pages.reduce(
-    (n, p) => n + p.sentences.reduce((m, s) => m + (s.text.match(/[A-Za-z0-9']+/g)?.length ?? 0), 0),
+    (n, p) =>
+      n + p.sentences.reduce((m, s) => m + (s.kind === 'caption' ? 0 : (s.text.match(/[A-Za-z0-9']+/g)?.length ?? 0)), 0),
     0,
   );
 }

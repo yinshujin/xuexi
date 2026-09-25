@@ -1,7 +1,7 @@
 import { spawn } from 'node:child_process';
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { sha256Hex, type Book, type BookWord } from '@xuexi/course-pack';
+import { sha256Hex, wordKey, type Book, type BookWord } from '@xuexi/course-pack';
 import { REPO_ROOT, type Paths } from '../paths';
 import { sayEngine } from '../tts';
 import { bare, tokens } from './sentences';
@@ -104,35 +104,70 @@ export interface BookTtsOptions {
   log?: (s: string) => void;
 }
 
-/** Narrate every sentence that has no audio yet. Returns the number of clips made. */
+/**
+ * Narrate everything that has no audio yet: every sentence (with word
+ * timings), each word on its own (tap a word to hear it), and the quiz
+ * questions and options (听题选答案). Returns the number of clips placed.
+ */
 export async function narrateBook(paths: Paths, book: Book, o: BookTtsOptions): Promise<number> {
   const dir = bookDir(paths, book.id);
   mkdirSync(join(dir, 'audio'), { recursive: true });
   mkdirSync(o.cacheDir, { recursive: true });
-  type Todo = { page: number; idx: number; text: string; cached: string };
-  const todo: Todo[] = [];
+  const ext = o.voice.ext;
+  const has = (rel: string | undefined) => !!rel && !o.force && existsSync(join(dir, rel));
+
+  /** One clip to place: `text` spoken, stored at `rel`, then `done(words file)` updates book.json. */
+  type Slot = { text: string; rel: string; done: (wordsFile: string) => void };
+  const slots: Slot[] = [];
   for (const [pi, page] of book.pages.entries()) {
     for (const [si, s] of page.sentences.entries()) {
-      if (s.audio && !o.force && existsSync(join(dir, s.audio))) continue;
-      const key = await sha256Hex(new TextEncoder().encode(`${o.voice.cacheKey}\n${s.text}`));
-      todo.push({ page: pi, idx: si, text: s.text, cached: join(o.cacheDir, key) });
+      if (has(s.audio)) continue;
+      slots.push({
+        text: s.text,
+        rel: `audio/p${String(pi + 1).padStart(2, '0')}-s${si + 1}.${ext}`,
+        done: (wordsFile) => {
+          const words = existsSync(wordsFile) ? alignWords(s.text, JSON.parse(readFileSync(wordsFile, 'utf8'))) : undefined;
+          if (words) s.words = words;
+          else delete s.words;
+        },
+      });
+      s.audio = slots.at(-1)!.rel;
     }
   }
-  const missing = todo.filter((t) => o.force || !existsSync(`${t.cached}.${o.voice.ext}`));
-  const unique = [...new Map(missing.map((t) => [t.cached, t])).values()];
-  if (unique.length) o.log?.(`  ${book.id}：合成 ${unique.length} 句`);
-  await o.voice.synthesize(unique.map((t) => ({ text: t.text, audio: `${t.cached}.${o.voice.ext}`, words: `${t.cached}.words.json` })));
+  for (const [qi, q] of (book.quiz ?? []).entries()) {
+    const base = `audio/q${String(qi + 1).padStart(2, '0')}`;
+    if (!has(q.audio)) {
+      q.audio = `${base}.${ext}`;
+      slots.push({ text: q.question, rel: q.audio, done: () => {} });
+    }
+    const opts = q.optionAudio?.length === q.options.length ? q.optionAudio : q.options.map((_, i) => `${base}-o${i + 1}.${ext}`);
+    q.optionAudio = opts;
+    q.options.forEach((text, i) => {
+      if (!has(opts[i])) slots.push({ text, rel: opts[i], done: () => {} });
+    });
+  }
+  const words = new Set<string>();
+  for (const p of book.pages) for (const s of p.sentences) for (const t of tokens(s.text)) if (wordKey(t)) words.add(wordKey(t));
+  book.wordAudio = Object.fromEntries(Object.entries(book.wordAudio ?? {}).filter(([k]) => words.has(k)));
+  for (const w of [...words].sort()) {
+    if (has(book.wordAudio[w])) continue;
+    const rel = `audio/w-${w.replace(/[^a-z0-9]/g, '_')}.${ext}`;
+    book.wordAudio[w] = rel;
+    slots.push({ text: w, rel, done: () => {} });
+  }
 
-  for (const t of todo) {
-    const rel = `audio/p${String(t.page + 1).padStart(2, '0')}-s${t.idx + 1}.${o.voice.ext}`;
-    copyFileSync(`${t.cached}.${o.voice.ext}`, join(dir, rel));
-    const s = book.pages[t.page].sentences[t.idx];
-    s.audio = rel;
-    const wordsFile = `${t.cached}.words.json`;
-    const words = existsSync(wordsFile) ? alignWords(s.text, JSON.parse(readFileSync(wordsFile, 'utf8'))) : undefined;
-    if (words) s.words = words;
-    else delete s.words;
+  const keyed = await Promise.all(
+    slots.map(async (x) => ({ ...x, cached: join(o.cacheDir, await sha256Hex(new TextEncoder().encode(`${o.voice.cacheKey}\n${x.text}`))) })),
+  );
+  const missing = keyed.filter((t) => o.force || !existsSync(`${t.cached}.${ext}`));
+  const unique = [...new Map(missing.map((t) => [t.cached, t])).values()];
+  if (unique.length) o.log?.(`  ${book.id}：合成 ${unique.length} 段`);
+  await o.voice.synthesize(unique.map((t) => ({ text: t.text, audio: `${t.cached}.${ext}`, words: `${t.cached}.words.json` })));
+
+  for (const t of keyed) {
+    copyFileSync(`${t.cached}.${ext}`, join(dir, t.rel));
+    t.done(`${t.cached}.words.json`);
   }
   saveBook(paths, book);
-  return todo.length;
+  return keyed.length;
 }

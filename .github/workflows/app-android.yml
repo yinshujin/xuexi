@@ -17,8 +17,8 @@ name: Android APK
 on:
   workflow_dispatch:
   workflow_run:
-    # Also after new course bundles, so the APK ships the latest lessons.
-    workflows: [CI, Course bundles]
+    # Also after new course bundles or sample books, so the APK ships the latest ones.
+    workflows: [CI, Course bundles, Sample books]
     types: [completed]
   push:
     tags: ['app-v*']
@@ -78,7 +78,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p bundles
-          if gh release download courses-latest --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles; then
+          if gh release download courses-latest --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles &&
+            { gh release download books-sample --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles ||
+              echo "::notice::No books-sample release yet; building without built-in picture books."; }; then
             pnpm content builtin bundles/*.zip
           else
             echo "::notice::No courses-latest release yet; building without built-in courses."

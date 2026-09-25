@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { BookWord } from '@xuexi/course-pack';
+import { wordKey, type BookWord } from '@xuexi/course-pack';
 import { BOOK_EVENT_PREFIX, type BookReadMode } from '@xuexi/shared';
 import { openBook, recordingId, recordingsOf, saveRecording, type OpenedBook } from '../lib/books';
 import { recordLimitMs, wordAt, wordTimings } from '../lib/reading';
@@ -40,6 +40,8 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
   const [picked, setPicked] = useState<number | null>(null);
   const [correct, setCorrect] = useState(0);
   const [layout, setLayout] = useState<'stack' | 'side'>('stack');
+  /** Quiz narration: -1 = the question is being read, i = option i, null = quiet. */
+  const [readingOpt, setReadingOpt] = useState<number | null>(null);
 
   const audio = useRef<HTMLAudioElement | null>(null);
   const run = useRef(0);
@@ -304,6 +306,12 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
     const src = opened?.url(s.audio);
     setSentence(si);
     setWord(wi);
+    const own = opened?.url(book?.wordAudio?.[wordKey(s.text.split(/\s+/).filter(Boolean)[wi] ?? '')]);
+    if (own) {
+      await play(r, own);
+      if (r === run.current) setWord(wi);
+      return;
+    }
     if (!src) return;
     const known = durations.current.get(`${pi}:${si}`);
     const w = s.words?.[wi] ?? (known ? wordTimings(s, known)[wi] : undefined);
@@ -364,6 +372,32 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
     }
   };
 
+  /** 听题：read the question, then each option, lighting up what is being read. */
+  const listenQuiz = async (qi: number, only?: number) => {
+    const q = book?.quiz?.[qi];
+    if (!q) return;
+    stopAll();
+    const r = run.current;
+    const say = async (idx: number, rel: string | undefined) => {
+      const src = opened?.url(rel);
+      if (!src) return true;
+      setReadingOpt(idx);
+      return play(r, src);
+    };
+    if (only !== undefined) {
+      await say(only, only < 0 ? q.audio : q.optionAudio?.[only]);
+    } else if (await say(-1, q.audio)) {
+      for (let i = 0; i < q.options.length; i++) {
+        if (!(await sleep(r, 350)) || !(await say(i, q.optionAudio?.[i]))) break;
+      }
+    }
+    if (r === run.current) setReadingOpt(null);
+  };
+  useEffect(() => {
+    if (screen === 'quiz') void listenQuiz(quizAt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [screen, quizAt]);
+
   const exit = async () => {
     stopAll();
     if (screen === 'read' || screen === 'quiz') await record(false);
@@ -412,6 +446,7 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
               <span className="mr-2 rounded-lg bg-violet-500 px-2 py-0.5 text-white">{book.level}</span>
               {pages.length} 页{book.quiz?.length ? ` · 读完有 ${book.quiz.length} 道小题` : ''}
             </div>
+            <div className="text-slate-500">💡 读的时候，点任何一个单词都能听它的发音。</div>
             {MODES.map((m) => (
               <button
                 key={m.id}
@@ -453,29 +488,51 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
           <div className="text-slate-500">
             小测 {quizAt + 1}/{book.quiz.length}
           </div>
-          <h2 className="text-2xl font-bold leading-snug">{q.question}</h2>
+          <div className={`flex items-start gap-3 rounded-2xl p-2 ${readingOpt === -1 ? 'bg-sky-100' : ''}`}>
+            <h2 className="flex-1 text-2xl font-bold leading-snug">{q.question}</h2>
+            {q.audio && (
+              <button type="button" aria-label="听题" className="shrink-0 rounded-full bg-white px-3 py-2 text-xl shadow-sm ring-1 ring-slate-200" onClick={() => void listenQuiz(quizAt)}>
+                🔊 听题
+              </button>
+            )}
+          </div>
           {q.options.map((opt, i) => {
             const tone = !answered
-              ? 'bg-white ring-slate-200'
+              ? readingOpt === i
+                ? 'bg-sky-50 ring-sky-400'
+                : 'bg-white ring-slate-200'
               : i === q.answer
                 ? 'bg-emerald-100 ring-emerald-400'
                 : i === picked
                   ? 'bg-rose-100 ring-rose-400'
                   : 'bg-white ring-slate-200 opacity-60';
             return (
-              <button
-                key={opt}
-                type="button"
-                disabled={answered}
-                onClick={() => {
-                  setPicked(i);
-                  if (i === q.answer) setCorrect((n) => n + 1);
-                }}
-                className={`rounded-2xl p-4 text-left text-xl ring-2 transition ${tone}`}
-              >
-                <span className="mr-2 font-bold text-slate-400">{'ABCD'[i]}</span>
-                {opt}
-              </button>
+              <div key={opt} className="flex items-stretch gap-2">
+                <button
+                  type="button"
+                  disabled={answered}
+                  onClick={() => {
+                    stopAll();
+                    setReadingOpt(null);
+                    setPicked(i);
+                    if (i === q.answer) setCorrect((n) => n + 1);
+                  }}
+                  className={`flex-1 rounded-2xl p-4 text-left text-xl ring-2 transition ${tone}`}
+                >
+                  <span className="mr-2 font-bold text-slate-400">{'ABCD'[i]}</span>
+                  {opt}
+                </button>
+                {q.optionAudio?.[i] && (
+                  <button
+                    type="button"
+                    aria-label={`听选项 ${'ABCD'[i]}`}
+                    className="shrink-0 rounded-2xl bg-white px-3 text-xl ring-1 ring-slate-200"
+                    onClick={() => void listenQuiz(quizAt, i)}
+                  >
+                    🔊
+                  </button>
+                )}
+              </div>
             );
           })}
           {answered && (
@@ -571,14 +628,21 @@ export function BookReader({ childId, bookId, back }: { childId: string; bookId:
           }`}
         >
           {p.sentences.length === 0 ? (
-            <p className="text-center text-lg text-slate-400">这一页没有字，看看图上发生了什么？</p>
+            <p className="text-center text-lg text-slate-400">这一页只有图，看看图上发生了什么？</p>
           ) : (
             <p className="text-2xl leading-relaxed sm:text-3xl sm:leading-relaxed">
               {p.sentences.map((s, si) => {
                 const active = si === sentence;
                 const words = s.text.split(/\s+/).filter(Boolean);
+                const caption = s.kind === 'caption';
                 return (
-                  <span key={si} className={`mr-2 rounded-lg ${active ? 'bg-sky-100' : ''}`}>
+                  <span
+                    key={si}
+                    className={`mr-2 rounded-lg ${active ? 'bg-sky-100' : ''} ${caption ? 'text-slate-600 italic' : ''}`}
+                  >
+                    {caption && si === 0 && (
+                      <span className="mr-2 rounded-md bg-amber-100 px-1.5 align-middle text-base not-italic text-amber-800">🖼 看图说一说</span>
+                    )}
                     {words.map((w, wi) => (
                       <button
                         key={wi}

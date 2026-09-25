@@ -48,7 +48,9 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p bundles
-          if gh release download courses-latest --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles; then
+          if gh release download courses-latest --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles &&
+            { gh release download books-sample --repo "$GITHUB_REPOSITORY" --pattern '*.zip' --dir bundles ||
+              echo "::notice::No books-sample release yet; building without built-in picture books."; }; then
             pnpm content builtin bundles/*.zip
           else
             echo "::notice::No courses-latest release yet; building without built-in courses."

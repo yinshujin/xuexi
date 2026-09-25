@@ -60,7 +60,7 @@ const HELP = `用法：pnpm content <命令> [选项]
   builtin <课程包.zip ...> [--out 目录]
                                   把课程包文件解包到 apps/web/public/builtin，构建 App 时一起打包（装好就能上课）
   —— 绘本跟读（原图 + 逐句朗读 + 跟读录音）——
-  book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M]
+  book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M] [--keep-blank]
                                   导入自己有版权的绘本 PDF（如 RAZ Plus 订阅里下载的），默认私有
   book import-bookdash <目录/en> --level A [--quiz 题目.json]   导入 Book Dash 开放绘本（CC BY 4.0）
   book import-samples <bookdash-books 目录>   导入 content/books-sample/samples.json 里的示例绘本
@@ -130,6 +130,7 @@ async function main() {
       source: { type: 'string' },
       license: { type: 'string' },
       'allow-silent': { type: 'boolean' },
+      'keep-blank': { type: 'boolean' },
       samples: { type: 'string' },
     },
   });
@@ -339,7 +340,7 @@ async function main() {
       const out = values.out ?? join(paths.root, 'apps/web/public/builtin');
       const r = await writeBuiltin(zips, out);
       for (const s of r.skipped) log(`⚠ 跳过 ${s}`);
-      log(`App 内置课程：${r.lessons.length} 节（${fmtBytes(r.bytes)}）→ ${out}`);
+      log(`App 内置课程：${r.lessons.length} 节，绘本 ${r.books.length} 本（${fmtBytes(r.bytes)}）→ ${out}`);
       return;
     }
     case 'book': {
@@ -362,6 +363,7 @@ async function main() {
           throw new Error('用法：book import-pdf <绘本.pdf> --level C [--title 书名] [--source RAZ] [--split 2] [--first N] [--last M] [--public]');
         }
         const b = await importPdf(paths, pdf, {
+          keepBlank: values['keep-blank'],
           level: values.level,
           id: values.id,
           title: values.title,

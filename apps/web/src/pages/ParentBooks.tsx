@@ -1,7 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { BookEntry } from '@xuexi/course-pack';
 import { BOOK_EVENT_PREFIX, type LessonEvent } from '@xuexi/shared';
-import { deleteRecordings, listBooks, recordingsOf, removeBook, type Recording } from '../lib/books';
+import {
+  deleteRecordings,
+  listBooks,
+  recordingsOf,
+  removeBook,
+  type Recording,
+} from '../lib/books';
 import { useApp } from '../lib/store';
 import { bytes, dayKey } from '../lib/format';
 import { Btn, Card, Empty } from '../components/ui';
@@ -45,7 +51,11 @@ export function ParentBooks() {
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap gap-2">
         {family.children.map((c) => (
-          <Btn key={c.id} tone={c.id === childId ? 'primary' : 'plain'} onClick={() => setChildId(c.id)}>
+          <Btn
+            key={c.id}
+            tone={c.id === childId ? 'primary' : 'plain'}
+            onClick={() => setChildId(c.id)}
+          >
             {c.avatar} {c.name}
           </Btn>
         ))}
@@ -76,21 +86,30 @@ export function ParentBooks() {
               <span className="text-slate-400">{b.private ? '家庭自有 · 请勿外传' : b.source}</span>
               <span className="flex-1" />
               {mine.length > 0 && (
-                <button type="button" className="text-sky-600 underline" onClick={() => setOpen(open === b.id ? null : b.id)}>
+                <button
+                  type="button"
+                  className="text-sky-600 underline"
+                  onClick={() => setOpen(open === b.id ? null : b.id)}
+                >
                   跟读录音 {mine.length} 句
                 </button>
               )}
-              <button
-                type="button"
-                className="text-slate-500 underline"
-                onClick={async () => {
-                  if (!confirm(`删除绘本「${b.title}」和孩子们的跟读录音？删除后需要重新导入。`)) return;
-                  await removeBook(b);
-                  setVersion((v) => v + 1);
-                }}
-              >
-                删除绘本
-              </button>
+              {b.origin === 'builtin' ? (
+                <span className="rounded bg-sky-50 px-1.5 text-xs text-sky-700">App 自带</span>
+              ) : (
+                <button
+                  type="button"
+                  className="text-slate-500 underline"
+                  onClick={async () => {
+                    if (!confirm(`删除绘本「${b.title}」和孩子们的跟读录音？删除后需要重新导入。`))
+                      return;
+                    await removeBook(b);
+                    setVersion((v) => v + 1);
+                  }}
+                >
+                  删除绘本
+                </button>
+              )}
             </div>
             {open === b.id && (
               <Recordings
@@ -139,7 +158,11 @@ function Recordings({ list, onClear }: { list: Recording[]; onClear: () => void 
           <span className="flex-1">{r.text}</span>
         </button>
       ))}
-      <button type="button" className="mt-1 self-end text-sm text-rose-600 underline" onClick={onClear}>
+      <button
+        type="button"
+        className="mt-1 self-end text-sm text-rose-600 underline"
+        onClick={onClear}
+      >
         删除这些录音
       </button>
     </div>

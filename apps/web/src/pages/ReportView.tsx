@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { BOOK_EVENT_PREFIX, EXAM_EVENT_PREFIX } from '@xuexi/shared';
+import { BOOK_EVENT_PREFIX, EXAM_EVENT_PREFIX, WRITING_EVENT_PREFIX } from '@xuexi/shared';
 import { SUBJECT_LABEL } from '@xuexi/curriculum';
 import { examHistory, findPaper, medalOf, MEDAL_ICON } from '../lib/exams';
 import { useApp } from '../lib/store';
@@ -37,8 +37,11 @@ export function ReportView() {
     const kps = childKps(child).filter((k) => k.kp.practice.length > 0);
     const done = events.filter((e) => e.type === 'lesson' && e.completed);
     const ids = done.map((e) => (e.type === 'lesson' ? e.lessonId : ''));
-    const lessonIds = new Set(ids.filter((id) => !id.startsWith(BOOK_EVENT_PREFIX) && !id.startsWith(EXAM_EVENT_PREFIX)));
+    const lessonIds = new Set(
+      ids.filter((id) => !id.startsWith(BOOK_EVENT_PREFIX) && !id.startsWith(EXAM_EVENT_PREFIX) && !id.startsWith(WRITING_EVENT_PREFIX)),
+    );
     const booksRead = new Set(ids.filter((id) => id.startsWith(BOOK_EVENT_PREFIX))).size;
+    const writings = ids.filter((id) => id.startsWith(WRITING_EVENT_PREFIX)).length;
     return {
       perDay,
       tags,
@@ -46,6 +49,7 @@ export function ReportView() {
       kps,
       lessonsWatched: lessonIds.size,
       booksRead,
+      writings,
       exams: [...examHistory(events)].sort((a, b) => b[1].lastAt - a[1].lastAt).slice(0, 12),
       mistakes: openMistakes(events).length,
       total: attempts.length,
@@ -73,7 +77,10 @@ export function ReportView() {
         </Card>
         <Card className="text-center">
           <div className="text-3xl font-bold">{report.lessonsWatched}</div>
-          <div className="text-slate-500">看完的课{report.booksRead > 0 ? ` · 绘本 ${report.booksRead} 本` : ''}</div>
+          <div className="text-slate-500">
+            看完的课{report.booksRead > 0 ? ` · 绘本 ${report.booksRead} 本` : ''}
+            {report.writings > 0 ? ` · 作文 ${report.writings} 篇` : ''}
+          </div>
         </Card>
         <Card className="text-center">
           <div className="text-3xl font-bold">{report.mistakes}</div>

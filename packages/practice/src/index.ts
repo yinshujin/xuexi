@@ -100,3 +100,5 @@ export { YW_G4A_SOUNDALIKE_WORDS } from './banks/yw-g4a-words';
 export { EN_G2A } from './banks/en-g2a';
 export { EN_G4A } from './banks/en-g4a';
 export type { EnglishBank, EnWord, ChoiceItem } from './banks/types';
+export { XZ_G2A, XZ_G2A_GAMES } from './banks/xz-g2a';
+export type { WritingGames } from './banks/types';

@@ -1,11 +1,11 @@
 /**
  * 排序: tap four tiles into order. 数学 得数 / 大数 / 长度 from small to large
- * (or large to small), 语文 音序, 英语 字母顺序. Every tile has its own key, so
- * there is exactly one right order.
+ * (or large to small), 语文 音序, 英语 字母顺序, 写作 a short passage (顺序词、时间、
+ * 故事的先后). Every tile has its own key, so there is exactly one right order.
  */
 import type { GameBuilder, GameInfo, SortGame, UnitGame } from './types';
 import { bigNumbers, lengths, mathTopic, topicKp, unitSumPool, valueOf } from './mathfacts';
-import { mixed } from './util';
+import { mixed, writingPick, XZ_GAMES } from './util';
 import { enWords, ywWords, yinxu } from './words';
 
 const TILES = 4;
@@ -32,6 +32,20 @@ export const sortBuilder: GameBuilder = {
   id: 'sort',
   build({ book, unit, paper, rng, kpOf }): UnitGame[] {
     const ctx = { book, unit, kpOf };
+    if (book.subject === 'writing') {
+      const got = writingPick(XZ_GAMES[book.id]?.sort, kpOf, paper);
+      if (!got) return [];
+      const answer = got.item.sentences;
+      const game: SortGame = {
+        kind: 'sort',
+        title: '排序：排成一段话',
+        prompt: got.item.prompt,
+        answer,
+        tiles: mixed(rng, answer, (t) => sortCorrect({ answer } as SortGame, t)),
+        sep: ' → ',
+      };
+      return [{ kpId: got.kp.id, kpTitle: got.kp.title, game }];
+    }
     if (book.subject === 'math') {
       const topic = mathTopic(unit);
       const kp = topic && topicKp(unit, topic);

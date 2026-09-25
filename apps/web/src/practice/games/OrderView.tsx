@@ -32,7 +32,11 @@ export function OrderView({ game, onDone, done }: GameViewProps<OrderGame>) {
           result === null ? 'border-slate-300' : result ? 'border-emerald-400 bg-emerald-50' : 'border-rose-400 bg-rose-50'
         }`}
       >
-        {picked.length === 0 && <span className="text-lg text-slate-400">点下面的{game.joiner === '' ? '字' : '单词'}，按顺序排好</span>}
+        {picked.length === 0 && (
+          <span className="text-lg text-slate-400">
+            点下面的{game.joiner !== '' ? '单词' : game.tiles.some((t) => [...t].length > 1) ? '字块' : '字'}，按顺序排好
+          </span>
+        )}
         {picked.map((i, k) => (
           <button
             key={`${i}-${k}`}

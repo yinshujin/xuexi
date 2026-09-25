@@ -7,6 +7,7 @@ import { YW_G4A_ITEMS } from '../banks/yw-g4a';
 import { YW_G4A_POLY } from '../banks/yw-g4a-poly';
 import { YW_G2A_SOUNDALIKE_WORDS, YW_G2A_WORDS } from '../banks/yw-g2a-words';
 import { YW_G4A_SOUNDALIKE_WORDS, YW_G4A_WORDS } from '../banks/yw-g4a-words';
+import { XZ_G2A } from '../banks/xz-g2a';
 import { dictationGenerator } from './dictation';
 import { chineseWordsGenerator, englishGenerator, polyphoneGenerator } from './lang';
 
@@ -27,3 +28,6 @@ export const yw4Dictation = dictationGenerator('yw4.dictation', YW_G4A_WORDS, YW
  */
 export const g2Concepts = chineseWordsGenerator('g2.concepts', MATH_G2A);
 export const g4Concepts = chineseWordsGenerator('g4.concepts', MATH_G4A);
+
+/** 写作 二年级 写话小练习 (写完整、用标点、写具体、看图写话、排顺序、格式…): an authored bank like 语文. */
+export const xz2Skills = chineseWordsGenerator('xz2.skills', XZ_G2A);

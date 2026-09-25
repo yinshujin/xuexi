@@ -69,6 +69,15 @@ export const ERROR_TAGS = {
   polyphone: '多音字的读音和意思没对上',
   'similar-char': '形近字、同音字混淆',
   'word-usage': '词语意思或搭配用错',
+  // ---- 写作 二年级 写话 (xz2.skills) ----
+  'sentence-incomplete': '句子不完整（缺了谁、在哪里或干什么）',
+  punctuation: '标点用错（句号、逗号、问号、叹号、引号）',
+  'not-specific': '没有写具体（缺少样子、颜色、声音、动作）',
+  'writing-order': '顺序乱了（时间、事情经过的先后）',
+  'writing-format': '格式不对（留言条、日记的格式）',
+  'not-fluent': '句子不通顺（搭配不当、前后矛盾、重复啰嗦）',
+  'picture-misread': '看图没看清（时间、地点、人物或事情说错）',
+  'imagine-unreasonable': '想象不合理（和开头接不上、角色的特点变了）',
   // ---- English ----
   'en-meaning': '英语单词意思记混',
   'en-spelling': '英语单词拼写错误',
@@ -324,6 +333,24 @@ export const GENERATORS = [
     grade: 4,
     title: '看拼音写词语（课本听写词语）',
     errorTags: ['similar-char'],
+  },
+  // ---------------- 写作 (item banks) ----------------
+  {
+    id: 'xz2.skills',
+    grade: 2,
+    title: '写话小练习（写完整、用标点、写具体、排顺序、格式）',
+    errorTags: [
+      'sentence-incomplete',
+      'punctuation',
+      'not-specific',
+      'writing-order',
+      'writing-format',
+      'not-fluent',
+      'picture-misread',
+      'imagine-unreasonable',
+      'word-usage',
+      'reasoning',
+    ],
   },
   {
     id: 'en2.words',

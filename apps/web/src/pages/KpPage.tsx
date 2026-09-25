@@ -7,11 +7,13 @@ import { coreSpecs, progressMap, setShape } from '../lib/learning';
 import { wordsOf } from '../lib/dictation';
 import { minutes } from '../lib/format';
 import { Card, Empty, Page } from '../components/ui';
+import { StatusPill, useWritingStatus } from './WritingPage';
 
 const SPEED_GENERATORS = new Set(['g2.mul.table', 'g2.div.table', 'g2.addsub.2d', 'g4.oral.muldiv']);
 
 export function KpPage({ child, kpId }: { child: ChildProfile; kpId: string }) {
   const { catalog, eventsOf, family } = useApp();
+  const writing = useWritingStatus(child);
   const ref = findKnowledgePoint(kpId);
   const events = eventsOf(child.id);
   const progress = useMemo(() => progressMap(events, family.settings).get(kpId), [events, family.settings, kpId]);
@@ -87,6 +89,19 @@ export function KpPage({ child, kpId }: { child: ChildProfile; kpId: string }) {
               <span className="block text-xl font-bold">看拼音写词语（{dictation.length} 个）</span>
               <span className="opacity-90">课本听写词语：看拼音在本子上写，写完对答案</span>
             </span>
+          </Card>
+        </a>
+      )}
+      {kp.writing && (
+        <a href={href(`/c/${child.id}/writing/${kpId}?back=${back}`)} className="mb-6 block">
+          <Card className="flex items-center gap-3 bg-gradient-to-r from-amber-400 to-lime-400 text-white ring-0 transition active:scale-95">
+            <span className="text-5xl">✏️</span>
+            <span className="min-w-0 flex-1">
+              <span className="block text-sm opacity-90">写作任务</span>
+              <span className="block text-2xl font-bold">{kp.writing.title}</span>
+              <span className="opacity-90">看题目 → 列提纲 → 动笔写 → 自查 → 看范文</span>
+            </span>
+            <StatusPill status={writing.statusOf(kp.writing.id)} />
           </Card>
         </a>
       )}

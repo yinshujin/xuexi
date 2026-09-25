@@ -19,6 +19,7 @@ import { MATH_G4A } from '../src/banks/math-g4a';
 import { YW_G2A } from '../src/banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../src/banks/yw-g4a';
 import { YW_G4A_POLY } from '../src/banks/yw-g4a-poly';
+import { XZ_G2A } from '../src/banks/xz-g2a';
 
 const MINUS = '−';
 
@@ -163,6 +164,8 @@ export function expectedAnswer(q: Question): Answer {
       return langAnswer(q, MATH_G2A.items, [], []);
     case 'g4.concepts':
       return langAnswer(q, MATH_G4A.items, [], []);
+    case 'xz2.skills':
+      return langAnswer(q, XZ_G2A.items, [], []);
     case 'g2.addsub.2d': {
       if (q.vertical) {
         const [a, b] = q.vertical.operands;

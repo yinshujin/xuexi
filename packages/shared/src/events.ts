@@ -71,6 +71,8 @@ export type BookReadMode = 'listen' | 'repeat' | 'self';
 export const BOOK_EVENT_PREFIX = 'book:';
 /** 单元测试 results are lesson events with lessonId "exam:<paper id>" (e.g. "exam:bsd-g2a.u1.A"). */
 export const EXAM_EVENT_PREFIX = 'exam:';
+/** 写作任务 handed in are lesson events with lessonId "writing:<task id>" (e.g. "writing:xz-g2a.u1.task"). */
+export const WRITING_EVENT_PREFIX = 'writing:';
 
 export type LearningEvent = AttemptEvent | LessonEvent;
 

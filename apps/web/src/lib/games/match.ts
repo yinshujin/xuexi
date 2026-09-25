@@ -1,7 +1,7 @@
-/** 连连看: match pairs — 英语 word ↔ 中文, 语文 词语 ↔ 拼音, 数学 算式 ↔ 得数. */
+/** 连连看: match pairs — 英语 word ↔ 中文, 语文 词语 ↔ 拼音, 数学 算式 ↔ 得数, 写作 authored pairs (标点 ↔ 名字 …). */
 import { displayPinyin, type Rng } from '@xuexi/practice';
 import type { GameBuilder, GameInfo, MatchGame, UnitGame } from './types';
-import { distinctPairs, EN_BANKS, mixed, unitSums, unitWords } from './util';
+import { distinctPairs, EN_BANKS, mixed, unitSums, unitWords, writingPick, XZ_GAMES } from './util';
 
 const PAIRS = 5;
 /** A 连连看 counts as right with at most one wrong match. */
@@ -14,7 +14,13 @@ function matchOf(rng: Rng, title: string, pairs: Array<[string, string]>, words?
 
 export const matchBuilder: GameBuilder = {
   id: 'match',
-  build({ book, unit, rng, seed, kpOf }): UnitGame[] {
+  build({ book, unit, paper, rng, seed, kpOf }): UnitGame[] {
+    if (book.subject === 'writing') {
+      const got = writingPick(XZ_GAMES[book.id]?.match, kpOf, paper);
+      if (!got) return [];
+      const pairs = rng.shuffle(got.item.pairs).slice(0, PAIRS);
+      return [{ kpId: got.kp.id, kpTitle: got.kp.title, game: matchOf(rng, got.item.title, pairs) }];
+    }
     if (book.subject === 'english') {
       const bank = EN_BANKS[book.id];
       const words = bank?.words.filter((w) => kpOf(w.kp)) ?? [];

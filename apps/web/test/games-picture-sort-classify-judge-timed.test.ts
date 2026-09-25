@@ -20,7 +20,7 @@ import { coreSpecs } from '../src/lib/learning';
 import { unitPapers } from '../src/lib/exams';
 import { evalMath } from '../src/lib/games/mathfacts';
 import { EN_CATEGORY, EN_EMOJI, EN_SIMILAR, YW_EMOJI } from '../src/lib/games/pictures';
-import { EN_BANKS, DICTATION, variantOf } from '../src/lib/games/util';
+import { EN_BANKS, DICTATION, variantOf, XZ_GAMES } from '../src/lib/games/util';
 import { misreadings, nasal, structure, tongue, toneless, withTone, yinxu } from '../src/lib/games/words';
 
 const MINE = ['picture', 'sort', 'classify', 'judge', 'timed'];
@@ -180,6 +180,11 @@ describe('games: 看图题 / 排序 / 分类 / 判断 / 限时挑战', () => {
       expect(s.answer.length).toBe(4);
       expect([...s.tiles].sort()).toEqual([...s.answer].sort());
       expect(s.tiles.join(), where).not.toBe(s.answer.join());
+      if (book.subject === 'writing') {
+        // 写作: an authored passage whose sentences carry their own order.
+        expect(XZ_GAMES[book.id].sort.some((x) => x.sentences.join() === s.answer.join()), where).toBe(true);
+        continue;
+      }
       const py = pinyinOf(book.id);
       const key = (t: string): number | string =>
         book.subject === 'math' ? (evalMath(t) as number) : book.subject === 'chinese' ? yinxu([...py.get(t)!][0]) : t[0].toLowerCase();

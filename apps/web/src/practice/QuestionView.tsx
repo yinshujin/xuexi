@@ -106,6 +106,8 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
   } else if (q.widget === 'choice' || q.widget === 'compare') {
     const opts = q.widget === 'compare' ? ['>', '<', '='] : (q.options ?? []);
     const right = q.answer.type === 'choice' ? q.answer.index : q.answer.type === 'compare' ? opts.indexOf(q.answer.value) : -1;
+    // 选标点 (写作): options that are only punctuation marks are drawn big, like the compare signs.
+    const marks = q.widget === 'choice' && opts.every((o) => /^[\s。，？！：、“”‘’；…]+$/u.test(o));
     const shown = (i: number) =>
       !oneShot || phase !== 'done'
         ? 'bg-white ring-1 ring-slate-200'
@@ -126,7 +128,7 @@ export function QuestionView({ question: q, grade, onFirstAnswer, onNext, autoNe
               submit(q.widget === 'compare' ? { type: 'compare', value: o as '<' | '>' | '=' } : { type: 'choice', index: i });
             }}
             className={`min-h-16 rounded-2xl px-4 py-3 text-2xl font-bold shadow-sm active:scale-95 ${oneShot ? '' : 'disabled:opacity-60'} ${shown(i)} ${
-              q.widget === 'compare' ? 'text-4xl' : 'text-left text-xl font-medium'
+              q.widget === 'compare' || marks ? 'text-4xl' : 'text-left text-xl font-medium'
             }`}
           >
             {o}

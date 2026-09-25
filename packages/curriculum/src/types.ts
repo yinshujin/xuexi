@@ -49,6 +49,34 @@ export interface KnowledgePoint {
   lessons: LessonSpec[];
   /** Empty when the topic has no programmatic practice yet (e.g. 观察物体). */
   practice: PracticeSpec[];
+  /** 写作: the writing task of this knowledge point (write on paper or type, self-check, parent review). */
+  writing?: WritingTask;
+}
+
+/**
+ * A 写作任务: the child reads the prompt, fills in an outline, writes (on paper
+ * and takes a photo, or types), checks the list, and a parent reviews it.
+ * Nothing here is auto-graded; the example is original (never a textbook text).
+ */
+export interface WritingTask {
+  /** e.g. "xz-g2a.u1.task" */
+  id: string;
+  title: string;
+  /** What to write, in child-friendly Chinese (the 题目要求). */
+  prompt: string;
+  /** How to go about it: 3–5 short tips. */
+  tips: string[];
+  /** Outline boxes to fill in before writing, e.g. 开头 / 经过 / 结尾, each with a hint. */
+  outline: Array<{ label: string; hint: string }>;
+  /** Good words and phrases the child may use. */
+  wordBank?: string[];
+  /** Self-check list shown after writing (标点、顺序、写具体 …). */
+  checklist: string[];
+  /** Suggested length in Chinese characters. */
+  minChars: number;
+  maxChars?: number;
+  /** An original model text at the child's level (shown after writing, or on request). */
+  example?: string;
 }
 
 export interface Unit {
@@ -60,9 +88,9 @@ export interface Unit {
   knowledgePoints: KnowledgePoint[];
 }
 
-export type Subject = 'math' | 'chinese' | 'english';
+export type Subject = 'math' | 'chinese' | 'english' | 'writing';
 
-export const SUBJECT_LABEL: Record<Subject, string> = { math: '数学', chinese: '语文', english: '英语' };
+export const SUBJECT_LABEL: Record<Subject, string> = { math: '数学', chinese: '语文', english: '英语', writing: '写作' };
 
 export interface Book {
   /** e.g. "bsd-g4a" = 北师大版 四年级上册 */

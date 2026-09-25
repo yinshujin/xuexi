@@ -29,7 +29,7 @@ import { Btn, Card, Empty, Page } from '../components/ui';
 import { answerText, QuestionView } from '../practice/QuestionView';
 import { GAME_VIEWS, type GameOutcome } from '../practice/games';
 
-const SUBJECT_TONE = { math: 'from-sky-500 to-cyan-400', chinese: 'from-rose-500 to-orange-400', english: 'from-violet-500 to-fuchsia-400' } as const;
+const SUBJECT_TONE = { math: 'from-sky-500 to-cyan-400', chinese: 'from-rose-500 to-orange-400', english: 'from-violet-500 to-fuchsia-400', writing: 'from-amber-500 to-lime-400' } as const;
 
 // ================================================================ the map
 

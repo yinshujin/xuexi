@@ -4,6 +4,7 @@
  * regular pack lesson (OpenMAIC DSL slides + actions), so review / build /
  * publish and the player work unchanged.
  */
+import type { Subject } from '@xuexi/curriculum';
 
 export const AUTHORED_FORMAT = 'xuexi-authored@1' as const;
 
@@ -120,7 +121,7 @@ answer 是正确选项的序号（从 0 开始）；多个序号表示多选（�
 `;
 
 /** Subject-specific hard requirements appended to FORMAT_SPEC in the author brief. */
-export const SUBJECT_RULES: Record<'math' | 'chinese' | 'english', string> = {
+export const SUBJECT_RULES: Record<Subject, string> = {
   math: `### 硬性要求
 - 所有算式必须正确：脚本会自动验算形如 "a + b = c"、"a × b = c"、"a ÷ b = c" 的算式，以及连等式（"408 × 23 = 408 × 20 + 408 × 3 = 9384"，每一段都要等于第一段）和带万、亿的数（"1200000 = 120万"），算错会被拒绝。
 - 只用这一册已经学过的知识；术语和北师大版课本一致。
@@ -152,6 +153,17 @@ export const SUBJECT_RULES: Record<'math' | 'chinese' | 'english', string> = {
 - 讲解课要有一页“情景对话”：用本课句型编一段 4–6 句的问答对话（两个角色轮流），逐句领读。
 - 课堂小题按题型分成几个 quiz 场景：讲解课 3 组（判断题 3 道，选项固定 ["对","错"]；选择题 3–4 道；
   填空与情景交际 3 道，题干用“（　）”表示空，做成选择题）；技巧课 2 组（判断题 2 道；选择与填空 2–3 道）。
+- 所有算式（如果出现）也会被自动验算。
+`,
+  writing: `### 硬性要求
+- 只讲一个写作方法，讲透：为什么这样写、怎么写，用“改前 / 改后”的原创例句对比（白板上一步步改给孩子看）。
+- 例句、范文全部原创，贴近孩子的生活（学校、家里、深圳的公园和地铁……）；不整篇抄录课文或别人的作文，课文最多引用一句。
+- 字词、标点准确；二年级用短句、常用字，四年级可以长一点；say 里只写汉字，不写拼音。
+- 讲解课 8–12 分钟（约 6–9 页、40–70 句 say）；技巧课 3–5 分钟（约 2–4 页、15–30 句 say）。
+- 每节课都有一页“学法口诀”：2–4 句顺口好记的口诀（每句 5–9 字），和本课方法一致，老师先领读再逐句解释。
+- 讲解课要有一页“动笔试一试”：给一个小任务（写一两句话或补全一段），再给出参考写法。
+- 课堂小题按题型分成几个 quiz 场景：讲解课 3 组（判断题 3 道，选项固定 ["对","错"]；选择题 3–4 道，如选出写得更具体的句子、
+  选合适的开头、给句子排顺序；句子练习 2–3 道，做成选择题）；技巧课 2 组（判断题 2 道；选择与句子练习 2–3 道）。
 - 所有算式（如果出现）也会被自动验算。
 `,
 };

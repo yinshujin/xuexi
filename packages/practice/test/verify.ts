@@ -14,6 +14,8 @@ import type { Answer, Question } from '../src/types';
 import type { ChoiceItem, EnWord, Polyphone } from '../src/banks/types';
 import { EN_G2A } from '../src/banks/en-g2a';
 import { EN_G4A } from '../src/banks/en-g4a';
+import { MATH_G2A } from '../src/banks/math-g2a';
+import { MATH_G4A } from '../src/banks/math-g4a';
 import { YW_G2A } from '../src/banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../src/banks/yw-g4a';
 import { YW_G4A_POLY } from '../src/banks/yw-g4a-poly';
@@ -157,6 +159,10 @@ export function expectedAnswer(q: Question): Answer {
       return langAnswer(q, EN_G2A.items, [], EN_G2A.words);
     case 'en4.words':
       return langAnswer(q, EN_G4A.items, [], EN_G4A.words);
+    case 'g2.concepts':
+      return langAnswer(q, MATH_G2A.items, [], []);
+    case 'g4.concepts':
+      return langAnswer(q, MATH_G4A.items, [], []);
     case 'g2.addsub.2d': {
       if (q.vertical) {
         const [a, b] = q.vertical.operands;

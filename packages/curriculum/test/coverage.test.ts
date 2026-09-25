@@ -10,10 +10,14 @@ import { BOOKS, type Book } from '../src/index';
 const DOCUMENTED_UNCOVERED: Record<string, ErrorTag[]> = {
   // reasoning: a wrong 拔高 / 创新 (g2.challenge) answer that matches no typical mistake;
   // there is no single technique for it, the worked solution of each question explains it.
-  'bsd-g2a': ['reasoning'],
+  // symmetry, motion-type, shift-count: the 图形的运动 concept bank (g2.concepts). Like 语文, these
+  // are fixed by each item's explanation; the lecture of the knowledge point covers the idea.
+  'bsd-g2a': ['motion-type', 'reasoning', 'shift-count', 'symmetry'],
   // reasoning: a wrong 拔高 / 创新 (g4.challenge) answer that matches no typical mistake;
   // there is no single technique for it, the worked solution of each question explains it.
-  'bsd-g4a': ['reasoning'],
+  // spatial, direction, data-read, data-judge: the concept bank (g4.concepts) for 观察的范围、
+  // 天安门广场、图形的奥秘 and 统计; fixed by each item's explanation, like 语文.
+  'bsd-g4a': ['data-judge', 'data-read', 'direction', 'reasoning', 'spatial'],
 };
 
 function coverage(book: Book) {

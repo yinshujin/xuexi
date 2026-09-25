@@ -1,7 +1,19 @@
-import type { Book } from '../types';
+import type { Book, PracticeSpec } from '../types';
 import { unit } from './helpers';
 
 const B = 'bsd-g4a';
+
+/**
+ * 概念题库（g4.concepts，文字选择题）: routine practice plus the 拔高 / 创新 items of a
+ * knowledge point; the variant is the knowledge point id without the book prefix.
+ */
+function concepts(v: string): PracticeSpec[] {
+  return [
+    { generatorId: 'g4.concepts', minDifficulty: 1, maxDifficulty: 5, variant: v },
+    { generatorId: 'g4.concepts', variant: `${v}#stretch`, tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 },
+    { generatorId: 'g4.concepts', variant: `${v}#creative`, tier: 'creative', minDifficulty: 3, maxDifficulty: 5 },
+  ];
+}
 
 /**
  * 北师大版 数学 四年级上册（2024 修订版，2026 年秋深圳四年级首次使用）。
@@ -28,7 +40,7 @@ export const bsdG4a: Book = {
     '第一、二单元沿用 2014 版的知识点 id，标题改成新课题名。对应关系：数说祖国、十万有多大、认识更大的数、从结绳计数说起 → counting-units；人口普查 → read-write-big；',
     '大豆产量 → compare-big、国庆庆典 → approximation 是推断的（这两课的正文没有看到，按旧版“国土面积”“近似数”的位置推断），已做好的讲解课仍用旧版情境。',
     '以下也是按课题名推断、需对照课本核实的：找规律 = 积的变化规律与末尾有 0 的乘法；队列表演（一）（二）= 两位数乘两位数（点子图、竖式）；电影院 = 乘法估算；生态养殖 = 混合运算与中括号；',
-    '第四、六、八单元和两个综合实践的具体内容（观察的范围 = 视线与盲区，天安门广场 = 用方向和距离描述位置等）。这些知识点暂时只有课，没有程序化练习。',
+    '第四、六、八单元和两个综合实践的具体内容（观察的范围 = 视线与盲区，天安门广场 = 用方向和距离描述位置等）。第四、六、八单元和「导航给的时间准吗」的练习是文字选择题题库（g4.concepts），编码和神奇的计算工具、有趣的算式暂时只有课，没有练习。',
     '旧版的“方向与位置”“除法（除数是两位数）”“生活中的负数”“可能性”不在本册，相应知识点已删除；g4.div.2d、g4.negative 练习保留给以后的册次。',
     '第一单元的深圳数据来自练习册“数说祖国”一页（深圳 2025 年常住人口、国内旅游总收入、在校学生总数、城乡居民生活用电）。',
   ].join(''),
@@ -742,7 +754,7 @@ export const bsdG4a: Book = {
           focus:
             '以教材“观察的范围”情境（隔着墙或窗户看外面）讲：从眼睛出发经过遮挡物边缘画两条视线，两条视线之间是能看到的范围，被挡住的是盲区；人离遮挡物越近，看到的范围越小。例题一在示意图上画视线判断某个人或物体能不能被看到；例题二说明大货车右转时的盲区，提醒过马路的安全。不涉及计算。',
         },
-        practice: [],
+        practice: concepts('u4.observe-range'),
       },
       {
         slug: 'tiananmen',
@@ -765,7 +777,7 @@ export const bsdG4a: Book = {
           focus:
             '以教材“天安门广场”情境的平面示意图（天安门、人民英雄纪念碑、人民大会堂、国家博物馆）讲：确定观察点，按“上北下南、左西右东”判断方向，再说出大约的距离，完整描述“某建筑物在某建筑物的什么方向，大约多少米”；再换一个观察点重新描述。方向只用八个方向，不涉及角度。',
         },
-        practice: [],
+        practice: concepts('u4.tiananmen'),
       },
     ]),
     // ------------------------------------------------------------------ 五
@@ -1078,7 +1090,7 @@ export const bsdG4a: Book = {
           focus:
             '用切萝卜块、切豆腐（正方体、长方体）和切火腿肠（圆柱）的生活情境讲：平着切、竖着切、斜着切，切面分别是什么形状（正方形、长方形、三角形、圆等）。先猜再用实物或动画验证。例题一说出切面形状，例题二根据切面形状选择切法。不涉及计算。',
         },
-        practice: [],
+        practice: concepts('u6.cut-solids'),
       },
       {
         slug: 'build-blocks',
@@ -1101,7 +1113,7 @@ export const bsdG4a: Book = {
           focus:
             '以用小正方体搭“大楼”的活动讲：分别从正面、左面（侧面）、上面看，画出看到的形状（用方格表示）；再反过来，根据三个方向看到的形状搭出大楼，并数出用了几个小正方体，讨论被挡住的那几个。例题一画出三个方向看到的形状，例题二根据形状数小正方体的个数。',
         },
-        practice: [],
+        practice: concepts('u6.build-blocks'),
       },
       {
         slug: 'roll-cube',
@@ -1124,7 +1136,7 @@ export const bsdG4a: Book = {
           focus:
             '用骰子和写了字的正方体讲：正方体有 6 个面，相对的两个面不相邻；沿着一条棱向前、向右翻滚一次，朝上的面怎样变化，连续翻滚时一步一步记录。再看正方体展开图，找出相对的面（隔一个的两个面相对）。例题一翻滚后哪个面朝上，例题二在展开图中找相对的面。',
         },
-        practice: [],
+        practice: concepts('u6.roll-cube'),
       },
     ]),
     // ------------------------------------------------------------------ 七
@@ -1329,7 +1341,7 @@ export const bsdG4a: Book = {
           focus:
             '以调查全班同学生日所在的月份（或季节）为例：先记录，再用画“正”字的方法整理成统计表，然后画条形统计图（一格表示 1 人），最后读图回答“哪个月过生日的人最多、比最少的多几人”。只用整数，不涉及平均数。',
         },
-        practice: [],
+        practice: concepts('u8.birthdays'),
       },
       {
         slug: 'award-age',
@@ -1352,7 +1364,7 @@ export const bsdG4a: Book = {
           focus:
             '以一组获奖者（如科学家）获奖时的年龄为例：先确定分段（每 10 岁一段），逐个数据画记，整理成统计表，再画一格表示 2 人的条形统计图，读图说出哪个年龄段获奖的人最多。数据用整数，不涉及平均数和折线统计图。',
         },
-        practice: [],
+        practice: concepts('u8.award-age'),
       },
       {
         slug: 'navigation',
@@ -1375,7 +1387,7 @@ export const bsdG4a: Book = {
           focus:
             '以家长开车或乘地铁用手机导航为情境：记录几次出行导航预估的时间和实际用的时间，整理成统计表，算出相差几分钟，讨论堵车、红绿灯、天气对时间的影响，说明导航是用“路程 ÷ 速度”估计时间的。例题用虚构的整数数据，不涉及小数。',
         },
-        practice: [],
+        practice: concepts('u8.navigation'),
       },
     ]),
   ],

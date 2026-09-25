@@ -56,6 +56,14 @@ export const ERROR_TAGS = {
   // ---- word problems / counting figures ----
   'relation-confused': '数量关系用错（该乘用了除、该减用了加，或漏了一部分）',
   'figure-count': '数图形没有有序地数（只数了基本图形或有遗漏）',
+  // ---- 图形的运动 / 空间 / 统计（概念题库） ----
+  symmetry: '轴对称判断错（只看左右差不多，没想对折后能否完全重合）',
+  'motion-type': '平移和旋转分不清',
+  'shift-count': '数平移的格数出错（数了图形之间的空格，没有盯住同一个点）',
+  spatial: '空间想象出错（观察的范围、看到的形状、切面、展开图与翻滚）',
+  direction: '方向判断错（观察点弄混、相对方向说反）',
+  'data-read': '统计表 / 统计图读错或整理数据出错（一格表示几、分段、漏数重数）',
+  'data-judge': '用数据下结论不当（只看一次记录、不考虑实际情况）',
   // ---- 语文 ----
   'char-pinyin': '字音读错（声调、平翘舌、前后鼻音）',
   polyphone: '多音字的读音和意思没对上',
@@ -141,6 +149,12 @@ export const GENERATORS = [
     grade: 2,
     title: '猜数游戏（根据回答确定范围、从中间猜）',
     errorTags: ['guess-range'],
+  },
+  {
+    id: 'g2.concepts',
+    grade: 2,
+    title: '图形的运动（概念题）',
+    errorTags: ['symmetry', 'motion-type', 'shift-count', 'reasoning'],
   },
   // ---------------- 四年级 ----------------
   {
@@ -232,6 +246,12 @@ export const GENERATORS = [
     grade: 4,
     title: '生活中的负数',
     errorTags: ['negative-compare'],
+  },
+  {
+    id: 'g4.concepts',
+    grade: 4,
+    title: '空间、图形与统计（概念题）',
+    errorTags: ['spatial', 'direction', 'data-read', 'data-judge', 'relation-confused', 'reasoning'],
   },
   // ---------------- 拔高题 / 创新题 ----------------
   {

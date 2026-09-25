@@ -1,7 +1,19 @@
-import type { Book } from '../types';
+import type { Book, PracticeSpec } from '../types';
 import { unit } from './helpers';
 
 const B = 'bsd-g2a';
+
+/**
+ * 概念题库（g2.concepts，文字选择题）: routine practice plus the 拔高 / 创新 items of a
+ * knowledge point; the variant is the knowledge point id without the book prefix.
+ */
+function concepts(v: string): PracticeSpec[] {
+  return [
+    { generatorId: 'g2.concepts', minDifficulty: 1, maxDifficulty: 5, variant: v },
+    { generatorId: 'g2.concepts', variant: `${v}#stretch`, tier: 'stretch', minDifficulty: 3, maxDifficulty: 5 },
+    { generatorId: 'g2.concepts', variant: `${v}#creative`, tier: 'creative', minDifficulty: 3, maxDifficulty: 5 },
+  ];
+}
 
 /**
  * 北师大版 数学 二年级上册（2024 修订版，2025 年秋首次使用；2026 年秋深圳二年级继续使用）。
@@ -24,7 +36,7 @@ export const bsdG2a: Book = {
     '不带序号的部分作为知识点放在前一单元末尾：猜数游戏 → u1.guess-number，画校园路线图 → u4.campus-map（只有课，没有练习），参加欢乐购物活动 → u8.shopping（整元价格的表内乘除法练习，不用角、分）。总复习未单列知识点。',
     '单元内课时名称来自检索摘要（电子课本网 dzkbw.com 目录；21世纪教育网 / 教习网 / 学科网按课时编号的教案，如 1.2 摘苹果、1.3 借阅图书、1.4 收玉米、1.5 跳绳、3.5 快乐的动物、4.1 文物中的乘法口诀、7.4 有多少无人机、7.5 做个乘法表），目录照片只到单元一级。',
     '不确定处：第七单元 7.2/7.3 的课题（《西游记》中的乘法口诀 覆盖 7 的口诀还是 7、8、9 的口诀）未能核实，本数据把 8、9 的口诀单列为一个知识点；',
-    '第六单元除「折一折，做一做」「好玩的华容道」外可能还有其他课时；第八单元只核实到「长颈鹿与小鸟」「农家小院」。',
+    '第六单元的两课是动手操作课，练习用文字选择题题库（g2.concepts）；第六单元除「折一折，做一做」「好玩的华容道」外可能还有其他课时；第八单元只核实到「长颈鹿与小鸟」「农家小院」。',
     '本册没有“元角分”单元，人民币换算练习（g2.unit.money）未关联。',
   ].join(''),
   units: [
@@ -1228,7 +1240,7 @@ export const bsdG2a: Book = {
           focus:
             '以教材“折一折，做一做”活动讲解：把纸对折后剪出图案，展开后两边完全一样，折痕就是对称轴。例题一：判断蝴蝶、树叶、字母图形是否为轴对称图形；例题二：对折剪纸时画一半能剪出什么。不讲对称轴的精确画法和对称点距离，不涉及旋转对称。',
         },
-        practice: [],
+        practice: concepts('u6.axial-symmetry'),
       },
       {
         slug: 'translation-rotation',
@@ -1251,7 +1263,7 @@ export const bsdG2a: Book = {
           focus:
             '以教材“好玩的华容道”游戏为主线讲平移：棋子只能上下左右移动，说出向哪个方向移动了几格（盯住棋子的一个角数格）；再举摩天轮、风车、陀螺等例子认识旋转，对比两者。不涉及旋转角度、方格纸上画旋转图形。',
         },
-        practice: [],
+        practice: concepts('u6.translation-rotation'),
       },
     ]),
     // ------------------------------------------------------------------ 七

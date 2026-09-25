@@ -2,8 +2,8 @@ import { describe, expect, it } from 'vitest';
 import { ALL_GENERATORS, generateQuestion } from '../src/registry';
 import { generatorProperties } from './properties.shared';
 
-/** Routine math generators. */
-generatorProperties((id) => /^g[24]\./.test(id) && !id.endsWith('.challenge'));
+/** Routine math generators (the .concepts item banks run with the 语文 / 英语 banks). */
+generatorProperties((id) => /^g[24]\./.test(id) && !id.endsWith('.challenge') && !id.endsWith('.concepts'));
 
 describe('generator options', () => {
   it('rejects unknown variants and clamps difficulty', () => {

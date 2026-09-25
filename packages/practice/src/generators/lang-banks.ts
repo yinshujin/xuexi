@@ -1,5 +1,7 @@
 import { EN_G2A } from '../banks/en-g2a';
 import { EN_G4A } from '../banks/en-g4a';
+import { MATH_G2A } from '../banks/math-g2a';
+import { MATH_G4A } from '../banks/math-g4a';
 import { YW_G2A } from '../banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../banks/yw-g4a';
 import { YW_G4A_POLY } from '../banks/yw-g4a-poly';
@@ -18,3 +20,10 @@ export const en4Words = englishGenerator('en4.words', EN_G4A);
 /** 看拼音选词语 from each book's 词语听写表. */
 export const yw2Dictation = dictationGenerator('yw2.dictation', YW_G2A_WORDS, YW_G2A_SOUNDALIKE_WORDS);
 export const yw4Dictation = dictationGenerator('yw4.dictation', YW_G4A_WORDS, YW_G4A_SOUNDALIKE_WORDS);
+
+/**
+ * 数学概念题（图形的运动、观察与方向、立体图形、统计与综合实践）: the hands-on
+ * topics have no computable questions, so they use authored banks like 语文.
+ */
+export const g2Concepts = chineseWordsGenerator('g2.concepts', MATH_G2A);
+export const g4Concepts = chineseWordsGenerator('g4.concepts', MATH_G4A);

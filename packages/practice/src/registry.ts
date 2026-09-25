@@ -25,7 +25,17 @@ import { g4Quantity } from './generators/g4-quantity';
 import { g4OralMulDiv } from './generators/g4-oral-muldiv';
 import { g2Challenge } from './generators/challenge-g2';
 import { g4Challenge } from './generators/challenge-g4';
-import { en2Words, en4Words, yw2Dictation, yw2Words, yw4Dictation, yw4Polyphone, yw4Words } from './generators/lang-banks';
+import {
+  en2Words,
+  en4Words,
+  g2Concepts,
+  g4Concepts,
+  yw2Dictation,
+  yw2Words,
+  yw4Dictation,
+  yw4Polyphone,
+  yw4Words,
+} from './generators/lang-banks';
 import type { GenerateOptions, GradeResult, Question, Response } from './types';
 
 /** Every generator, in catalog order. */
@@ -40,6 +50,7 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g2UnitLength,
   g2Measure,
   g2Guess,
+  g2Concepts,
   g4BignumPlace,
   g4BignumRead,
   g4BignumRewrite,
@@ -55,6 +66,7 @@ export const ALL_GENERATORS: readonly PracticeGenerator[] = [
   g4Quantity,
   g4Figures,
   g4Negative,
+  g4Concepts,
   g2Challenge,
   g4Challenge,
   yw2Words,

@@ -209,8 +209,9 @@ describe('knowledge points', () => {
         expect(p.minDifficulty, where).toBeGreaterThanOrEqual(1);
         expect(p.maxDifficulty, where).toBeLessThanOrEqual(5);
         expect(p.minDifficulty, where).toBeLessThanOrEqual(p.maxDifficulty);
-        // 语文 / 英语 bank generators: variants are the knowledge points found in the bank data.
-        const allowed = VARIANTS[p.generatorId] ?? (book.subject !== 'math' ? getGenerator(p.generatorId).variants : undefined);
+        // Item-bank generators (语文 / 英语, 数学 .concepts): variants are the knowledge points found in the bank data.
+        const bank = book.subject !== 'math' || p.generatorId.endsWith('.concepts');
+        const allowed = VARIANTS[p.generatorId] ?? (bank ? getGenerator(p.generatorId).variants : undefined);
         if (p.variant === undefined) continue;
         expect(allowed, `${where} takes no variant`).toBeDefined();
         expect(allowed).toContain(p.variant);
@@ -228,6 +229,8 @@ describe('语文 / 英语 practice banks', () => {
     'yw4.dictation': 'yw-g4a',
     'en2.words': 'en-g2a',
     'en4.words': 'en-g4a',
+    'g2.concepts': 'bsd-g2a',
+    'g4.concepts': 'bsd-g4a',
   };
   it('every bank knowledge point exists in its book and every book knowledge point has practice', () => {
     for (const [gid, bookId] of Object.entries(BANK_BOOK)) {
@@ -246,6 +249,17 @@ describe('语文 / 英语 practice banks', () => {
             if (p.variant?.includes('#')) expect(p.variant.split('#')[1], k.id).toBe(p.tier);
           }
         }
+      }
+    }
+  });
+
+  it('数学 concept banks: every bank knowledge point links to its routine, 拔高 and 创新 items', () => {
+    for (const [gid, bookId] of [['g2.concepts', 'bsd-g2a'], ['g4.concepts', 'bsd-g4a']] as const) {
+      const kps = getGenerator(gid).variants.filter((v) => v !== 'mixed' && !v.includes('#'));
+      for (const v of kps) {
+        const kp = findKnowledgePoint(`${bookId}.${v}`)!.kp;
+        const linked = kp.practice.filter((p) => p.generatorId === gid).map((p) => p.variant);
+        expect(linked, kp.id).toEqual([v, `${v}#stretch`, `${v}#creative`]);
       }
     }
   });

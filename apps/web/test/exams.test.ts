@@ -5,7 +5,8 @@ import { examHistory, examUnits, findPaper, PAPER_SIZE, questionIdentity, scoreE
 import type { Answer, Question, Response } from '@xuexi/practice';
 import { orderCorrect } from '../src/lib/games';
 
-const units = BOOKS.flatMap((b) => b.units.filter((u) => u.knowledgePoints.some((k) => k.practice.some((p) => !p.tier))));
+// Every unit of every book, the hands-on ones (观察物体, 统计 …) included.
+const units = BOOKS.flatMap((b) => b.units);
 
 /** The right response to a question (to check the papers grade). */
 function rightResponse(q: Question): Response {

@@ -3,6 +3,8 @@ import { GENERATORS, isErrorTag, type ErrorTag } from '@xuexi/shared';
 import type { ChoiceItem, EnWord, Polyphone } from '../src/banks/types';
 import { EN_G2A } from '../src/banks/en-g2a';
 import { EN_G4A } from '../src/banks/en-g4a';
+import { MATH_G2A } from '../src/banks/math-g2a';
+import { MATH_G4A } from '../src/banks/math-g4a';
 import { YW_G2A } from '../src/banks/yw-g2a';
 import { YW_G4A_ITEMS } from '../src/banks/yw-g4a';
 import { YW_G4A_POLY } from '../src/banks/yw-g4a-poly';
@@ -127,5 +129,30 @@ describe('English banks', () => {
   it('en-g4a', () => {
     checkWords('en-g4a', EN_G4A.words);
     checkItems('en-g4a', 'en4.words', EN_G4A.items, true);
+  });
+});
+
+describe('数学概念题 banks', () => {
+  /** The unit exams draw about 9 routine questions per knowledge point from each of three papers. */
+  function checkCounts(items: ChoiceItem[]) {
+    const kps = [...new Set(items.map((it) => it.kp))];
+    for (const kp of kps) {
+      const of = items.filter((it) => it.kp === kp);
+      const routine = of.filter((it) => !it.tier);
+      expect(routine.length, `${kp}: routine items`).toBeGreaterThanOrEqual(26);
+      for (const level of [1, 2, 3]) expect(routine.filter((it) => it.level === level).length, `${kp}: level ${level}`).toBeGreaterThanOrEqual(8);
+      for (const tier of ['stretch', 'creative'])
+        expect(of.filter((it) => it.tier === tier).length, `${kp}: ${tier} items`).toBeGreaterThanOrEqual(5);
+    }
+  }
+  it('math-g2a', () => {
+    checkItems('math-g2a', 'g2.concepts', MATH_G2A.items, false);
+    expect(MATH_G2A.polyphones).toEqual([]);
+    checkCounts(MATH_G2A.items);
+  });
+  it('math-g4a', () => {
+    checkItems('math-g4a', 'g4.concepts', MATH_G4A.items, false);
+    expect(MATH_G4A.polyphones).toEqual([]);
+    checkCounts(MATH_G4A.items);
   });
 });
